@@ -7,7 +7,7 @@ y = locations[:, 2]
 plot(x, y, "ro")
 end
 
-locations = rand(10, 2)
+# locations = rand(10, 2)
 
 using Winston
 display(locations)
