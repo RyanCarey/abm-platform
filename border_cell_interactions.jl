@@ -13,13 +13,17 @@ desired_y = desired_loc[2]
 # Need a global variable to denote which type of interaction to use
 # Also need global x and y bounds.
 
-if desired_x >= global_x || desired x <= 0
-reflectCell_x(original_loc, desired_loc)
+if desired_x >= global_x || desired_x <= 0
+desired_x, desired_y = reflectCell_x(original_loc, desired_loc)
+#desired_x, desired_y = stickCell_x(original_loc, desired_loc)
 end
 
 if desired_y >= global_y || desired_y <= 0
-reflectCell_y(original_loc, desired_loc)
+desired_x, desired_y = reflectCell_y(original_loc, desired_loc)
+#desired_x, desired_y = stickCell_y(original_loc, desired_loc)
 end
+
+return desired_x, desired_y
 
 end
 
@@ -49,7 +53,33 @@ end
 
 
 function stickCell_x(original_loc, desired_loc)
+origin_x = original_loc[1]
+origin_y = original_loc[2]
+
+desired_x = desired_loc[1]
+desired_y = desired_loc[2] 
+
+gradient = (desired_y - origin_y) / (desired_x - origin_x)
+offset = origin_y - (gradient * origin_x)
+
+desired_x = global_x
+desired_y = (gradient * global_x) + offset
+
+return desired_x, desired_y
 end
 
 function stickCell_y(original_loc, desired_loc)
+origin_x = original_loc[1]
+origin_y = original_loc[2]
+
+desired_x = desired_loc[1]
+desired_y = desired_loc[2] 
+
+gradient = (desired_y - origin_y) / (desired_x - origin_x)
+offset = origin_y - (gradient * origin_x)
+
+desired_x = global_y - offset / gradient
+desired_y = global_y
+
+return desired_x, desired_y
 end
