@@ -1,8 +1,8 @@
 dir = pwd()
 include("$dir/propose_move.jl")
-using propose_move
-#include("$dir/display.jl")
-using display
+using Propose_move
+include("$dir/display.jl")
+using Display
 
 
 #println("Enter X size of environment: ")
