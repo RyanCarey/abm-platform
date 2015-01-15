@@ -1,4 +1,6 @@
-File Edit Options Buffers Tools Help                                                                                                     
+module Init
+export init
+
 #Initialization function
 #1st parameter: number of cells
 #2nd parameter: length of the square
@@ -36,4 +38,7 @@ list[1,2]=y*rand()
 return list
 end
 
-println(init(50,10,10,0.1))
+#println(init(50,10,10,0.1))
+
+
+end

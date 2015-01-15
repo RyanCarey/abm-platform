@@ -1,4 +1,4 @@
-module propose_move
+module Propose_move
 export propose_move_all, list_locations, propose_move_one, describe_move, propose_describe_move, move_many_times
 
 
