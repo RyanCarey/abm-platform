@@ -6,7 +6,7 @@ function pausing(prompt = true)
     println("anykey to advance timestep")
     junk = readline(STDIN)
   else
-    sleep(.005)
+    sleep(.001)
   end
 end
 

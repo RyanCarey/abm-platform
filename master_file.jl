@@ -4,36 +4,31 @@ include("$dir/init.jl")
 include("$dir/propose_move.jl")
 include("$dir/show_cells.jl")
 include("$dir/pausing.jl")
+include("$dir/optional_arg.jl")
 #reload("$dir/propose_move.jl")
 #reload("$dir/show_cells.jl")
 using Init
 using Propose_move
 using Show_cells
 using Pausing
+using Optional_arg
 
-#println("Enter X size of environment: ")
-#x_size = int(readline(STDIN))
-const x_size = 25 #delete this later
-const y_size = 25 #delete this hard-coded part later
-#println("Enter Y size of environment: ")
-#y_size = int(readline(STDIN))
-println("Enter amount of starting cells: ")
-cells = int(readline(STDIN))
-#println("Enter proposed speed of cells: ")
-#speed = float(readline(STDIN))
-speed = 3.0 #delete this hard-coded part later
-#println("Enter amount of timesteps: ")
-#steps = int(readline(STDIN))
-steps = 100 #delete this later
 
-cell_radius = 1 #radius is hardcoded here
+cells = int(optional_arg(1,"Enter initial number of cells: "))
+cell_speed = float(optional_arg(2,"Enter speed of cells: "))
+cell_radius = float(optional_arg(3,"Enter radius of cells: "))
+const steps = int(optional_arg(4,"Enter number of timesteps: "))
+const x_size = int(optional_arg(5,"Enter width of environment: "))
+const y_size = int(optional_arg(6,"Enter height of environment: "))
 
+
+println("building environment")
 a = init(cells,x_size,y_size,cell_radius) 
 show_cells(a,x_size,y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-  a = propose_describe_move(a, speed)
+  a = propose_move_one(a, cell_speed)
   show_cells(a,x_size,y_size)
   pausing(false)
 end
