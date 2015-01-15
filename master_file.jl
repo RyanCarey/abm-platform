@@ -1,9 +1,13 @@
 dir = pwd()
+using Winston
 include("$dir/propose_move.jl")
+include("$dir/show_cells.jl")
+include("$dir/pausing.jl")
+#reload("$dir/propose_move.jl")
+#reload("$dir/show_cells.jl")
 using Propose_move
-include("$dir/display.jl")
-using Display
-
+using Show_cells
+using Pausing
 
 #println("Enter X size of environment: ")
 #x_size = int(readline(STDIN))
@@ -18,11 +22,18 @@ x_size = 5 #delete this later
 #steps = int(readline(STDIN))
 steps = 3 #delete this later
 
-a = [0.0 0.0;0.0 0.0;0.0 0.0]
+a = [2.0 2.0;2.0 2.0;2.0 2.0]
 for i = 1:steps
   for i in 1:5
   a = propose_describe_move(a, 2.0)
-  display(a) 
+  show_cells(a)
+  pausing(false)
   end
 end
+
+
+
+
+
+
 
