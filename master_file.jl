@@ -28,7 +28,7 @@ show_cells(a,x_size,y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-  a = propose_move_one(a, cell_speed)
+  a = propose_move_any(a, cell_speed)
   show_cells(a,x_size,y_size)
   pausing(false)
 end
