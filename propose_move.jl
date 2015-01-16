@@ -1,7 +1,7 @@
 module Propose_move
 export propose_move_all, list_locations, propose_move_any, describe_move, propose_describe_move
-export move_many_times, propose_move_x, propose_describe_move, is_overlap
-
+export move_many_times, propose_move_x, propose_describe_move, is_overlap, move_cell_x!
+export move_any
 
 
 generate_exp(rate::Float64) = -1/rate*log(1-rand())
@@ -24,7 +24,7 @@ function propose_move_any(i::Array,max_speed::Float64)
   n = size(i,1)
   cell_index = rand(1:n)
   d = propose_move_x(i[cell_index,:], max_speed)
-  f[n,:]=d
+  f[cell_index,:]=d
   return f
 end
 
@@ -36,12 +36,31 @@ function propose_move_x(pos::Array, max_speed::Float64)
   return f
 end
 
-function move_cell_x(pos::Array, cell_index::Int, max_speed::Float64)
-  f = propose_move_x(pos, cell_index, max_speed)
-  if is_overlap(f, cell_index, radius)
-    return pos
+
+function move_any(i::Array, max_speed::Float64, radius::Float64)
+  f = copy(i)
+  n = size(i,1)
+  x = rand(1:n)
+  println("move cell $n")
+  move_cell_x!(f,x, max_speed, radius)
+  return f      #this could be made a mutator method
+end
+
+function move_cell_x!(i::Array, cell_index::Int, max_speed::Float64, radius::Float64)
+  #takes all cell positions and returns the whole matrix with a valid move or no move
+  println("move cell from")
+  println(i[cell_index,:])
+  pos = i[cell_index,:]
+  i[cell_index,:] = propose_move_x(pos, max_speed)
+  if is_overlap(i, cell_index, radius)
+    println("overlap")
+    i[cell_index,:] = pos
+    return i
+    #move_cell_x(i,cell_index,max_speed,radius) # include this to retry moving cell
   else
-    return f
+    println("move cell to")
+    println(i[cell_index,:])
+    return i
   end
 end
 
@@ -62,11 +81,13 @@ function propose_describe_move(i::Array,max_speed::Float64)
 end
 
 function is_overlap(i::Array, cell_index::Int, radius::Float64)  # will later need to add multiple radii
-  distance_mat = i - repmat(i[cell_index,:],length(i,1),1)
-  nearby = [distance_mat - repmat(i[cell_index,:],length(i,i),1) < 2*radius]
+  distance_mat = i - repmat(i[cell_index,:],size(i,1),1)
+  nearby = [distance_mat - repmat(i[cell_index,:],size(i,1),1) .< 2*radius]
+  nearby[cell_index] = false    #exclude the cell itself
   possible_overlappers = i[nearby]
-  overlappers = sqrt(sum(possible_overlappers.^2,2))-2*radius<0
-  if trues(1,4)*overlappers > 0
+  println(possible_overlappers)
+  overlappers = sqrt(sum(possible_overlappers.^2,2))-2*radius .< 0.0
+  if sum(overlappers) > 0
     return true
   else
     return false

@@ -1,12 +1,11 @@
-dir = pwd()
 using Winston
-include("$dir/init.jl")
-include("$dir/propose_move.jl")
-include("$dir/show_cells.jl")
-include("$dir/await_user.jl")
-include("$dir/optional_arg.jl")
-#reload("$dir/propose_move.jl")
-#reload("$dir/show_cells.jl")
+include("init.jl")
+include("propose_move.jl")
+include("show_cells.jl")
+include("await_user.jl")
+include("optional_arg.jl")
+#reload("propose_move.jl")
+#reload("show_cells.jl")
 using Init
 using Propose_move
 using Show_cells
@@ -16,23 +15,24 @@ using Optional_arg
 
 cells = int(optional_arg(1,"Enter initial number of cells: "))
 cell_speed = float(optional_arg(2,"Enter speed of cells: "))
-cell_radius = float(optional_arg(3,"Enter radius of cells: "))
+radius = float(optional_arg(3,"Enter radius of cells: "))
 const steps = int(optional_arg(4,"Enter number of timesteps: "))
 const x_size = int(optional_arg(5,"Enter width of environment: "))
 const y_size = int(optional_arg(6,"Enter height of environment: "))
 
 
 println("building environment")
-a = init(cells,x_size,y_size,cell_radius) 
+a = init(cells,x_size,y_size,radius) 
 show_cells(a,x_size,y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-  a = propose_move_any(a, cell_speed)
+print("master says locations start at:")
+print(a)
+b = move_any(a, cell_speed, radius)
   show_cells(a,x_size,y_size)
-  await_user(false)
+  await_user(false) # change this to true if you want to advance timesteps manually
 end
-
 
 
 
