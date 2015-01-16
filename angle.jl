@@ -19,23 +19,39 @@
 # The bias will be proportional in each direction to the differentiate of the ligand concentration
 
 function angleBRW(L,R=[0.5,0.5,0.5],r)
-	list=Array(Float64)	
+	list=Array(Float64,1,3)	
+	x=0
+	y=0
 	for i in 1:size(L,1)
 		dx=L[i,1]-R[1]
 		dy=L[i,2]-R[2]
-		if (sqrt(dx*dx+dy*dy)<1.1*r && sqrt(dx*dx+dy*dy)>0.9*r) 
-			alpha=acos(dx/sqrt(dx*dx+dy*dy))*sign(dy)
-			list=[list;alpha]
+		if (sqrt(dx*dx+dy*dy)<1.1*r && sqrt(dx*dx+dy*dy)>0.9*r) 	
+			list=[list;[dx dy acos(dx/sqrt(dx*dx+dy*dy))*sign(dy)]]
+			x=x+dx
+			y=y+dy
 		end
 	end
-	if(length(list)>1)
-		beta=mean(list[2:end])
-		bias=std(list[2:end])
+	if(length(list)>3)
+		beta= acos(x/sqrt(x*x+y*y))*sign(y)
+		bias=std(list[2:end,3])
 		angle=beta+rand()*(bias*bias)
 	else 
 		angle=rand()*2*pi
 	end
-	
 return angle
-			
+end
+
+
+
+
+function anglePRW(prev_angle=-pi,variance=0.25)
+	angle = prev_angle+rand()*variance
+	return angle
+end
+
+
+
+
+function anglePBRW(prev_angle,variance=0.25,omega=0.5,L,R=[0.5,0.5,0.5],r)
+	return omega*angleBRW(L,R,r) + (1-omega)*anglePRW(prev_angle,variance)
 end
