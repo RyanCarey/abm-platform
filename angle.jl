@@ -18,7 +18,7 @@
 # Then we are going to look all over the membrane of the cell for ligand concentration 
 # The bias will be proportional in each direction to the differentiate of the ligand concentration
 
-function angleBRW(L,R=[0.5,0.5,0.5],r)
+function angleBRW(L,R=[0.5,0.5,0.5],r=0.04)
 	list=Array(Float64,1,3)	
 	x=0
 	y=0
@@ -52,6 +52,6 @@ end
 
 
 
-function anglePBRW(prev_angle,variance=0.25,omega=0.5,L,R=[0.5,0.5,0.5],r)
+function anglePBRW(prev_angle=-pi,variance=0.25,omega=0.5,L,R=[0.5,0.5,0.5],r=0.04)
 	return omega*angleBRW(L,R,r) + (1-omega)*anglePRW(prev_angle,variance)
 end
