@@ -3,14 +3,14 @@ using Winston
 include("$dir/init.jl")
 include("$dir/propose_move.jl")
 include("$dir/show_cells.jl")
-include("$dir/pausing.jl")
+include("$dir/await_user.jl")
 include("$dir/optional_arg.jl")
 #reload("$dir/propose_move.jl")
 #reload("$dir/show_cells.jl")
 using Init
 using Propose_move
 using Show_cells
-using Pausing
+using Await_user
 using Optional_arg
 
 
@@ -30,7 +30,7 @@ junk = readline(STDIN)
 for i = 1:steps
   a = propose_move_any(a, cell_speed)
   show_cells(a,x_size,y_size)
-  pausing(false)
+  await_user(false)
 end
 
 

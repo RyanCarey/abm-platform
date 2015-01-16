@@ -22,9 +22,10 @@ end
 function propose_move_any(i::Array,max_speed::Float64)
   f = copy(i)
   n = size(i,1)
-  moving = rand(1:n)
-  f = propose_move_x(i[moving,:], max_speed)
-  return f     # maybe I should just manipulate variables in-place instead of copying them
+  cell_index = rand(1:n)
+  d = propose_move_x(i[cell_index,:], max_speed)
+  f[n,:]=d
+  return f
 end
 
 function propose_move_x(pos::Array, max_speed::Float64)
