@@ -1,13 +1,13 @@
 using Winston
 include("init.jl")
-include("propose_move.jl")
+include("move.jl")
 include("show_cells.jl")
 include("await_user.jl")
 include("optional_arg.jl")
-#reload("propose_move.jl")
+#reload("move.jl")
 #reload("show_cells.jl")
 using Init
-using Propose_move
+using Move
 using Show_cells
 using Await_user
 using Optional_arg
@@ -27,9 +27,7 @@ show_cells(a,x_size,y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-print("master says locations start at:")
-print(a)
-b = move_any(a, cell_speed, radius)
+a = move_any(a, cell_speed, radius)
   show_cells(a,x_size,y_size)
   await_user(false) # change this to true if you want to advance timesteps manually
 end
