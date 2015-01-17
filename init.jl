@@ -12,33 +12,35 @@ export init
 #overlapping with another cell. If yes, we choose another random location for the cell
 
 function init(n,x,y,r)
-list=Array(Float64,n,2)
-list[1,1]=x*rand()
-list[1,2]=y*rand()
-         if(n>1)
-         for i in 2:n
-             next_step=false
-             while(next_step==false)
-                xi = rand()*x
-                yi = rand()*y
-                   overlap=false
-                   for j in 1:i-1
-                       if((xi-list[j,1])*(xi-list[j,1])+(yi-list[j,2])*(yi-list[j,2])<r*r)
-                        overlap=true
-                       end
-                       if(overlap==false)
-                        list[i,1]=xi
-                        list[i,2]=yi
-                        next_step=true
-                       end
-                   end
-             end
-        end
-        end
-return list
+  list=Array(Float64,n,2)
+  list[1,1]=x*rand()
+  list[1,2]=y*rand()
+  for i in 2:n
+    placed = false
+    overlap = false
+    while(!placed)
+      xi = rand()*x
+      yi = rand()*y
+      sleep(.1)
+      println("propose $xi,$yi")
+      for j in 1:i-1
+        if (xi-list[j,1])^2+(yi-list[j,2])^2<(r*r)
+          println("overlap")
+          overlap=true
+        end 
+      end
+      if !overlap
+          list[i,1]=xi
+          list[i,2]=yi
+          println("placed:")
+          println(list[i,:])
+          placed = true
+      end
+    end
+  end
+  return list
 end
 
 #println(init(50,10,10,0.1))
-
 
 end

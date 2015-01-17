@@ -19,16 +19,16 @@ radius = float(optional_arg(3,"Enter radius of cells: "))
 const steps = int(optional_arg(4,"Enter number of timesteps: "))
 const x_size = int(optional_arg(5,"Enter width of environment: "))
 const y_size = int(optional_arg(6,"Enter height of environment: "))
-
+# at this stage, it's silly to have different height and width because it won't be graphed correctly
 
 println("building environment")
 a = init(cells,x_size,y_size,radius) 
-show_cells(a,x_size,y_size)
+show_cells(a, radius, x_size, y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
 a = move_any!(a, cell_speed, radius)
-  show_cells(a,x_size,y_size)
+  show_cells(a, radius, x_size, y_size)
   await_user(false) # change this to true if you want to advance timesteps manually
 end
 
