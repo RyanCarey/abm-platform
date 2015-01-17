@@ -27,7 +27,7 @@ show_cells(a,x_size,y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-a = move_any(a, cell_speed, radius)
+a = move_any!(a, cell_speed, radius)
   show_cells(a,x_size,y_size)
   await_user(false) # change this to true if you want to advance timesteps manually
 end
