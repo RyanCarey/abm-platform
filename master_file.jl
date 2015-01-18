@@ -17,8 +17,8 @@ cells = int(optional_arg(1,"Enter initial number of cells: "))
 cell_speed = float(optional_arg(2,"Enter speed of cells: "))
 radius = float(optional_arg(3,"Enter radius of cells: "))
 const steps = int(optional_arg(4,"Enter number of timesteps: "))
-const x_size = int(optional_arg(5,"Enter width of environment: "))
-const y_size = int(optional_arg(6,"Enter height of environment: "))
+const x_size = float(optional_arg(5,"Enter width of environment: "))
+const y_size = float(optional_arg(6,"Enter height of environment: "))
 # at this stage, it's silly to have different height and width because it won't be graphed correctly
 
 println("building environment")

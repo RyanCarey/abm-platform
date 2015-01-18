@@ -3,10 +3,10 @@ export show_cells
 # Module to display cells
 using Winston
 
-function show_cells(locations::Array, radius::Float64, x_size::Int64, y_size::Int)
+function show_cells(locations::Array, radius::Float64, x_size::Float64, y_size::Float64)
 x = locations[:, 1]
 y = locations[:, 2]
-p = scatter(x,y,radius*x_size/5,"ro")
+p = scatter(x,y,radius/x_size*70,"ro")
 
 #p = plot(x, y, "ro")
 xlim(0,x_size)
