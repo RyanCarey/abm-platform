@@ -1,5 +1,3 @@
-module Optional_arg
-export optional_arg
 
 function optional_arg(arg_index,prompt_text)
   # checks if an arg is present and 
@@ -11,4 +9,3 @@ function input_prompt(prompt_text::String)
   return readline(STDIN)
 end
 
-end

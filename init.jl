@@ -1,5 +1,3 @@
-module Init
-export init
 
 #Initialization function
 #1st parameter: number of cells
@@ -12,33 +10,48 @@ export init
 #overlapping with another cell. If yes, we choose another random location for the cell
 
 function init(n,x,y,r)
-list=Array(Float64,n,2)
-list[1,1]=x*rand()
-list[1,2]=y*rand()
-         if(n>1)
-         for i in 2:n
-             next_step=false
-             while(next_step==false)
-                xi = rand()*x
-                yi = rand()*y
-                   overlap=false
-                   for j in 1:i-1
-                       if((xi-list[j,1])^2+(yi-list[j,2])^2<(2r)^2)
-                        overlap=true
-                       end
-                   end
-                   if(overlap==false)
-                        list[i,1]=xi
-                        list[i,2]=yi
-                        next_step=true
-                   end
-             end
+list=Array(Float64,n,3)
+list[1,1]= x * rand()
+list[1,2]= y * rand()
+rvar = 0.1 # variation can be adjusted here
+list[1,3]= rand_radius(r,r*rvar)
+  if(n>1)
+    for i in 2:n
+      placed=false
+      while !placed
+        xi = x * rand()
+        yi = y * rand()
+        ri = rand_radius(r,r*rvar)
+        overlap=false
+        for j in 1:i-1
+          if((xi-list[j,1])^2+(yi-list[j,2])^2<(ri+list[j,3])^2)
+            overlap=true
+          end
         end
+        if !overlap
+          list[i,1]=xi
+          list[i,2]=yi
+          list[i,3]=ri
+          placed=true
         end
+      end
+    end
+  end
 return list
 end
+
+function rand_radius(mean,stdev)
+  radius = mean+stdev*randn()
+  # while radius is negative, try again
+  while radius <= 0
+    radius = rand_radius(mean,stdev)
+  end
+  return radius
+end
+
+
+
 
 #println(init(50,10,10,0.1))
 
 
-end

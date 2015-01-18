@@ -1,5 +1,3 @@
-module Await_user
-export await_user
 
 function await_user(prompt = true)
   if prompt
@@ -10,6 +8,4 @@ function await_user(prompt = true)
   end
 end
 
-
-end
 

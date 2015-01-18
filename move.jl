@@ -1,43 +1,43 @@
-module Move
-export propose_move_all, list_locations, propose_move_any, describe_move, propose_describe_move
-export move_many_times, propose_move_x, propose_describe_move, is_overlap, move_cell_x!
-export move_any!
+include("angle.jl")
+using Distributions
 
-
-function propose_move_x(pos::Array, max_speed::Float64)
-  f = copy(pos)
-  speed = max_speed*rand()
-  dir = 2*rand()
-  f += speed*[sinpi(dir) cospi(dir)]
-  return f
+function propose_move_x(pos::Array, speed_param::Float64)
+  Y = copy(pos)
+  speed = rand()*speed_param
+  angle = anglePRW(-pi,0.5) #elaborate this
+  Y[1,1:2] += speed*[cos(angle) sin(angle)]
+  return Y
 end
 
 
-function move_any!(i::Array, max_speed::Float64, radius::Float64)
-  n = size(i,1)
-  x = rand(1:n)
-  move_cell_x!(i,x, max_speed, radius)
-  return i      #this could be made a mutator method
+function move_any!(X::Array, max_speed::Float64)
+  n = size(X,1)
+  m = rand(1:n)
+  move_cell_x!(X,m, max_speed)
+  return X
 end
 
-function move_cell_x!(i::Array, cell_index::Int, max_speed::Float64, radius::Float64)
+function move_cell_x!(X::Array, m::Int, max_speed::Float64)
   #takes all cell positions and returns the whole matrix with a valid move or no move
-  pos = i[cell_index,:]
-  i[cell_index,:] = propose_move_x(pos, max_speed)
-  if is_overlap(i, cell_index, radius)
-    i[cell_index,:] = pos
-    #move_cell_x(i,cell_index,max_speed,radius) # include this to retry moving cell
+  Y = X[m,:]
+  X[m,:] = propose_move_x(Y, max_speed)
+  if is_overlap(X, m)
+    X[m,:] = Y
+    #move_cell_x(X,m,max_speed) # include this to retry moving cell
   else
   end
 end
 
-function is_overlap(i::Array, cell_index::Int, radius::Float64)  # will later need to add multiple radii
-  distance_mat = abs(i - repmat(i[cell_index,:],size(i,1),1))
-  nearby = (distance_mat[:,1] .< 2*radius) & (distance_mat[:,2] .< 2*radius)
-  nearby[cell_index] = false    #exclude the cell itself
-  possible_overlappers = distance_mat[nearby,:]
-  overlappers = sqrt(sum(possible_overlappers.^2,2))-2*radius .< 0.0
-  if sum(overlappers) > 0
+function is_overlap(X::Array, m::Int)  # will later need to add multiple radii
+  n = size(X,1)
+  distances = zeros(n,3)
+  distances[:,1:2] = abs(X[:,1:2] - repmat(X[m,1:2],n,1))
+  distances[:,3] = X[:,3]
+  is_nearby = (distances[:,1] .< (distances[:,3]+X[m,3])) & (distances[:,2] .< (distances[:,3]+X[m,3]))
+  is_nearby[m] = false    #exclude the cell itself
+  small_distances = distances[is_nearby,:]
+  overlap_bools = sqrt(sum(small_distances[:,1:2].^2,2)) .< (small_distances[:,3].+X[m,3])
+  if sum(overlap_bools) > 0
     return true
   else
     return false
@@ -49,7 +49,7 @@ end
 
 
 
-# from here down is a bunch of pretty old functions that we're not currently using
+# from here down is a bunch of old functions that we're not currently using
 
 generate_exp(rate::Float64) = -1/rate*log(1-rand())
 
@@ -69,9 +69,9 @@ end
 function propose_move_any(i::Array,max_speed::Float64)
   f = copy(i)
   n = size(i,1)
-  cell_index = rand(1:n)
-  d = propose_move_x(i[cell_index,:], max_speed)
-  f[cell_index,:]=d
+  m = rand(1:n)
+  d = propose_move_x(i[m,:], max_speed)
+  f[m,:]=d
   return f
 end
 
@@ -117,4 +117,3 @@ end
 #a = propose_describe_move(a,1.0)
 #a = propose_describe_move(a,2.0)
 
-end

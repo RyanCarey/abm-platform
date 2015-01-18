@@ -44,14 +44,14 @@ end
 
 
 
-function anglePRW(prev_angle=-pi,variance=0.25)
-	angle = prev_angle+rand()*variance
+function anglePRW(prev_angle=-pi,sd=0.25)
+	angle = prev_angle+randn()*sd
 	return angle
 end
 
 
 
 
-function anglePBRW(prev_angle=-pi,variance=0.25,omega=0.5,L,R=[0.5,0.5,0.5],r=0.04)
+function anglePBRW(L,R=[0.5,0.5,0.5],r=0.04,prev_angle=-pi,variance=0.25,omega=0.5)
 	return omega*angleBRW(L,R,r) + (1-omega)*anglePRW(prev_angle,variance)
 end

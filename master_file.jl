@@ -6,11 +6,6 @@ include("await_user.jl")
 include("optional_arg.jl")
 #reload("move.jl")
 #reload("show_cells.jl")
-using Init
-using Move
-using Show_cells
-using Await_user
-using Optional_arg
 
 
 cells = int(optional_arg(1,"Enter initial number of cells: "))
@@ -23,12 +18,12 @@ const y_size = float(optional_arg(6,"Enter height of environment: "))
 
 println("building environment")
 a = init(cells,x_size,y_size,radius) 
-show_cells(a, radius, x_size, y_size)
+show_cells(a, x_size, y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-a = move_any!(a, cell_speed, radius)
-  show_cells(a, radius, x_size, y_size)
+a = move_any!(a, cell_speed)
+  show_cells(a, x_size, y_size)
   await_user(false) # change this to true if you want to advance timesteps manually
 end
 
