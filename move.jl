@@ -1,11 +1,12 @@
 include("angle.jl")
 using Distributions
 
-function propose_move_x(pos::Array, speed_param::Float64)
-  Y = copy(pos)
+function propose_move_x(X::Array, speed_param::Float64)
+  Y = copy(X)
   speed = rand()*speed_param
-  angle = anglePRW(-pi,0.5) #elaborate this
+  angle = anglePRW(Y[1,4],0.5) #elaborate this
   Y[1,1:2] += speed*[cos(angle) sin(angle)]
+  Y[1,4:5] = [angle speed]
   return Y
 end
 
@@ -43,7 +44,6 @@ function is_overlap(X::Array, m::Int)  # will later need to add multiple radii
     return false
   end
 end
-
 
 
 

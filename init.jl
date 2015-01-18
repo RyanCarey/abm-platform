@@ -10,7 +10,7 @@
 #overlapping with another cell. If yes, we choose another random location for the cell
 
 function init(n,x,y,r)
-list=Array(Float64,n,3)
+list=Array(Float64,n,5)
 list[1,1]= x * rand()
 list[1,2]= y * rand()
 rvar = 0.1 # variation can be adjusted here
@@ -18,17 +18,24 @@ list[1,3]= rand_radius(r,r*rvar)
   if(n>1)
     for i in 2:n
       placed=false
+      fails = 0
+      ri = rand_radius(r,r*rvar)
       while !placed
-        xi = x * rand()
-        yi = y * rand()
-        ri = rand_radius(r,r*rvar)
+        xi = ri+(x-2*ri) * rand()
+        yi = ri+(y-2*ri) * rand()
         overlap=false
         for j in 1:i-1
           if((xi-list[j,1])^2+(yi-list[j,2])^2<(ri+list[j,3])^2)
             overlap=true
           end
         end
-        if !overlap
+        if overlap
+          fails += 1
+          if fails > 10000
+            println("")
+            error("could not place cell, try smaller radius or larger map")
+          end
+        else
           list[i,1]=xi
           list[i,2]=yi
           list[i,3]=ri
@@ -48,6 +55,7 @@ function rand_radius(mean,stdev)
   end
   return radius
 end
+
 
 
 

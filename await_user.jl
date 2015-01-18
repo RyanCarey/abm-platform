@@ -4,7 +4,7 @@ function await_user(prompt = true)
     println("anykey to advance timestep")
     junk = readline(STDIN)
   else
-    sleep(.1)
+    sleep(.001)
   end
 end
 
