@@ -1,15 +1,14 @@
 include("angle.jl")
 using Distributions
-
+include("border_cell_interactions.jl")
 function propose_move_x(X::Array, speed_param::Float64)
   Y = copy(X)
   speed = rand()*speed_param
-  angle = anglePRW(Y[1,4],0.5) #elaborate this
+  angle = anglePRW(Y[4],0.5) #elaborate this
   Y[1,1:2] += speed*[cos(angle) sin(angle)]
   Y[1,4:5] = [angle speed]
   return Y
 end
-
 
 function move_any!(X::Array, max_speed::Float64)
   n = size(X,1)
@@ -20,11 +19,12 @@ end
 
 function move_cell_x!(X::Array, m::Int, max_speed::Float64)
   #takes all cell positions and returns the whole matrix with a valid move or no move
-  Y = X[m,:]
-  X[m,:] = propose_move_x(Y, max_speed)
+  S = X[m,:]
+  X[m,:] = propose_move_x(S, max_speed)
+  X[m,1:2] = checkBorders(S[1,1:2],X[m,1:2])
   if is_overlap(X, m)
-    X[m,:] = Y
-    #move_cell_x(X,m,max_speed) # include this to retry moving cell
+    X[m,:] = S
+    #move_cell_x!(X,m,max_speed) # include this to retry moving cell
   end
 end
 
