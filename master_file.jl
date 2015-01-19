@@ -24,11 +24,7 @@ junk = readline(STDIN)
 for i = 1:steps
 a = move_any!(a, cell_speed)
   show_cells(a, x_size, y_size)
-  await_user(false) # change this to true if you want to advance timesteps manually
+  await_user(.001) # change this to true if you want to advance timesteps manually
 end
-
-
-
-
 
 

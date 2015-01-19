@@ -25,7 +25,6 @@ function move_cell_x!(X::Array, m::Int, max_speed::Float64)
   if is_overlap(X, m)
     X[m,:] = Y
     #move_cell_x(X,m,max_speed) # include this to retry moving cell
-  else
   end
 end
 
