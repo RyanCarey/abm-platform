@@ -22,7 +22,8 @@ show_cells(a, x_size, y_size)
 println("press any key to go")
 junk = readline(STDIN)
 for i = 1:steps
-a = move_any!(a, cell_speed)
+  diffusion!(conc_map,.1)
+  move_any!(conc_map,a, cell_speed)
   show_cells(a, x_size, y_size)
   await_user(.001) # change this to true if you want to advance timesteps manually
 end

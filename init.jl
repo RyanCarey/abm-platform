@@ -11,10 +11,10 @@
 
 function init(n,x,y,r)
 list=Array(Float64,n,5)
-list[1,1]= x * rand()
-list[1,2]= y * rand()
-rvar = 0.1 # variation can be adjusted here
 list[1,3]= rand_radius(r,r*rvar)
+list[1,1]= list[1,3] + (x- 2 * list[1,3]) * rand()
+list[1,2]= list[1,3] + (y- 2 * list[1,3]) * rand()
+rvar = 0.1 # variation can be adjusted here
   if(n>1)
     for i in 2:n
       placed=false

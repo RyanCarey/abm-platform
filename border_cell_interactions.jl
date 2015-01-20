@@ -21,7 +21,7 @@ function checkBorders(initial, final, reflect = true)
 	intersect_y_bound = (y_bound - offset) / grad
 	intersect_x_bound = (grad * x_bound) + offset
 	if (final[1] > x_size - r || final[1] < r) && (final[2] > y_size - r|| final[2] < r)
-		if r < intersect_y_bound < 10 - r
+		if r < intersect_y_bound < y_size - r
 			if reflect
 				initial[1:2], final[1:2] = reflectCell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
 			else
