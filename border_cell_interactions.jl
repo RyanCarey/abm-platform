@@ -5,49 +5,50 @@
 
 
 function checkBorders(initial, final, reflect = true)
-	if final[2] < 0
-		y_bound = 0
+  r = initial[3]
+	if final[2] < r
+		y_bound = r
 	else
-		y_bound = y_size
+		y_bound = y_size - r
 	end
-	if final[1] < 0
-		x_bound = 0
+	if final[1] < r 
+		x_bound = r
 	else
-		x_bound = x_size
+		x_bound = x_size - r
 	end
 	grad = (final[2] - initial[2]) / (final[1] - initial[1])
 	offset = initial[2] - (grad * initial[1])
 	intersect_y_bound = (y_bound - offset) / grad
 	intersect_x_bound = (grad * x_bound) + offset
-	if (final[1] > x_size || final[1] < 0) && (final[2] > y_size || final[2] < 0)
-		if 0 < intersect_y_bound < 10
+	if (final[1] > x_size - r || final[1] < r) && (final[2] > y_size - r|| final[2] < r)
+		if r < intersect_y_bound < 10 - r
 			if reflect
-				initial, final = reflectCell_y(initial, final, y_bound, intersect_y_bound)
+				initial[1:2], final[1:2] = reflectCell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
 			else
 				final = stickCell_y(initial, final, y_bound, intersect_y_bound)
 			end			
 		else
 			if reflect
-	     	initial, final = reflectCell_x(initial, final, x_bound, intersect_x_bound)
+	     	initial[1:2], final[1:2] = reflectCell_x(initial[1:2], final[1:2], x_bound, intersect_x_bound)
 			else
-				final = stickCell_x(initial, final, x_bound, intersect_x_bound)
+				final = stickCell_x(initial[1:2] , final[1:2] , x_bound, intersect_x_bound)
 			end	
 		end
-	elseif final[1] > x_size || final[1] < 0
+	elseif final[1] > x_size - r|| final[1] < r
 		if reflect
-			initial, final = reflectCell_x(initial, final, x_bound, intersect_x_bound)
+			initial[1:2], final[1:2] = reflectCell_x(initial[1:2], final[1:2], x_bound, intersect_x_bound)
 		else
-			final = stickCell_x(initial, final, x_bound, intersect_x_bound)
+			final = stickCell_x(initial[1:2] , final[1:2] , x_bound, intersect_x_bound)
 		end
-		else final[2] > y_size || final[2] < 0
+		else final[2] > y_size - r|| final[2] < 0
 			if reflect
-				initial, final = reflectCell_y(initial, final, y_bound, intersect_y_bound)
+				initial[1:2], final[1:2] = reflectCell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
 			else
-				final = stickCell_y(initial, final, y_bound, intersect_y_bound)
+				final[1:2] = stickCell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
 			end
 		end
 	angle = atan((final[2] - initial[2]) / (final[1] - initial[1]))
-	if final[1] > x_size || final[1] < 0 || final[2] > y_size || final[2] < 0
+	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < 0
 		final = checkBorders(initial, final)
 	end
 	return final

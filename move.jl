@@ -21,7 +21,7 @@ function move_cell_x!(X::Array, m::Int, max_speed::Float64)
   #takes all cell positions and returns the whole matrix with a valid move or no move
   S = X[m,:]
   X[m,:] = propose_move_x(S, max_speed)
-  X[m,1:2] = checkBorders(S[1,1:2],X[m,1:2])
+  X[m,:] = checkBorders(S[1,:],X[m,:])
   if is_overlap(X, m)
     X[m,:] = S
     #move_cell_x!(X,m,max_speed) # include this to retry moving cell
@@ -43,7 +43,6 @@ function is_overlap(X::Array, m::Int)  # will later need to add multiple radii
     return false
   end
 end
-
 
 
 

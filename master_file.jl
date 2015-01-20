@@ -4,8 +4,7 @@ include("move.jl")
 include("show_cells.jl")
 include("await_user.jl")
 include("optional_arg.jl")
-#reload("move.jl")
-#reload("show_cells.jl")
+include("diffusion.jl")
 
 
 cells = int(optional_arg(1,"Enter initial number of cells: "))
@@ -17,6 +16,7 @@ const y_size = float(optional_arg(6,"Enter height of environment: "))
 # at this stage, it's silly to have different height and width because it won't be graphed correctly
 
 println("building environment")
+conc_map = init_diffusion(x_size,y_size)
 a = init(cells,x_size,y_size,radius) 
 show_cells(a, x_size, y_size)
 println("press any key to go")
