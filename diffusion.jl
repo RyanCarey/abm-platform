@@ -16,8 +16,6 @@ end
 function diffusion!(X, rate)
   #Diffusion iterates one step of diffusive process
   # rate > 0
-  top = 
-  right = 
   X[:,:] = (1-rate)*X + rate * ([X[2:end,:];X[end,:]] + [X[:,1] X[:,1:(end-1)]] + [X[:,2:end] X[:,end]] + [X[1,:];X[1:(end-1),:]])/4
 end
 

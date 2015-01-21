@@ -18,14 +18,16 @@ const y_size = float(optional_arg(6,"Enter height of environment: "))
 println("building environment")
 conc_map = init_diffusion(x_size,y_size)
 a = init(cells,x_size,y_size,radius) 
+
 show_cells(a, x_size, y_size)
 println("press any key to go")
 junk = readline(STDIN)
+
 for i = 1:steps
-  diffusion!(conc_map,.1)
+  diffusion!(conc_map,.1) # turn diffusion on or off
   move_any!(conc_map,a, cell_speed)
   show_cells(a, x_size, y_size)
-  await_user(.001) # change this to true if you want to advance timesteps manually
+  await_user(.002) # change this to true if you want to advance timesteps manually
 end
 
 

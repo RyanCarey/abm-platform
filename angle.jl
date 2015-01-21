@@ -1,57 +1,67 @@
-# L is a 3 columns array of all the position of the ligands (large list)
-# R is the coordinate (x,y,z) of the studied cell
+# Biased Random Walk V2
+# C is the coordinate (x,y,z) of the studied cell
 # r is the radius of a cell
+# ML is the matrix of ligand's concentration
+# degree_precision is an integer and the numnber of ligants we are going to use to assess the favorite direction
+# 1-We first need to adapt the localization of the cell to the matrix. The cell will be spotted by the cooridnates (they can be float)
+# whereas the matrix is located thaks to integer. We assume that the localisation of the cell matches with the coordinates of the matrix. 
+# If C=(5.2,6.3) then the center of teh cell will be in the cell (6,7). We start to count the colums at 1 for the matrix. 
+# We cannot have a localization (0.2,0.1) within the matrix but we can for the cell center.
+# We call a ligand-concentration vector the product of teh concentration of ligand with the vector going from the center of the cell to the cell of the ligand concentration
+# Moreover, the matrix of the cocnetration starts from the top left and the localization of the celle starts form the bottom left
 #
-# The receptors move with the angle alpha which follows a Biased Random Walk
-# ie. alpha ~ N(beta,bias)
-# The concentration of the ligand and the receptor respect the following equation
-# k1 is the speed of the reaction R+L -> RL
-# k2 is the speed of the reaction RL -> R+L
-# [RL] = k1[R][L] - k2[RL]
-# ie [RL] = k1/(k2 +1) * [R][L]
-# We admit that beta is equal to delta[RL]
-# ie beta ~ k1/(k2+1)([R]delta[L] + [L]delta[R])
-# We assume that we only have to look at the concentration of the ligands around the membrane cell
-# and that we do not need to look at the concentration of the receptor (insignificant)
+# 2-We choose the number of possible directions by creating a angle step = 2*pi/degree_precision
 #
-# First we reduce the size of the list of ligands by keeping only those are close to the cell center.
-# Then we are going to look all over the membrane of the cell for ligand concentration 
-# The bias will be proportional in each direction to the differentiate of the ligand concentration
+# 3-The receptors move with the angle alpha which follows a Biased Random Walk
+# ie. alpha ~ N(beta,var)
+# where beta is the angle of the sum of the ligand-concentration vectors
+# and assuming a normal wrapped distribution for the pregfered angle, we assume that:
+# var = sqrt(ln(1/R^2))
+# R is the length of the mean resultant ; R = norm(sum(ligand vector))/sum(norm(ligand vector))
+# 
+# 3bis-We have also constructed another way of calculating the variance, but it is just intuitive:
+# var=1/degree_precision(sum(i=1..degree_precision)(ML(concentration's cell (i))/maximum(ML) * distance(beta,angle(i)))
+# where angle(i)=i*2*pi/degree_precision
+# var= var + ML[round(C[1] + cos(angle)*r)+1,round(C[2] + sin(angle)*r)+1]/maximum(ML)  *  min(abs(beta-angle),2*pi-abs(beta-angle))*min(abs(beta-angle),2*pi-abs(beta-angle))
 
-function angleBRW(L,R=[0.5,0.5,0.5],r=0.04)
-	list=Array(Float64,1,3)	
-	x=0
-	y=0
-	for i in 1:size(L,1)
-		dx=L[i,1]-R[1]
-		dy=L[i,2]-R[2]
-		if (sqrt(dx*dx+dy*dy)<1.1*r && sqrt(dx*dx+dy*dy)>0.9*r) 	
-			list=[list;[dx dy acos(dx/sqrt(dx*dx+dy*dy))*sign(dy)]]
-			x=x+dx
-			y=y+dy
-		end
+function angleBRW(ML=ones(50,50),C=[10,10,0.5],degree_precision=360)
+  r = C[3]
+	sum_x=0
+	sum_y=0
+	sum_norm_vect=0
+	for i in 1:degree_precision
+		angle=i*2*pi/degree_precision
+		#we add one to correct the fact that the matrix doesn't start at 0 and we correct the fact that matrix start from the top left
+    print("cell",C)
+		x_ligand_i = round(C[1] + cos(angle)*r) + 1
+		y_ligand_i = round(y_size - (C[2] + sin(angle)*r)) + 1
+		sum_norm_vect += ML[y_ligand_i,x_ligand_i]
+		sum_x += ML[y_ligand_i,x_ligand_i] * cos(angle)
+		sum_y += ML[y_ligand_i,x_ligand_i] * sin(angle)
 	end
-	if(length(list)>3)
-		beta= acos(x/sqrt(x*x+y*y))*sign(y)
-		bias=std(list[2:end,3])
-		angle=beta+rand()*(bias*bias)
-	else 
-		angle=rand()*2*pi
+	if(sum_x!=0)
+		beta=acos(sum_y/sqrt(sum_x*sum_x+sum_y*sum_y))*sign(sum_y)
+		sd=sqrt(-2*log(sqrt(sum_x*sum_x+sum_y*sum_y)/sum_norm_vect))
+		chosen_angle=beta #+(randn()-1/2)*sd #add this for randomness
+	elseif(sum_y!=0)
+		chosen_angle=pi/2*sign(sum_y)
+	else
+		chosen_angle=rand()*2*pi
 	end
-return angle
+  return chosen_angle
 end
 
-
-
-
-function anglePRW(prev_angle=-pi,sd=0.25)
-	angle = prev_angle+randn()*sd
+#Persistent random walk
+function anglePRW(prev_angle=-pi,variance=0.2)
+	angle = prev_angle+randn()*variance
 	return angle
 end
 
-
-
-
-function anglePBRW(L,R=[0.5,0.5,0.5],r=0.04,prev_angle=-pi,variance=0.25,omega=0.5)
-	return omega*angleBRW(L,R,r) + (1-omega)*anglePRW(prev_angle,variance)
+#Persistent Biased Random walk
+function anglePBRW(prev_angle,L,r,variance=0.25,omega=0.5,C=[0.5,0.5,0.5])
+	return omega*angleBRW(L,C,r) + (1-omega)*anglePRW(prev_angle,variance)
 end
+
+
+
+#println(angleBRW())

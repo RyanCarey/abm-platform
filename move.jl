@@ -1,11 +1,12 @@
-include("angleBRW3.jl")
+include("angle.jl")
 include("border_cell_interactions.jl")
 using Distributions
 
-function propose_move_x(conc_map, X::Array, speed_param::Float64)
+function propose_move_x(conc_map, X::Array{Float64,2}, speed_param::Float64)
+  @assert size(X,1)==1
   Y = copy(X)
   speed = rand()*speed_param
-  angle = anglePRW(Y[1,4]) #elaborate this
+  angle = angleBRW(conc_map,Y[1,:]) #elaborate this
   Y[1,1:2] += speed*[cos(angle) sin(angle)]
   Y[1,4:5] = [angle speed]
   return Y
