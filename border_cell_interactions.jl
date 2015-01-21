@@ -48,7 +48,7 @@ function checkBorders(initial, final, reflect = true)
 			end
 		end
 	angle = atan((final[2] - initial[2]) / (final[1] - initial[1]))
-	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < 0
+	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < r
 		final = checkBorders(initial, final)
 	end
 	return final
