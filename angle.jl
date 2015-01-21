@@ -32,7 +32,6 @@ function angleBRW(ML=ones(50,50),C=[10,10,0.5],degree_precision=360)
 	for i in 1:degree_precision
 		angle=i*2*pi/degree_precision
 		#we add one to correct the fact that the matrix doesn't start at 0 and we correct the fact that matrix start from the top left
-    print("cell",C)
 		x_ligand_i = round(C[1] + cos(angle)*r) + 1
 		y_ligand_i = round(y_size - (C[2] + sin(angle)*r)) + 1
 		sum_norm_vect += ML[y_ligand_i,x_ligand_i]
@@ -42,11 +41,11 @@ function angleBRW(ML=ones(50,50),C=[10,10,0.5],degree_precision=360)
 	if(sum_x!=0)
 		beta=acos(sum_y/sqrt(sum_x*sum_x+sum_y*sum_y))*sign(sum_y)
 		sd=sqrt(-2*log(sqrt(sum_x*sum_x+sum_y*sum_y)/sum_norm_vect))
-		chosen_angle=beta #+(randn()-1/2)*sd #add this for randomness
+		chosen_angle=beta +randn()*sd #add this for randomness
 	elseif(sum_y!=0)
 		chosen_angle=pi/2*sign(sum_y)
 	else
-		chosen_angle=rand()*2*pi
+		chosen_angle= rand()*2*pi
 	end
   return chosen_angle
 end

@@ -12,14 +12,13 @@ function show_cells(locations::Array, x_size::Float64, y_size::Float64)
   display(p)
 end
 
-function output_csv(filename::String,output::String)
+function csv_out(filename::String,output::String)
   f = open(filename,"a")
   write(f,output)
   close(f)
 end
 
-function output_csv(filename::String, out::Array)
-  #@assert size(out,1)=5
+function csv_out(filename::String, out::Array)
   f = open(filename,"a")
   for i in 1:size(out,1)
     g = tuple(out[i,:]...)
