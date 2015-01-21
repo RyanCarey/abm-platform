@@ -28,6 +28,7 @@ for i = 1:steps
   move_any!(conc_map,a, cell_speed)
   show_cells(a, x_size, y_size)
   await_user(.002) # change this to true if you want to advance timesteps manually
+  
 end
 
 
