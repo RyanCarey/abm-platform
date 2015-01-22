@@ -6,7 +6,7 @@ using Distributions
 function propose_move_x(conc_map, X::Cell, speed_param::Float64)
   Y = X
   Y.speed = rand()*speed_param
-  Y.angle = angleBRW(conc_map,Y[1,:])
+  Y.angle = angleBRW(conc_map,Y)
   Y.loc.x += Y.speed * cos(Y.angle)
   Y.loc.y += Y.speed * sin(Y.angle) 
   return Y
