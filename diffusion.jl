@@ -1,4 +1,4 @@
-include("await_user.jl")
+include("pause.jl")
 using Winston
 
 function test_diffusion()
@@ -24,7 +24,7 @@ function n_diffusion_and_display!(X,rate,n)
     diffusion!(X,rate)
     p = imagesc(X,(0,1))
     display(p)
-    await_user(.001)
+    pause(.001)
   end
 end
 
