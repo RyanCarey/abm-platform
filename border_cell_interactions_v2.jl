@@ -1,13 +1,18 @@
 # Module to evaluate border - cell interactions.
-# Receives the original location and desired location of a cell as an array [x y].
-# Call with x, y, radius, false to use sticking behaviour.
+# Receives a cell and desired location of a cell as an array [x y].
+# Call with cell, [x y], false to use sticking behaviour.
 # Needs the bounds of the environment explicitly stated globally.
 
+include("point_type.jl")
+include("cell_type.jl")
 global x_size = 10.0
 global y_size = 10.0
 
-function checkBorders(initial, final, radius, reflect = true)
-
+function checkBorders!(cell::Cell, final, reflect = true)
+	
+	newcell = cell
+	initial = [newcell.loc.x newcell.loc.y]
+	radius = newcell.radius
 	# Calculate bound(s) to be crossed
 
 	# If final Y is less than 0, Y bound is bottom bound
@@ -24,6 +29,39 @@ function checkBorders(initial, final, radius, reflect = true)
 	else
 		x_bound = [x_size 0.0; x_size y_size]
 	end
+
+	# Shrink environment by radius to check if circle ever touches a bound
+	temp_x_left_bound = [radius radius; radius (y_size - radius)]
+	temp_x_right_bound = [(x_size - radius) radius; (x_size - radius) (y_size - radius)]
+	temp_y_upper_bound = [radius (y_size - radius); (x_size - radius) (y_size - radius)]
+	temp_y_lower_bound = [radius radius; (x_size - radius) radius]
+
+	if !(line_intersection(initial, final, temp_x_left_bound, radius)[2] || line_intersection(initial, final, temp_x_right_bound, radius)[2] || line_intersection(initial, final, temp_y_upper_bound, radius)[2] || line_intersection(initial, final, temp_y_lower_bound, radius)[2])
+	println("Circle never touches a bound")
+	cell.loc.x = final[1]
+	cell.loc.y = final[2]
+	return newcell
+	end
+
+	for i in 1:4
+		if i == 1
+			corner = [0 0]
+		end
+		if i == 2
+			corner = [0 y_size]
+		end
+		if i == 3
+			corner = [x_size y_size]
+		end
+		if i == 4
+			corner = [x_size 0]
+		end
+		println("Corner being checked: ", corner)
+		if corner == closest_point(corner, [initial; final])
+			final[1] = float(final[1]) + e
+			final[2] = float(final[2]) + e
+		end
+	end 
 
 	println("Detected bounds are: ")
 	println("X Bound: ", x_bound)
@@ -45,14 +83,19 @@ function checkBorders(initial, final, radius, reflect = true)
 			initial, final = circle_line_collision(initial, final, x_bound, radius)
 		end
 	else
-		return final
+		newcell.loc.x = final[1]
+		newcell.loc.y = final[2]
+		return newcell
 	end
 	
 	angle = atan((final[2] - initial[2]) / (final[1] - initial[1]))
 	if final[1] > x_size || final[1] < 0 || final[2] > y_size || final[2] < 0
-		initial, final, angle = checkBorders(initial, final, radius)
+		newcell = checkBorders(newcell, final)
 	end
-	return initial, final, angle
+	newcell.loc.x = final[1]
+	newcell.loc.y = final[2]
+	newcell.angle = angle
+	return newcell
 end
 			
 
@@ -79,7 +122,7 @@ function line_intersection(initial, final, bound, radius)
 		
 	# Check if lines ever cross, if taken to infinity
 	if det == 0
-		println("Lines do not intersect")
+		println("Lines do not ever intersect")
 		return null, false
 
 	else
@@ -94,18 +137,6 @@ function line_intersection(initial, final, bound, radius)
 
 		# Else return point and false
 		else
-			tempbound = copy(bound)
-			for i = 1:4
-				if bound[i] == 0
-					tempbound[i] = radius
-				else
-					tempbound[i] -= radius
-				end
-			end
-			if (line_intersection(initial, final, tempbound, radius)[2])
-				println("Cell radius means cell and line will intersect")
-				return [x y], true
-			end
 			println("Lines intersect at: ", [x y])
 			println("Note that this point is not on both line segments")
 			return [x y], false
@@ -167,10 +198,10 @@ function circle_line_collision(initial, final, bound, r)
 	b = closest_point(final, bound)
 
 	# C
-	c = closest_point(bound[1;:], initial, final)
+	c = closest_point(bound[1;:], [initial; final])
 
 	# D
-	d = closest_point(bound[2;:], initial, final)
+	d = closest_point(bound[2;:], [initial; final])
 
 	# AC vector
 	println("Initial Loc: ", initial)
