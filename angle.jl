@@ -1,7 +1,7 @@
 # Biased Random Walk V2
 # C is the coordinate (x,y,z) of the studied cell
 # r is the radius of a cell
-# ML is the matrix of ligand's concentration
+# conc_map is the matrix of ligand's concentration
 # degree_precision is an integer and the numnber of ligants we are going to use to assess the favorite direction
 # 1-We first need to adapt the localization of the cell to the matrix. The cell will be spotted by the cooridnates (they can be float)
 # whereas the matrix is located thaks to integer. We assume that the localisation of the cell matches with the coordinates of the matrix. 
@@ -20,40 +20,37 @@
 # R is the length of the mean resultant ; R = norm(sum(ligand vector))/sum(norm(ligand vector))
 # 
 # 3bis-We have also constructed another way of calculating the variance, but it is just intuitive:
-# var=1/degree_precision(sum(i=1..degree_precision)(ML(concentration's cell (i))/maximum(ML) * distance(beta,angle(i)))
+# var=1/degree_precision(sum(i=1..degree_precision)(conc_map(concentration's cell (i))/maximum(ML) * distance(beta,angle(i)))
 # where angle(i)=i*2*pi/degree_precision
-# var= var + ML[round(C[1] + cos(angle)*r)+1,round(C[2] + sin(angle)*r)+1]/maximum(ML)  *  min(abs(beta-angle),2*pi-abs(beta-angle))*min(abs(beta-angle),2*pi-abs(beta-angle))
+# var= var + conc_map[round(C[1] + cos(angle)*r)+1,round(C[2] + sin(angle)*r)+1]/maximum(ML)  *  min(abs(beta-angle),2*pi-abs(beta-angle))*min(abs(beta-angle),2*pi-abs(beta-angle))
 
-function angleBRW(ML=ones(50,50),C=[10,10,0.5],degree_precision=360)
-  r = C[3]
+function angleBRW(C::Cell, conc_map::Array = ones(50,50), degree_precision::Int = 360)
 	sum_x=0
 	sum_y=0
 	sum_norm_vect=0
 	for i in 1:degree_precision
-		angle=i*2*pi/degree_precision
+		C.angle=i*2*pi/degree_precision
 		#we add one to correct the fact that the matrix doesn't start at 0 and we correct the fact that matrix start from the top left
-		x_ligand_i = round(C[1] + cos(angle)*r) + 1
-		y_ligand_i = round(y_size - (C[2] + sin(angle)*r)) + 1
-		sum_norm_vect += ML[y_ligand_i,x_ligand_i]
-		sum_x += ML[y_ligand_i,x_ligand_i] * cos(angle)
-		sum_y += ML[y_ligand_i,x_ligand_i] * sin(angle)
+		x_ligand_i = round(C.loc.x + cos(C.angle)*C.r) + 1
+		y_ligand_i = round(y_size - (C.loc.y + sin(C.angle)*C.r)) + 1
+		sum_norm_vect += conc_map[y_ligand_i,x_ligand_i]
+		sum_x += conc_map[y_ligand_i,x_ligand_i] * cos(C.angle)
+		sum_y += conc_map[y_ligand_i,x_ligand_i] * sin(C.angle)
 	end
-	if(sum_x!=0)
-		beta=acos(sum_y/sqrt(sum_x*sum_x+sum_y*sum_y))*sign(sum_y)
-		sd=sqrt(-2*log(sqrt(sum_x*sum_x+sum_y*sum_y)/sum_norm_vect))
-		chosen_angle=beta +randn()*sd #add this for randomness
+	if(sum_x != 0)
+		beta=acos(sum_y / sqrt(sum_x*sum_x+sum_y*sum_y)) * sign(sum_y)
+		sd=sqrt(-2 * log(sqrt(sum_x*sum_x+sum_y*sum_y) / sum_norm_vect))
+		return beta +randn() * sd
 	elseif(sum_y!=0)
-		chosen_angle=pi/2*sign(sum_y)
+		return pi/2*sign(sum_y)
 	else
-		chosen_angle= rand()*2*pi
+		return rand()*2*pi
 	end
-  return chosen_angle
 end
 
 #Persistent random walk
-function anglePRW(prev_angle=-pi,variance=0.2)
-	angle = prev_angle+randn()*variance
-	return angle
+function anglePRW(prev_angle=-pi, sd=pi/20)
+	return prev_angle+randn()*sd
 end
 
 #Persistent Biased Random walk
