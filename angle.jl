@@ -24,7 +24,9 @@
 # where angle(i)=i*2*pi/degree_precision
 # var= var + conc_map[round(C[1] + cos(angle)*r)+1,round(C[2] + sin(angle)*r)+1]/maximum(ML)  *  min(abs(beta-angle),2*pi-abs(beta-angle))*min(abs(beta-angle),2*pi-abs(beta-angle))
 
-function angleBRW(C::Cell, conc_map::Array = ones(50,50), degree_precision::Int = 360)
+include("cell_type.jl")
+
+function angleBRW(conc_map::Array, C::Cell, degree_precision::Int = 360)
 	sum_x=0
 	sum_y=0
 	sum_norm_vect=0
