@@ -5,16 +5,16 @@
 #3rd parameter: width of the square surrounding the cells
 #4th parameter: radius of the cell
 #
-#This function return a 2D list of random located cells within the square's borders. The cells have a radius and they do not overlap.
-#We initilaize the first location of the cell and then for each new potential cell we look within the list whether the cell is
+#This function return a 2D cells of random located cells within the square's borders. The cells have a radius and they do not overlap.
+#We initilaize the first location of the cell and then for each new potential cell we look within the cells whether the cell is
 #overlapping with another cell. If yes, we choose another random location for the cell
 
 function init(n,x,y,r)
-list=Array(Float64,n,5)
+cells=Array(Float64,n,5)
 rvar = 0.1 # variation can be adjusted here
-list[1,3]= rand_radius(r,r*rvar)
-list[1,1]= list[1,3] + (x- 2 * list[1,3]) * rand()
-list[1,2]= list[1,3] + (y- 2 * list[1,3]) * rand()
+cells[1,3]= rand_radius(r,r*rvar)
+cells[1,1]= cells[1,3] + (x- 2 * cells[1,3]) * rand()
+cells[1,2]= cells[1,3] + (y- 2 * cells[1,3]) * rand()
   if(n>1)
     for i in 2:n
       placed=false
@@ -25,7 +25,7 @@ list[1,2]= list[1,3] + (y- 2 * list[1,3]) * rand()
         yi = ri+(y-2*ri) * rand()
         overlap=false
         for j in 1:i-1
-          if((xi-list[j,1])^2+(yi-list[j,2])^2<(ri+list[j,3])^2)
+          if((xi-cells[j,1])^2+(yi-cells[j,2])^2<(ri+cells[j,3])^2)
             overlap=true
           end
         end
@@ -36,15 +36,15 @@ list[1,2]= list[1,3] + (y- 2 * list[1,3]) * rand()
             error("could not place cell, try smaller radius or larger map")
           end
         else
-          list[i,1]=xi
-          list[i,2]=yi
-          list[i,3]=ri
+          cells[i,1]=xi
+          cells[i,2]=yi
+          cells[i,3]=ri
           placed=true
         end
       end
     end
   end
-return list
+return cells
 end
 
 function rand_radius(mean,stdev)
