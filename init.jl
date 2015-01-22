@@ -1,4 +1,4 @@
-
+include("cell_type.jl")
 # Initialization Function
 # 1st parameter: Number of cells
 # 2nd parameter: Height of environment
@@ -37,9 +37,8 @@ rvar = 0.1 # Radius Variation
 						error("could not place cell, try smaller radius or larger map")
 						end
 					else
-					cells[i].loc.x = xi
-					cells[i].loc.y = yi
-					cells[i].r = ri
+					cell = Cell(Point(xi, yi), ri, 0, 0)
+					push!(cells, cell)					
 					placed = true
 					end
 			end
