@@ -3,16 +3,13 @@
 # Call with cell, [x y], false to use sticking behaviour.
 # Needs the bounds of the environment explicitly stated globally.
 
-include("point_type.jl")
 include("cell_type.jl")
-global x_size = 10.0
-global y_size = 10.0
 
-function checkBorders!(cell::Cell, final, reflect = true)
+function check_borders(cell::Cell, final, reflect = true)
 	
 	newcell = cell
 	initial = [newcell.loc.x newcell.loc.y]
-	radius = newcell.radius
+	radius = cell.r
 	# Calculate bound(s) to be crossed
 
 	# If final Y is less than 0, Y bound is bottom bound

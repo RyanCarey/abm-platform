@@ -34,14 +34,14 @@ junk = readline(STDIN)
 for i = 1:steps
   diffusion!(conc_map,diffusion_rate) # turn diffusion on or off
   move_any!(conc_map, X, cell_speed)
-  #show_agents(X, x_size, y_size)
+  show_agents(X, x_size, y_size)
   
   # for speed, it will be necessary to batch these outputs in groups of 100
   #if csv_output
     #j = [repmat([i],size(X,1),1) X[:,1:2] X[:,5]]
     #csv_out(file,j)
   #end
-  #pause(.002)
+  pause(0)
 end
 
 

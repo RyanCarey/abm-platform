@@ -1,5 +1,5 @@
 include("angle.jl")
-include("borders.jl")
+include("border2.jl")
 include("cell_type.jl")
 using Distributions
 
@@ -23,7 +23,7 @@ function move_cell_x!(conc_map, X::Array, m::Int, max_speed::Float64)
   #takes all cell positions and returns the whole list with a valid move or no move
   S = X[m]
   X[m] = propose_move_x(conc_map, S, max_speed)
-  #X[m] = check_borders(S, X[m].loc)
+  X[m] = check_borders(S, X[m].loc)
   print(X)
   if is_overlap(X, m)
     X[m] = S
