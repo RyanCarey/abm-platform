@@ -1,6 +1,6 @@
-function pause(time)
+function pause(time,message::String = "anykey to advance timestep")
   if time==0
-    println("anykey to advance timestep")
+    println(message)
     junk = readline(STDIN)
   else
     sleep(time)

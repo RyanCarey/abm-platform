@@ -5,14 +5,21 @@ include("show.jl")
 include("pause.jl")
 include("optional_arg.jl")
 include("diffusion.jl")
+include("entry.jl")
 
-n_cell = int(optional_arg(1,"Enter initial number of cells: "))
-cell_speed = float(optional_arg(2,"Enter speed of cells: "))
-radius = float(optional_arg(3,"Enter radius of cells: "))
-const steps = int(optional_arg(4,"Enter number of timesteps: "))
-const x_size = float(optional_arg(5,"Enter width of environment: "))
-const y_size = float(optional_arg(6,"Enter height of environment: "))
-const diffusion_rate = .1
+recieved_entry = false
+while !recieved_entry
+  recieved_entry, v = init_window()
+end
+
+n_cell = int(v[1])
+cell_speed = v[2]
+radius = v[3]
+const steps = int(v[4])
+const x_size = v[5]
+const y_size = v[6]
+print(n_cell,cell_speed,"number of cells and cell speed")
+
 # at this stage, it's silly to have different height and width because it won't be graphed correctly
 csv_output = true
 
