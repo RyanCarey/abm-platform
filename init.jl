@@ -5,7 +5,7 @@ include("cell_type.jl")
 # 3rd parameter: Width of environment
 # 4th parameter: Radius of the cell
 #
-# This function return a 2D cells of random located cells within the square's borders. The cells have a radius and they do not overlap.
+# This function return a 2D cells of random located cells within the squares borders. The cells have a radius and they do not overlap.
 # We initilaize the first location of the cell and then for each new potential cell we look within the cells whether the cell is
 # overlapping with another cell. If yes, we choose another random location for the cell
 
@@ -38,7 +38,7 @@ rvar = 0.1 # Radius Variation
 						end
 					else
 					cell = Cell(Point(xi, yi), ri, 0, 0)
-					push!(cells, cell)					
+					push!(cells, cell)			
 					placed = true
 					end
 			end
