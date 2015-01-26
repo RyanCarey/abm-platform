@@ -6,6 +6,8 @@
 include("cell_type.jl")
 
 function check_borders(cell::Cell, final, reflect = true)
+
+	final = [final[1] final[2]]
 	
 	newcell = cell
 	initial = [newcell.loc.x newcell.loc.y]
@@ -55,8 +57,8 @@ function check_borders(cell::Cell, final, reflect = true)
 		end
 		println("Corner being checked: ", corner)
 		if corner == closest_point(corner, [initial; final])
-			final[1] = float(final[1]) + e
-			final[2] = float(final[2]) + e
+			final[1] = float(final[1]) - e
+		#	final[2] = float(final[2]) + e
 		end
 	end 
 
@@ -87,7 +89,7 @@ function check_borders(cell::Cell, final, reflect = true)
 	
 	angle = atan((final[2] - initial[2]) / (final[1] - initial[1]))
 	if final[1] > x_size || final[1] < 0 || final[2] > y_size || final[2] < 0
-		newcell = checkBorders(newcell, final)
+		newcell = check_borders(newcell, final)
 	end
 	newcell.loc.x = final[1]
 	newcell.loc.y = final[2]
