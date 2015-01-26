@@ -29,7 +29,7 @@ function n_diffusion_and_display!(X,rate,n)
 end
 
 function init_diffusion(x,y)
-  X = repmat([0:1/ceil(x):1]',int(ceil(y))+1,1)
+  X = repmat([0:1/int(ceil(x)):1]',int(ceil(y))+1,1)
 end
 
 
