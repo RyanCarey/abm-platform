@@ -7,8 +7,6 @@ include("cell_type.jl")
 
 function check_borders(cell::Cell, final, reflect = true)
 	
-	#initial = [cell.loc.x, cell.loc.y]
- 	
 	r = cell.r
 	if final[2] < r
 		y_bound = r
@@ -25,13 +23,16 @@ function check_borders(cell::Cell, final, reflect = true)
 	intersect_y_bound = (y_bound - offset) / grad
 	intersect_x_bound = (grad * x_bound) + offset
 	if (final[1] > x_size - r || final[1] < r) && (final[2] > y_size - r|| final[2] < r)
+		
 		if r < intersect_y_bound < y_size - r
+			
 			if reflect
 				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
 			else
 				final = stick_cell_y(final, y_bound, intersect_y_bound)
 			end			
 		else
+			
 			if reflect
 	     			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
 			else
@@ -39,12 +40,14 @@ function check_borders(cell::Cell, final, reflect = true)
 			end	
 		end
 	elseif final[1] > x_size - r|| final[1] < r
+		
 		if reflect
 			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
 		else
 			final = stick_cell_x(final, x_bound, intersect_x_bound)
 		end
-		else final[2] > y_size - r|| final[2] < 0
+		elseif final[2] > y_size - r || final[2] < r
+			
 			if reflect
 				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
 			else
@@ -55,6 +58,7 @@ function check_borders(cell::Cell, final, reflect = true)
 	cell.loc.x = final[1]
 	cell.loc.y = final[2]
 	cell.angle = angle
+	
 	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < r
 		cell = check_borders(cell, final)
 	end
@@ -62,6 +66,7 @@ function check_borders(cell::Cell, final, reflect = true)
 end
 
 function reflect_cell_x(cell, final, x_bound, x_intersect)
+	
 	origin_x = cell.loc.x
 	origin_y = cell.loc.y
 	desired_x = final[1]
@@ -71,11 +76,14 @@ function reflect_cell_x(cell, final, x_bound, x_intersect)
 	if isequal(x_intersect, NaN)
 		x_intersect = final[2]
 	end
-	initial = [x_bound, x_intersect]
+	cell.loc.x = x_bound
+	cell.loc.y = x_intersect
+	
 	return cell, final
 end
 
 function reflect_cell_y(cell, final, y_bound, y_intersect)
+	
 	origin_x = cell.loc.x
 	origin_y = cell.loc.y
 	desired_x = final[1]
@@ -85,7 +93,9 @@ function reflect_cell_y(cell, final, y_bound, y_intersect)
 	if isequal(y_intersect, NaN)
 		y_intersect = final[1]
 	end
-	initial = [y_intersect, y_bound]
+	cell.loc.x = y_intersect
+	cell.loc.y = y_bound
+	
 	return cell, final
 end
 
