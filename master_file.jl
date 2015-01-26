@@ -8,8 +8,6 @@ include("diffusion.jl")
 
 
 function main()
-  println("recieved entry")
-
   n_cell = int(v[1])
   cell_speed = v[2]
   radius = v[3]
@@ -44,7 +42,7 @@ function main()
       #j = [repmat([i],size(X,1),1) X[:,1:2] X[:,5]]
       #csv_out(file,j)
     #end
-  pause(0.2)
+  pause(0.1)
   end
 end
 

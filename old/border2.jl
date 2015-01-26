@@ -5,7 +5,7 @@
 
 include("cell_type.jl")
 
-function check_borders(cell::Cell, final, reflect = true)
+function check_borders!(cell::Cell, final, reflect = true)
 	
 	global reflection = true
 	final = [final[1] final[2]]
@@ -106,8 +106,8 @@ function check_borders(cell::Cell, final, reflect = true)
 	newcell.angle = angle
 
 	if final[1] > x_size || final[1] < 0 || final[2] > y_size || final[2] < 0
-		println("Had violated both bounds. Repeating check_borders")
-		newcell = check_borders(newcell, final)
+		println("Had violated both bounds. Repeating check_borders!")
+		newcell = check_borders!(newcell, final)
 	end
 
 	return newcell

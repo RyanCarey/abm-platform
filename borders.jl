@@ -5,7 +5,7 @@
 
 include("cell_type.jl")
 
-function check_borders(cell::Cell, final, reflect = true)
+function check_borders!(cell::Cell, final, reflect = true)
 	
 	r = cell.r
 	if final[2] < r
@@ -60,7 +60,7 @@ function check_borders(cell::Cell, final, reflect = true)
 	cell.angle = angle
 	
 	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < r
-		cell = check_borders(cell, final)
+		cell = check_borders!(cell, final)
 	end
 	return cell
 end
