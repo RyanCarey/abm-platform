@@ -1,4 +1,4 @@
-# Module to generate new cells mid simulation
+# Module to generate new cells mid simulation, or kill cells
 # Takes the initial location of a cell, angle of travel, a threshold for chance to generate a new cell [0;1], and cell radius
 # Threshold 0.1 = 10% chance each time step
 # Needs to know desired direction of parent cell
@@ -22,8 +22,22 @@ function cell_division(cells, threshold)
 			new_radius = (radius * .72)
 			cells[i; 3] = new_radius
 			push!(cells, [new[1], new[2], new_radius])
-			return cells
+			
 		end
 	end
+	return cells
+end
+
+function cell_death(cells, threshold)
+
+	for i = size(cells)
+		seed = rand()
+		if seed < threshold
+			# Dead Cell!
+			println("Dead Cell!")
+			pop!(cells, i)
+		end
+	end
+	return cells
 end
 		
