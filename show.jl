@@ -11,7 +11,7 @@ function show_agents(X::Array, x_size::Float64, y_size::Float64)
   p = scatter(x,y,r/x_size.*70,"ro")
   xlim(0,x_size)
   ylim(0,y_size)
-  display(p)
+  display(c,p)
 end
 
 function csv_out(filename::String,output::String)

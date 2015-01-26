@@ -26,8 +26,6 @@ function main()
   conc_map = init_diffusion(x_size,y_size)
   X = init(n_cell,x_size,y_size,radius) 
   show_agents(X, x_size, y_size)
-  println("press any key to go")
-  junk = readline(STDIN)
 
 
   #if csv_output

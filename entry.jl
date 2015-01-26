@@ -1,8 +1,9 @@
 using Tk
 include("pause.jl")
 include("master_file.jl")
+include("show.jl")
 
-function store_vars(path)
+function simulate(path)
   n = length(prompts)
   for i in 1:n
     try
@@ -13,25 +14,21 @@ function store_vars(path)
     end
   end
   println("variables stored")
-  recieved_entry = true
   main()
 end
 
 function init_window()
-global entries = []
-global prompts = ["Number of cells: ", "Speed of cells: ", "Average cell radius: ", "Number of timesteps: ", 
-"Width of environment: ", "Height of environment: "]
-field_length = length(prompts)
-global v = zeros(field_length,1)
-  w = Toplevel()
-  f = Frame(w); pack(f, expand=true, fill="both")
-
+  global entries = []
+  global prompts = ["Number of cells: ", "Speed of cells: ", "Average cell radius: ", "Number of timesteps: ", 
+  "Width of environment: ", "Height of environment: "]
+  field_length = length(prompts)
+  global v = zeros(field_length,1)
   n = length(prompts)
 
   for i in 1:n
-    push!(entries, Entry(f))
+    push!(entries, Entry(ctrls))
   end
-  b = Button(f, "Ok")
+  b = Button(ctrls, "Run")
 
   for i in 1:n
     formlayout(entries[i],prompts[i])
@@ -39,19 +36,38 @@ global v = zeros(field_length,1)
   formlayout(b, nothing)
   focus(entries[1])
 
-
-
-  bind(b,"command", store_vars)
-  bind(b,"<Return>", store_vars)
-  bind(b,"<KP_Enter>", store_vars)
+  bind(b,"command", simulate)
+  bind(b,"<Return>", simulate)
+  bind(b,"<KP_Enter>", simulate)
   for i in 1:n
-    bind(entries[i], "<Return>", store_vars)
-    bind(entries[i], "<KP_Enter>", store_vars)
+    bind(entries[i], "<Return>", simulate)
+    bind(entries[i], "<KP_Enter>", simulate)
   end
 
   if !isinteractive()
     pause(0,"any key to close program")
   end
 end
+
+
+w = Toplevel("Testing", 700, 400)
+f = Frame(w); pack(f, expand=true, fill="both")
+global c = Canvas(f, 500, 400)
+
+grid(c, 1, 1, sticky="nsew")
+ctrls = Frame(f)
+grid(ctrls, 1, 2, sticky="sw", pady=5, padx=5)
+grid_columnconfigure(f, 1, weight=1)
+grid_rowconfigure(f, 1, weight=1)
+
+
+#grid(ok, 1, 1)
+
+# plot sin
+x = [1:pi/100:4*pi]
+y = sin(x)
+
+p = FramedPlot()
+Winston.display(c, p)
 
 init_window()
