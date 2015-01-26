@@ -22,8 +22,22 @@ function cell_division(cells, threshold)
 			new_radius = (radius * .72)
 			cells[i; 3] = new_radius
 			push!(cells, [new[1], new[2], new_radius])
-			return cells
+			
 		end
 	end
+	return cells
+end
+
+function cell_death(cells, threshold)
+
+	for i = size(cells)
+		seed = rand()
+		if seed < threshold
+			# Dead Cell!
+			println("Dead Cell!")
+			pop!(cells, i)
+		end
+	end
+	return cells
 end
 		
