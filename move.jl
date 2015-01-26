@@ -1,5 +1,5 @@
 include("angle.jl")
-include("border2.jl")
+include("borders.jl")
 include("cell_type.jl")
 using Distributions
 
