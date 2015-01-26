@@ -1,3 +1,6 @@
+# Added a name and state component to the Cell type.
+# Name is initialised as the index number of the cell whilst state is either "Alive" or "Dead"
+
 type Point
 	x::Real
 	y::Real
@@ -9,8 +12,10 @@ function getindex(a::Point,b::Int64)
 end
 
 type Cell
+	name::String
 	loc::Point
 	r::Real
 	angle::Real
 	speed::Real
+	state::String
 end

@@ -34,10 +34,10 @@ rvar = 0.1 # Radius Variation
 						fails += 1
 						if fails > 10000
 						println("")
-						error("could not place cell, try smaller radius or larger map")
+						error("Could not place cell; try smaller radius or larger map")
 						end
 					else
-					cell = Cell(Point(xi, yi), ri, 0, 0)
+					cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive")
 					push!(cells, cell)			
 					placed = true
 					end
