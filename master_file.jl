@@ -17,7 +17,6 @@ function main()
   global x_size = v[5]
   global y_size = v[6]
   const diffusion_rate = .1
-  println(n_cell,cell_speed,"number of cells and cell speed")
 
   # at this stage, it's silly to have different height and width because it won't be graphed correctly
   csv_output = true
@@ -36,7 +35,6 @@ function main()
   #end
 
   for i = 1:steps
-    println("iterating")
     diffusion!(conc_map,diffusion_rate) # turn diffusion on or off
     move_any!(conc_map, X, cell_speed)
     show_agents(X, x_size, y_size)
@@ -46,7 +44,7 @@ function main()
       #j = [repmat([i],size(X,1),1) X[:,1:2] X[:,5]]
       #csv_out(file,j)
     #end
-  #pause(0)
+  pause(0.2)
   end
 end
 

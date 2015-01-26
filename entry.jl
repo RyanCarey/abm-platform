@@ -44,8 +44,14 @@ function init_window()
     bind(entries[i], "<KP_Enter>", simulate)
   end
 
+  # keeps program open
   if !isinteractive()
-    pause(0,"any key to close program")
+    while true
+      a = readline(STDIN)
+      if a == "exit"
+        return
+      end
+    end
   end
 end
 
