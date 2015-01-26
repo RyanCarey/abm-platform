@@ -6,7 +6,8 @@
 include("cell_type.jl")
 
 function check_borders(cell::Cell, final, reflect = true)
-
+	
+	global reflection = true
 	final = [final[1] final[2]]
 	
 	newcell = cell
@@ -28,7 +29,7 @@ function check_borders(cell::Cell, final, reflect = true)
 	else
 		x_bound = [x_size 0.0; x_size y_size]
 	end
-
+	
 	# Shrink environment by radius to check if circle ever touches a bound
 	temp_x_left_bound = [radius radius; radius (y_size - radius)]
 	temp_x_right_bound = [(x_size - radius) radius; (x_size - radius) (y_size - radius)]
@@ -39,9 +40,10 @@ function check_borders(cell::Cell, final, reflect = true)
 	println("Circle never touches a bound")
 	cell.loc.x = final[1]
 	cell.loc.y = final[2]
+	reflection = false
 	return newcell
 	end
-
+	corner_passed = false
 	for i in 1:4
 		if i == 1
 			corner = [0 0]
@@ -55,21 +57,31 @@ function check_borders(cell::Cell, final, reflect = true)
 		if i == 4
 			corner = [x_size 0]
 		end
-		println("Corner being checked: ", corner)
+	#	println("Corner being checked: ", corner)
 		if corner == closest_point(corner, [initial; final])
-			final[1] = float(final[1]) - e
+	#		println("Cell passes directly through corner!")
+			corner_passed = true
+		#	final[1] = float(final[1]) - e
 		#	final[2] = float(final[2]) + e
 		end
-	end 
+	end
+	
+	#if corner_passed
+#		final[1] = float(final[1]) - 0.05
+	#end
 
 	println("Detected bounds are: ")
 	println("X Bound: ", x_bound)
 	println("Y Bound: ", y_bound)
+	println("Initial: ", initial)
+	println("Final: ", final)
+	println("Radius: ", radius)
 	# Detect which bounds potential move violates
 	# If movement vector intersects both bounds
 	if (line_intersection(initial, final, y_bound, radius)[2])
 		println("Y Bound Violated!")
 		if reflect
+			println("Reflecting Y")
 			initial, final = circle_line_collision(initial, final, y_bound, radius)
 		else
 			initial, final = circle_line_collision(initial, final, y_bound, radius)
@@ -77,6 +89,7 @@ function check_borders(cell::Cell, final, reflect = true)
 	elseif (line_intersection(initial, final, x_bound, radius)[2])
 		println("X Bound Violated!")
 		if reflect
+			println("Reflecting X")
 			initial, final = circle_line_collision(initial, final, x_bound, radius)
 		else
 			initial, final = circle_line_collision(initial, final, x_bound, radius)
@@ -88,12 +101,15 @@ function check_borders(cell::Cell, final, reflect = true)
 	end
 	
 	angle = atan((final[2] - initial[2]) / (final[1] - initial[1]))
-	if final[1] > x_size || final[1] < 0 || final[2] > y_size || final[2] < 0
-		newcell = check_borders(newcell, final)
-	end
 	newcell.loc.x = final[1]
 	newcell.loc.y = final[2]
 	newcell.angle = angle
+
+	if final[1] > x_size || final[1] < 0 || final[2] > y_size || final[2] < 0
+		println("Had violated both bounds. Repeating check_borders")
+		newcell = check_borders(newcell, final)
+	end
+
 	return newcell
 end
 			
@@ -136,9 +152,16 @@ function line_intersection(initial, final, bound, radius)
 
 		# Else return point and false
 		else
-			println("Lines intersect at: ", [x y])
-			println("Note that this point is not on both line segments")
-			return [x y], false
+			if reflection
+				println("Lines intersect at: ", [x y])
+				println("Note that this point is not on both line segments")
+				println("However, due to the radius of the circle, the cell will hit wall")
+				return [x y], true
+			else
+				println("Lines intersect at: ", [x y])
+				println("Note that this point is not on both line segments")
+				return [x y], false
+			end
 		end
 
 	end
@@ -147,7 +170,7 @@ end
 # Function to calculate closest point on line to the first point
 # Syntax: Point [x y], Line [x y; x y]
 function closest_point(point, line)
-	println("Calculating closest point to ", point, " on line between ", line[1;:], line[2;:])
+#	println("Calculating closest point to ", point, " on line between ", line[1;:], line[2;:])
 	A = line[2; 2] - line[1; 2]
 	B = line[1; 1] - line[2; 1]
 	C1 = (A * line[1; 1]) + (B * line[1; 2])
@@ -161,7 +184,7 @@ function closest_point(point, line)
 		x = point[1]
 		y = point[2]
 	end
-	println("Closest point is: ", [x y])
+#	println("Closest point is: ", [x y])
 	return [x y]
 end
 
@@ -169,15 +192,15 @@ end
 # Syntax: Initial Point [x y], Point 2 [x y], Point 3 [x y]
 
 function collision_response(initial, p2, p3)
-	println("Calculating collision response...")
+#	println("Calculating collision response...")
 	direction_vector = initial - (2 * (p3 - p2) + p2)
-	println("Direction vector is: ", direction_vector)
+#	println("Direction vector is: ", direction_vector)
 
 	norm_d_v = sqrt(sum(direction_vector.^2, 2))
-	println("Norm D V is: ", norm_d_v)
+#	println("Norm D V is: ", norm_d_v)
 
 	u_v = direction_vector ./ norm_d_v
-	println("UV is: ", u_v)
+#	println("UV is: ", u_v)
 
 	return u_v
 end
@@ -185,7 +208,7 @@ end
 # Function to calculate the outcome of a circle - line collision
 # Syntax: Initial Point of Circle [x y], Final Point of Circle [x y], Bound Line [x y; x y], Radius R
 function circle_line_collision(initial, final, bound, r)
-	println("Calculating point at which circle collides with line")
+#	println("Calculating point at which circle collides with line")
 	# Point 1
 	p1 = closest_point(initial, bound)
 	distance = sqrt((p1[1] - initial[1]) ^ 2 + (p1[2] - initial[2]) ^ 2)
@@ -203,38 +226,38 @@ function circle_line_collision(initial, final, bound, r)
 	d = closest_point(bound[2;:], [initial; final])
 
 	# AC vector
-	println("Initial Loc: ", initial)
-	println("A: ", a)
+#	println("Initial Loc: ", initial)
+#	println("A: ", a)
 	ac = sqrt(sum((initial - a).^2,2))
 
 	#P1C vector
 	p1c = sqrt(sum((initial - p1).^2, 2))
 
 	movement = final - initial
-	println("Movement: ", movement)
+#	println("Movement: ", movement)
 	norm_move = sqrt(sum(movement.^2,2))
-	println("Norm Move: ", norm_move)
+#	println("Norm Move: ", norm_move)
 	term = movement ./ norm_move
-	println("Term: ", term)
-	println("AC is: ", ac)
-	println("p1c is: ", p1c)
-	println("a is: ", a)
+#	println("Term: ", term)
+#	println("AC is: ", ac)
+#	println("p1c is: ", p1c)
+#	println("a is: ", a)
 	p2 = a - r * (ac / p1c) * term
-	println("p2: ", p2)
+#	println("p2: ", p2)
 	
 	pc = closest_point(p2, bound)
-	println("pc: ", pc)
+#	println("pc: ", pc)
 	p3 = p2 + (p1 - pc)
-	println("p3: ", p3)
+#	println("p3: ", p3)
 
 	u_v = collision_response(initial, p2, p3)
-	println("U V: ", u_v)
+#	println("U V: ", u_v)
 	difference = sqrt(sum((p2 - initial).^2, 2))
-	println("Difference: ", difference)
+#	println("Difference: ", difference)
 	left_to_travel = norm_move - difference
-	println("Left to travel: ", left_to_travel)
+#	println("Left to travel: ", left_to_travel)
 	collision_velocity = u_v .* left_to_travel
-	println("Collision Velocity: ", collision_velocity)
+#	println("Collision Velocity: ", collision_velocity)
 	end_loc = p2 + collision_velocity
 	return p2, end_loc
 

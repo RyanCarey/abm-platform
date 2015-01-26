@@ -1,11 +1,15 @@
 # Module to evaluate border - cell interactions.
 # Receives the original location and desired location of a cell as an array [x, y].
-# Call with x, y, false to use sticking behaviour.
+# Call with Cell, false to use sticking behaviour.
 # Needs the bounds of the environment explicitly stated globally.
 
+include("cell_type.jl")
 
-function check_borders(initial, final, reflect = true)
-  r = initial[3]
+function check_borders(cell::Cell, final, reflect = true)
+	
+	#initial = [cell.loc.x, cell.loc.y]
+ 	
+	r = cell.r
 	if final[2] < r
 		y_bound = r
 	else
@@ -16,47 +20,50 @@ function check_borders(initial, final, reflect = true)
 	else
 		x_bound = x_size - r
 	end
-	grad = (final[2] - initial[2]) / (final[1] - initial[1])
-	offset = initial[2] - (grad * initial[1])
+	grad = (final[2] - cell.loc.y) / (final[1] - cell.loc.x)
+	offset = cell.loc.y - (grad * cell.loc.x)
 	intersect_y_bound = (y_bound - offset) / grad
 	intersect_x_bound = (grad * x_bound) + offset
 	if (final[1] > x_size - r || final[1] < r) && (final[2] > y_size - r|| final[2] < r)
 		if r < intersect_y_bound < y_size - r
 			if reflect
-				initial[1:2], final[1:2] = reflect_cell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
+				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
 			else
-				final = stick_cell_y(initial, final, y_bound, intersect_y_bound)
+				final = stick_cell_y(final, y_bound, intersect_y_bound)
 			end			
 		else
 			if reflect
-	     	initial[1:2], final[1:2] = reflect_cell_x(initial[1:2], final[1:2], x_bound, intersect_x_bound)
+	     			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
 			else
-				final = stick_cell_x(initial[1:2] , final[1:2] , x_bound, intersect_x_bound)
+				final = stick_cell_x(final, x_bound, intersect_x_bound)
 			end	
 		end
 	elseif final[1] > x_size - r|| final[1] < r
 		if reflect
-			initial[1:2], final[1:2] = reflect_cell_x(initial[1:2], final[1:2], x_bound, intersect_x_bound)
+			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
 		else
-			final = stick_cell_x(initial[1:2] , final[1:2] , x_bound, intersect_x_bound)
+			final = stick_cell_x(final, x_bound, intersect_x_bound)
 		end
 		else final[2] > y_size - r|| final[2] < 0
 			if reflect
-				initial[1:2], final[1:2] = reflect_cell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
+				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
 			else
-				final[1:2] = stick_cell_y(initial[1:2], final[1:2], y_bound, intersect_y_bound)
+				final = stick_cell_y(final, y_bound, intersect_y_bound)
 			end
 		end
-	angle = atan((final[2] - initial[2]) / (final[1] - initial[1]))
+	angle = atan((final[2] - cell.loc.y) / (final[1] - cell.loc.x))
+	cell.loc.x = final[1]
+	cell.loc.y = final[2]
+	cell.angle = angle
 	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < r
-		final = check_borders(initial, final)
+		cell = check_borders(cell, final)
 	end
-	return final
+	return cell
 end
 
-function reflect_cell_x(initial, final, x_bound, x_intersect)
-	origin_x = initial[1]
-	origin_y = initial[2]
+function reflect_cell_x(cell, final, x_bound, x_intersect)
+	origin_x = cell.loc.x
+	origin_y = cell.loc.y
 	desired_x = final[1]
 	desired_y = final[2]
 	desired_x = 2(x_bound) - desired_x
@@ -65,12 +72,12 @@ function reflect_cell_x(initial, final, x_bound, x_intersect)
 		x_intersect = final[2]
 	end
 	initial = [x_bound, x_intersect]
-	return initial, final
+	return cell, final
 end
 
-function reflect_cell_y(initial, final, y_bound, y_intersect)
-	origin_x = initial[1]
-	origin_y = initial[2]
+function reflect_cell_y(cell, final, y_bound, y_intersect)
+	origin_x = cell.loc.x
+	origin_y = cell.loc.y
 	desired_x = final[1]
 	desired_y = final[2]
 	desired_y = 2(y_bound) - desired_y
@@ -79,15 +86,15 @@ function reflect_cell_y(initial, final, y_bound, y_intersect)
 		y_intersect = final[1]
 	end
 	initial = [y_intersect, y_bound]
-	return initial, final
+	return cell, final
 end
 
-function stick_cell_x(initial, final, x_bound, x_intersect)
+function stick_cell_x(final, x_bound, x_intersect)
 	final = [x_bound, x_intersect]
 	return final
 end
 
-function stick_cell_y(initial, final, y_bound, y_intersect)
+function stick_cell_y(final, y_bound, y_intersect)
 	final = [y_intersect, y_bound]
 	return final
 end
