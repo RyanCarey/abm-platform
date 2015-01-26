@@ -1,4 +1,4 @@
-# Module to generate new cells mid simulation
+# Module to generate new cells mid simulation, or kill cells
 # Takes the initial location of a cell, angle of travel, a threshold for chance to generate a new cell [0;1], and cell radius
 # Threshold 0.1 = 10% chance each time step
 # Needs to know desired direction of parent cell
