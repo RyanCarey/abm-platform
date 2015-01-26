@@ -27,10 +27,10 @@ function move_cell_x!(conc_map, X::Array, m::Int, max_speed::Float64)
   if is_overlap(X, m)
     println("overlap")
     println(X)
-    X[m] = start
-    println(X)
+    X[m] = deepcopy(start)
     X[m].angle = 0.
     X[m].speed = 0.
+    println(X)
     #move_cell_x!(conc_map, X,m,max_speed) # include this to retry moving cell
   end
 end
@@ -38,7 +38,7 @@ end
 function is_overlap(X::Array, m::Int)
   n = length(X)
   for i in 1:n
-    if (X[n].loc.x - X[m].loc.x)^2 + (X[n].loc.y - X[m].loc.y)^2 < (X[n].r + X[m].r)^2
+    if sqrt((X[i].loc.x - X[m].loc.x)^2 + (X[i].loc.y - X[m].loc.y)^2) < (X[i].r + X[m].r)
       if n != m
         return true
       end

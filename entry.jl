@@ -58,7 +58,7 @@ end
 
 w = Toplevel("Testing", 700, 400)
 f = Frame(w); pack(f, expand=true, fill="both")
-global c = Canvas(f, 500, 400)
+global c = Canvas(f, 400, 400)
 
 grid(c, 1, 1, sticky="nsew")
 ctrls = Frame(f)
