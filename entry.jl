@@ -6,8 +6,10 @@ include("show.jl")
 function simulate(path)
   n = length(prompts)
   global v = zeros(n,1)
-	bounce_choice = get_value(bouncebox)
-	println("$bounce_choice")
+    fruit_choice = get_value(cb)
+    msg = (fruit_choice == nothing) ? "What, no choice?" : 
+      "Good choice! $(fruit_choice)" * "s are delicious!"
+    println(msg)
   for i in 1:n
     try
 			v[i] = float(get_value(entries[i]))
@@ -33,7 +35,6 @@ function init_window()
   grid_rowconfigure(f, 1, weight=1)
   #grid(ok, 1, 1)
 
-
   # make and activate controls
   global prompts = ["Number of cells: ", "Speed of cells: ", "Average cell radius: ", "Number of timesteps: ", 
   "Width of environment: ", "Height of environment: "]
@@ -49,15 +50,11 @@ function init_window()
   end
   focus(entries[1])
 
-  # Attempt to add combo box for bouncing behaviour
-	global bounce_options = ["Bouncing", "Sticking"]
-	bouncebox = Combobox(ctrls, bounce_options)
-	grid(bouncebox, 2,3)
-	grid(Label(ctrls, "Border Behaviour?"), 1, 3)
-
-
-	
-	
+  # make comboboxes
+  boundary_options = ["Reflecting","Absorbing"]
+  global cb = Combobox(ctrls, boundary_options)
+  formlayout(cb,"What boundary?")
+  #grid(cb, 2,1, sticky="ew")
 
 	# make, sensitise and display the button
   b = Button(ctrls, "Run")
@@ -66,8 +63,6 @@ function init_window()
   for i in ["command","<Return>","<KP_Enter>"]
     bind(b,i,simulate)
   end
-
-
 
   # keeps program open
   if !isinteractive()
