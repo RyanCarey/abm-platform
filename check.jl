@@ -12,3 +12,15 @@ function callback(path)
 end  
 
 bind(cb, "command", callback)
+
+
+
+# keeps program open
+if !isinteractive()
+  while true
+    a = readline(STDIN)
+    if a == "exit"
+      return
+    end
+  end
+end

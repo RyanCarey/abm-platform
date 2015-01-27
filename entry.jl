@@ -4,14 +4,12 @@ include("master_file.jl")
 include("show.jl")
 
 function simulate(path)
+  # store entry field data
   n = length(prompts)
   global v = zeros(n,1)
-    border_choice = get_value(cb)
-    global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
   for i in 1:n
     if startswith(prompts[i],"Probability")
       if !(0 <= float(get_value(entries[i])) <= 1)
-
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return
       end
@@ -25,6 +23,12 @@ function simulate(path)
     p = FramedPlot()
     Winston.display(c, p)
   end
+  # store combobox data
+  border_choice = get_value(cb)
+  global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
+  # store checkbox data
+  global DISPLAY_OUTPUT  = get_value(display_option)
+  global TXT_OUTPUT = get_value(txt_option)
   main()
 end
 
@@ -33,9 +37,9 @@ function init_window()
   w = Toplevel("Testing", 700, 400)
   f = Frame(w); pack(f, expand=true, fill="both")
   global c = Canvas(f, 400, 400)
-  grid(c, 1, 1, sticky="nsew")
+  grid(c, 1, 2, sticky="nsew")
   ctrls = Frame(f)
-  grid(ctrls, 1, 2, sticky="sw", pady=5, padx=5)
+  grid(ctrls, 1, 1, sticky="sw", pady=5, padx=5)
   grid_columnconfigure(f, 1, weight=1)
   grid_rowconfigure(f, 1, weight=1)
   #grid(ok, 1, 1)
@@ -58,8 +62,13 @@ function init_window()
   # make combobox
   boundary_options = ["Reflecting","Absorbing"]
   global cb = Combobox(ctrls, boundary_options)
-  formlayout(cb,"What boundary?")
+  formlayout(cb,"Reflecting or absorbing edges?")
 
+  # make checkbuttons
+  global display_option = Checkbutton(ctrls, "display simulation")
+  global txt_option = Checkbutton(ctrls, "write to txt")
+  formlayout(display_option, nothing)
+  formlayout(txt_option, nothing)
 
 	# make, display and sensitise the button
   b = Button(ctrls, "Run")

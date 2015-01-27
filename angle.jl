@@ -53,7 +53,7 @@ function angleBRW(ML,cell,degree_precision=36)
 		beta=acos(sum_x/sqrt(sum_x^2+sum_y^2))*sign(sum_y)
 		R2=(sum_x/(sum_norm_vect))^2+(sum_y/(sum_norm_vect))^2
 		sd=sqrt(log(1/R2))/degree_precision
-		println(sd)
+		#println(sd)
 		chosen_angle=beta +randn()*sd #add this for randomness
 	elseif(sum_y!=0)
 		chosen_angle=pi/2*sign(sum_y)

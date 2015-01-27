@@ -30,22 +30,20 @@ function init_diffusion(x=50,y=50)
   #X[i,:]=X[i,:]-(i-1)*ones(y,1)'
   #end
   return X
-
 end
 
 #this function takes a matrix as an input and return an array of 3 columns x,y,value
 
 function matrix_list(M)
-L=Array(Float64,size(M,2)*size(M,1),3)
-for i in 1:size(M,1)
-	for j in  1:size(M,2)
-	L[(i-1)*size(M,1)+j,1]=j
-	L[(i-1)*size(M,1)+j,2]=size(M,1)-i+1
-	L[(i-1)*size(M,1)+j,3]=M[i,j]
-	end
-end
-return L
-
+  L=Array(Float64,size(M,2)*size(M,1),3)
+  for i in 1:size(M,1)
+    for j in  1:size(M,2)
+      L[(i-1)*size(M,1)+j,1]=j
+      L[(i-1)*size(M,1)+j,2]=size(M,1)-i+1
+      L[(i-1)*size(M,1)+j,3]=M[i,j]
+    end
+  end
+  return L
 end
 
 #Diffusion iterates one step of diffusive process

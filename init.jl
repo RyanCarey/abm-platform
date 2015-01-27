@@ -8,7 +8,9 @@ include("cell_type.jl")
 # This function return a 2D cells of random located cells within the squares borders. The cells have a radius and they do not overlap.
 # We initilaize the first location of the cell and then for each new potential cell we look within the cells whether the cell is
 # overlapping with another cell. If yes, we choose another random location for the cell
-function init(n, x, y, r)
+function init(n, r)
+  x = X_SIZE
+  y = Y_SIZE
   cells = Cell[]
   rvar = 0.1 # Radius Variation
   #cells[1,3]= rand_radius(r,r*rvar)

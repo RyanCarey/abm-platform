@@ -1,6 +1,6 @@
 using Winston
 
-function show_agents(M::Array,X::Array, X_SIZE::Float64, Y_SIZE::Float64)
+function show_agents(M::Array,X::Array)
   locations = zeros(length(X),3)
   for i in 1:length(X)
 		locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
