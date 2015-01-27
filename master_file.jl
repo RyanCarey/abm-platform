@@ -17,6 +17,8 @@ function main()
   const steps = int(v[4])
   global X_SIZE = v[5]
   global Y_SIZE = v[6]
+  global DIVIDE_THRESHOLD = v[7]
+  global DIE_THRESHOLD = v[8]
   const diffusion_rate = .1
 
   # at this stage, it's silly to have different height and width because it won't be graphed correctly

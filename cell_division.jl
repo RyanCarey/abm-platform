@@ -46,7 +46,7 @@ function cell_division(cells, i)
 	end
 		
 		if !give_up
-			offspring_name = string(cells[i].name, ".", cells[i].offspring"
+			offspring_name = string(cells[i].name, ".", cells[i].offspring)
 			new_cell = Cell(offspring_name, Point(new_x, new_y), radius, 1, 1, "Alive", 0)
 			push!(cells, new_cell)
 		end

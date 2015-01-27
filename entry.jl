@@ -9,8 +9,6 @@ function simulate(path)
     border_choice = get_value(cb)
     global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
     # should input this
-    global DIVIDE_THRESHOLD = 0.1
-    global DIE_THRESHOLD = 0.1
   for i in 1:n
     if startswith(prompts[i],"Probability")
       if !(0 <= float(get_value(entries[i])) <= 1)
