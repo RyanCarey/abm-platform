@@ -36,7 +36,7 @@ function cell_division(cells, i)
 		angle = 2 * pi * rand()
 		new_x = cells[i].loc.x - cos(angle) * 2 * radius
 		new_y = cells[i].loc.y - sin(angle) * 2 * radius
-		in_empty_space = !(is_overlap(cells, new_point, radius))
+		in_empty_space = !(is_overlap(cells, Point(new_x, new_y), radius))
 		attempt += 1
 		if attempt > 100
 			println("Tried 100 times to place new cell, giving up!")
