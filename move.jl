@@ -14,6 +14,7 @@ function propose_move_x(conc_map, cell::Cell, speed_param::Float64)
 end
 
 function move_any!(conc_map::Array, X::Array, max_speed::Float64)
+  # moves a random cell
   n = length(X)
   m = rand(1:n)	
 	move_cell_x!(conc_map, X, m, max_speed)	
@@ -21,7 +22,7 @@ function move_any!(conc_map::Array, X::Array, max_speed::Float64)
 end
 
 function move_cell_x!(conc_map, X::Array, m::Int, max_speed::Float64)
-  #takes all cell positions and returns the whole list with a valid move or no move
+  # takes cell list and (attempts to) move specified cell
 	start = deepcopy(X[m])
 	X[m] = propose_move_x(conc_map, start, max_speed)
 	rebounder = deepcopy(start)
