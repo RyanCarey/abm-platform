@@ -3,7 +3,9 @@ using Winston
 function show_agents(X::Array, x_size::Float64, y_size::Float64)
   locations = zeros(length(X),3)
   for i in 1:length(X)
-    locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+		if X[i].state == "Alive"
+   	 locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+		end
   end
   x = locations[:, 1]
   y = locations[:, 2]

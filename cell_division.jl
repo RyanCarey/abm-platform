@@ -6,6 +6,8 @@
 # If a cell is dividing, it stops desiring to move
 # If 2nd value is null, no new cell
 
+include("cell_type.jl")
+
 function life_or_death(cells, index, divide_threshold, die_threshold)
 	
 	seed = rand()

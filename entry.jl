@@ -6,9 +6,11 @@ include("show.jl")
 function simulate(path)
   n = length(prompts)
   global v = zeros(n,1)
+	bounce_choice = get_value(bouncebox)
+	println("$bounce_choice")
   for i in 1:n
     try
-      v[i] = float(get_value(entries[i]))
+			v[i] = float(get_value(entries[i]))
       p = FramedPlot()
       Winston.display(c, p)
     catch
@@ -47,13 +49,25 @@ function init_window()
   end
   focus(entries[1])
 
-  # make, sensitise and display the button
+  # Attempt to add combo box for bouncing behaviour
+	global bounce_options = ["Bouncing", "Sticking"]
+	bouncebox = Combobox(ctrls, bounce_options)
+	grid(bouncebox, 2,3)
+	grid(Label(ctrls, "Border Behaviour?"), 1, 3)
+
+
+	
+	
+
+	# make, sensitise and display the button
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"]
     bind(b,i,simulate)
   end
+
+
 
   # keeps program open
   if !isinteractive()

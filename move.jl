@@ -1,6 +1,7 @@
 include("angle.jl")
 include("borders.jl")
 include("cell_type.jl")
+include("cell_division.jl")
 using Distributions
 
 function propose_move_x(conc_map, cell::Cell, speed_param::Float64)
@@ -15,22 +16,25 @@ end
 function move_any!(conc_map::Array, X::Array, max_speed::Float64)
   n = length(X)
   m = rand(1:n)
-  move_cell_x!(conc_map, X, m, max_speed)
+	X = life_or_death(X, m, 0.01, 0.01)
+	if X[m].state == "Alive"
+	  move_cell_x!(conc_map, X, m, max_speed)
+	end
   return X
 end
 
 function move_cell_x!(conc_map, X::Array, m::Int, max_speed::Float64)
   #takes all cell positions and returns the whole list with a valid move or no move
-  start = deepcopy(X[m])
-  X[m] = propose_move_x(conc_map, start, max_speed)
-  rebounder = deepcopy(start)
-  X[m] = check_borders!(rebounder, X[m].loc)
-  if is_overlap(X, m)
-    X[m] = start
-    X[m].angle = 0.
-    X[m].speed = 0.
-    #move_cell_x!(conc_map, X,m,max_speed) # include this to retry moving cell
-  end
+	start = deepcopy(X[m])
+	X[m] = propose_move_x(conc_map, start, max_speed)
+	rebounder = deepcopy(start)
+	X[m] = check_borders!(rebounder, X[m].loc)
+	if is_overlap(X, m)
+	  X[m] = start
+	  X[m].angle = 0.
+	  X[m].speed = 0.
+	  #move_cell_x!(conc_map, X,m,max_speed) # include this to retry moving cell
+	end
 end
 
 function is_overlap(X::Array, m::Int)
