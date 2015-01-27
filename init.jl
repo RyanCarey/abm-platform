@@ -31,8 +31,8 @@ function init(n, x, y, r)
         if overlap
           fails += 1
           if fails > 10000
-            println("")
-            error("Could not place cell; try smaller radius or larger map")
+            Messagebox(title="Warning", message=string("Could not place cell; try smaller radius or larger map"))
+            return cells
           end
         else
           cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive")
