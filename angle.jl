@@ -34,7 +34,7 @@ function angleBRW(conc_map::Array, C::Cell, degree_precision::Int = 360)
 		C.angle=i*2*pi/degree_precision
 		#we add one to correct the fact that the matrix doesn't start at 0 and we correct the fact that matrix start from the top left
 		x_ligand_i = round(C.loc.x + cos(C.angle)*C.r) + 1
-		y_ligand_i = round(y_size - (C.loc.y + sin(C.angle)*C.r)) + 1
+		y_ligand_i = round(Y_SIZE - (C.loc.y + sin(C.angle)*C.r)) + 1
 		sum_norm_vect += conc_map[y_ligand_i,x_ligand_i]
 		sum_x += conc_map[y_ligand_i,x_ligand_i] * cos(C.angle)
 		sum_y += conc_map[y_ligand_i,x_ligand_i] * sin(C.angle)
