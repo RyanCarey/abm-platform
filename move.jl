@@ -1,7 +1,7 @@
 include("angle.jl")
 include("borders.jl")
 include("cell_type.jl")
-include("cell_division.jl")
+
 using Distributions
 
 function propose_move_x(conc_map, cell::Cell, speed_param::Float64)
@@ -13,13 +13,10 @@ function propose_move_x(conc_map, cell::Cell, speed_param::Float64)
   return Y
 end
 
-function move_any!(conc_map::Array, X::Array, max_speed::Float64)
-  n = length(X)
-  m = rand(1:n)
-	X = life_or_death(X, m, 0.01, 0.01)
-	if X[m].state == "Alive"
-	  move_cell_x!(conc_map, X, m, max_speed)
-	end
+function move_any!(conc_map::Array, X::Array, m::Int, max_speed::Float64)
+#  n = length(X)
+#  m = rand(1:n)	
+	move_cell_x!(conc_map, X, m, max_speed)	
   return X
 end
 
@@ -47,4 +44,14 @@ function is_overlap(X::Array, m::Int)
     end
   end
   return false
+end
+
+function is_overlap(cells::Array, point::Point, radius::Real)
+	n = length(cells)
+		for i in 1:n
+			if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
+				return true
+			end
+		end
+	return false
 end

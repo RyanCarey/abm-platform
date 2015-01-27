@@ -5,50 +5,52 @@
 
 include("cell_type.jl")
 
-function check_borders!(cell::Cell, final, reflect = true)
+global BORDER_BEHAVIOUR = "Bounce"
+
+function check_borders!(cell::Cell, final)
 	
 	r = cell.r
 	if final[2] < r
 		y_bound = r
 	else
-		y_bound = y_size - r
+		y_bound = Y_SIZE - r
 	end
 	if final[1] < r 
 		x_bound = r
 	else
-		x_bound = x_size - r
+		x_bound = X_SIZE - r
 	end
 	grad = (final[2] - cell.loc.y) / (final[1] - cell.loc.x)
 	offset = cell.loc.y - (grad * cell.loc.x)
 	intersect_y_bound = (y_bound - offset) / grad
 	intersect_x_bound = (grad * x_bound) + offset
-	if (final[1] > x_size - r || final[1] < r) && (final[2] > y_size - r|| final[2] < r)
+	if (final[1] > X_SIZE - r || final[1] < r) && (final[2] > Y_SIZE - r|| final[2] < r)
 		
-		if r < intersect_y_bound < y_size - r
+		if r < intersect_y_bound < Y_SIZE - r
 			
-			if reflect
+			if BORDER_BEHAVIOUR == "Bounce"
 				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
 			else
 				final = stick_cell_y(final, y_bound, intersect_y_bound)
 			end			
 		else
 			
-			if reflect
+			if BORDER_BEHAVIOUR == "Bounce"
 	     			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
 			else
 				final = stick_cell_x(final, x_bound, intersect_x_bound)
 			end	
 		end
-	elseif final[1] > x_size - r|| final[1] < r
+	elseif final[1] > X_SIZE - r|| final[1] < r
 		
-		if reflect
+		if BORDER_BEHAVIOUR == "Bounce"
 			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
 		else
 			final = stick_cell_x(final, x_bound, intersect_x_bound)
 		end
-		elseif final[2] > y_size - r || final[2] < r
+		elseif final[2] > Y_SIZE - r || final[2] < r
 			
-			if reflect
+			if BORDER_BEHAVIOUR == "Bounce"
 				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
 			else
 				final = stick_cell_y(final, y_bound, intersect_y_bound)
@@ -59,7 +61,7 @@ function check_borders!(cell::Cell, final, reflect = true)
 	cell.loc.y = final[2]
 	cell.angle = angle
 	
-	if final[1] > x_size - r || final[1] < r || final[2] > y_size - r || final[2] < r
+	if final[1] > X_SIZE - r || final[1] < r || final[2] > Y_SIZE - r || final[2] < r
 		cell = check_borders!(cell, final)
 	end
 	return cell
