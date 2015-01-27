@@ -1,6 +1,6 @@
 using Winston
 
-function show_agents(X::Array, X_SIZE::Float64, Y_SIZE::Float64)
+function show_agents(M::Array,X::Array, X_SIZE::Float64, Y_SIZE::Float64)
   locations = zeros(length(X),3)
   for i in 1:length(X)
 		locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
@@ -12,7 +12,13 @@ function show_agents(X::Array, X_SIZE::Float64, Y_SIZE::Float64)
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
   display(c,p)
+  hold(true)
+  L=matrix_list(M)
+  l=scatter(L[:,1],L[:,2],2*L[:,3]/maximum(L[:,3]),round(L[:,3]),"*")
+  display(c,l)
+  hold(false)
 end
+
 
 function csv_out(filename::String,output::String)
   f = open(filename,"a")
