@@ -13,11 +13,6 @@ function n_diffusion!(X,rate,n)
   end
 end
 
-function diffusion!(X, rate)
-  #Diffusion iterates one step of diffusive process
-  # rate > 0
-  X[:,:] = (1-rate)*X + rate * ([X[2:end,:];X[end,:]] + [X[:,1] X[:,1:(end-1)]] + [X[:,2:end] X[:,end]] + [X[1,:];X[1:(end-1),:]])/4
-end
 
 function n_diffusion_and_display!(X,rate,n)
   for i in 1:n
@@ -28,8 +23,36 @@ function n_diffusion_and_display!(X,rate,n)
   end
 end
 
-function init_diffusion(x,y)
-  X = repmat([0:1/int(ceil(x)):1]',int(ceil(y))+1,1)
+function init_diffusion(x=50,y=50)
+  X = repmat([100/ceil(x):100/ceil(x):100]',int(ceil(y)),1)
+  #X=ones(x,y)*x
+  #for i in 1:x
+  #X[i,:]=X[i,:]-(i-1)*ones(y,1)'
+  #end
+  return X
+
+end
+
+#this function takes a matrix as an input and return an array of 3 columns x,y,value
+
+function matrix_list(M)
+L=Array(Float64,size(M,2)*size(M,1),3)
+for i in 1:size(M,1)
+	for j in  1:size(M,2)
+	L[(i-1)*size(M,1)+j,1]=j
+	L[(i-1)*size(M,1)+j,2]=size(M,1)-i+1
+	L[(i-1)*size(M,1)+j,3]=M[i,j]
+	end
+end
+return L
+
+end
+
+#Diffusion iterates one step of diffusive process
+# rate > 0
+function diffusion!(X, rate=1)
+	X[:,:] = (1-rate)*X + rate * ([X[2:end,:];X[end,:]] + [X[:,1] X[:,1:(end-1)]] + [X[:,2:end] X[:,end]] + [X[1,:];X[1:(end-1),:]])/4
+	return X
 end
 
 
