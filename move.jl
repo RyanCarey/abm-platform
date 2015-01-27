@@ -13,9 +13,9 @@ function propose_move_x(conc_map, cell::Cell, speed_param::Float64)
   return Y
 end
 
-function move_any!(conc_map::Array, X::Array, m::Int, max_speed::Float64)
-#  n = length(X)
-#  m = rand(1:n)	
+function move_any!(conc_map::Array, X::Array, max_speed::Float64)
+  n = length(X)
+  m = rand(1:n)	
 	move_cell_x!(conc_map, X, m, max_speed)	
   return X
 end

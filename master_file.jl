@@ -43,7 +43,7 @@ function main()
 		n = length(alive_cells)
 		i = rand(1:n)
 		alive_cells, dead_cells = life_or_death(alive_cells, dead_cells, i, DIVIDE_THRESHOLD, DIE_THRESHOLD)
-    move_any!(conc_map, alive_cells, i, cell_speed)
+    move_any!(conc_map, alive_cells, cell_speed)
     show_agents(alive_cells, X_SIZE, Y_SIZE)
     
     # for speed, it will be necessary to batch these outputs in groups of 100
