@@ -18,4 +18,5 @@ type Cell
 	angle::Real
 	speed::Real
 	state::String
+	offspring::Int
 end

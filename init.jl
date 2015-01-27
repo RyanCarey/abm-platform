@@ -35,7 +35,7 @@ function init(n, x, y, r)
             return cells
           end
         else
-          cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive")
+          cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0)
           push!(cells, cell)
           placed = true
         end
