@@ -8,11 +8,11 @@ function simulate(path)
   global v = zeros(n,1)
     border_choice = get_value(cb)
     global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
-    # should input this
   for i in 1:n
     if startswith(prompts[i],"Probability")
       if !(0 <= float(get_value(entries[i])) <= 1)
-        Messagebox(title="Warning", message=string(string(prompts[i]))," must be between 0 and 1")
+
+        Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return
       end
     end
@@ -42,7 +42,7 @@ function init_window()
 
   # make and activate controls
   global prompts = ["Number of cells", "Speed of cells", "Average cell radius", "Number of timesteps", 
-  "Width of environment", "Height of environment", "Probability of death", "Probability of cell division"]
+  "Width of environment", "Height of environment", "Probability of cell division", "Probability of cell death"]
   n = length(prompts)
   global entries = []
 
@@ -55,13 +55,13 @@ function init_window()
   end
   focus(entries[1])
 
-  # make comboboxes
+  # make combobox
   boundary_options = ["Reflecting","Absorbing"]
   global cb = Combobox(ctrls, boundary_options)
   formlayout(cb,"What boundary?")
-  #grid(cb, 2,1, sticky="ew")
 
-	# make, sensitise and display the button
+
+	# make, display and sensitise the button
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
