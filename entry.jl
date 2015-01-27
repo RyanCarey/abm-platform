@@ -7,9 +7,9 @@ function simulate(path)
   n = length(prompts)
   global v = zeros(n,1)
     fruit_choice = get_value(cb)
-    msg = (fruit_choice == nothing) ? "What, no choice?" : 
-      "Good choice! $(fruit_choice)" * "s are delicious!"
-    println(msg)
+    BORDER_BEHAVIOUR = (fruit_choice == "Reflecting" ? "Bounce" : "Stick")
+    
+
   for i in 1:n
     try
 			v[i] = float(get_value(entries[i]))
