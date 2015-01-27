@@ -1,6 +1,6 @@
 using Tk
 include("pause.jl")
-include("master_file.jl")
+include("simulator.jl")
 include("show.jl")
 
 function simulate(path)

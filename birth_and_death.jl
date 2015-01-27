@@ -11,7 +11,7 @@ include("move.jl")
 
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
-		divide_any!(alive_cells)
+		alive_cells = divide_any(alive_cells)
   end
 	if rand() < DIE_THRESHOLD
 		alive_cells, dead_cells = kill_any(alive_cells, dead_cells)
@@ -19,13 +19,13 @@ function life_or_death(alive_cells, dead_cells)
 	return alive_cells, dead_cells
 end
 
-function divide_any(cells)
+function divide_any(alive_cells)
   i = rand(1:length(alive_cells))
-  cell_division!(cells,i)
+  return cell_division(alive_cells,i)
 end
 
 
-function cell_division!(cells, i)
+function cell_division(cells, i)
 	radius = cells[i].r		
 	angle = 2 * pi * rand()		
 	# New Cell!
