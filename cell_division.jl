@@ -9,12 +9,12 @@
 include("cell_type.jl")
 include("move.jl")
 
-function life_or_death(alive_cells, dead_cells, index, divide_threshold, die_threshold)
+function life_or_death(alive_cells, dead_cells, index)
 	seed = rand()
-	if seed < divide_threshold
+	if seed < DIVIDE_THRESHOLD
 		alive_cells = cell_division(alive_cells, index)
   end
-	if rand() < die_threshold
+	if rand() < DIE_THRESHOLD
 		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
 	end
 	

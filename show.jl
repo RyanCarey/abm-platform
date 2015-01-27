@@ -20,22 +20,36 @@ function csv_out(filename::String,output::String)
   close(f)
 end
 
-function csv_out(filename::String, out::Array)
+function csv_out(filename::String, alive_cells::Array, dead_cells::Array)
   f = open(filename,"a")
-  for i in 1:size(out,1)
-    g = tuple(out[i,:]...)
-    write(f,join(g,","),"\n")
+  for i in 1:size(alive_cells,1)
+    write(f,string(alive_cells[i])[6:end-1],"\n")
   end
   close(f)
 end
 
-function start_output(filename::String, t::String, cell_speed::Float64, radius::Float64, conc_map::Array, X::Array, diffusion_rate::Float64)
-  csv_out(filename,"time,cells,cell speed,radius,steps,X_SIZE,Y_SIZE,diffusion rate\n")
-  csv_out(filename,"$t,$cells,$cell_speed,$radius,$steps,$X_SIZE,$Y_SIZE,$diffusion_rate\n")
-  csv_out(filename,"starting concentration map\n")
-  csv_out(filename,conc_map)
-  csv_out(filename,"starting position matrix\n")
-  csv_out(filename,X)
-  csv_out(filename,"subsequent position matrices\n")
+# 
+function start_output(filename::String, t::String, v::Array, conc_map::Array, alive_cells::Array, diffusion_rate::Float64)
+  f = open(filename,"a")
+  write(f, "time,diffusion rate\n")
+  write(f, "$t,$diffusion_rate\n")
+  write(f, string(join(prompts,","),"\n"))
+  write(f, string(join(v,","),"\n"))
+  write(f, "starting concentration map\n")
+  write(f, array_to_string(conc_map))
+  write(f, "\n")
+  write(f, "starting cell matrix\n")
+  for i in 1:size(alive_cells,1)
+    write(f, string(alive_cells[i])[6:end-1],"\n")
+  end
+  write(f, "subsequent cell matrices\n")
+  close(f)
 end
 
+function array_to_string(X::Array)
+  rows_as_strings = repmat([""],size(X,1),1)
+  for i in 1:size(X,1)
+    rows_as_strings[i] = join(X[i,:],",")
+  end
+  join(rows_as_strings,"\n")
+end

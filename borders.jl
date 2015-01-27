@@ -5,7 +5,6 @@
 
 include("cell_type.jl")
 
-global BORDER_BEHAVIOUR = "Bounce"
 
 function check_borders!(cell::Cell, final)
 	

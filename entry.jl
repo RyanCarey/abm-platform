@@ -6,19 +6,26 @@ include("show.jl")
 function simulate(path)
   n = length(prompts)
   global v = zeros(n,1)
-    fruit_choice = get_value(cb)
-    BORDER_BEHAVIOUR = (fruit_choice == "Reflecting" ? "Bounce" : "Stick")
-    
-
+    border_choice = get_value(cb)
+    global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
+    # should input this
+    global DIVIDE_THRESHOLD = 0.1
+    global DIE_THRESHOLD = 0.1
   for i in 1:n
+    if startswith(prompts[i],"Probability")
+      if !(0 <= float(get_value(entries[i])) <= 1)
+        Messagebox(title="Warning", message=string(string(prompts[i]))," must be between 0 and 1")
+        return
+      end
+    end
     try
 			v[i] = float(get_value(entries[i]))
-      p = FramedPlot()
-      Winston.display(c, p)
     catch
-      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])[1:end-2]))
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
       return
     end
+    p = FramedPlot()
+    Winston.display(c, p)
   end
   main()
 end
@@ -36,15 +43,15 @@ function init_window()
   #grid(ok, 1, 1)
 
   # make and activate controls
-  global prompts = ["Number of cells: ", "Speed of cells: ", "Average cell radius: ", "Number of timesteps: ", 
-  "Width of environment: ", "Height of environment: "]
+  global prompts = ["Number of cells", "Speed of cells", "Average cell radius", "Number of timesteps", 
+  "Width of environment", "Height of environment", "Probability of death", "Probability of cell division"]
   n = length(prompts)
   global entries = []
 
   # make the input fields 
   for i in 1:n
     push!(entries, Entry(ctrls))
-    formlayout(entries[i],prompts[i])
+    formlayout(entries[i],string(prompts[i],": "))
     bind(entries[i], "<Return>", simulate)
     bind(entries[i], "<KP_Enter>", simulate)
   end
