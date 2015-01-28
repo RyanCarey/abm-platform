@@ -1,5 +1,5 @@
 # Biased Random Walk V2
-# C is the coordinate (x,y,z) of the studied cell
+# Ca is the coordinate (x,y,z) of the studied cell
 # r is the radius of a cell
 # ML is the matrix of ligand's concentration
 # degree_precision is an integer and the numnber of ligants we are going to use to assess the favorite direction
