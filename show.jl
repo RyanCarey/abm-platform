@@ -5,19 +5,34 @@ function show_agents(M::Array,X::Array)
   for i in 1:length(X)
 		locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
   end
+  display_circles(locations)
+end
+
+function display_circles(locations::Array)
   x = locations[:, 1]
   y = locations[:, 2]
   r = locations[:, 3]
-  p = scatter(x,y,r/X_SIZE.*70,"ro")
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
+  p = scatter(x,y,r/X_SIZE.*70,colour)
   display(c,p)
+end
+
+function display_two(locations::Array, bools::BitArray)
+  x = locations[:, 1][bools]
+  y = locations[:, 2][bools]
+  r = locations[:, 3][bools]
+  p = scatter(x,y,r,"r")
+  display(p)
   hold(true)
-  L=matrix_list(M)
-  l=scatter(L[:,1],L[:,2],2*L[:,3]/maximum(L[:,3]),round(L[:,3]),"*")
-  display(c,l)
+  x2 = locations[:,1][!bools]
+  y2 = locations[:,2][!bools]
+  r2 = locations[:,3][!bools]
+  q = scatter(x2,y2,r2,"b")
+  display(q)
   hold(false)
 end
+
 
 
 function csv_out(filename::String,output::String)
