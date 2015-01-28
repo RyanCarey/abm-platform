@@ -1,18 +1,14 @@
 include("angle.jl")
-include("await_user.jl")
-using Winston
-cell = [5.,3.,2.,pi,1.]
-conc = repmat([1:20]',20,1)
+include("init.jl")
+include("cell_type.jl")
+include("diffusion.jl")
 
-a = round(edges(cell,36))
-println(a)
-println(conc)
-for i in 1:size(a,1)
-  println(conc[a[i,1]+1,a[i,2]]+1)
-end
+X_SIZE = Y_SIZE = 10
+conc_map = init_diffusion(10,10)
+cells = init(10,1)
 
-#x = a[:,1]
-#y = a[:,2]
-#p = plot(x,y)
-#display(p)
-#await_user(0)
+angleBRW(conc_map,cells[1],36)
+
+
+
+

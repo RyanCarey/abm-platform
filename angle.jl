@@ -1,4 +1,5 @@
 using Winston
+using Distributions
 
 # Biased Random Walk V2
 # C is the coordinate and the radius (x,y,r) of the studied cell
@@ -26,16 +27,15 @@ using Winston
 # var= var + ML[round(C[1] + cos(angle)*r)+1,round(C[2] + sin(angle)*r)+1]/maximum(ML)  *  min(abs(beta-angle),2*pi-abs(beta-angle))*min(abs(beta-angle),2*pi-abs(beta-angle))
 
 function angleBRW(ML,cell,degree_precision=36)
-
-
-  	x = cell.loc.x
- 	y = cell.loc.y
-  	r = cell.r
+  x = cell.loc.x
+  y = cell.loc.y
+  r = cell.r
 
 	sum_x=0
 	sum_y=0
 	sum_norm_vect=0
 	b=Array(Float64,degree_precision)
+  c=Array(Float64,degree_precision)
 	for i in 1:degree_precision
 		angle=i*2*pi/degree_precision
 		#we add one to correct the fact that the matrix doesn't start at 0 and we correct the fact that matrix start from the top left
@@ -47,31 +47,45 @@ function angleBRW(ML,cell,degree_precision=36)
 		sum_y += ML[i_ligand_i,j_ligand_i] * sin(angle)
 		#b[i]=ML[i_ligand_i,j_ligand_i]
 	end
-	#display(plot(b))
-	#junk = readline(STDIN)
 	if(sum_x!=0)
 		beta=acos(sum_x/sqrt(sum_x^2+sum_y^2))*sign(sum_y)
-		R2=(sum_x/(sum_norm_vect))^2+(sum_y/(sum_norm_vect))^2
-		sd=sqrt(log(1/R2))/degree_precision
-		#println(sd)
-		chosen_angle=beta +randn()*sd #add this for randomness
+		R2=(sum_x/sum_norm_vect)^2+(sum_y/sum_norm_vect)^2
+		sd=sqrt(log(1/R2)) /degree_precision
+		chosen_angle=beta +randn()*sd
 	elseif(sum_y!=0)
 		chosen_angle=pi/2*sign(sum_y)
 	else
 		chosen_angle=rand()*2*pi
 	end
-  #println(chosen_angle)
+  for i in 1:degree_precision
+    c[i] = normalpdf(i*2*pi/degree_precision, beta, sd*1000) 
+  end
+  #println("normal distribution: ",c)
+  #println("standard deviation: ",sd)
+  #println("chosen angle: ",chosen_angle)
+  #x_axis = 1:degree_precision
+  #p = plot(x_axis,b/100,"g^",x_axis,c,"b-o")
+	#display(p)
+	#junk = readline(STDIN)
   return chosen_angle
 end
 
 #Persistent random walk
-function anglePRW(prev_angle=-pi,variance=0.2)
-	angle = prev_angle+randn()*variance
+function anglePRW(cell,sd=0.2)
+	angle = cell.angle+randn()*sd
 	return angle
 end
 
 #Persistent Biased Random walk
-function anglePBRW(prev_angle,L,r,variance=0.25,omega=0.5,C=[0.5,0.5,0.5])
-	return omega*angleBRW(L,C,r) + (1-omega)*anglePRW(prev_angle,variance)
+function anglePBRW(conc_map, cell)
+  if PERSISTENCE == 0
+    println("persistence rounded to 9999999")
+    stdev = 9999999
+  else
+    stdev = sqrt(-log(PERSISTENCE))
+  end
+  # ?should be var or stdev?
+	return OMEGA*angleBRW(conc_map,cell) + (1-OMEGA)*anglePRW(cell,stdev)
 end
 
+normalpdf(x,m,sd) = 1/sqrt(2*pi*sd^2)*exp(-(x-m)^2/(2*sd^2))

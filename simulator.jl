@@ -18,9 +18,8 @@ function main()
   global Y_SIZE = v[6]
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
-  global BIAS = v[9]
-  global PERSISTENCE = v[10]
-  global BRW_WEIGHT = v[11]
+  global PERSISTENCE = v[9]
+  global OMEGA = v[10]
   const diffusion_rate = 1.0
 
   # at this stage, it's silly to have different height and width because it won't be graphed correctly

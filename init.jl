@@ -46,6 +46,7 @@ function init(n, r)
   end
   return cells
 end
+
 function rand_radius(mean, stdev)
   radius = mean + (stdev * randn())
   # while radius is negative, try again

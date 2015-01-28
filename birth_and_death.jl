@@ -65,7 +65,6 @@ end
 
 
 function cell_death(alive_cells, dead_cells, i)
-	
 	# Dead Cell!
 	println("Dead Cell!")
 	dead_cell = splice!(alive_cells, i)
