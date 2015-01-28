@@ -22,7 +22,7 @@ function main()
 
   # at this stage, it's silly to have different height and width because it won't be graphed correctly
 
-  println("building environment")
+  println("Building Environment")
   conc_map = init_diffusion()
   alive_cells = init(n_cell,radius)
   dead_cells = Cell[]
@@ -38,7 +38,7 @@ function main()
 
   for i = 1:steps
     if i % 20 == 0
-      println("$i iterations completed")
+      println("$i Iterations Completed")
     end
 
     diffusion!(conc_map,diffusion_rate) # turn diffusion on or off
@@ -56,5 +56,5 @@ function main()
     end
   pause(0.01)
   end
-  println("simulation finished")
+  println("Simulation Finished")
 end

@@ -28,6 +28,7 @@ end
 
 function csv_out(filename::String, alive_cells::Array, dead_cells::Array)
   f = open(filename,"a")
+  write(f, "> New Time Step\n")
   for i in 1:size(alive_cells,1)
     write(f,string(alive_cells[i])[6:end-1],"\n")
   end
@@ -37,18 +38,18 @@ end
 # 
 function start_output(filename::String, t::String, v::Array, conc_map::Array, alive_cells::Array, diffusion_rate::Float64)
   f = open(filename,"a")
-  write(f, "time,diffusion rate\n")
-  write(f, "$t,$diffusion_rate\n")
-  write(f, string(join(prompts,","),"\n"))
-  write(f, string(join(v,","),"\n"))
-  write(f, "starting concentration map\n")
+  write(f, "> Time, Diffusion Rate\n")
+  write(f, "> $t,$diffusion_rate\n")
+  write(f, ">", string(join(prompts,","),"\n"))
+  write(f, ">", string(join(v,","),"\n"))
+  write(f, "> Starting Concentration Map\n")
   write(f, array_to_string(conc_map))
   write(f, "\n")
-  write(f, "starting cell matrix\n")
+  write(f, ">Starting Cell Matrix\n")
   for i in 1:size(alive_cells,1)
     write(f, string(alive_cells[i])[6:end-1],"\n")
   end
-  write(f, "subsequent cell matrices\n")
+  write(f, "> Subsequent Cell Matrices\n")
   close(f)
 end
 
