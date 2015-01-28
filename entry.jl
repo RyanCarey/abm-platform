@@ -8,7 +8,7 @@ function simulate(path)
   n = length(prompts)
   global v = zeros(n,1)
   for i in 1:n
-    if startswith(prompts[i],"Probability")
+    if startswith(prompts[i],"Probability") || endswith(prompts[i],"(0-1)")
       if !(0 <= float(get_value(entries[i])) <= 1)
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return
@@ -45,8 +45,9 @@ function init_window()
   #grid(ok, 1, 1)
 
   # make and activate controls
-  global prompts = ["Number of cells", "Speed of cells", "Average cell radius", "Number of timesteps", 
-  "Width of environment", "Height of environment", "Probability of cell division", "Probability of cell death"]
+  global prompts = ["Number of cells", "Speed of cells (~1)", "Average cell radius (~1)", "Number of timesteps (~100)", 
+    "Width of environment (~10)", "Height of environment (~10)", "Probability of cell division", "Probability of cell death",
+    "bias of cell movement (0-1)","persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
   n = length(prompts)
   global entries = []
 
