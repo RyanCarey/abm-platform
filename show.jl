@@ -1,39 +1,70 @@
 using Winston
 
-function show_agents(M::Array,X::Array)
+function show_agents(X::Array,colour = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
 		locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
   end
-  display_circles(locations)
+  display_circles(locations, colour)
 end
 
-function display_circles(locations::Array)
+function display_circles(locations::Array, colour = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
   r = locations[:, 3]
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
   p = scatter(x,y,r/X_SIZE.*70,colour)
-  display(c,p)
+  display(p)
+  # display(c,p)
 end
 
-function display_two(locations::Array, bools::BitArray)
-  x = locations[:, 1][bools]
-  y = locations[:, 2][bools]
-  r = locations[:, 3][bools]
-  p = scatter(x,y,r,"r")
-  display(p)
+function display_two(locs::Array, bools::BitArray)
+  print(" locs: ",locs)
+  print(" bools: ",bools)
+  if sum(bools) > 0
+    x = locs[:,1][bools]
+    println("x: ",x)
+    y = locs[:,2][bools]
+    println("y: ",y)
+    r = locs[:,3][bools]
+    println("r: ",r)
+    p = scatter(x,y,r/X_SIZE.*70,"ro")
+    xlim(0,X_SIZE)
+    ylim(0,Y_SIZE)
+    display(p)
+    hold(true)
+  end
+  if sum(bools) < length(bools)
+    xx = locs[:,1][!bools]
+    println("xx: ",xx)
+    yy = locs[:,2][!bools]
+    println("yy: ",yy)
+    rr = locs[:,3][!bools]
+    q = scatter(xx,yy,5*rr,"bo")
+    xlim(0,X_SIZE)
+    ylim(0,Y_SIZE)
+    display(q)
+    hold(false)
+  end
+end
+
+function show_ellipse(a::Real,b::Real,n=36)
   hold(true)
-  x2 = locations[:,1][!bools]
-  y2 = locations[:,2][!bools]
-  r2 = locations[:,3][!bools]
-  q = scatter(x2,y2,r2,"b")
-  display(q)
+  t = [1/n:1/n:1]*2pi
+  X = [a*cos(t) b*sin(t)]
+  r = scatter(X[:,1],X[:,2],.2,"go")
+  display(r)
   hold(false)
 end
 
-
+function display_cell_sets(X::Array, bools::BitArray)
+  locations = zeros(length(X),3)
+  for i in 1:length(X)
+    locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+  end
+  display_two(locations,bools)
+end
 
 function csv_out(filename::String,output::String)
   f = open(filename,"a")
@@ -75,3 +106,4 @@ function array_to_string(X::Array)
   end
   join(rows_as_strings,"\n")
 end
+
