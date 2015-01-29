@@ -24,12 +24,11 @@ function divide_any(alive_cells)
   return cell_division(alive_cells,i)
 end
 
-
 function cell_division(cells, i)
 	radius = cells[i].r		
 	angle = 2 * pi * rand()		
 	# New Cell!
-	println("New Cell!")
+	#println("New Cell!")
 	new_x = cells[i].loc.x - cos(angle) * 2 * radius
 	new_y = cells[i].loc.y - sin(angle) * 2 * radius
 	new_point = Point(new_x, new_y)
@@ -66,7 +65,7 @@ end
 
 function cell_death(alive_cells, dead_cells, i)
 	# Dead Cell!
-	println("Dead Cell!")
+	#println("Dead Cell!")
 	dead_cell = splice!(alive_cells, i)
 	dead_cell.state = "Dead"
 	push!(dead_cells, dead_cell)

@@ -12,11 +12,11 @@ function display_circles(locations::Array, colour = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
   r = locations[:, 3]
+  p = scatter(x,y,r/X_SIZE.*70,colour)
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
-  p = scatter(x,y,r/X_SIZE.*70,colour)
-  display(p)
-  # display(c,p)
+  #display(p)
+  display(c,p)
 end
 
 function display_two(locs::Array, bools::BitArray)

@@ -18,18 +18,17 @@ function main()
   global Y_SIZE = v[6]
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
-  global PERSISTENCE = v[9]
-  global OMEGA = v[10]
-  const diffusion_rate = 1.0
+  #global PERSISTENCE = v[9]
+  #global OMEGA = v[10]
+  #const diffusion_rate = 1.0
 
   # at this stage, it's silly to have different height and width because it won't be graphed correctly
 
   println("building environment")
-  conc_map = init_diffusion()
   alive_cells = init(n_cell,radius)
   dead_cells = Cell[]
   if DISPLAY_OUTPUT
-    show_agents(conc_map,alive_cells)
+    show_agents(alive_cells)
   end
 
   if TXT_OUTPUT
@@ -39,21 +38,23 @@ function main()
   end
 
   for i = 1:steps
-    if i % 20 == 0
-      println("$i iterations completed")
+    if length(alive_cells) == 0
+      println("all cells have died after $i iterations")
+      break
     end
-    diffusion!(conc_map,diffusion_rate) # turn diffusion on or off
+    move_any!(alive_cells, cell_speed)
 		alive_cells, dead_cells = life_or_death(alive_cells, dead_cells)
-    move_any!(conc_map, alive_cells, cell_speed)
     if DISPLAY_OUTPUT
-      show_agents(conc_map,alive_cells)
+      show_agents(alive_cells)
     end
-    
     # for speed, it will be necessary to batch these outputs in groups of 100
     if TXT_OUTPUT
       csv_out(file, alive_cells, dead_cells)
     end
-  pause(0.01)
+    if i % 20 == 0
+      println("$i iterations completed")
+    end
+    pause(0.01)
   end
   println("simulation finished")
 end

@@ -46,8 +46,8 @@ function init_window()
 
   # make and activate controls
   global prompts = ["Number of cells", "Speed of cells (~1)", "Average cell radius (~1)", "Number of timesteps (~100)", 
-    "Width of environment (~10)", "Height of environment (~10)", "Probability of cell division", "Probability of cell death",
-    "persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
+    "Width of environment (~20)", "Height of environment (~20)", "Probability of cell division", "Probability of cell death",
+    ]       #"persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
   n = length(prompts)
   global entries = []
 
@@ -89,8 +89,5 @@ function init_window()
     end
   end
 end
-
-
-
 
 init_window()
