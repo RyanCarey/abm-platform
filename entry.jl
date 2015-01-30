@@ -20,8 +20,6 @@ function simulate(path)
       Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
       return
     end
-    p = FramedPlot()
-    Winston.display(c, p)
   end
   # store combobox data
   border_choice = get_value(cb)
@@ -34,9 +32,9 @@ end
 
 function init_window()
   # window parameters
-  w = Toplevel("Testing", 700, 400)
-  f = Frame(w); pack(f, expand=true, fill="both")
-  global c = Canvas(f, 400, 400)
+  global w = Toplevel("Agent-based modeller")
+  global f = Frame(w); pack(f, expand=true, fill="both")
+  global c = Canvas(f, 0, 0)
   grid(c, 1, 2, sticky="nsew")
   ctrls = Frame(f)
   grid(ctrls, 1, 1, sticky="sw", pady=5, padx=5)

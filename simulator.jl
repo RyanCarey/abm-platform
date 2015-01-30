@@ -24,10 +24,16 @@ function main()
 
   # at this stage, it's silly to have different height and width because it won't be graphed correctly
 
+
   println("building environment")
   alive_cells = init(n_cell,radius)
   dead_cells = Cell[]
+
   if DISPLAY_OUTPUT
+    c[:height] = 400
+    c[:width] = 400 * X_SIZE/Y_SIZE
+    w[:width] = 400 + int(c[:width])
+    pack(f, expand=true, fill="both")
     show_agents(alive_cells)
   end
 

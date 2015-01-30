@@ -1,5 +1,7 @@
 using Winston
 
+
+
 function show_agents(X::Array,colour = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
@@ -11,8 +13,9 @@ end
 function display_circles(locations::Array, colour = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
-  r = locations[:, 3]
-  p = scatter(x,y,r/X_SIZE.*70,colour)
+  # radius is adjusted so that cells are displayed at correct size for any window
+  r = locations[:, 3].*70/(sqrt(Y_SIZE*X_SIZE))*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.11
+  p = scatter(x,y,r,colour)
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
   #display(p)
