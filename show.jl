@@ -1,6 +1,13 @@
 using Winston
 
-
+function show(X::Array)
+  show_agents(X)
+  if ELLIPTICAL_BORDER
+    hold(true)
+    show_elliptical_border()
+    hold(false)
+  end
+end
 
 function show_agents(X::Array,colour = "ro")
   locations = zeros(length(X),3)
@@ -14,12 +21,32 @@ function display_circles(locations::Array, colour = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
   # radius is adjusted so that cells are displayed at correct size for any window
-  r = locations[:, 3].*70/(sqrt(Y_SIZE*X_SIZE))*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.11
+  r = locations[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10
   p = scatter(x,y,r,colour)
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
   #display(p)
-  display(c,p)
+  display(canvas,p)
+end
+
+function show_elliptical_border()
+  show_ellipse(X_SIZE/2,Y_SIZE/2,X_SIZE/2,Y_SIZE/2)
+end
+
+function show_ellipse(c::Real,d::Real,a::Real,b::Real,n=72)
+  t = [0:1/n:1]*2pi
+  X = [c+a*cos(t) d+b*sin(t)]
+  r = plot(X[:,1],X[:,2])
+  display(canvas,r)
+end
+
+# for showing two sets of cells in different colours
+function display_cell_sets(X::Array, bools::BitArray)
+  locations = zeros(length(X),3)
+  for i in 1:length(X)
+    locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+  end
+  display_two(locations,bools)
 end
 
 function display_two(locs::Array, bools::BitArray)
@@ -52,23 +79,7 @@ function display_two(locs::Array, bools::BitArray)
   end
 end
 
-function show_ellipse(a::Real,b::Real,n=36)
-  hold(true)
-  t = [1/n:1/n:1]*2pi
-  X = [a*cos(t) b*sin(t)]
-  r = scatter(X[:,1],X[:,2],.2,"go")
-  display(r)
-  hold(false)
-end
-
-function display_cell_sets(X::Array, bools::BitArray)
-  locations = zeros(length(X),3)
-  for i in 1:length(X)
-    locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
-  end
-  display_two(locations,bools)
-end
-
+# text output
 function csv_out(filename::String,output::String)
   f = open(filename,"a")
   write(f,output)
@@ -84,7 +95,6 @@ function csv_out(filename::String, alive_cells::Array, dead_cells::Array)
   close(f)
 end
 
-# 
 function start_output(filename::String, t::String, v::Array, conc_map::Array, alive_cells::Array, diffusion_rate::Float64)
   f = open(filename,"a")
   write(f, "> Time, Diffusion Rate\n")
@@ -109,4 +119,3 @@ function array_to_string(X::Array)
   end
   join(rows_as_strings,"\n")
 end
-

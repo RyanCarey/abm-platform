@@ -1,4 +1,5 @@
 include("cell_type.jl")
+include("ellipse.jl")
 # Initialization Function
 # 1st parameter: Number of cells
 # 2nd parameter: Height of environment
@@ -13,9 +14,6 @@ function init(n, r)
   y = Y_SIZE
   cells = Cell[]
   rvar = 0.1 # Radius Variation
-  #cells[1,3]= rand_radius(r,r*rvar)
-  #cells[1,1]= cells[1,3] + (x- 2 * cells[1,3]) * rand()
-  #cells[1,2]= cells[1,3] + (y- 2 * cells[1,3]) * rand()
   if(n >= 1)
     for i in 1:n
       placed = false
@@ -25,6 +23,13 @@ function init(n, r)
         xi = ri + (x - 2 * ri) * rand()
         yi = ri + (y - 2 * ri) * rand()
         overlap = false
+        if ELLIPTICAL_BORDER
+          cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0)
+          if !in_ellipse(cell)
+            overlap = true
+          end
+        end
+
         for j in 1:i-1
           if((xi - cells[j].loc.x) ^ 2 + (yi - cells[j].loc.y) ^ 2 < (ri + cells[j].r) ^ 2)
             overlap = true
@@ -55,5 +60,3 @@ function rand_radius(mean, stdev)
   end
   return radius
 end
-#println(init(50,10,10,0.1))
-

@@ -4,10 +4,17 @@
 # Needs the bounds of the environment explicitly stated globally.
 
 include("cell_type.jl")
-
+include("ellipse.jl")
 
 function check_borders!(cell::Cell, final)
-	
+  if ELLIPTICAL_BORDER
+    return ellipse_borders(cell::Cell,final)
+  else
+    return rectangle_borders!(cell::Cell, final)
+  end
+end
+
+function rectangle_borders!(cell::Cell, final)
 	r = cell.r
 	if final[2] < r
 		y_bound = r
@@ -61,7 +68,7 @@ function check_borders!(cell::Cell, final)
 	cell.angle = angle
 	
 	if final[1] > X_SIZE - r || final[1] < r || final[2] > Y_SIZE - r || final[2] < r
-		cell = check_borders!(cell, final)
+		cell = rectangle_borders!(cell, final)
 	end
 	return cell
 end

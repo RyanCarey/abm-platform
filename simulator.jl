@@ -22,19 +22,16 @@ function main()
   #global OMEGA = v[10]
   #const diffusion_rate = 1.0
 
-  # at this stage, it's silly to have different height and width because it won't be graphed correctly
-
-
   println("building environment")
   alive_cells = init(n_cell,radius)
   dead_cells = Cell[]
 
   if DISPLAY_OUTPUT
-    c[:height] = 400
-    c[:width] = 400 * X_SIZE/Y_SIZE
-    w[:width] = 400 + int(c[:width])
-    pack(f, expand=true, fill="both")
-    show_agents(alive_cells)
+    canvas[:height] = 400
+    canvas[:width] = 400 * X_SIZE/Y_SIZE
+    w[:width] = 400 + int(canvas[:width])
+    pack(frame, expand=true, fill="both")
+    show(alive_cells)
   end
 
   if TXT_OUTPUT
@@ -51,7 +48,7 @@ function main()
     move_any!(alive_cells, cell_speed)
 		alive_cells, dead_cells = life_or_death(alive_cells, dead_cells)
     if DISPLAY_OUTPUT
-      show_agents(alive_cells)
+      show(alive_cells)
     end
     # for speed, it will be necessary to batch these outputs in groups of 100
     if TXT_OUTPUT

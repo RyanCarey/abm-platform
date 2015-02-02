@@ -24,6 +24,8 @@ function simulate(path)
   # store combobox data
   border_choice = get_value(cb)
   global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
+  shape_choice = get_value(cb2)
+  global ELLIPTICAL_BORDER = (shape_choice == "Rectangle" ? false : true)
   # store checkbox data
   global DISPLAY_OUTPUT  = get_value(display_option)
   global TXT_OUTPUT = get_value(txt_option)
@@ -32,14 +34,14 @@ end
 
 function init_window()
   # window parameters
-  global w = Toplevel("Agent-based modeller")
-  global f = Frame(w); pack(f, expand=true, fill="both")
-  global c = Canvas(f, 0, 0)
-  grid(c, 1, 2, sticky="nsew")
-  ctrls = Frame(f)
+  global w = Toplevel("Agent-based modeller",350,385)
+  global frame = Frame(w); pack(frame, expand=true, fill="both")
+  global canvas = Canvas(frame, 0, 0)
+  grid(canvas, 1, 2, sticky="nsew")
+  ctrls = Frame(frame)
   grid(ctrls, 1, 1, sticky="sw", pady=5, padx=5)
-  grid_columnconfigure(f, 1, weight=1)
-  grid_rowconfigure(f, 1, weight=1)
+  grid_columnconfigure(frame, 1, weight=1)
+  grid_rowconfigure(frame, 1, weight=1)
   #grid(ok, 1, 1)
 
   # make and activate controls
@@ -58,10 +60,13 @@ function init_window()
   end
   focus(entries[1])
 
-  # make combobox
+  # make comboboxes
   boundary_options = ["Reflecting","Absorbing"]
   global cb = Combobox(ctrls, boundary_options)
   formlayout(cb,"Reflecting or absorbing edges?")
+  boundary_shape = ["Rectangle","Ellipse"]
+  global cb2 = Combobox(ctrls, boundary_shape)
+  formlayout(cb2,"Boundary Shape")
 
   # make checkbuttons
   global display_option = Checkbutton(ctrls, "display simulation")
@@ -73,8 +78,7 @@ function init_window()
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
-  for i in ["command","<Return>","<KP_Enter>"]
-    bind(b,i,simulate)
+  for i in ["command","<Return>","<KP_Enter>"] bind(b,i,simulate)
   end
 
   # keeps program open
