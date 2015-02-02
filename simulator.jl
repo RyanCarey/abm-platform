@@ -31,7 +31,7 @@ function main()
     canvas[:width] = 400 * X_SIZE/Y_SIZE
     w[:width] = 400 + int(canvas[:width])
     pack(frame, expand=true, fill="both")
-    show(alive_cells)
+    show_sim(alive_cells)
   end
 
   if TXT_OUTPUT
@@ -48,13 +48,13 @@ function main()
     move_any!(alive_cells, cell_speed)
 		alive_cells, dead_cells = life_or_death(alive_cells, dead_cells)
     if DISPLAY_OUTPUT
-      show(alive_cells)
+      show_sim(alive_cells)
     end
     # for speed, it will be necessary to batch these outputs in groups of 100
     if TXT_OUTPUT
       csv_out(file, alive_cells, dead_cells)
     end
-    if i % 20 == 0
+    if i % 50 == 0
       println("$i iterations completed")
     end
     pause(0.01)

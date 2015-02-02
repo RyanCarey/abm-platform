@@ -7,7 +7,7 @@ using Distributions
 function propose_move_x(cell::Cell, speed_param::Float64)
   Y = deepcopy(cell)
   Y.speed = rand()*speed_param
-  Y.angle = randn()/3
+  Y.angle = rand()* 2pi
   Y.loc.x += Y.speed * cos(Y.angle)
   Y.loc.y += Y.speed * sin(Y.angle) 
   return Y
@@ -16,19 +16,18 @@ end
 function move_any!(X::Array, max_speed::Float64)
   # moves a random cell
   n = length(X)
-  m = rand(1:n)	
+  m = rand(1:n)
 	move_cell_x!(X, m, max_speed)	
   return X
 end
 
 function move_cell_x!(X::Array, m::Int, max_speed::Float64)
   # takes cell list and (attempts to) move specified cell
-	start = deepcopy(X[m])
-	X[m] = propose_move_x(start, max_speed)
-	rebounder = deepcopy(start)
-	X[m] = check_borders!(rebounder, X[m].loc)
+	startloc = Point(X[m].loc.x, X[m].loc.y)
+	X[m] = propose_move_x(X[m], max_speed)
+	check_borders!(X[m],startloc)
 	if is_overlap(X, m)
-	  X[m] = start
+	  X[m].loc = Point(startloc.x,startloc.y)
 	  X[m].angle = 0.
 	  X[m].speed = 0.
 	  #move_cell_x!(X,m,max_speed) # include this to retry moving cell

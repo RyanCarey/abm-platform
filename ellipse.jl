@@ -2,13 +2,11 @@
 include("cell_type.jl")
 include("show.jl")
 
-function ellipse_borders(start_cell::Cell,final::Point)
-  final_cell = deepcopy(start_cell)
-  final_cell.loc = final
-  if in_ellipse(final_cell)
-    return final_cell
+function ellipse_borders!(cell::Cell,source::Point)
+  if in_ellipse(cell)
+    nothing
   else
-    return start_cell
+    cell.loc = source
   end
 end
 

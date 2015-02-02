@@ -1,6 +1,6 @@
 using Winston
 
-function show(X::Array)
+function show_sim(X::Array)
   show_agents(X)
   if ELLIPTICAL_BORDER
     hold(true)
