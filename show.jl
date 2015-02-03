@@ -19,6 +19,20 @@ function show_agents(M::Array,X::Array)
   hold(false)
 end
 
+function show_cells(X::Array)
+  locations = zeros(length(X),3)
+  for i in 1:length(X)
+		locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+  end
+  x = locations[:, 1]
+  y = locations[:, 2]
+  r = locations[:, 3]
+  p = scatter(x,y,r/X_SIZE.*70,"ro")
+  xlim(0,X_SIZE)
+  ylim(0,Y_SIZE)
+  display(c,p)
+end
+
 
 function csv_out(filename::String,output::String)
   f = open(filename,"a")

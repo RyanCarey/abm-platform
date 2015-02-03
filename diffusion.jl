@@ -1,6 +1,42 @@
 include("pause.jl")
 using Winston
 
+#Returns the ligand's concentration of one point thanks to an ODE
+#
+# time
+# i,j coordinates of the points where we want the concentration
+# source abscisse of the source (1D at the moment)
+# tau must be linked to a possible delay
+# D is the diffusion coefficient
+# A is another coefficient
+# tau0 is the number of steps possible
+###################################################################
+#!!!!!!!!!!!!!!!!CHOICE OF THE PARAMETERS!!!!!!!!!!!!!!!!!!!!!!!!!#
+###################################################################
+function ligand_concentration_onesource(abscisse_ligand,time,source_abscisse_ligand=0,A=100,D=10,tau0=30)
+
+	global Diffusion_coefficient = D,time_diffusion=time,A_coefficient=A, distance_source = abs(source_abscisse_ligand-abscisse_ligand)
+	(res,tmp)=quadgk(integrand,0,min(time,tau0))
+	return res
+
+end
+
+#Ligand initiation for a rectangle
+function ligand_initiation(x=X_SIZE/2)
+	j=int(floor(x))+1
+	ligand_matrix=zeros(Y_size,X_SIZE)
+	ligand_matrix[:,j]=1.+ligand_matrix[:,j]
+	return ligand_matrix
+end
+
+#fucntion to integrate when running the diffusion
+function integrand(tau)
+	result = A_coefficient*exp(-distance_source^2/(4*Diffusion_coefficient*(time_diffusion-tau)))/(4*Diffusion_coefficient*time_diffusion*pi)
+	return result
+end
+
+
+
 function test_diffusion()
   X = init_diffusion(15,15)
   n_diffusion_and_display!(X,.5,400)
@@ -52,5 +88,10 @@ function diffusion!(X, rate=1)
 	X[:,:] = (1-rate)*X + rate * ([X[2:end,:];X[end,:]] + [X[:,1] X[:,1:(end-1)]] + [X[:,2:end] X[:,end]] + [X[1,:];X[1:(end-1),:]])/4
 	return X
 end
+
+
+
+
+
 
 

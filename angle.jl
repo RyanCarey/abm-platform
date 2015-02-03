@@ -1,91 +1,82 @@
 using Winston
 using Distributions
 
-# Biased Random Walk V2
-# C is the coordinate and the radius (x,y,r) of the studied cell
-# ML is the matrix of ligand's concentration
-# degree_precision is an integer and the numnber of ligants we are going to use to assess the favorite direction
-# 1-We first need to adapt the localization of the cell to the matrix. The cell will be spotted by the cooridnates (they can be float)
-# whereas the matrix is located thaks to integer. We assume that the localisation of the cell matches with the coordinates of the matrix. 
-# If C=(5.2,6.3) then the center of teh cell will be in the cell (6,7). We start to count the colums at 1 for the matrix. 
-# We cannot have a localization (0.2,0.1) within the matrix but we can for the cell center.
-# We call a ligand-concentration vector the product of teh concentration of ligand with the vector going from the center of the cell to the cell of the ligand concentration
-# Moreover, the matrix of the cocnetration starts from the top left and the localization of the celle starts form the bottom left
-#
-# 2-We choose the number of possible directions by creating a angle step = 2*pi/degree_precision
-#
-# 3-The receptors move with the angle alpha which follows a Biased Random Walk
-# ie. alpha ~ N(beta,var)
-# where beta is the angle of the sum of the ligand-concentration vectors
-# and assuming a normal wrapped distribution for the pregfered angle, we assume that:
-# var = sqrt(ln(1/R^2))
-# R is the length of the mean resultant ; R = norm(sum(ligand vector))/sum(norm(ligand vector))
-# 
-# 3bis-We have also constructed another way of calculating the variance, but it is just intuitive:
-# var=1/degree_precision(sum(i=1..degree_precision)(ML(concentration's cell (i))/maximum(ML) * distance(beta,angle(i)))
-# where angle(i)=i*2*pi/degree_precision
-# var= var + ML[round(C[1] + cos(angle)*r)+1,round(C[2] + sin(angle)*r)+1]/maximum(ML)  *  min(abs(beta-angle),2*pi-abs(beta-angle))*min(abs(beta-angle),2*pi-abs(beta-angle))
+include("diffusion.jl")
 
-function angleBRW(ML,cell,degree_precision=36)
-  x = cell.loc.x
-  y = cell.loc.y
-  r = cell.r
+# Proposed angle of direction for the cell
+#
+# t : time_step
+# nb_ligands : number of ligands around the cell ie the number of possible directions
+# cell : data from the cell we want to assess the next angle
 
-	sum_x=0
-	sum_y=0
-	sum_norm_vect=0
-	b=Array(Float64,degree_precision)
-  c=Array(Float64,degree_precision)
-	for i in 1:degree_precision
-		angle=i*2*pi/degree_precision
-		#we add one to correct the fact that the matrix doesn't start at 0 and we correct the fact that matrix start from the top left
-   		#print("cell",C)
-		i_ligand_i = min(size(ML,1)-(floor(y + sin(angle)*r)),size(ML,1))
-		j_ligand_i = min(floor(x + cos(angle)*r) + 1,size(ML,2))
-		sum_norm_vect += ML[i_ligand_i,j_ligand_i]
-		sum_x += ML[i_ligand_i,j_ligand_i] * cos(angle)
-		sum_y += ML[i_ligand_i,j_ligand_i] * sin(angle)
-		#b[i]=ML[i_ligand_i,j_ligand_i]
+#Ze still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
+function angle_from_ligand(time,cell,source_abscisse_ligand,nb_ligands)
+ 	x = cell.loc.x
+  	y = cell.loc.y
+  	r = cell.r
+	#println(x," ",y)
+	#println(nb_ligands)
+  	list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
+
+	for i in 1:nb_ligands
+		angle=(i-1)*2*pi/nb_ligands
+
+		list_ligand[i,1] = angle
+		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
+		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
+		list_ligand[i,4] = ligand_concentration_onesource(list_ligand[i,2],time,source_abscisse_ligand)
+		if(i==1)
+			list_ligand[i,5]=list_ligand[i,4]
+		else
+			list_ligand[i,5]=list_ligand[i-1,5]+list_ligand[i,4]
+		end
 	end
-	if(sum_x!=0)
-		beta=acos(sum_x/sqrt(sum_x^2+sum_y^2))*sign(sum_y)
-		R2=(sum_x/sum_norm_vect)^2+(sum_y/sum_norm_vect)^2
-		sd=sqrt(log(1/R2)) /degree_precision
-		chosen_angle=beta +randn()*sd
-	elseif(sum_y!=0)
-		chosen_angle=pi/2*sign(sum_y)
-	else
-		chosen_angle=rand()*2*pi
+	#Cumulative ligand concentration probability
+	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1	
+	if(maximum(list_ligand[:,5]!=0))
+		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
 	end
-  for i in 1:degree_precision
-    c[i] = normalpdf(i*2*pi/degree_precision, beta, sd*1000) 
-  end
-  #println("normal distribution: ",c)
-  #println("standard deviation: ",sd)
-  #println("chosen angle: ",chosen_angle)
-  #x_axis = 1:degree_precision
-  #p = plot(x_axis,b/100,"g^",x_axis,c,"b-o")
-	#display(p)
-	#junk = readline(STDIN)
-  return chosen_angle
+	#println(list_ligand)
+	#Method 1: we choose the angle which has the maximum concentration
+	choosen_angle_1=list_ligand[indmax(list_ligand[:,4]),1]
+
+	#Method 2: we chose the angle thanks to a uniform distribution
+	#and the cumulative probability of the ligand concentration:
+	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
+	choosen_angle_2=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
+	#println(choosen_angle_1)
+  	return choosen_angle_2
 end
 
 #Persistent random walk
-function anglePRW(cell,sd=0.2)
+function angle_persistent(cell,sd=0)
 	angle = cell.angle+randn()*sd
 	return angle
 end
 
-#Persistent Biased Random walk
-function anglePBRW(conc_map, cell)
-  if PERSISTENCE == 0
-    println("persistence rounded to 9999999")
-    stdev = 9999999
-  else
-    stdev = sqrt(-log(PERSISTENCE))
-  end
-  # ?should be var or stdev?
-	return OMEGA*angleBRW(conc_map,cell) + (1-OMEGA)*anglePRW(cell,stdev)
+
+#Combination of the two methods
+#probability is the probability of choosing the angle from the persistent random walk over the direction fro; the ligand
+function angle_from_both(cell::Cell,time,nb_ligands=36,probability_persistent=0.5)
+	if(rand()<probability_persistent)
+		angle=anglePRW(cell)
+	else
+		angle=angle_from_ligand(time,cell,nb_ligands)
+	end
+	return angle
 end
 
-normalpdf(x,m,sd) = 1/sqrt(2*pi*sd^2)*exp(-(x-m)^2/(2*sd^2))
+
+
+
+#Persistent Biased Random walk
+#function anglePBRW(conc_map, cell)
+#  if PERSISTENCE == 0
+#    println("persistence rounded to 9999999")
+#    stdev = 9999999
+#  else
+#    stdev = sqrt(-log(PERSISTENCE))
+#  end
+#  # ?should be var or stdev?
+#	return OMEGA*angleBRW(conc_map,cell) + (1-OMEGA)*anglePRW(cell,stdev)
+#end
