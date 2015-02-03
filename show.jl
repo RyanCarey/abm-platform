@@ -3,7 +3,7 @@ using Winston
 function show_sim(X::Array)
   show_agents(X)
   hold(true)
-  display(canvas,plot(ones(int(Y_SIZE)+1,1).*source_abscisse_ligand,[0:1:int(Y_SIZE)]))
+  #display(canvas,plot(ones(int(Y_SIZE)+1,1).*source_abscisse_ligand,[0:1:int(Y_SIZE)]))
   if ELLIPTICAL_BORDER
     show_elliptical_border()
   end

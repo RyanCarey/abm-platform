@@ -13,7 +13,15 @@ using Winston
 
 function ligand_concentration_onesource(abscisse_ligand)
 
-	global distance_source = abs(source_abscisse_ligand-abscisse_ligand)
+	global distance_source_squared = (source_abscisse_ligand-abscisse_ligand)^2
+	(res,tmp)=quadgk(integrand,0,min(iter,tau0))
+	return res
+
+end
+
+function ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
+
+	global distance_source_squared = (abs(source_abscisse_ligand-abscisse_ligand)+abs(source_ordinate_ligand-ordinate_ligand))^2
 	(res,tmp)=quadgk(integrand,0,min(iter,tau0))
 	return res
 
@@ -29,7 +37,7 @@ end
 
 #fucntion to integrate when running the diffusion
 function integrand(tau)
-	result = A_coefficient*exp(-distance_source^2/(4*Diffusion_coefficient*(iter-tau)))/(4*Diffusion_coefficient*iter*pi)
+	result = A_coefficient*exp(-distance_source_squared/(4*Diffusion_coefficient*(iter-tau)))/(4*Diffusion_coefficient*iter*pi)
 	return result
 end
 
