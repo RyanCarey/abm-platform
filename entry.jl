@@ -8,7 +8,7 @@ function simulate(path)
   n = length(prompts)
   global v = zeros(n,1)
   for i in 1:n
-    if startswith(prompts[i],"Probability") || endswith(prompts[i],"(0-1)")
+    if prompts[i][1:11]=="Probability" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return
@@ -52,8 +52,16 @@ function init_window()
   global entries = []
 
   # make the input fields 
+  entries1 = Entry(ctrls)
+  entries2 = Entry(ctrls)
+  entries3 = Entry(ctrls)
+  entries4 = Entry(ctrls)
+  entries5 = Entry(ctrls)
+  entries6 = Entry(ctrls)
+  entries7 = Entry(ctrls)
+  entries8 = Entry(ctrls)
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]
   for i in 1:n
-    push!(entries, Entry(ctrls))
     formlayout(entries[i],string(prompts[i],": "))
     bind(entries[i], "<Return>", simulate)
     bind(entries[i], "<KP_Enter>", simulate)
