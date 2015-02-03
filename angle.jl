@@ -24,7 +24,7 @@ function angle_from_ligand(time,cell)
 		list_ligand[i,1] = angle
 		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
 		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
-		list_ligand[i,4] = ligand_concentration_onesource(list_ligand[i,2],time,source_abscisse_ligand)
+		list_ligand[i,4] = ligand_concentration_onesource(list_ligand[i,2])
 		if(i==1)
 			list_ligand[i,5]=list_ligand[i,4]
 		else
@@ -45,7 +45,7 @@ function angle_from_ligand(time,cell)
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle_2=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
 	#println(choosen_angle_1)
-  	return choosen_angle_1
+  	return choosen_angle_2
 end
 
 #Persistent random walk
@@ -57,7 +57,7 @@ end
 
 #Combination of the two methods
 #probability is the probability of choosing the angle from the persistent random walk over the direction fro; the ligand
-function angle_from_both(cell::Cell,time,nb_ligands=36,probability_persistent=0.5)
+function angle_from_both(cell::Cell,probability_persistent=0.5)
 	if(rand()<probability_persistent)
 		angle=anglePRW(cell)
 	else

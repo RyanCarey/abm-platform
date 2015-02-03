@@ -18,11 +18,12 @@ function main()
   global Y_SIZE = v[6]
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
-  #global PERSISTENCE = v[9]
-  #global OMEGA = v[10]
-  #const diffusion_rate = 1.0
+  global source_abscisse_ligand=v[9]
+
   global nb_ligands=36
-  global source_abscisse_ligand=X_SIZE/4
+  global Diffusion_coefficient = 10
+  global A_coefficient=100
+  global tau0=30
 
   println("building environment")
   alive_cells = init(n_cell,radius)
