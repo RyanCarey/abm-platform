@@ -10,7 +10,7 @@ include("diffusion.jl")
 # cell : data from the cell we want to assess the next angle
 
 #Ze still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
-function angle_from_ligand(time,cell,source_abscisse_ligand,nb_ligands)
+function angle_from_ligand(time,cell)
  	x = cell.loc.x
   	y = cell.loc.y
   	r = cell.r
@@ -45,7 +45,7 @@ function angle_from_ligand(time,cell,source_abscisse_ligand,nb_ligands)
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle_2=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
 	#println(choosen_angle_1)
-  	return choosen_angle_2
+  	return choosen_angle_1
 end
 
 #Persistent random walk
