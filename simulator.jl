@@ -21,8 +21,8 @@ function main()
   #global PERSISTENCE = v[9]
   #global OMEGA = v[10]
   #const diffusion_rate = 1.0
-  global nb_ligands=36
-  global source_abscisse_ligand=X_SIZE/4
+  global const nb_ligands=36
+  global const source_abscisse_ligand=X_SIZE/4
 
   println("building environment")
   alive_cells = init(n_cell,radius)
@@ -42,18 +42,23 @@ function main()
     start_output(file, t, v, conc_map, alive_cells, diffusion_rate)
   end
 
+  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, cell_speed, steps)
+  println("simulation finished")
+end
+
+function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int)
   for i = 1:steps
     global time =i
     if length(alive_cells) == 0
       println("all cells have died after $i iterations")
-      break
+      return alive_cells, dead_cells 
     end
     move_any!(alive_cells, cell_speed)
     alive_cells, dead_cells = life_or_death(alive_cells, dead_cells)
     if DISPLAY_OUTPUT
       show_sim(alive_cells)
     end
-    # for speed, it will be necessary to batch these outputs in groups of 100
+    # for speed, it will be necessary to batch these outputs in groups of 100+
     if TXT_OUTPUT
       csv_out(file, alive_cells, dead_cells)
     end
@@ -62,5 +67,5 @@ function main()
     end
     #pause(0.0001)
   end
-  println("simulation finished")
+  return alive_cells, dead_cells
 end

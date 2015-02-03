@@ -10,9 +10,9 @@ using Winston
 # D is the diffusion coefficient
 # A is another coefficient
 # tau0 is the number of steps possible
-###################################################################
+#=
 #!!!!!!!!!!!!!!!!CHOICE OF THE PARAMETERS!!!!!!!!!!!!!!!!!!!!!!!!!#
-###################################################################
+=#
 function ligand_concentration_onesource(abscisse_ligand,time,source_abscisse_ligand=0,A=100,D=10,tau0=30)
 
 	global Diffusion_coefficient = D,time_diffusion=time,A_coefficient=A, distance_source = abs(source_abscisse_ligand-abscisse_ligand)
