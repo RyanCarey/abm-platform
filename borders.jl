@@ -4,108 +4,79 @@
 # Needs the bounds of the environment explicitly stated globally.
 
 include("cell_type.jl")
+include("ellipse.jl")
 
-
-function check_borders!(cell::Cell, final)
-	
-	r = cell.r
-	if final[2] < r
-		y_bound = r
-	else
-		y_bound = Y_SIZE - r
-	end
-	if final[1] < r 
-		x_bound = r
-	else
-		x_bound = X_SIZE - r
-	end
-	grad = (final[2] - cell.loc.y) / (final[1] - cell.loc.x)
-	offset = cell.loc.y - (grad * cell.loc.x)
-	intersect_y_bound = (y_bound - offset) / grad
-	intersect_x_bound = (grad * x_bound) + offset
-	if (final[1] > X_SIZE - r || final[1] < r) && (final[2] > Y_SIZE - r|| final[2] < r)
-		
-		if r < intersect_y_bound < Y_SIZE - r
-			
-			if BORDER_BEHAVIOUR == "Bounce"
-				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
-			else
-				final = stick_cell_y(final, y_bound, intersect_y_bound)
-			end			
-		else
-			
-			if BORDER_BEHAVIOUR == "Bounce"
-	     			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
-			else
-				final = stick_cell_x(final, x_bound, intersect_x_bound)
-			end	
-		end
-	elseif final[1] > X_SIZE - r|| final[1] < r
-		
-		if BORDER_BEHAVIOUR == "Bounce"
-			cell, final = reflect_cell_x(cell, final, x_bound, intersect_x_bound)
-		else
-			final = stick_cell_x(final, x_bound, intersect_x_bound)
-		end
-		elseif final[2] > Y_SIZE - r || final[2] < r
-			
-			if BORDER_BEHAVIOUR == "Bounce"
-				cell, final = reflect_cell_y(cell, final, y_bound, intersect_y_bound)
-			else
-				final = stick_cell_y(final, y_bound, intersect_y_bound)
-			end
-		end
-	angle = atan((final[2] - cell.loc.y) / (final[1] - cell.loc.x))
-	cell.loc.x = final[1]
-	cell.loc.y = final[2]
-	cell.angle = angle
-	
-	if final[1] > X_SIZE - r || final[1] < r || final[2] > Y_SIZE - r || final[2] < r
-		cell = check_borders!(cell, final)
-	end
-	return cell
+function check_borders!(cell::Cell, source)
+  if ELLIPTICAL_BORDER
+    ellipse_borders!(cell::Cell, source)
+  else
+    rectangle_borders!(cell::Cell, source)
+  end
 end
 
-function reflect_cell_x(cell, final, x_bound, x_intersect)
-	
-	origin_x = cell.loc.x
-	origin_y = cell.loc.y
-	desired_x = final[1]
-	desired_y = final[2]
-	desired_x = 2(x_bound) - desired_x
-	final = [desired_x, desired_y]
-	if isequal(x_intersect, NaN)
-		x_intersect = final[2]
-	end
-	cell.loc.x = x_bound
-	cell.loc.y = x_intersect
-	
-	return cell, final
+function rectangle_borders!(cell::Cell, source)
+  if BORDER_BEHAVIOUR == "Bounce"
+    bounce_if_req!(cell)
+  elseif BORDER_BEHAVIOUR == "Stick"
+    stick_if_req!(cell,source)
+  end
 end
 
-function reflect_cell_y(cell, final, y_bound, y_intersect)
-	
-	origin_x = cell.loc.x
-	origin_y = cell.loc.y
-	desired_x = final[1]
-	desired_y = final[2]
-	desired_y = 2(y_bound) - desired_y
-	final = [desired_x, desired_y]
-	if isequal(y_intersect, NaN)
-		y_intersect = final[1]
-	end
-	cell.loc.x = y_intersect
-	cell.loc.y = y_bound
-	
-	return cell, final
+function stick_if_req!(cell::Cell,source)
+  r = cell.r
+  x_bound = (cell.loc.x < r ? r : X_SIZE - r)
+  y_bound = (cell.loc.y < r ? r : Y_SIZE - r)
+  grad = (cell.loc.y - source.y) / (cell.loc.x - source.x)
+  offset = source.y - (grad * source.x)
+  x_intersect = (grad * x_bound) + offset
+  y_intersect = (y_bound - offset) / grad
+
+
+  if !(r <= cell.loc.x <= X_SIZE - r) && (0 <= x_intersect <= Y_SIZE)
+    stick_cell_y!(cell, source, x_bound, x_intersect)
+  end
+  if !(r <= cell.loc.y <= Y_SIZE - r)
+    stick_cell_x!(cell, source, y_bound, y_intersect)
+  end
+
+  # maybe need to add pi here sometimes
+  cell.angle = atan((cell.loc.y - source.y) / (cell.loc.x - source.x))
+
+  # if out of bounds, redo
+  (r <= cell.loc.x <= X_SIZE - r) && (r <= cell.loc.y <= Y_SIZE - r) ? nothing : stick_if_req!(cell,source)
 end
 
-function stick_cell_x(final, x_bound, x_intersect)
-	final = [x_bound, x_intersect]
-	return final
+function bounce_if_req!(cell)
+  r = cell.r
+  x_bound = (cell.loc.x < r ? r : X_SIZE - r)
+  y_bound = (cell.loc.y < r ? r : Y_SIZE - r)
+  r <= cell.loc.x <= X_SIZE - r ? nothing : reflect_cell_x!(cell,x_bound)
+  r <= cell.loc.y <= Y_SIZE - r ? nothing : reflect_cell_y!(cell,y_bound)
+
+  # if out of bounds, redo
+  (r <= cell.loc.x <= X_SIZE - r) && (r <= cell.loc.y <= Y_SIZE - r) ? nothing : bounce_if_req!(cell) 
 end
 
-function stick_cell_y(final, y_bound, y_intersect)
-	final = [y_intersect, y_bound]
-	return final
+function reflect_cell_x!(cell::Cell, x_bound)
+	cell.loc.x = 2(x_bound) - cell.loc.x
+  cell.angle = pi - cell.angle
+end
+
+function reflect_cell_y!(cell::Cell, y_bound)
+  cell.loc.y = 2(y_bound) - cell.loc.y
+  cell.angle = - cell.angle
+end
+
+function stick_cell_x!(cell::Cell, source::Point, x_bound, x_intersect)
+  source = Point(cell.loc.x, cell.loc.y)
+	cell.loc = Point(x_intersect, x_bound)
+  cell.angle = 0.
+  cell.speed = 0.
+end
+
+function stick_cell_y!(cell::Cell, source::Point, y_bound, y_intersect)
+  source = Point(cell.loc.x, cell.loc.y)
+  cell.loc = Point(y_bound, y_intersect)
+  cell.angle = 0.
+  cell.speed = 0.
 end

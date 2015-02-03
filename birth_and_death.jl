@@ -24,16 +24,21 @@ function divide_any(alive_cells)
   return cell_division(alive_cells,i)
 end
 
-
 function cell_division(cells, i)
 	radius = cells[i].r		
 	angle = 2 * pi * rand()		
-	# New Cell!
-	println("New Cell!")
+
+	#println("New Cell!")
 	new_x = cells[i].loc.x - cos(angle) * 2 * radius
 	new_y = cells[i].loc.y - sin(angle) * 2 * radius
 	new_point = Point(new_x, new_y)
 	in_empty_space = !(is_overlap(cells, new_point, radius))
+
+  if ELLIPTICAL_BORDER
+    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0)
+    in_empty_space = in_ellipse(cell) ? in_empty_space : false
+  end
+
 	attempt = 0
 	give_up = false
 	while !in_empty_space || !(radius < new_x < X_SIZE - radius) || !(radius < new_y < Y_SIZE - radius)
@@ -41,6 +46,13 @@ function cell_division(cells, i)
 		new_x = cells[i].loc.x - cos(angle) * 2 * radius
 		new_y = cells[i].loc.y - sin(angle) * 2 * radius
 		in_empty_space = !(is_overlap(cells, Point(new_x, new_y), radius))
+    
+    # check if within elliptical bounds
+    if ELLIPTICAL_BORDER
+      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0)
+      in_empty_space = in_ellipse(cell) ? in_empty_space : false
+    end
+
 		attempt += 1
 		if attempt > 100
 			println("Tried 100 times to place new cell, giving up!")
@@ -66,7 +78,7 @@ end
 
 function cell_death(alive_cells, dead_cells, i)
 	# Dead Cell!
-	println("Dead Cell!")
+	#println("Dead Cell!")
 	dead_cell = splice!(alive_cells, i)
 	dead_cell.state = "Dead"
 	push!(dead_cells, dead_cell)
