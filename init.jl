@@ -13,12 +13,12 @@ function init(n, r)
   x = X_SIZE
   y = Y_SIZE
   cells = Cell[]
-  rvar = 0.1 # Radius Variation
   if(n >= 1)
     for i in 1:n
       placed = false
       fails = 0
-      ri = rand_radius(r, r * rvar)
+      rvar = max(r/10,.00001) # Radius Variation
+      ri = rand_radius(r, rvar)
       while !placed
         xi = ri + (x - 2 * ri) * rand()
         yi = ri + (y - 2 * ri) * rand()
