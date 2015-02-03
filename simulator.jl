@@ -24,6 +24,7 @@ function main()
   global const Diffusion_coefficient = 10
   global const A_coefficient=100
   global const tau0=30
+  global probability_persistent=0.5
 
   println("building environment")
   alive_cells = init(n_cell,radius)
@@ -64,6 +65,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
     if TXT_OUTPUT
       csv_out(file, alive_cells, dead_cells)
     end
+    println(i)
     if i % 1000 == 0
       println("$i iterations completed")
     end

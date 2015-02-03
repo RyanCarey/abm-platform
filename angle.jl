@@ -16,7 +16,7 @@ function angle_from_ligand(cell)
   	r = cell.r
 	#println(x," ",y)
 	#println(nb_ligands)
-  	list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
+  	list_ligand=Array(Float64,int(nb_ligands),6) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability, cumulative squared distribution
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands
@@ -29,14 +29,17 @@ function angle_from_ligand(cell)
 
 		if(i==1)
 			list_ligand[i,5]=list_ligand[i,4]
+			list_ligand[i,6]=list_ligand[i,4]^2
 		else
 			list_ligand[i,5]=list_ligand[i-1,5]+list_ligand[i,4]
+			list_ligand[i,6]=list_ligand[i-1,6]+list_ligand[i,4]^2
 		end
 	end
 	#Cumulative ligand concentration probability
 	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1	
 	if(maximum(list_ligand[:,5]!=0))
 		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
+		list_ligand[:,6] = list_ligand[:,6]./maximum(list_ligand[:,6])
 	end
 	#println(list_ligand)
 	#Method 1: we choose the angle which has the maximum concentration
@@ -46,22 +49,18 @@ function angle_from_ligand(cell)
 	#and the cumulative probability of the ligand concentration:
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle_2=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
-	#println(choosen_angle_1)
-  	return choosen_angle_2
-end
 
-#Persistent random walk
-function angle_persistent(cell,sd=0)
-	angle = cell.angle+randn()*sd
-	return angle
+	#Method 3: same as method 2 with a squared distribution
+	choosen_angle_3=list_ligand[findfirst(list_ligand[:,6].>rand()),1]
+	
+  	return choosen_angle_3
 end
-
 
 #Combination of the two methods
 #probability is the probability of choosing the angle from the persistent random walk over the direction fro; the ligand
-function angle_from_both(cell::Cell,probability_persistent=0.5)
-	if(rand()<probability_persistent)
-		angle=anglePRW(cell)
+function angle_from_both(cell::Cell)
+	if(rand()<probability_persistent && iter>1)
+		angle=cell.angle
 	else
 		angle=angle_from_ligand(cell)
 	end

@@ -14,6 +14,12 @@ function simulate(path)
         return
       end
     end
+    if prompts[i][1:6]=="Choose" 
+      if !(0 <= float(get_value(entries[i])) <= v[5])
+        Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and width"))
+        return
+      end
+    end
     try
 			v[i] = float(get_value(entries[i]))
     catch
@@ -46,7 +52,7 @@ function init_window()
 
   # make and activate controls
   global prompts = ["Number of cells", "Speed of cells (~1)", "Average cell radius (~1)", "Number of timesteps (~100)", 
-    "Width of environment (~20)", "Height of environment (~20)", "Probability of cell division", "Probability of cell death",
+    "Width of environment (~20)", "Height of environment (~20)", "Probability of cell division", "Probability of cell death","Choose where the injury is (x axis)"
     ]       #"persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
   n = length(prompts)
   global entries = []
@@ -60,7 +66,8 @@ function init_window()
   entries6 = Entry(ctrls)
   entries7 = Entry(ctrls)
   entries8 = Entry(ctrls)
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]
+  entries9 = Entry(ctrls)
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8,entries9]
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))
     bind(entries[i], "<Return>", simulate)
