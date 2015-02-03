@@ -47,8 +47,9 @@ function main()
 end
 
 function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int)
+  global iter
   for i = 1:steps
-    global time =i
+    iter = i
     if length(alive_cells) == 0
       println("all cells have died after $i iterations")
       return alive_cells, dead_cells 

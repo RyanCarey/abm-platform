@@ -13,10 +13,10 @@ using Winston
 #=
 #!!!!!!!!!!!!!!!!CHOICE OF THE PARAMETERS!!!!!!!!!!!!!!!!!!!!!!!!!#
 =#
-function ligand_concentration_onesource(abscisse_ligand,time,source_abscisse_ligand=0,A=100,D=10,tau0=30)
+function ligand_concentration_onesource(abscisse_ligand,iter,source_abscisse_ligand=0,A=100,D=10,tau0=30)
 
-	global Diffusion_coefficient = D,time_diffusion=time,A_coefficient=A, distance_source = abs(source_abscisse_ligand-abscisse_ligand)
-	(res,tmp)=quadgk(integrand,0,min(time,tau0))
+	global Diffusion_coefficient = D,time_diffusion=iter,A_coefficient=A, distance_source = abs(source_abscisse_ligand-abscisse_ligand)
+	(res,tmp)=quadgk(integrand,0,min(iter,tau0))
 	return res
 
 end
@@ -43,7 +43,7 @@ function test_diffusion()
 end
 
 function n_diffusion!(X,rate,n)
-  # implements diffusion n times
+    # implements diffusion n times
   for i in 1:n
     diffusion!(X,rate)
   end

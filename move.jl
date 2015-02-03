@@ -7,7 +7,7 @@ using Distributions
 function propose_move_x(cell::Cell, speed_param::Float64)
   Y = deepcopy(cell)
   Y.speed = rand()*speed_param
-  Y.angle = angle_from_ligand(time,cell)
+  Y.angle = angle_from_ligand(iter,cell)
   Y.loc.x += Y.speed * cos(Y.angle)
   Y.loc.y += Y.speed * sin(Y.angle) 
   return Y
