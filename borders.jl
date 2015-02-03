@@ -30,8 +30,16 @@ function stick_if_req!(cell::Cell,source)
   offset = source.y - (grad * source.x)
   x_intersect = (grad * x_bound) + offset
   y_intersect = (y_bound - offset) / grad
-  r <= cell.loc.x <= X_SIZE - r ? nothing : stick_cell_y!(cell, source, x_bound, x_intersect)
-  r <= cell.loc.y <= Y_SIZE - r ? nothing : stick_cell_x!(cell, source, y_bound, y_intersect)
+
+
+  if !(r <= cell.loc.x <= X_SIZE - r) && (0 <= x_intersect <= Y_SIZE)
+    stick_cell_y!(cell, source, x_bound, x_intersect)
+  end
+  if !(r <= cell.loc.y <= Y_SIZE - r)
+    stick_cell_x!(cell, source, y_bound, y_intersect)
+  end
+
+  # maybe need to add pi here sometimes
   cell.angle = atan((cell.loc.y - source.y) / (cell.loc.x - source.x))
 
   # if out of bounds, redo

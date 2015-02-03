@@ -54,10 +54,10 @@ function main()
     if TXT_OUTPUT
       csv_out(file, alive_cells, dead_cells)
     end
-    if i % 50 == 0
+    if i % 1000 == 0
       println("$i iterations completed")
     end
-    pause(0.01)
+    #pause(0.0001)
   end
   println("simulation finished")
 end

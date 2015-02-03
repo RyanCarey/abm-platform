@@ -54,8 +54,8 @@ end
 
 function rand_radius(mean, stdev)
   radius = mean + (stdev * randn())
-  # while radius is negative, try again
-  while radius <= 0
+  # if radius is negative, try again
+  if radius <= 0
     radius = rand_radius(mean, stdev)
   end
   return radius
