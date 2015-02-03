@@ -18,12 +18,12 @@ function main()
   global Y_SIZE = v[6]
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
-  global source_abscisse_ligand=v[9]
+  global const source_abscisse_ligand=v[9]
 
-  global nb_ligands=36
-  global Diffusion_coefficient = 10
-  global A_coefficient=100
-  global tau0=30
+  global const nb_ligands=36
+  global const Diffusion_coefficient = 10
+  global const A_coefficient=100
+  global const tau0=30
 
   println("building environment")
   alive_cells = init(n_cell,radius)
@@ -43,18 +43,24 @@ function main()
     start_output(file, t, v, conc_map, alive_cells, diffusion_rate)
   end
 
+  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, cell_speed, steps)
+  println("simulation finished")
+end
+
+function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int)
+  global iter
   for i = 1:steps
-    global time =i
+    iter = i
     if length(alive_cells) == 0
       println("all cells have died after $i iterations")
-      break
+      return alive_cells, dead_cells 
     end
     move_any!(alive_cells, cell_speed)
     alive_cells, dead_cells = life_or_death(alive_cells, dead_cells)
     if DISPLAY_OUTPUT
       show_sim(alive_cells)
     end
-    # for speed, it will be necessary to batch these outputs in groups of 100
+    # for speed, it will be necessary to batch these outputs in groups of 100+
     if TXT_OUTPUT
       csv_out(file, alive_cells, dead_cells)
     end
@@ -63,5 +69,5 @@ function main()
     end
     #pause(0.0001)
   end
-  println("simulation finished")
+  return alive_cells, dead_cells
 end

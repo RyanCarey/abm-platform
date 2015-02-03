@@ -10,7 +10,7 @@ include("diffusion.jl")
 # cell : data from the cell we want to assess the next angle
 
 #Ze still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
-function angle_from_ligand(time,cell)
+function angle_from_ligand(cell)
  	x = cell.loc.x
   	y = cell.loc.y
   	r = cell.r
@@ -24,7 +24,9 @@ function angle_from_ligand(time,cell)
 		list_ligand[i,1] = angle
 		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
 		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
+
 		list_ligand[i,4] = ligand_concentration_onesource(list_ligand[i,2])
+
 		if(i==1)
 			list_ligand[i,5]=list_ligand[i,4]
 		else
@@ -61,7 +63,7 @@ function angle_from_both(cell::Cell,probability_persistent=0.5)
 	if(rand()<probability_persistent)
 		angle=anglePRW(cell)
 	else
-		angle=angle_from_ligand(time,cell,nb_ligands)
+		angle=angle_from_ligand(cell)
 	end
 	return angle
 end

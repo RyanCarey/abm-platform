@@ -10,10 +10,11 @@ using Winston
 # D is the diffusion coefficient
 # A is another coefficient
 # tau0 is the number of steps possible
+
 function ligand_concentration_onesource(abscisse_ligand)
 
 	global distance_source = abs(source_abscisse_ligand-abscisse_ligand)
-	(res,tmp)=quadgk(integrand,0,min(time,tau0))
+	(res,tmp)=quadgk(integrand,0,min(iter,tau0))
 	return res
 
 end
@@ -28,7 +29,7 @@ end
 
 #fucntion to integrate when running the diffusion
 function integrand(tau)
-	result = A_coefficient*exp(-distance_source^2/(4*Diffusion_coefficient*(time-tau)))/(4*Diffusion_coefficient*time*pi)
+	result = A_coefficient*exp(-distance_source^2/(4*Diffusion_coefficient*(iter-tau)))/(4*Diffusion_coefficient*iter*pi)
 	return result
 end
 
@@ -40,7 +41,7 @@ function test_diffusion()
 end
 
 function n_diffusion!(X,rate,n)
-  # implements diffusion n times
+    # implements diffusion n times
   for i in 1:n
     diffusion!(X,rate)
   end
