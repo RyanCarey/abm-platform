@@ -4,27 +4,22 @@ include("cell_type.jl")
 
 using Distributions
 
-function propose_move_x(cell::Cell, speed_param::Float64)
-  Y = deepcopy(cell)
-  Y.speed = rand()*speed_param
-  Y.angle = rand()* 2pi
-  Y.loc.x += Y.speed * cos(Y.angle)
-  Y.loc.y += Y.speed * sin(Y.angle) 
-  return Y
+function propose_move_x!(cell::Cell, speed_param::Float64)
+  cell.speed = rand()*speed_param
+  cell.angle = rand()* 2pi
+  cell.loc.x += cell.speed * cos(cell.angle)
+  cell.loc.y += cell.speed * sin(cell.angle) 
 end
 
 function move_any!(X::Array, max_speed::Float64)
   # moves a random cell
-  n = length(X)
-  m = rand(1:n)
-	move_cell_x!(X, m, max_speed)	
-  return X
+	move_cell_x!(X, rand(1:length(X)), max_speed)
 end
 
 function move_cell_x!(X::Array, m::Int, max_speed::Float64)
   # takes cell list and (attempts to) move specified cell
 	startloc = Point(X[m].loc.x, X[m].loc.y)
-	X[m] = propose_move_x(X[m], max_speed)
+	propose_move_x!(X[m], max_speed)
 	check_borders!(X[m],startloc)
 	if is_overlap(X, m)
 	  X[m].loc = Point(startloc.x,startloc.y)
