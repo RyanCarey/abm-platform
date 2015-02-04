@@ -4,6 +4,19 @@ using Distributions
 include("diffusion.jl")
 
 # Proposed angle of direction for the cell
+# Biased Random Walk V2
+# Ca is the coordinate (x,y,z) of the studied cell
+# r is the radius of a cell
+# ML is the matrix of ligand's concentration
+# degree_precision is an integer and the numnber of ligants we are going to use to assess the favorite direction
+# 1-We first need to adapt the localization of the cell to the matrix. The cell will be spotted by the cooridnates (they can be float)
+# whereas the matrix is located thaks to integer. We assume that the localisation of the cell matches with the coordinates of the matrix. 
+# If C=(5.2,6.3) then the center of teh cell will be in the cell (6,7). We start to count the colums at 1 for the matrix. 
+# We cannot have a localization (0.2,0.1) within the matrix but we can for the cell center.
+# We call a ligand-concentration vector the product of teh concentration of ligand with the vector going from the center of the cell to the cell of the ligand concentration
+# Moreover, the matrix of the cocnetration starts from the top left and the localization of the celle starts form the bottom left
+#
+# 2-We choose the number of possible directions by creating a angle step = 2*pi/degree_precision
 #
 # t : time_step
 # nb_ligands : number of ligands around the cell ie the number of possible directions
