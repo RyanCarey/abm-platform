@@ -19,11 +19,14 @@ function main()
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
   global const source_abscisse_ligand=v[9]
+  global const source_ordinate_ligand=v[10]
 
   global const nb_ligands=36
   global const Diffusion_coefficient = 10
   global const A_coefficient=100
   global const tau0=30
+  global probability_persistent=0.5
+  
 
   println("building environment")
   alive_cells = init(n_cell,radius)
