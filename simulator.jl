@@ -13,6 +13,7 @@ function main()
   n_cell = int(v[1])
   cell_speed = v[2]
   radius = v[3]
+  global AVG_RADIUS = radius
   const steps = int(v[4])
   global X_SIZE = v[5]
   global Y_SIZE = v[6]
