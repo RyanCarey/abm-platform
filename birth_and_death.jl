@@ -71,7 +71,7 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0)
+			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, "A")
 			cells[i].r /= 2
 			cells[i].offspring += 1
 			push!(cells, new_cell)
