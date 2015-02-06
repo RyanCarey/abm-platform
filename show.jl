@@ -50,6 +50,13 @@ function display_cell_sets(X::Array, bools::BitArray)
   display_two(locations,bools)
 end
 
+
+#function display_two(cells::Array)
+#  locations = zeros(length(cells), 3)
+ # for i in 1 : length(cells)
+  #  locations[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+   # if cells[i].category == "A"
+
 function display_two(locs::Array, bools::BitArray)
   print(" locs: ",locs)
   print(" bools: ",bools)
