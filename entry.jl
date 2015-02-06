@@ -1,7 +1,9 @@
 using Tk
+using Winston
 include("pause.jl")
 include("simulator.jl")
 include("show.jl")
+include("diffusion.jl")
 
 function simulate2(path)
   n2 = length(prompts2)
@@ -10,26 +12,51 @@ function simulate2(path)
     try
       v2[i] = float(get_value(entries2[i]))
     catch
-      Messagebox(title="Warning", message=string("k. Must enter a numeric for field ", string(prompts2[i])))
+      Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(prompts2[i])))
       return
     end
   end
   destroy(w2) 
 end
 
+##########################################################################################################
+function simulate3(path)
+  result = Array(Float64,100,1)
+  for x in 1:100
+  	global distance_source_squared = int(x)
+	timediff = get_value(sc)	
+	tau0 = int(get_value(entries2[6]))
+  	(res,tmp)=quadgk(integrand,0,min(timediff,tau0))
+	result[x]=res
+  end
+  p=plot(result)
+  xlabel("Distance from source")
+  ylabel("Concentration")
+  display(canvas2,p)
+  
+end
+##########################################################################################################
 
+function integrand(tau)
+	timediff = get_value(sc)
+	A=int(get_value(entries2[5]))
+	D=int(get_value(entries2[4]))
+	result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
+	return result
+end
+##########################################################################################################
 function callback(path)
-  global w2 = Toplevel("Diffusion Parameters") ## title, width, height
-  f2 = Frame(w2)
+  global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
+  global f2 = Frame(w2) 
   pack(f2, expand=true, fill="both")
-  global canvas2 = Canvas(f2, 0, 0)
-  grid(canvas2, 1, 2, sticky="nsew")
+  global canvas2 = Canvas(f2, 300, 300)
+  grid(canvas2, 1, 2, sticky="news")
   ctrls2 = Frame(f2)
-  grid(ctrls2, 1, 1, sticky="sw", pady=5, padx=5)
+  grid(ctrls2, 1, 1, sticky="nw", pady=5, padx=5)
   grid_columnconfigure(f2, 1, weight=1)
   grid_rowconfigure(f2, 1, weight=1)
 
-  global prompts2 =["Abscisse of the injury","Ordinate of the injury","Probability of persistance","Diffusion coefficient","A diffusion coefficient","tau coefficient","Choose the numbers of direction for a cell"]
+  global prompts2 =["X ordinate of the injury","Y ordinate of the injury","Probability of persistance","D diffusion coefficient","A diffusion coefficient","Tau coefficient (maximum intergration time)","Choose the numbers of direction for a cell"]
   n2=length(prompts2)
   entries21 = Entry(ctrls2)
   entries22 = Entry(ctrls2)
@@ -38,6 +65,7 @@ function callback(path)
   entries25 = Entry(ctrls2)
   entries26 = Entry(ctrls2)
   entries27 = Entry(ctrls2)
+
   
   global entries2 = [entries21,entries22,entries23,entries24,entries25,entries26,entries27]
   for i in 1:n2
@@ -46,16 +74,33 @@ function callback(path)
     bind(entries2[i], "<KP_Enter>", simulate2)
   end
   focus(entries2[1]) 
+  
 
-  b = Button(ctrls2, "Ok")
+  #f3 = Frame(w2); pack(f3, expand = true, fill = "both")
+  grid(Label(f2, "Move the cursor to plot the diffusion over time"), 2, 1)
+  global sc = Slider(f2, 1:200)
+  l = Label(f2)
+  l[:textvariable] = sc[:variable]
+  grid(sc, 3, 1, sticky="ew")
+  grid(l,  4, 1, sticky="w")
+  bind(sc, "command", simulate3)
+
+  b = Button(ctrls2, "Simulate diffusion")
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,simulate2)
+     bind(b,i,simulate3)
   end
+  b2 = Button(ctrls2, "Ok")
+  # displays the button
+  formlayout(b2, nothing)
+  for i in ["command","<Return>","<KP_Enter>"] 
+     bind(b2,i,simulate2)
+  end
+
 end
 
-
+##########################################################################################################
 function simulate(path)
   # store entry field data
   n = length(prompts)
@@ -103,6 +148,7 @@ function simulate(path)
   main()
 end
 
+##########################################################################################################
 function init_window()
   # window parameters
   global w = Toplevel("Agent-based modeller",350,385)
@@ -140,10 +186,6 @@ function init_window()
   end
   focus(entries[1])
   
-  #Choose diffusion parameters
-  b2 = Button(ctrls, "Diffusion Coefficient")
-  formlayout(b2, "Modify the diffusion parameters: ")
-  bind(b2, "command", callback) 
 
   # make comboboxes
   boundary_options = ["Reflecting","Absorbing"]
@@ -152,6 +194,11 @@ function init_window()
   boundary_shape = ["Rectangle","Ellipse"]
   global cb2 = Combobox(ctrls, boundary_shape)
   formlayout(cb2,"Boundary Shape")
+
+  #Choose diffusion parameters
+  b2 = Button(ctrls, "Change Diffusion Coefficient")
+  formlayout(b2, nothing)
+  bind(b2, "command", callback) 
 
   # make checkbuttons
   global display_option = Checkbutton(ctrls, "display simulation")
@@ -175,6 +222,7 @@ function init_window()
       end
     end
   end
+
 end
 
 init_window()

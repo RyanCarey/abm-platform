@@ -13,7 +13,7 @@ end
 function show_agents(X::Array,colour = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
-		locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+	locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
   end
   display_circles(locations, colour)
 end
@@ -26,7 +26,6 @@ function display_circles(locations::Array, colour = "ro")
   p = scatter(x,y,r,colour)
   xlim(0,X_SIZE)
   ylim(0,Y_SIZE)
-  #display(p)
   display(canvas,p)
 end
 
