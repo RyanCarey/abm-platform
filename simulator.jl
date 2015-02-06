@@ -20,12 +20,11 @@ function main()
   global DIE_THRESHOLD = v[8]
   global const source_abscisse_ligand=v[9]
   global const source_ordinate_ligand=v[10]
-
-  global const nb_ligands=36
-  global const Diffusion_coefficient = 10
-  global const A_coefficient=100
-  global const tau0=30
-  global probability_persistent=0.5
+  global const probability_persistent=v[11]
+  global const Diffusion_coefficient = v[12]
+  global const A_coefficient= v[13]
+  global const tau0= v[14]
+  global const nb_ligands= int(v[15])
   
 
   println("building environment")
