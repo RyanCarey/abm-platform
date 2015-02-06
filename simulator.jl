@@ -13,18 +13,19 @@ function main()
   n_cell = int(v[1])
   cell_speed = v[2]
   radius = v[3]
+  global AVG_RADIUS = radius
   const steps = int(v[4])
   global X_SIZE = v[5]
   global Y_SIZE = v[6]
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
-  global const source_abscisse_ligand=v[9]
-  global const source_ordinate_ligand=v[10]
-  global const probability_persistent=v[11]
-  global const Diffusion_coefficient = v[12]
-  global const A_coefficient= v[13]
-  global const tau0= v[14]
-  global const nb_ligands= int(v[15])
+  global const source_abscisse_ligand=v2[1]
+  global const source_ordinate_ligand=v2[2]
+  global const probability_persistent=v2[3]
+  global const Diffusion_coefficient = v2[4]
+  global const A_coefficient= v2[5]
+  global const tau0= v2[6]
+  global const nb_ligands= v2[7]
   
 
   println("building environment")
