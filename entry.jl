@@ -5,6 +5,12 @@ include("simulator.jl")
 include("show.jl")
 include("diffusion.jl")
 
+# TO DO :
+# Problems with the call of the global values, put a default setting
+# Define properly the size of the distance from source (200 now)
+# More than one source
+# Adapt the size of the canvas
+
 function simulate2(path)
   n2 = length(prompts2)
   global v2 = zeros(n2,1)
