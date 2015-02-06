@@ -9,16 +9,13 @@ include("birth_and_death.jl")
 # AVG_RADIUS - The radius that all cells are created around
 # GROWTH_RATE - A specified maximal growth rate
 
-global AVG_RADIUS = 1
-global GROWTH_RATE = 0.1
-
 # Decides when to split a cell into two.
-function growth_decision!(alive_cells::Array, i::Int)
+function division_decision!(alive_cells::Array, i::Int)
 	cell = alive_cells[i]
 	original_area = pi * AVG_RADIUS ^ 2
 	current_area = pi * cell.r ^ 2
 
-	if current_area / original_area > 1.75
+	if current_area / original_area > 1.95
 		# New Cell!
 		cell_division(alive_cells, i)
 	end

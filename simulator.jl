@@ -6,14 +6,14 @@ include("pause.jl")
 include("diffusion.jl")
 include("birth_and_death.jl")
 include("cell_type.jl")
+include("cell_growth.jl")
 
 
 
 function main()
   n_cell = int(v[1])
   cell_speed = v[2]
-  radius = v[3]
-  global AVG_RADIUS = radius
+  global AVG_RADIUS = v[3]
   const steps = int(v[4])
   global X_SIZE = v[5]
   global Y_SIZE = v[6]
@@ -21,6 +21,7 @@ function main()
   global DIE_THRESHOLD = v[8]
   global const source_abscisse_ligand=v[9]
   global const source_ordinate_ligand=v[10]
+  global GROWTH_RATE = v[11]
 
   global const nb_ligands=36
   global const Diffusion_coefficient = 10
@@ -30,7 +31,7 @@ function main()
   
 
   println("building environment")
-  alive_cells = init(n_cell,radius)
+  alive_cells = init(n_cell,AVG_RADIUS)
   dead_cells = Cell[]
 
   if DISPLAY_OUTPUT
@@ -59,8 +60,18 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
       println("all cells have died after $i iterations")
       return alive_cells, dead_cells 
     end
-    move_any!(alive_cells, cell_speed)
-    alive_cells, dead_cells = life_or_death(alive_cells, dead_cells)
+
+    index = rand(1 : length(alive_cells))
+    # Does all cell functions
+    cell_died = false
+    alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
+    if !cell_died
+    	move_cell_x!(alive_cells, index, cell_speed)
+    	alive_cells = cell_growth!(alive_cells, index)
+    	alive_cells = division_decision!(alive_cells, index)
+    end
+
+
     if DISPLAY_OUTPUT
       show_sim(alive_cells)
     end

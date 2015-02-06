@@ -12,11 +12,19 @@ include("move.jl")
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
 		alive_cells = divide_any(alive_cells)
-  end
+  	end
 	if rand() < DIE_THRESHOLD
 		alive_cells, dead_cells = kill_any(alive_cells, dead_cells)
 	end
 	return alive_cells, dead_cells
+end
+
+function chance_to_die(alive_cells, dead_cells, index)
+	if rand() < DIE_THRESHOLD
+		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
+		return alive_cells, dead_cells, true
+	end
+	return alive_cells, dead_cells, false
 end
 
 function divide_any(alive_cells)
