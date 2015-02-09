@@ -38,7 +38,7 @@ function angle_from_ligand(cell)
 		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
 		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
 
-		list_ligand[i,4] = ligand_concentration_onesource_2D(list_ligand[i,2],list_ligand[i,3])
+		list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
 
 		if(i==1)
 			list_ligand[i,5]=list_ligand[i,4]
@@ -66,7 +66,7 @@ function angle_from_ligand(cell)
 	#Method 3: same as method 2 with a squared distribution
 	choosen_angle_3=list_ligand[findfirst(list_ligand[:,6].>rand()),1]
 	
-  	return choosen_angle_2
+  	return choosen_angle_1
 end
 
 #Combination of the two methods

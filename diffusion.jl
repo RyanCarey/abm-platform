@@ -21,10 +21,19 @@ end
 
 function ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
 
-	global distance_source_squared = (abs(source_abscisse_ligand-abscisse_ligand)+abs(source_ordinate_ligand-ordinate_ligand))^2
-	(res,tmp)=quadgk(integrand,0,min(iter,tau0))
+	global distance_source_squared = (abs(source_abscisse_ligand[number_source]-abscisse_ligand)+abs(source_ordinate_ligand[number_source]-ordinate_ligand))^2
+	(res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
 	return res
 
+end
+
+function ligand_concentration_multiplesource_2D(abscisse_ligand,ordinate_ligand)
+	res=0
+	for i in 1:nb_source
+		global number_source=i
+		res = res + ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
+	end
+	return res
 end
 
 #Ligand initiation for a rectangle
@@ -37,7 +46,7 @@ end
 
 #fucntion to integrate when running the diffusion
 function integrand(tau)
-	result = A_coefficient*exp(-distance_source_squared/(4*Diffusion_coefficient*(iter-tau)))/(4*Diffusion_coefficient*iter*pi)
+	result = A_coefficient[number_source]*exp(-distance_source_squared/(4*Diffusion_coefficient[number_source]*(iter-tau)))/(4*Diffusion_coefficient[number_source]*iter*pi)
 	return result
 end
 

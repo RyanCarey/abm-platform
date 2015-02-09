@@ -21,14 +21,23 @@ function main()
   global Y_SIZE = v[6]
   global DIVIDE_THRESHOLD = v[7]
   global DIE_THRESHOLD = v[8]
-  global const source_abscisse_ligand=v2[1]
-  global const source_ordinate_ligand=v2[2]
-  global const probability_persistent=v2[3]
-  global const Diffusion_coefficient = v2[4]
-  global const A_coefficient= v2[5]
-  global const tau0= v2[6]
-  global const nb_ligands= v2[7]
+  global const probability_persistent=v2[1]
+  global const nb_ligands= int(v2[5])
+  global const nb_source= int(v2[6])
 
+  global source_abscisse_ligand =[]
+  global source_ordinate_ligand =[]
+  global Diffusion_coefficient = []
+  global A_coefficient= []
+  global tau0= []
+
+  for i in 1:nb_source
+	source_abscisse_ligand=[source_abscisse_ligand,v3[2*i-1]]
+	source_ordinate_ligand=[source_ordinate_ligand,v3[2*i]]
+	Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
+	A_coefficient = [A_coefficient,v4[3*i-1]]
+	tau0 = [tau0,v4[3*i]]
+  end
   
 
   println("building environment")
