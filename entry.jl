@@ -6,7 +6,6 @@ include("show.jl")
 include("diffusion_window.jl")
 
 # TO DO :
-# Problems with the call of the global values, put a default setting
 # Adapt the size of the canvas
 # Lower the cost of integration
 # Understabnd why v2[4] is 10 digit when modifying again the diffusion parameters
