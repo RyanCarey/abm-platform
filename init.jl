@@ -10,6 +10,7 @@ include("ellipse.jl")
 # We initilaize the first location of the cell and then for each new potential cell we look within the cells whether the cell is
 # overlapping with another cell. If yes, we choose another random location for the cell
 
+# Below variables need to be specified in the GUI eventually!!
 TYPE_1 = 0.5
 TYPE_2 = 0.3
 TYPE_3 = 0.1
