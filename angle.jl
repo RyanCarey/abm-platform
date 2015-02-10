@@ -71,8 +71,15 @@ function angle_from_ligand(cell)
 	# If it's any other type, do the exact opposite.
 	if cat == 1
   		return choosen_angle_1
-  	else
+  	end
+  	if cat == 2
   		return choosen_angle_1 - pi
+  	end
+  	if cat == 3
+  		return choosen_angle_1 - (pi / 2)
+  	end
+  	if cat == 4
+  		return choosen_angle_1 + (pi / 2)
   	end
 end
 
