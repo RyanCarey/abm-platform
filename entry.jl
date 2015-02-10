@@ -95,6 +95,14 @@ function init_window()
   entries6 = Entry(ctrls,"30")
   entries7 = Entry(ctrls,"0.001")
   entries8 = Entry(ctrls,"0.001")
+  set_value(entries1, "10")
+  set_value(entries2, "1")
+  set_value(entries3, "1")
+  set_value(entries4, "1000")
+  set_value(entries5, "30")
+  set_value(entries6, "30")
+  set_value(entries7, "0.001")
+  set_value(entries8, "0.001")
 
   entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]
   for i in 1:n
@@ -112,9 +120,11 @@ function init_window()
   boundary_options = ["Reflecting","Absorbing"]
   global cb = Combobox(ctrls, boundary_options)
   formlayout(cb,"Reflecting or absorbing edges?")
+  set_value(cb, 1)
   boundary_shape = ["Rectangle","Ellipse"]
   global cb2 = Combobox(ctrls, boundary_shape)
   formlayout(cb2,"Boundary Shape")
+  set_value(cb2, 1)
 
   #Choose diffusion parameters
   b2 = Button(ctrls, "Choose the diffusion")
@@ -122,10 +132,11 @@ function init_window()
   bind(b2, "command", window_diffusion) 
 
   # make checkbuttons
-  global display_option = Checkbutton(ctrls, "display simulation")
-  global txt_option = Checkbutton(ctrls, "write to txt")
+  global display_option = Checkbutton(ctrls, "Display Simulation")
+  global txt_option = Checkbutton(ctrls, "Write to text")
   formlayout(display_option, nothing)
   formlayout(txt_option, nothing)
+  set_value(display_option, 1)
 
 	# make, display and sensitise the button
   b = Button(ctrls, "Run")

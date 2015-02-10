@@ -55,9 +55,9 @@ function init(n, r)
           else
             if 1 <= i <= type_1
               cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 1)
-            elseif type_1 + 1 <= i <= type_1 + type_2
+            elseif type_1 < i <= type_1 + type_2
               cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 2)
-            elseif type_1 + type_2 + 1 <= i <= type_1 + type_2 + type_3
+            elseif type_1 + type_2 < i <= type_1 + type_2 + type_3
               cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 3)
             else
               cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 4)
