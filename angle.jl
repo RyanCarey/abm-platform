@@ -67,6 +67,8 @@ function angle_from_ligand(cell)
 	#Method 3: same as method 2 with a squared distribution
 	choosen_angle_3=list_ligand[findfirst(list_ligand[:,6].>rand()),1]
 	
+	# If it's a normal type, return the normal angle
+	# If it's any other type, do the exact opposite.
 	if cat == 1
   		return choosen_angle_1
   	else
