@@ -19,7 +19,7 @@ function main()
   const steps = int(v[4])
   global X_SIZE = v[5]
   global Y_SIZE = v[6]
-  global DIVIDE_THRESHOLD = v[7]
+  global GROWTH_RATE = v[7]
   global DIE_THRESHOLD = v[8]
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[5])
@@ -29,14 +29,19 @@ function main()
   global source_ordinate_ligand =[]
   global Diffusion_coefficient = []
   global A_coefficient= []
-  global tau0= []
+  global tau0 = []
 
   for i in 1:nb_source
-	source_abscisse_ligand=[source_abscisse_ligand,v3[2*i-1]]
-	source_ordinate_ligand=[source_ordinate_ligand,v3[2*i]]
-	Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
-	A_coefficient = [A_coefficient,v4[3*i-1]]
-	tau0 = [tau0,v4[3*i]]
+#	source_abscisse_ligand=[source_abscisse_ligand,v3[2*i-1]]
+#	source_ordinate_ligand=[source_ordinate_ligand,v3[2*i]]
+  source_ordinate_ligand = [5.0, 5.0]
+  source_abscisse_ligand = [5.0, 5.0]
+#	Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
+#	A_coefficient = [A_coefficient,v4[3*i-1]]
+#	tau0 = [tau0,v4[3*i]]
+Diffusion_coefficient = 0.1
+A_coefficient = 0.5
+tau0 = 0.5
   end
   
 

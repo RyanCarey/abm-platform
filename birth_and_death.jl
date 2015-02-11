@@ -74,7 +74,7 @@ function cell_division(cells, i)
 
 			#new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0)
 
-			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, "A")
+			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].category)
 
 			cells[i].r /= 2
 			cells[i].offspring += 1

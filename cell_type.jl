@@ -19,5 +19,5 @@ type Cell
 	speed::Real
 	state::String
 	offspring::Int
-	category::String
+	category::Int
 end

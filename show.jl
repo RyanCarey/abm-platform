@@ -1,7 +1,8 @@
 using Winston
 
 function show_sim(X::Array)
-  show_agents(X)
+  #show_agents(X)
+  display_two(X)
   hold(true)
   #display(canvas,plot(ones(int(Y_SIZE)+1,1).*source_abscisse_ligand,[0:1:int(Y_SIZE)]))
   if ELLIPTICAL_BORDER
@@ -13,7 +14,7 @@ end
 function show_agents(X::Array,colour = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
-	locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+  locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
   end
   display_circles(locations, colour)
 end
@@ -50,11 +51,53 @@ function display_cell_sets(X::Array, bools::BitArray)
 end
 
 
-#function display_two(cells::Array)
-#  locations = zeros(length(cells), 3)
- # for i in 1 : length(cells)
-  #  locations[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
-   # if cells[i].category == "A"
+function display_two(cells::Array)
+  locations1 = zeros(length(cells), 3)
+  for i in 1 : length(cells)
+    if cells[i].category == 1
+      locations1[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+    end
+  end
+  p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "ro")
+  xlim(0, X_SIZE)
+  ylim(0, Y_SIZE)
+  display(canvas, p1)
+  
+  hold(true)  
+
+  locations2 = zeros(length(cells), 3)
+  for i in 1 : length(cells)
+    if cells[i].category == 2
+      locations2[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+    end
+  end
+  p2 = scatter(locations2[:, 1], locations2[:, 2], locations2[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "bo")
+  display(canvas, p2)
+  
+  hold(true)
+
+  locations3 = zeros(length(cells), 3)
+  for i in 1 : length(cells)
+    if cells[i].category == 3
+      locations3[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+    end
+  end
+  p3 = scatter(locations3[:, 1], locations3[:, 2], locations3[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "mo")
+  display(canvas, p3)
+  
+  hold(true)
+
+  locations4 = zeros(length(cells), 3)
+  for i in 1 : length(cells)
+    if cells[i].category == 4
+      locations4[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+    end
+  end
+  p4 = scatter(locations4[:, 1], locations4[:, 2], locations4[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "go")
+  display(canvas, p4)
+  
+  hold(true)
+end
 
 function display_two(locs::Array, bools::BitArray)
   print(" locs: ",locs)
