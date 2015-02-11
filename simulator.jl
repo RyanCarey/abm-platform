@@ -32,16 +32,12 @@ function main()
   global tau0 = []
 
   for i in 1:nb_source
-#	source_abscisse_ligand=[source_abscisse_ligand,v3[2*i-1]]
-#	source_ordinate_ligand=[source_ordinate_ligand,v3[2*i]]
-  source_ordinate_ligand = [5.0, 5.0]
-  source_abscisse_ligand = [5.0, 5.0]
-#	Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
-#	A_coefficient = [A_coefficient,v4[3*i-1]]
-#	tau0 = [tau0,v4[3*i]]
-Diffusion_coefficient = 0.1
-A_coefficient = 0.5
-tau0 = 0.5
+	source_abscisse_ligand=[source_abscisse_ligand,v3[2*i-1]]
+	source_ordinate_ligand=[source_ordinate_ligand,v3[2*i]]
+	Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
+  A_coefficient = [A_coefficient,v4[3*i-1]]
+	tau0 = [tau0,v4[3*i]]
+  
   end
   
 
@@ -97,7 +93,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
     if i % 1000 == 0
       println("$i iterations completed")
     end
-    #pause(0.0001)
+    #pause(0)
   end
   return alive_cells, dead_cells
 end

@@ -3,7 +3,7 @@ using Winston
 include("pause.jl")
 include("simulator.jl")
 include("show.jl")
-#include("diffusion_window.jl")
+include("diffusion_window.jl")
 
 # TO DO :
 # Adapt the size of the canvas
@@ -32,9 +32,9 @@ function simulate(path)
 	for i in 1:int(v2[6])
 		v3[2*i-1]=0
 		v3[2*i]=0
-#		v4[3*i-2]=10
-#		v4[3*i-1]=100
-#		v4[3*i]=150		
+		v4[3*i-2]=10
+  	v4[3*i-1]=100
+  	v4[3*i]=150		
 	end
   end
 
@@ -126,10 +126,10 @@ function init_window()
   formlayout(cb2,"Boundary Shape")
   set_value(cb2, 1)
 
-  #Choose diffusion parameters
- # b2 = Button(ctrls, "Choose the diffusion")
- # formlayout(b2, nothing)
- # bind(b2, "command", window_diffusion) 
+  Choose diffusion parameters
+  b2 = Button(ctrls, "Choose the diffusion")
+  formlayout(b2, nothing)
+  bind(b2, "command", window_diffusion) 
 
   # make checkbuttons
   global display_option = Checkbutton(ctrls, "Display Simulation")

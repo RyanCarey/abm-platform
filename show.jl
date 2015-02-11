@@ -52,6 +52,7 @@ end
 
 
 function display_two(cells::Array)
+  
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].category == 1
