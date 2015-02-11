@@ -21,6 +21,10 @@ function main()
   global Y_SIZE = v[6]
   global GROWTH_RATE = v[7]
   global DIE_THRESHOLD = v[8]
+  global TYPE_1 = float(v[9])
+  global TYPE_2 = float(v[10])
+  global TYPE_3 = float(v[11])
+  global TYPE_4 = float(v[12])
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[5])
   global const nb_source= int(v2[6])
@@ -37,7 +41,7 @@ function main()
 	Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
   A_coefficient = [A_coefficient,v4[3*i-1]]
 	tau0 = [tau0,v4[3*i]]
-  
+
   end
   
 

@@ -82,8 +82,9 @@ function init_window()
 
   # make and activate controls
   global prompts = ["Number of cells", "Speed of cells ", "Average cell radius ", "Number of timesteps ", 
-    "Width of environment ", "Height of environment ", "Growth Rate", "Probability of cell death"
-    ]       #"persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
+    "Width of environment ", "Height of environment ", "Growth Rate", "Probability of cell death",
+     "Type 1 Ratio", "Type 2 Ratio", "Type 3 Ratio", "Type 4 Ratio"]      
+  #"persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
   n = length(prompts)
   global entries = []
 
@@ -96,16 +97,23 @@ function init_window()
   entries6 = Entry(ctrls,"30")
   entries7 = Entry(ctrls,"0.001")
   entries8 = Entry(ctrls,"0.001")
+  entries9 = Entry(ctrls)
+  entries10 = Entry(ctrls)
+  entries11 = Entry(ctrls)
+  entries12 = Entry(ctrls)
   set_value(entries1, "10")
   set_value(entries2, "1")
   set_value(entries3, "1")
   set_value(entries4, "1000")
   set_value(entries5, "30")
   set_value(entries6, "30")
-  set_value(entries7, "0.001")
+  set_value(entries7, "0.05")
   set_value(entries8, "0.001")
-
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]
+  set_value(entries9, "1.0")
+  set_value(entries10, "0")
+  set_value(entries11, "0")
+  set_value(entries12, "0")
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8, entries9, entries10, entries11, entries12]
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))
     #bind(entries[i], "<Return>", simulate)

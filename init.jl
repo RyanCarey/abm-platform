@@ -11,10 +11,7 @@ include("ellipse.jl")
 # overlapping with another cell. If yes, we choose another random location for the cell
 
 # Below variables need to be specified in the GUI eventually!!
-TYPE_1 = 0.5
-TYPE_2 = 0.3
-TYPE_3 = 0.1
-TYPE_4 = 0.1
+
 
 function init(n, r)
   x = X_SIZE
