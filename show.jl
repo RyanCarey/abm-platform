@@ -59,10 +59,10 @@ function display_two(cells::Array)
 	  end
 	end
 	p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "ro")
-	display(p1)
-	xlim(0, X_SIZE)
-	ylim(0, Y_SIZE)
-	hold(true)	
+	
+  
+	
+		
 
 	locations2 = zeros(length(cells), 3)
   for i in 1 : length(cells)
@@ -71,10 +71,10 @@ function display_two(cells::Array)
 	  end
 	end
 	p2 = scatter(locations2[:, 1], locations2[:, 2], locations2[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "bo")
-	display(p2)
-	xlim(0, X_SIZE)
-	ylim(0, Y_SIZE)
-	hold(true)
+	
+  
+	
+	
 
 	locations3 = zeros(length(cells), 3)
   for i in 1 : length(cells)
@@ -83,10 +83,10 @@ function display_two(cells::Array)
 	  end
 	end
 	p3 = scatter(locations3[:, 1], locations3[:, 2], locations3[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "mo")
-	display(p3)
-	xlim(0, X_SIZE)
-	ylim(0, Y_SIZE)
-	hold(true)
+	
+  
+	
+	
 
 	locations4 = zeros(length(cells), 3)
   for i in 1 : length(cells)
@@ -95,9 +95,20 @@ function display_two(cells::Array)
 	  end
 	end
 	p4 = scatter(locations4[:, 1], locations4[:, 2], locations4[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "go")
-	display(p4)
 	xlim(0, X_SIZE)
-	ylim(0, Y_SIZE)
+  ylim(0, Y_SIZE)
+  display(canvas, p1)
+  hold(true)
+  xlim(0, X_SIZE)
+  ylim(0, Y_SIZE)
+  display(canvas, p2)
+  xlim(0, X_SIZE)
+  ylim(0, Y_SIZE)
+  display(canvas, p3)
+  xlim(0, X_SIZE)
+  ylim(0, Y_SIZE)
+  display(canvas, p4)
+	
 	hold(false)
 end
 
