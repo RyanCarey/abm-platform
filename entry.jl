@@ -29,6 +29,7 @@ function simulate(path)
   end
   if (!check_location)
 	global v3=Array(Float64,2*int(v2[6]))
+	global v4=Array(Float64,3*int(v2[6]))
 	for i in 1:int(v2[6])
 		v3[2*i-1]=0
 		v3[2*i]=0
