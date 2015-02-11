@@ -126,7 +126,7 @@ function init_window()
   formlayout(cb2,"Boundary Shape")
   set_value(cb2, 1)
 
-  Choose diffusion parameters
+  #Choose diffusion parameters
   b2 = Button(ctrls, "Choose the diffusion")
   formlayout(b2, nothing)
   bind(b2, "command", window_diffusion) 
