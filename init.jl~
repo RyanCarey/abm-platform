@@ -36,7 +36,7 @@ function init(n, r)
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
       xi = rand()*x #categories[cell_cat].left_placed ? ri : ri + (x - 2ri) * rand()
-      yi = rand()*y #ri + (y - 2ri) * rand()
+      yi = ri + (y - 2ri) * rand()
       overlap = false
       if BORDER_SHAPE == "Ellipse"
         cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0)

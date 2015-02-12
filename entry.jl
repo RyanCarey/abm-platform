@@ -24,7 +24,7 @@ function simulate(path)
   global TXT_OUTPUT = get_value(txt_option)
 
   if (!check_diffusion)
-	global v2=[0.5,8,0.75,10,100,150,4]
+	global v2=[0.5,8,1,10,100,150,4]
   end
   if (!check_location)
 	global v3=Array(Float64,2*int(v2[7]))

@@ -30,7 +30,7 @@ function window_diffusion(path)
   else
 	entries21 = Entry(ctrls2,"$(float(v2[1]))")
 	entries22 = Entry(ctrls2,"$(int(v2[2]))")
-	entries23 = Entry(ctrls2,"$(int(v2[3]))")
+	entries23 = Entry(ctrls2,"$(float(v2[3]))")
 	entries24 = Entry(ctrls2,"$(int(v2[4]))")
 	entries25 = Entry(ctrls2,"$(int(v2[5]))")
 	entries26 = Entry(ctrls2,"$(int(v2[6]))")
