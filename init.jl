@@ -13,59 +13,53 @@ include("ellipse.jl")
 # Below variables need to be specified in the GUI eventually!!
 
 
+categories = [Category(1,"r",1,1,1,1,true,true,true),
+              Category(1,"b",1,1,1,1,false,false,false)]
+
 function init(n, r)
   x = X_SIZE
   y = Y_SIZE
-  type_1 = round(TYPE_1 * n)
-  type_2 = round(TYPE_2 * n)
-  type_3 = round(TYPE_3 * n)
-  type_4 = round(TYPE_4 * n)
+  type_freqs = n * [TYPE_1,TYPE_2,TYPE_3,TYPE_4]
   cells = Cell[]
-  if(n >= 1)
-      for i in 1:n
-        placed = false
-        fails = 0
-        rvar = max(r/10,.00001) # Radius Variation
-        ri = rand_radius(r, rvar)
-        while !placed
-          xi = ri + (x - 2 * ri) * rand()
-          yi = ri + (y - 2 * ri) * rand()
-          overlap = false
-          if ELLIPTICAL_BORDER
-            cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0)
-            if !in_ellipse(cell)
-              overlap = true
-            end
-          end
-
-          for j in 1:i-1
-            if((xi - cells[j].loc.x) ^ 2 + (yi - cells[j].loc.y) ^ 2 < (ri + cells[j].r) ^ 2)
-              overlap = true
-            end
-          end
-          if overlap
-            fails += 1
-            if fails > 10000
-              Messagebox(title="Warning", message=string("Could not place cell; try smaller radius or larger map"))
-              return cells
-            end
-          else
-            if 1 <= i <= type_1
-              cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 1)
-            elseif type_1 < i <= type_1 + type_2
-              cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 2)
-            elseif type_1 + type_2 < i <= type_1 + type_2 + type_3
-              cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 3)
-            else
-              cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, 4)
-            end
-            push!(cells, cell)
-            placed = true
-          end
+  if(n < 1)
+    Messagebox(title="Error", message=string("No cells placed, increase the number of cells"))
+    return
+  end
+  for i in 1:n
+    cell_cat = 1
+    for j in 1:length(type_freqs)
+      cell_cat = (i > sum(1:type_freqs[j])) ? cell_cat : cell_cat
+    end
+    placed = false
+    fails = 0
+    rvar = r/10 # Radius Variation
+    ri = max(rand_radius(r, rvar),.00001)
+    while !placed
+      xi = categories[cell_cat].left_placed ? ri : ri + (x - 2ri) * rand()
+      yi = ri + (y - 2ri) * rand()
+      overlap = false
+      if BORDER_SHAPE == "Ellipse"
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0)
+        in_ellipse(cell) ? overlap = true : nothing
+      end
+      for j in 1:i-1
+        if((xi - cells[j].loc.x) ^ 2 + (yi - cells[j].loc.y) ^ 2 < (ri + cells[j].r) ^ 2)
+          overlap = true
         end
       end
+      if overlap
+        fails += 1
+        if fails > 10000
+          Messagebox(title="Warning", message=string("Could not place cell; try smaller radius or larger map"))
+          return cells
+        end
+      else
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)
+        push!(cells, cell)
+        placed = true
+      end
+    end
   end
-
   return cells
 end
 

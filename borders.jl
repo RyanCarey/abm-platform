@@ -6,20 +6,29 @@
 include("cell_type.jl")
 include("ellipse.jl")
 
-function check_borders!(cell::Cell, source)
-  if ELLIPTICAL_BORDER
-    ellipse_borders!(cell::Cell, source)
+function check_borders!(alive_cells, dead_cells,n::Int, source)
+  if BORDER_SHAPE == "Ellipse"
+    ellipse_borders!(alive_cells[n]::Cell, source)
   else
-    rectangle_borders!(cell::Cell, source)
+    if BORDER_BEHAVIOUR == "Reflecting"
+      bounce_if_req!(alive_cells[n])
+    elseif BORDER_BEHAVIOUR == "Absorbing"
+      stick_if_req!(alive_cells[n],source)
+    elseif BORDER_BEHAVIOUR == "Killing"
+      killing_borders!(alive_cells, dead_cells, source)
+    end
   end
 end
 
-function rectangle_borders!(cell::Cell, source)
-  if BORDER_BEHAVIOUR == "Bounce"
-    bounce_if_req!(cell)
-  elseif BORDER_BEHAVIOUR == "Stick"
-    stick_if_req!(cell,source)
+function killing_borders!(alive_cells, dead_cells, n::Int )
+  r = cell.r
+  in_bounds = true
+  in_bounds = (0 < alive_cells[n].loc.x < X_SIZE) ? in_bounds : false
+  in_bounds = (0 < alive_cells[n].loc.y < Y_SIZE) ? in_bounds : false
+  if !in_bounds
+    cell_death(alive_cells, dead_cells, n)
   end
+	return alive_cells, dead_cells
 end
 
 function stick_if_req!(cell::Cell,source)
@@ -30,7 +39,6 @@ function stick_if_req!(cell::Cell,source)
   offset = source.y - (grad * source.x)
   x_intersect = (grad * x_bound) + offset
   y_intersect = (y_bound - offset) / grad
-
 
   if !(r <= cell.loc.x <= X_SIZE - r) && (0 <= x_intersect <= Y_SIZE)
     stick_cell_y!(cell, source, x_bound, x_intersect)
