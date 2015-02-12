@@ -6,32 +6,36 @@
 include("cell_type.jl")
 include("ellipse.jl")
 
-function check_borders!(alive_cells, dead_cells,n::Int, source)
+function check_borders!(alive_cells, dead_cells,n::Int, source::Point)
+  cell_died = false
   if BORDER_SHAPE == "Ellipse"
-    ellipse_borders!(alive_cells[n]::Cell, source)
+    ellipse_borders!(alive_cells[n], source)
   else
     if BORDER_BEHAVIOUR == "Reflecting"
       bounce_if_req!(alive_cells[n])
     elseif BORDER_BEHAVIOUR == "Absorbing"
       stick_if_req!(alive_cells[n],source)
     elseif BORDER_BEHAVIOUR == "Killing"
-      killing_borders!(alive_cells, dead_cells, source)
+      cell_died = killing_borders!(alive_cells, dead_cells, n)
     end
   end
+  return cell_died
 end
 
 function killing_borders!(alive_cells, dead_cells, n::Int )
-  r = cell.r
+  r = alive_cells[n].r
+  cell_died = false
   in_bounds = true
-  in_bounds = (0 < alive_cells[n].loc.x < X_SIZE) ? in_bounds : false
-  in_bounds = (0 < alive_cells[n].loc.y < Y_SIZE) ? in_bounds : false
+  in_bounds = (-r < alive_cells[n].loc.x < X_SIZE+r) ? in_bounds : false
+  in_bounds = (-r < alive_cells[n].loc.y < Y_SIZE+r) ? in_bounds : false
   if !in_bounds
     cell_death(alive_cells, dead_cells, n)
+    cell_died = true
   end
-	return alive_cells, dead_cells
+	return alive_cells, dead_cells, cell_died
 end
 
-function stick_if_req!(cell::Cell,source)
+function stick_if_req!(cell::Cell,source::Point)
   r = cell.r
   x_bound = (cell.loc.x < r ? r : X_SIZE - r)
   y_bound = (cell.loc.y < r ? r : Y_SIZE - r)
@@ -49,9 +53,6 @@ function stick_if_req!(cell::Cell,source)
 
   # maybe need to add pi here sometimes
   cell.angle = atan((cell.loc.y - source.y) / (cell.loc.x - source.x))
-
-  # if out of bounds, redo
-  (r <= cell.loc.x <= X_SIZE - r) && (r <= cell.loc.y <= Y_SIZE - r) ? nothing : stick_if_req!(cell,source)
 end
 
 function bounce_if_req!(cell)

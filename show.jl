@@ -128,6 +128,7 @@ function display_two(locs::Array, bools::BitArray)
 end
 
 # text output
+#=
 function csv_out(filename::String,output::String)
   f = open(filename,"a")
   write(f,output)
@@ -167,4 +168,5 @@ function array_to_string(X::Array)
   end
   join(rows_as_strings,"\n")
 end
+=#
 
