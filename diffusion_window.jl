@@ -25,7 +25,7 @@ function window_diffusion(path)
 	entries23 = Entry(ctrls2,"10")
 	entries24 = Entry(ctrls2,"100")
 	entries25 = Entry(ctrls2,"150")
-	entries26 = Entry(ctrls2,"1")
+	entries26 = Entry(ctrls2,"4")
   else
 	entries21 = Entry(ctrls2,"$(float(v2[1]))")
 	entries22 = Entry(ctrls2,"$(int(v2[2]))")

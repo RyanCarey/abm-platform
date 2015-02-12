@@ -33,15 +33,25 @@ function window_ligand(path)
 		formlayout(l,nothing)	
 	end
 	if(!check_location)
-		entries3=[entries3,Entry(ctrls3,"0.0")]
-		formlayout(entries3[i],string(prompts3[i],": "))
+		if(mod(i,2)==1)
+			entries3=[entries3,Entry(ctrls3,"0.0")]
+			formlayout(entries3[i],string(prompts3[i],": "))
+		else
+			entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[6])*v[6])")]
+			formlayout(entries3[i],string(prompts3[i],": "))
+		end
 	else
 		try
 		entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
 		formlayout(entries3[i],string(prompts3[i],": "))
 		catch
-		entries3=[entries3,Entry(ctrls3,"0.0")]
-		formlayout(entries3[i],string(prompts3[i],": "))
+		if(mod(i,2)==1)
+			entries3=[entries3,Entry(ctrls3,"0.0")]
+			formlayout(entries3[i],string(prompts3[i],": "))
+		else
+			entries3=[entries3,Entry(ctrls3,"$((i-1)/(2*v2[6])*v[6])")]
+			formlayout(entries3[i],string(prompts3[i],": "))
+		end
 		end
 	end
 	if(mod(i,2)==1)
