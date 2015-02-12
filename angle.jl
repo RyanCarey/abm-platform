@@ -30,7 +30,7 @@ function angle_from_ligand(cell)
   	cat = cell.category
 	#println(x," ",y)
 	#println(nb_ligands)
-  	list_ligand=Array(Float64,int(nb_ligands),6) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability, cumulative squared distribution
+  	global list_ligand=Array(Float64,int(nb_ligands),6) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability, cumulative squared distribution
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands

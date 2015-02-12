@@ -116,7 +116,7 @@ function init_window()
   set_value(entries10, "1.0")
   set_value(entries11, "0")
   set_value(entries12, "0")
-  set_value(entries10, "0")
+  set_value(entries13, "0")
   entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8, entries9, entries10, entries11, entries12,entries13]
 
   for i in 1:n
