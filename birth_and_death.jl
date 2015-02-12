@@ -10,7 +10,7 @@ include("cell_type.jl")
 include("move.jl")
 
 global STEM_CELLS = true
-global STEM_THRESHOLD = 3.0
+global STEM_THRESHOLD = 1.5
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
 		alive_cells = divide_any(alive_cells)
@@ -78,18 +78,30 @@ function cell_division(cells, i)
 			cells[i].offspring += 1
 			if STEM_CELLS
 				# Sum ligands
-				sum_ligand = 0
-				#for i in 1 : nb_ligands
-				#sum_ligand += list_ligand[i, 4]
-				#end
-				#sum_ligand /= nb_ligands
 				sum_ligand = mean(list_ligand[:, 4])
 				println("Sum ligand: ", sum_ligand)
-				# If the overall conc of ligand is below the stem threshold, turn both cells into progenitors
+				# If the cell has a surrounding concentration of below the threshold:
+				# 30% of the time it will spawn a stem cell and a progenitor cell.
+				# 70% of the time it will spawn a progenitor cell and become one itself.
+				#
+				# If the cell has a surrounding concentration above the threshold:
+				# 30% of the time it will spawn a stem cell and a progenitor cell.
+				# 70% of the time it will spawn 2 stem cells.
+				thres = rand()
 				if sum_ligand < STEM_THRESHOLD
-					new_cell.category = 2
-					cells[i].category = 2
+					if thres > 0.85
+						new_cell.category = 2
+					else
+						new_cell.category = 2
+						cells[i].category = 2
+					end
 				end
+				if sum_ligand >= STEM_THRESHOLD
+					if thres > 0.85
+						new_cell.category = 2
+					end
+				end
+				
 			end
 			push!(cells, new_cell)
 		end
