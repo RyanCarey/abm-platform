@@ -14,7 +14,7 @@ function window_ligand(path)
   grid_rowconfigure(f3, 1, weight=1)
  
   global prompts3=[]
-  for i in 1:int(get_value(entries2[6]))
+  for i in 1:v2[7]
 	prompts3=[prompts3,"X ordinate of the injury","Y ordinate of the injury"]
   end
 
@@ -23,6 +23,7 @@ function window_ligand(path)
   
   global entries3=[]
   global entries4=[]
+
   for i in 1:n3
 	if(mod(i,2)==1)
 		if(i!=1)
@@ -32,28 +33,28 @@ function window_ligand(path)
 		l  = Label(ctrls3, "Source $(int((i+1)/2)):")
 		formlayout(l,nothing)	
 	end
-	if(!check_location)
-		if(mod(i,2)==1)
-			entries3=[entries3,Entry(ctrls3,"0.0")]
-			formlayout(entries3[i],string(prompts3[i],": "))
-		else
-			entries3=[entries3,Entry(ctrls3,"$((i-1)/(2*v2[6])*v[6])")]
-			formlayout(entries3[i],string(prompts3[i],": "))
-		end
-	else
-		try
-		entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
+	#if(!check_location)
+	if(mod(i,2)==1)
+		entries3=[entries3,Entry(ctrls3,"0.0")]
 		formlayout(entries3[i],string(prompts3[i],": "))
-		catch
-		if(mod(i,2)==1)
-			entries3=[entries3,Entry(ctrls3,"0.0")]
-			formlayout(entries3[i],string(prompts3[i],": "))
-		else
-			entries3=[entries3,Entry(ctrls3,"$((i-1)/(2*v2[6])*v[6])")]
-			formlayout(entries3[i],string(prompts3[i],": "))
-		end
-		end
+	else
+		entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[7])")]
+		formlayout(entries3[i],string(prompts3[i],": "))
 	end
+	#else
+		#try
+		##entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
+		#formlayout(entries3[i],string(prompts3[i],": "))
+		#catch
+		#if(mod(i,2)==1)
+		#	entries3=[entries3,Entry(ctrls3,"0.0")]
+		#	formlayout(entries3[i],string(prompts3[i],": "))
+		#else
+		#	entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[6]-2)*v[6])")]
+		#	formlayout(entries3[i],string(prompts3[i],": "))
+		#end
+		#end
+	#end
 	if(mod(i,2)==1)
 		if(i!=1)
 		l  = Label(ctrls4, " ")

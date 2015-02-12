@@ -23,14 +23,15 @@ include("diffusion.jl")
 # cell : data from the cell we want to assess the next angle
 
 #Ze still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
-function angle_from_ligand(cell)
+function angle_from_ligand(cell,k)
  	x = cell.loc.x
   	y = cell.loc.y
   	r = cell.r
   	cat = cell.category
 	#println(x," ",y)
 	#println(nb_ligands)
-  	global list_ligand=Array(Float64,int(nb_ligands),6) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability, cumulative squared distribution
+	choosen_angle=Array(Float64,3)
+  	global list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands
@@ -43,43 +44,39 @@ function angle_from_ligand(cell)
 
 		if(i==1)
 			list_ligand[i,5]=list_ligand[i,4]
-			list_ligand[i,6]=list_ligand[i,4]^2
 		else
 			list_ligand[i,5]=list_ligand[i-1,5]+list_ligand[i,4]
-			list_ligand[i,6]=list_ligand[i-1,6]+list_ligand[i,4]^2
 		end
 	end
 	#Cumulative ligand concentration probability
 	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1	
 	if(maximum(list_ligand[:,5]!=0))
 		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
-		list_ligand[:,6] = list_ligand[:,6]./maximum(list_ligand[:,6])
+
 	end
 	#println(list_ligand)
 	#Method 1: we choose the angle which has the maximum concentration
-	choosen_angle_1=list_ligand[indmax(list_ligand[:,4]),1]
+	choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
 
 	#Method 2: we chose the angle thanks to a uniform distribution
 	#and the cumulative probability of the ligand concentration:
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
-	choosen_angle_2=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
+	choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
 
-	#Method 3: same as method 2 with a squared distribution
-	choosen_angle_3=list_ligand[findfirst(list_ligand[:,6].>rand()),1]
 	
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
 	if cat == 1
-  		return choosen_angle_1
+  		return choosen_angle[k]
   	end
   	if cat == 2
-  		return choosen_angle_1 - pi
+  		return choosen_angle[k]- pi
   	end
   	if cat == 3
-  		return choosen_angle_1 - (pi / 2)
+  		return choosen_angle[k] - (pi / 2)
   	end
   	if cat == 4
-  		return choosen_angle_1 + (pi / 2)
+  		return choosen_angle[k] + (pi / 2)
   	end
 end
 
@@ -88,8 +85,10 @@ end
 function angle_from_both(cell::Cell)
 	if(rand()<probability_persistent && iter>1)
 		angle=cell.angle
+	elseif(rand()<RANDOMNESS)
+		angle=angle_from_ligand(cell,2)
 	else
-		angle=angle_from_ligand(cell)
+		angle=angle_from_ligand(cell,1)
 	end
 	return angle
 end
