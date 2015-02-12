@@ -22,16 +22,15 @@ function main()
   global Y_SIZE = v[6]
   global GROWTH_RATE = v[7]
   global DIE_THRESHOLD = v[8]
-  global RANDOMNESS = v[9]
-  global TYPE_1 = float(v[10])
-  global TYPE_2 = float(v[11])
-  global TYPE_3 = float(v[12])
-  global TYPE_4 = float(v[13])
+  global TYPE_1 = float(v[9])
+  global TYPE_2 = float(v[10])
+  global TYPE_3 = float(v[11])
+  global TYPE_4 = float(v[12])
 
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
-  println("nb ligands: ", nb_ligands)
-  global const nb_source= int(v2[6])
+  global RANDOMNESS = v2[3]
+  global const nb_source= int(v2[7])
 
   global source_abscisse_ligand =[]
   global source_ordinate_ligand =[]
@@ -47,7 +46,6 @@ function main()
 	tau0 = [tau0,v4[3*i]]
 
   end
-  
 
   println("building environment")
   alive_cells = init(n_cell,AVG_RADIUS)

@@ -17,15 +17,16 @@ function window_diffusion(path)
   b2 = Button(ctrls2, "See diffusion")
 
 
-  global prompts2 =["Probability of persistance","Numbers of direction for a cell","D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of ligand's sources"]
+  global prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness","D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of ligand's sources"]
   n2=length(prompts2)
   if(!check_diffusion)
 	entries21 = Entry(ctrls2,"0.5")
 	entries22 = Entry(ctrls2,"8")
-	entries23 = Entry(ctrls2,"10")
-	entries24 = Entry(ctrls2,"100")
-	entries25 = Entry(ctrls2,"150")
-	entries26 = Entry(ctrls2,"4")
+	entries23 = Entry(ctrls2,"0.75")
+	entries24 = Entry(ctrls2,"10")
+	entries25 = Entry(ctrls2,"100")
+	entries26 = Entry(ctrls2,"150")
+	entries27 = Entry(ctrls2,"4")
   else
 	entries21 = Entry(ctrls2,"$(float(v2[1]))")
 	entries22 = Entry(ctrls2,"$(int(v2[2]))")
@@ -33,16 +34,17 @@ function window_diffusion(path)
 	entries24 = Entry(ctrls2,"$(int(v2[4]))")
 	entries25 = Entry(ctrls2,"$(int(v2[5]))")
 	entries26 = Entry(ctrls2,"$(int(v2[6]))")
+	entries27 = Entry(ctrls2,"$(int(v2[7]))")
   end	
   
-  global entries2 = [entries21,entries22,entries23,entries24,entries25,entries26]
+  global entries2 = [entries21,entries22,entries23,entries24,entries25,entries26,entries27]
   for i in 1:n2
-    if(i==3)
+    if(i==4)
 	l  = Label(ctrls2, "")
 	formlayout(l,nothing)	
     end	
 
-    if(i==6)	
+    if(i==7)	
 	formlayout(b2, nothing)
 	l  = Label(ctrls2, "")
 	formlayout(l,nothing)
@@ -139,7 +141,7 @@ function check_entries2()
         Messagebox(title="Warning", message=string(string(prompts2[i])," must be positive"))
         return
     end
-    if prompts2[i][1:11]=="Probability"
+    if prompts2[i][1:10]=="Probabilit"
       if !(0 <= float(get_value(entries2[i])) <= 1)
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return
