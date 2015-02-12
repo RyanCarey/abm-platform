@@ -21,3 +21,15 @@ type Cell
 	offspring::Int
 	category::Int
 end
+
+type Category
+	number::Int
+	colour::String
+	growth_rate:Real
+	div_thres::Real
+	avg_speed::Real
+	avg_r::Real
+	left_placed::Bool
+	stem_cell::Bool
+	conc_response::Real
+end

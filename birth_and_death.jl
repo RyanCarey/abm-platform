@@ -9,6 +9,8 @@
 include("cell_type.jl")
 include("move.jl")
 
+global STEM_CELLS = true
+global STEM_THRESHOLD = 3.0
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
 		alive_cells = divide_any(alive_cells)
@@ -71,13 +73,24 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-
-			#new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0)
-
 			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].category)
-
 			cells[i].r /= 2
 			cells[i].offspring += 1
+			if STEM_CELLS
+				# Sum ligands
+				sum_ligand = 0
+				#for i in 1 : nb_ligands
+				#sum_ligand += list_ligand[i, 4]
+				#end
+				#sum_ligand /= nb_ligands
+				sum_ligand = mean(list_ligand[:, 4])
+				println("Sum ligand: ", sum_ligand)
+				# If the overall conc of ligand is below the stem threshold, turn both cells into progenitors
+				if sum_ligand < STEM_THRESHOLD
+					new_cell.category = 2
+					cells[i].category = 2
+				end
+			end
 			push!(cells, new_cell)
 		end
 
