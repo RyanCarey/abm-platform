@@ -9,6 +9,8 @@
 include("cell_type.jl")
 include("move.jl")
 
+global STEM_CELLS = true
+global STEM_THRESHOLD = 1.5
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
 		alive_cells = divide_any(alive_cells)
@@ -42,7 +44,7 @@ function cell_division(cells, i)
 	new_point = Point(new_x, new_y)
 	in_empty_space = !(is_overlap(cells, new_point, radius))
 
-  if ELLIPTICAL_BORDER
+  if BORDER_SHAPE == "Ellipse"
     cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0)
     in_empty_space = in_ellipse(cell) ? in_empty_space : false
   end
@@ -56,7 +58,7 @@ function cell_division(cells, i)
 		in_empty_space = !(is_overlap(cells, Point(new_x, new_y), radius))
     
     # check if within elliptical bounds
-    if ELLIPTICAL_BORDER
+    if BORDER_SHAPE == "Ellipse"
       cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0)
       in_empty_space = in_ellipse(cell) ? in_empty_space : false
     end
@@ -71,13 +73,36 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-
-			#new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0)
-
 			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].category)
-
 			cells[i].r /= 2
 			cells[i].offspring += 1
+			if STEM_CELLS
+				# Sum ligands
+				sum_ligand = mean(list_ligand[:, 4])
+				println("Sum ligand: ", sum_ligand)
+				# If the cell has a surrounding concentration of below the threshold:
+				# 30% of the time it will spawn a stem cell and a progenitor cell.
+				# 70% of the time it will spawn a progenitor cell and become one itself.
+				#
+				# If the cell has a surrounding concentration above the threshold:
+				# 30% of the time it will spawn a stem cell and a progenitor cell.
+				# 70% of the time it will spawn 2 stem cells.
+				thres = rand()
+				if sum_ligand < STEM_THRESHOLD
+					if thres > 0.85
+						new_cell.category = 2
+					else
+						new_cell.category = 2
+						cells[i].category = 2
+					end
+				end
+				if sum_ligand >= STEM_THRESHOLD
+					if thres > 0.85
+						new_cell.category = 2
+					end
+				end
+				
+			end
 			push!(cells, new_cell)
 		end
 

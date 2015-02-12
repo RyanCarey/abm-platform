@@ -13,32 +13,31 @@ function propose_move_x(cell::Cell, speed_param::Float64)
   return Y
 end
 
-function move_any!(X::Array, max_speed::Float64)
+function move_any!(alive_cells::Array, max_speed::Float64)
   # moves a random cell
-  n = length(X)
+  n = length(alive_cells)
   m = rand(1:n)	
-	move_cell_x!(X, m, max_speed)	
-  return X
+	move_cell_x!(alive_cells, dead_cells, m, max_speed)	
+  return alive_cells
 end
 
-
-function move_cell_x!(X::Array, m::Int, max_speed::Float64)
+function move_cell_x!(alive_cells::Array, dead_cells::Array, m::Int, max_speed::Float64)
   # takes cell list and (attempts to) move specified cell
-	startloc = Point(X[m].loc.x, X[m].loc.y)
-	X[m] = propose_move_x(X[m], max_speed)
-	check_borders!(X[m],startloc)
-	if is_overlap(X, m)
-	  X[m].loc = Point(startloc.x,startloc.y)
-	  X[m].angle = 0.
-	  X[m].speed = 0.
-	  #move_cell_x!(X,m,max_speed) # include this to retry moving cell
+	startloc = Point(alive_cells[m].loc.x, alive_cells[m].loc.y)
+	alive_cells[m] = propose_move_x(alive_cells[m], max_speed)
+	check_borders!(alive_cells,dead_cells,m,startloc)
+	if is_overlap(alive_cells, m)
+	  alive_cells[m].loc = Point(startloc.x,startloc.y)
+	  alive_cells[m].angle = 0.
+	  alive_cells[m].speed = 0.
+	  #move_cell_x!(alive_cells,dead_cells,m,max_speed) # include this to retry moving cell
 	end
 end
 
-function is_overlap(X::Array, m::Int)
-  n = length(X)
+function is_overlap(alive_cells::Array, m::Int)
+  n = length(alive_cells)
   for i in 1:n
-    if (X[i].loc.x - X[m].loc.x)^2 + (X[i].loc.y - X[m].loc.y)^2< (X[i].r + X[m].r) ^ 2
+    if (alive_cells[i].loc.x - alive_cells[m].loc.x)^2 + (alive_cells[i].loc.y - alive_cells[m].loc.y)^2< (alive_cells[i].r + alive_cells[m].r) ^ 2
       if i != m
         return true
       end

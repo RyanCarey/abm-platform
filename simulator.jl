@@ -83,7 +83,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
-    	move_cell_x!(alive_cells, index, cell_speed)
+    	move_cell_x!(alive_cells, dead_cells, index, cell_speed)
     	alive_cells = cell_growth!(alive_cells, index)
     	alive_cells = division_decision!(alive_cells, index)
     end

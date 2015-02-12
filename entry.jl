@@ -13,13 +13,12 @@ include("diffusion_window.jl")
 
 ##########################################################################################################
 function simulate(path)
-
   check_entries1()
   # store combobox data
   border_choice = get_value(cb)
-  global BORDER_BEHAVIOUR = (border_choice == "Reflecting" ? "Bounce" : "Stick")
+  global BORDER_BEHAVIOUR = border_choice
   shape_choice = get_value(cb2)
-  global ELLIPTICAL_BORDER = (shape_choice == "Rectangle" ? false : true)
+  global BORDER_SHAPE = shape_choice
   # store checkbox data
   global DISPLAY_OUTPUT  = get_value(display_option)
   global TXT_OUTPUT = get_value(txt_option)
@@ -39,13 +38,11 @@ function simulate(path)
   		v4[3*i]=150		
 	end
   end
-
   main()
 end
 
 ##########################################################################################################
 function check_entries1()
-
   n = length(prompts)
   global v = zeros(n,1)
   for i in 1:n
@@ -130,7 +127,7 @@ function init_window()
   global check_location = false
 
   # make comboboxes
-  boundary_options = ["Reflecting","Absorbing"]
+  boundary_options = ["Reflecting","Absorbing","Killing"]
   global cb = Combobox(ctrls, boundary_options)
   formlayout(cb,"Reflecting or absorbing edges?")
   set_value(cb, 1)
