@@ -1,4 +1,5 @@
 using Winston
+
 include("init.jl")
 include("move.jl")
 include("show.jl")
@@ -21,8 +22,10 @@ function main()
   global Y_SIZE = v[6]
   global GROWTH_RATE = v[7]
   global DIE_THRESHOLD = v[8]
+  global RANDOMNESS = v[9]
   global const probability_persistent=v2[1]
-  global const nb_ligands= int(v2[5])
+  global const nb_ligands= int(v2[2])
+  println("nb ligands: ", nb_ligands)
   global const nb_source= int(v2[6])
 
   global source_abscisse_ligand =[]

@@ -48,7 +48,7 @@ function check_entries1()
   n = length(prompts)
   global v = zeros(n,1)
   for i in 1:n
-    if prompts[i][1:11]=="Probability" || prompts[i][end-4:end]=="(0-1)"
+    if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return
@@ -82,20 +82,21 @@ function init_window()
 
   # make and activate controls
   global prompts = ["Number of cells", "Speed of cells ", "Average cell radius ", "Number of timesteps ", 
-    "Width of environment ", "Height of environment ", "Growth Rate", "Probability of cell death"
+    "Width of environment ", "Height of environment ", "Growth Rate", "Probability of cell death","Randomness"
     ]       #"persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
   n = length(prompts)
   global entries = []
 
   # make the input fields 
-  entries1 = Entry(ctrls,"10")
-  entries2 = Entry(ctrls,"1")
-  entries3 = Entry(ctrls,"1")
-  entries4 = Entry(ctrls,"1000")
-  entries5 = Entry(ctrls,"30")
-  entries6 = Entry(ctrls,"30")
-  entries7 = Entry(ctrls,"0.001")
-  entries8 = Entry(ctrls,"0.001")
+  entries1 = Entry(ctrls)
+  entries2 = Entry(ctrls)
+  entries3 = Entry(ctrls)
+  entries4 = Entry(ctrls)
+  entries5 = Entry(ctrls)
+  entries6 = Entry(ctrls)
+  entries7 = Entry(ctrls)
+  entries8 = Entry(ctrls)
+  entries9 = Entry(ctrls)
   set_value(entries1, "10")
   set_value(entries2, "1")
   set_value(entries3, "1")
@@ -104,8 +105,9 @@ function init_window()
   set_value(entries6, "30")
   set_value(entries7, "0.001")
   set_value(entries8, "0.001")
+  set_value(entries9, "0.75")
 
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8,entries9]
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))
     #bind(entries[i], "<Return>", simulate)
