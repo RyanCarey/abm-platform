@@ -30,7 +30,7 @@ function window_diffusion(path)
   else
 	entries21 = Entry(ctrls2,"$(float(v2[1]))")
 	entries22 = Entry(ctrls2,"$(int(v2[2]))")
-	entries23 = Entry(ctrls2,"$(int(v2[3]))")
+	entries23 = Entry(ctrls2,"$(float(v2[3]))")
 	entries24 = Entry(ctrls2,"$(int(v2[4]))")
 	entries25 = Entry(ctrls2,"$(int(v2[5]))")
 	entries26 = Entry(ctrls2,"$(int(v2[6]))")
@@ -68,7 +68,7 @@ function window_diffusion(path)
   for x in 1:int(sqrt(v[5]^2*v[6]^2)/700):int(sqrt(v[5]^2*v[6]^2))
   	global distance_source_squared = int(x)
 	timediff = get_value(sc)	
-	tau0 = int(get_value(entries2[4]))
+	tau0 = int(get_value(entries2[6]))
   	(res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
 	result[x]=res
   end
@@ -111,7 +111,7 @@ function plot_diffusion(path)
   for x in 1:int(sqrt(v[5]^2*v[6]^2)/700):int(sqrt(v[5]^2*v[6]^2))
   	global distance_source_squared = int(x)
 	timediff = get_value(sc)	
-	tau0 = int(get_value(entries2[4]))
+	tau0 = v2[6]
   	(res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
 	result[x]=res
   end
@@ -125,8 +125,8 @@ end
 ##########################################################################################################
 function integrand_entry(tau)
 	timediff = get_value(sc)
-	A=float(get_value(entries2[3]))
-	D=float(get_value(entries2[2]))
+	A=int(get_value(entries2[5]))
+	D=int(get_value(entries2[4]))
 	result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
 	return result
 end
