@@ -6,15 +6,14 @@ include("move.jl")
 include("birth_and_death.jl")
 
 # Need 2 global variables implemented:
-# AVG_RADIUS - The radius that all cells are created around
-# GROWTH_RATE - A specified maximal growth rate
+# avg_radius - The radius that all cells are created around
+# growth_rate - A specified maximal growth rate
 
-# global GROWTH_RATE = 0.1
 
 # Decides when to split a cell into two.
-function growth_decision!(alive_cells::Array, i::Int)
+function growth_decision!(alive_cells::Array, i::Int, avg_radius::Real)
 	cell = alive_cells[i]
-	original_area = pi * AVG_RADIUS ^ 2
+	original_area = pi * avg_radius ^ 2
 	current_area = pi * cell.r ^ 2
 
 	if current_area / original_area > 1.75
@@ -25,12 +24,10 @@ function growth_decision!(alive_cells::Array, i::Int)
 	return alive_cells
 end
 			
-
-
 # Decides when to split a cell into two.
-function division_decision!(alive_cells::Array, i::Int)
+function division_decision!(alive_cells::Array, i::Int, avg_radius::Real)
 	cell = alive_cells[i]
-	original_area = pi * AVG_RADIUS ^ 2
+	original_area = pi * avg_radius ^ 2
 	current_area = pi * cell.r ^ 2
 
 	if current_area / original_area > 1.95
@@ -45,10 +42,10 @@ end
 # Increases cell area by a certain random percentage of a defined maximal growth rate.
 # Will only grow if it will not overlap another cell, nor violate a boundary
 # Note this randomness can be substituted for a value drawn from ligand concentration maybe,
-function cell_growth!(alive_cells::Array, i::Int)
+function cell_growth!(alive_cells::Array, i::Int, growth_rate::Real)
 	cell = alive_cells[i]    
     area = pi * cell.r ^ 2
-    area *= (1 + (GROWTH_RATE * rand()))
+    area *= (1 + (growth_rate * rand()))
     p_new_r = sqrt(area / pi)
 
 

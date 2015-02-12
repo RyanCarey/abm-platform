@@ -13,13 +13,11 @@ include("ellipse.jl")
 # Below variables need to be specified in the GUI eventually!!
 
 
-categories = [Category(1,"r",1,1,1,1,true,true,true),
-              Category(1,"b",1,1,1,1,false,false,false)]
 
-function init(n, r)
+function init(n, r, categories)
   x = X_SIZE
   y = Y_SIZE
-  type_freqs = n * [TYPE_1,TYPE_2,TYPE_3,TYPE_4]
+  type_freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
   cells = Cell[]
   if(n < 1)
     Messagebox(title="Error", message=string("No cells placed, increase the number of cells"))
@@ -39,7 +37,7 @@ function init(n, r)
       yi = ri + (y - 2ri) * rand()
       overlap = false
       if BORDER_SHAPE == "Ellipse"
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0)
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)
         in_ellipse(cell) ? overlap = true : nothing
       end
       for j in 1:i-1

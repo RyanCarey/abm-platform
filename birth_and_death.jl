@@ -45,7 +45,7 @@ function cell_division(cells, i)
 	in_empty_space = !(is_overlap(cells, new_point, radius))
 
   if BORDER_SHAPE == "Ellipse"
-    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0)
+    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0, cells[i].category)
     in_empty_space = in_ellipse(cell) ? in_empty_space : false
   end
 
@@ -59,7 +59,7 @@ function cell_division(cells, i)
     
     # check if within elliptical bounds
     if BORDER_SHAPE == "Ellipse"
-      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0)
+      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0,cells[i].category)
       in_empty_space = in_ellipse(cell) ? in_empty_space : false
     end
 

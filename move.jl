@@ -1,7 +1,6 @@
 include("angle.jl")
 include("borders.jl")
 include("cell_type.jl")
-
 using Distributions
 
 function propose_move_x(cell::Cell, speed_param::Float64)
@@ -22,16 +21,20 @@ function move_any!(alive_cells::Array, max_speed::Float64)
 end
 
 function move_cell_x!(alive_cells::Array, dead_cells::Array, m::Int, max_speed::Float64)
+  num_cells = length(alive_cells)
   # takes cell list and (attempts to) move specified cell
 	startloc = Point(alive_cells[m].loc.x, alive_cells[m].loc.y)
 	alive_cells[m] = propose_move_x(alive_cells[m], max_speed)
-	check_borders!(alive_cells,dead_cells,m,startloc)
-	if is_overlap(alive_cells, m)
-	  alive_cells[m].loc = Point(startloc.x,startloc.y)
-	  alive_cells[m].angle = 0.
-	  alive_cells[m].speed = 0.
-	  #move_cell_x!(alive_cells,dead_cells,m,max_speed) # include this to retry moving cell
-	end
+	cell_died = check_borders!(alive_cells,dead_cells,m,startloc)
+  if !cell_died
+    if is_overlap(alive_cells, m)
+      alive_cells[m].loc = Point(startloc.x,startloc.y)
+      alive_cells[m].angle = 0.
+      alive_cells[m].speed = 0.
+      #move_cell_x!(alive_cells,dead_cells,m,max_speed) # include this to retry moving cell
+    end
+  end
+  return cell_died
 end
 
 function is_overlap(alive_cells::Array, m::Int)

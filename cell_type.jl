@@ -23,7 +23,7 @@ type Cell
 end
 
 type Category
-	number::Int
+	amount::Int
 	colour::String
 	growth_rate::Real
 	div_thres::Real
