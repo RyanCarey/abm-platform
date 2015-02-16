@@ -1,25 +1,13 @@
 using Tk
 
-function get_categories()
-	w3 = Toplevel("Type Parameters", 300, 300) ## title, width, height
-  f3 = Frame(w3)
+function get_categories(path)
+	global w3 = Toplevel("Type Parameters", 300, 300) ## title, width, height
+  global f3 = Frame(w3)
   pack(f3, expand = true, fill = "both")
-#  f3 = Frame(w3)
-#  f3 = Frame(w3)
- # f3 = Frame(w3)
-  #grid(ctrls3, 1, 1, sticky="nw", pady=5, padx=5)
-  #grid(ctrls4, 2, 1, sticky="nw", pady=5, padx=5)
-  #grid(ctrls5, 3, 1, sticky="nw", pady=5, padx=5)
-  #grid(ctrsl6, 4, 1, sticky="nw", pady=5, padx=5)
-  #grid_columnconfigure(f3, 1, weight=1)
-  #grid_rowconfigure(f3, 1, weight=1)
   grid(Label(f3, "Type 1"), 1, 2)
   grid(Label(f3, "Type 2"), 1, 3)
   grid(Label(f3, "Type 3"), 1, 4)
   grid(Label(f3, "Type 4"), 1, 5)
- # grid(f3, 2, 3)
- # grid(f3, 2, 4)
- # grid(f3, 2, 5)
   
   cat_prompts = "Ratio: ", "Colour: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ",
    "Average Radius: ", "Conc. Response: "
@@ -27,9 +15,7 @@ function get_categories()
   for i in 1 : 7
     grid(Label(f3, cat_prompts[i]), i + 1, 1, sticky = "se")
   end
-  #grid_columnconfigure(f3, 1, )
-  n = length(cat_prompts)
-  cat_entries = []
+  n = length(cat_prompts)  
 
 	cat_entries1 = Entry(f3, "1.0")
   cat_entries2 = Entry(f3, "r")
@@ -107,6 +93,4 @@ function get_categories()
       end
     end
   end
- end
-
-get_categories()
+end
