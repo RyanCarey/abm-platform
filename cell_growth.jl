@@ -18,7 +18,7 @@ function growth_decision!(alive_cells::Array, i::Int, avg_radius::Real)
 
 	if current_area / original_area > 1.75
 		# New Cell!
-		cell_division(alive_cells, i)
+		cell_division(alive_cells, i, avg_radius)
 	end
 
 	return alive_cells
@@ -47,7 +47,7 @@ function cell_growth!(alive_cells::Array, i::Int)
     cell = alive_cells[i]    
 
     area = pi * cell.r ^ 2
-    area *= (1 + (growth_rate * rand()))
+    area *= (1 + (categories[cell.category].growth_rate * rand()))
     p_new_r = sqrt(area / pi)
 
 

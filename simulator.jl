@@ -8,7 +8,7 @@ include("diffusion.jl")
 include("birth_and_death.jl")
 include("cell_type.jl")
 include("cell_growth.jl")
-include("pickle.jl")
+#include("pickle.jl")
 
 function main()
   n_cell = int(v[1])
@@ -23,10 +23,10 @@ function main()
   global Y_SIZE = v[6]
   growth_rate = v[7]
   global DIE_THRESHOLD = v[8]
-  categories = [Category(v[9],"r",1,1,1,1,true,true,true),
-              Category(v[10],"b",1,1,1,1,false,false,false),
-              Category(v[11],"g",1,1,1,1,false,false,false),
-              Category(v[12],"y",1,1,1,1,false,false,false)]
+  global categories = [Category(v[9] * n_cell,"r",1,1,1,1,true,true,true),
+              Category(v[10] * n_cell,"b",1,1,1,1,false,false,false),
+              Category(v[11] * n_cell,"g",1,1,1,1,false,false,false),
+              Category(v[12] * n_cell,"y",1,1,1,1,false,false,false)]
 
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
@@ -49,7 +49,7 @@ function main()
 
   println("building environment")
 
-  global alive_cells = init(n_cell,AVG_RADIUS)
+  global alive_cells = init(n_cell,avg_radius, categories)
 
   dead_cells = Cell[]
 
@@ -88,7 +88,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
 #<<<<<<< HEAD
     	move_any!()
     	alive_cells = cell_growth!(alive_cells, index)
-    	alive_cells = division_decision!(alive_cells, index)
+    	alive_cells = division_decision!(alive_cells, index, avg_radius)
 ##=======
 #    	cell_died = move_cell_x!(alive_cells, dead_cells, index, cell_speed)
 #    end

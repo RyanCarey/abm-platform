@@ -129,7 +129,7 @@ function init_window()
   # make comboboxes
   boundary_options = ["Reflecting","Absorbing","Killing"]
   global cb = Combobox(ctrls, boundary_options)
-  formlayout(cb,"Reflecting or absorbing edges?")
+  formlayout(cb,"Boundary Behaviour")
   set_value(cb, 1)
   boundary_shape = ["Rectangle","Ellipse"]
   global cb2 = Combobox(ctrls, boundary_shape)

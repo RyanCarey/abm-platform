@@ -69,7 +69,8 @@ function move_cell_x!(m::Int, startloc::Point)
 		
 	  end
 	end
-#=======
+end
+########
 #function move_cell_x!(alive_cells::Array, dead_cells::Array, m::Int, max_speed::Float64)
 #  num_cells = length(alive_cells)
 #  # takes cell list and (attempts to) move specified cell
@@ -85,8 +86,8 @@ function move_cell_x!(m::Int, startloc::Point)
 #    end
 #  end
 #  return cell_died
-#>>>>>>> 284575dcab57ce2c88e33e39c199e21990ce2d58
-end
+##### 284575dcab57ce2c88e33e39c199e21990ce2d58
+#end
 
 ##########################################################################################################
 function is_overlap( m::Int, startloc::Point,k::Int)
@@ -128,7 +129,7 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	  b = 2*(cos(theta)*(x1-x2) + sin(theta)*(y1-y2))
 	  c = (x1-x2)^2 + (y1-y2)^2 - (r1+r2)^2 
 	  delta = b^2 - 4*a*c
-	  if((-b - sqrt(delta))/2>0)
+	  if((-b - sqrt(delta))>0)
 	    d = min((-b + sqrt(delta))/2,(-b - sqrt(delta))/2)
 	  else
 	    d=(-b + sqrt(delta))/2
