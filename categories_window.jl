@@ -57,7 +57,7 @@ function get_categories(path)
   cat_entries48 = Checkbutton(f3, "Left Placed")
   cat_entries49 = Checkbutton(f3, "Stem Cell")
 
-  cat_entries = [cat_entries1, cat_entries2, cat_entries3, cat_entries4, cat_entries5, cat_entries6,
+  global cat_entries = [cat_entries1, cat_entries2, cat_entries3, cat_entries4, cat_entries5, cat_entries6,
   cat_entries7, cat_entries8, cat_entries9, cat_entries21, cat_entries22, cat_entries23, cat_entries24,
   cat_entries25, cat_entries26, cat_entries27, cat_entries28, cat_entries29, cat_entries31,
   cat_entries32, cat_entries33, cat_entries34, cat_entries35, cat_entries36, cat_entries37,
@@ -85,6 +85,13 @@ function get_categories(path)
   	grid(cat_entries[i], i - 26, 5)
   end
 
+  b = Button(f3, "Ok")
+  # displays the button
+  grid(b, 10, 6)
+  for i in ["command","<Return>","<KP_Enter>"] 
+     bind(b, i, destroy_cat_window)
+  end
+
  if !isinteractive()
     while true
       a = readline(STDIN)
@@ -93,4 +100,26 @@ function get_categories(path)
       end
     end
   end
+end
+
+function destroy_cat_window(path)
+  check_cat_entries()
+  destroy(w3)
+end
+
+function check_cat_entries()
+  global v_cat = []
+  for i in 1 : length(cat_entries)
+    try
+      if i != 8 || i != 9 || i != 17 || i != 18 || i != 26 || i != 27 || i != 35 || i != 36
+        v_cat[i] = float(get_value(cat_entries[i]))
+      else
+        v_cat[i] = get_value(cat_entries[i])
+      end
+    catch
+      Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(cat_prompts[i])))
+      return
+    end
+    global check_diffusion = true
+  end  
 end
