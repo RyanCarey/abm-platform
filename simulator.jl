@@ -52,7 +52,7 @@ function main()
 
   global alive_cells = init(n_cell,avg_radius, categories)
 
-  dead_cells = Cell[]
+  global dead_cells = Cell[]
 
   if DISPLAY_OUTPUT
     canvas[:height] = 400
