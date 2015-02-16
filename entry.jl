@@ -5,6 +5,7 @@ include("simulator.jl")
 include("show.jl")
 include("diffusion_window.jl")
 
+
 # TO DO :
 # Adapt the size of the canvas
 # Lower the cost of integration
