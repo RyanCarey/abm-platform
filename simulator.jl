@@ -24,10 +24,10 @@ function main()
   growth_rate = v[7]
   global DIE_THRESHOLD = v[8]
 
-  global categories = [Cell_type(v[9],"r",1,1,1,1,true,true,true),
-              Cell_type(v[10],"b",1,1,1,1,false,false,false),
-              Cell_type(v[11],"g",1,1,1,1,false,false,false),
-              Cell_type(v[12],"y",1,1,1,1,false,false,false)]
+  global categories = [Cell_type(10,"r",1,1,1,1,true,true,true),
+              Cell_type(0,"b",1,1,1,1,false,false,false),
+              Cell_type(0,"g",1,1,1,1,false,false,false),
+              Cell_type(0,"y",1,1,1,1,false,false,false)]
 
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
