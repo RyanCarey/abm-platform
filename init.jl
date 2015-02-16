@@ -17,6 +17,7 @@ function init(n, r, categories)
   y = Y_SIZE
   freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
   cumul_freqs = round(float([sum(freqs[1:i]) for i in 1:length(freqs)]))
+  print(cumul_freqs)
 
   cells = Cell[]
 
@@ -28,11 +29,12 @@ function init(n, r, categories)
     cell_cat = 1
     # assign cell category
     for j in 1:length(cumul_freqs)
-      if n <= cumul_freqs[j]
+      if i <= cumul_freqs[j]
         cell_cat = j
         break
       end
     end
+    print("cell cat: ",cell_cat)
     placed = false
     fails = 0
     rvar = r/10 # Radius Variation
