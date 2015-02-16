@@ -1,6 +1,7 @@
 using Tk
 
 function get_categories(path)
+  # Create a top level window and the assorted stuff with it
 	global w3 = Toplevel("Type Parameters", 300, 300) ## title, width, height
   global f3 = Frame(w3)
   pack(f3, expand = true, fill = "both")
@@ -11,12 +12,12 @@ function get_categories(path)
   
   cat_prompts = "Ratio: ", "Colour: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ",
    "Average Radius: ", "Conc. Response: "
-
+  # Put prompt labels down left hand side
   for i in 1 : 7
     grid(Label(f3, cat_prompts[i]), i + 1, 1, sticky = "se")
   end
   n = length(cat_prompts)  
-
+  # Each entry field
 	cat_entries1 = Entry(f3, "1.0")
   cat_entries2 = Entry(f3, "r")
   cat_entries3 = Entry(f3, "0.05")
@@ -64,29 +65,21 @@ function get_categories(path)
   cat_entries38, cat_entries39, cat_entries41, cat_entries42, cat_entries43, cat_entries44,
   cat_entries45, cat_entries46, cat_entries47, cat_entries48, cat_entries49]
   
+  # Place entry fields in columns
   for i in 1 : 9
   	grid(cat_entries[i], i + 1, 2)
-    #formlayout(cat_entries[i], string(cat_prompts[i],": "))
   end
-
-  #grid(cat_entries8, 9, 2)
-  #grid(cat_entries9, 10, 2)
-
-
   for i in 10 : 18
   	grid(cat_entries[i], i - 8, 3)
   end
-
   for i in 19 : 27
   	grid(cat_entries[i], i - 17, 4)
   end
-
   for i in 28 : 36
   	grid(cat_entries[i], i - 26, 5)
   end
-
-  b = Button(f3, "Ok")
-  # displays the button
+  # Place Ok button in bottom left
+  b = Button(f3, "Ok")  
   grid(b, 10, 6)
   for i in ["command","<Return>","<KP_Enter>"] 
      bind(b, i, destroy_cat_window)
@@ -102,24 +95,26 @@ function get_categories(path)
   end
 end
 
+# Function to get values and destroy window upon clicking OK
 function destroy_cat_window(path)
   check_cat_entries()
   destroy(w3)
 end
 
+# Function to collect values. BROKEN!!!!!
 function check_cat_entries()
   global v_cat = []
   for i in 1 : length(cat_entries)
     try
-      if i != 8 || i != 9 || i != 17 || i != 18 || i != 26 || i != 27 || i != 35 || i != 36
-        v_cat[i] = float(get_value(cat_entries[i]))
-      else
+    #  if i != 2 || i != 8 || i != 9 || i != 11 || i != 17 || i != 18 || i != 20 || i != 26 || i != 27 || i != 29 || i != 35 || i != 36
         v_cat[i] = get_value(cat_entries[i])
-      end
+    #  else
+    #    v_cat[i] = get_value(cat_entries[i])
+    #  end
     catch
-      Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(cat_prompts[i])))
+      Messagebox(title="Warning", message=string("Must enter a numeric for field ", cat_entries[i]))
       return
     end
-    global check_diffusion = true
+    
   end  
 end
