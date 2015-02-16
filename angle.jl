@@ -27,7 +27,7 @@ function angle_from_ligand(cell,k)
  	x = cell.loc.x
   	y = cell.loc.y
   	r = cell.r
-  	cat = cell.category
+  	cat = cell.cell_type
 	#println(x," ",y)
 	#println(nb_ligands)
 	choosen_angle=Array(Float64,3)

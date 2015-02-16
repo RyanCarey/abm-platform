@@ -16,23 +16,32 @@ function init(n, r, categories)
   x = X_SIZE
   y = Y_SIZE
   freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
+  cumul_freqs = round(float([sum(freqs[1:i]) for i in 1:length(freqs)]))
+
   cells = Cell[]
+
   if(n < 1)
     Messagebox(title="Error", message=string("No cells placed, increase the number of cells"))
     return
   end
   for i in 1:n
     cell_cat = 1
-    for j in 1:length(freqs)
-      cell_cat = (i > sum(freqs[1:j])) ? j : cell_cat
+    # assign cell category
+    for j in 1:length(cumul_freqs)
+      if n <= cumul_freqs[j]
+        cell_cat = j
+        break
+      end
     end
     placed = false
     fails = 0
     rvar = r/10 # Radius Variation
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
-      xi = rand()*x #categories[cell_cat].left_placed ? ri : ri + (x - 2ri) * rand()
-      yi = rand()*y #ri + (y - 2ri) * rand()
+      #xi = rand()*x 
+      xi = categories[cell_cat].left_placed ? ri : ri + (x - 2ri) * rand()
+      #yi = rand()*y 
+      yi = ri + (y - 2ri) * rand()
       overlap = false
       if BORDER_SHAPE == "Ellipse"
         cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)

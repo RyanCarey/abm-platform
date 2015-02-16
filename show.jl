@@ -55,7 +55,7 @@ function display_two(cells::Array)
   
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)
-    if cells[i].category == 1
+    if cells[i].cell_type == 1
       locations1[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
     end
   end
@@ -67,7 +67,7 @@ function display_two(cells::Array)
   
   locations2 = zeros(length(cells), 3)
   for i in 1 : length(cells)
-    if cells[i].category == 2
+    if cells[i].cell_type == 2
       locations2[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
     end
   end
@@ -75,7 +75,7 @@ function display_two(cells::Array)
   hold(true)
   locations3 = zeros(length(cells), 3)
   for i in 1 : length(cells)
-    if cells[i].category == 3
+    if cells[i].cell_type == 3
       locations3[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
     end
   end
@@ -83,7 +83,7 @@ function display_two(cells::Array)
   hold(true)
   locations4 = zeros(length(cells), 3)
   for i in 1 : length(cells)
-    if cells[i].category == 4
+    if cells[i].cell_type == 4
       locations4[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
     end
   end

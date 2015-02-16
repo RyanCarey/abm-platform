@@ -47,7 +47,7 @@ function cell_growth!(alive_cells::Array, i::Int)
     cell = alive_cells[i]    
 
     area = pi * cell.r ^ 2
-    area *= (1 + (categories[cell.category].growth_rate * rand()))
+    area *= (1 + (categories[cell.cell_type].growth_rate * rand()))
     p_new_r = sqrt(area / pi)
 
 

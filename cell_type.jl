@@ -19,11 +19,11 @@ type Cell
 	speed::Real
 	state::String
 	offspring::Int
-	category::Int
+	cell_type::Int
 end
 
-type Category
-	amount::Int
+type Cell_type
+	amount::Real
 	colour::String
 	growth_rate::Real
 	div_thres::Real
