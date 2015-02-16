@@ -12,12 +12,10 @@ include("ellipse.jl")
 
 # Below variables need to be specified in the GUI eventually!!
 
-
-
 function init(n, r, categories)
   x = X_SIZE
   y = Y_SIZE
-  type_freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
+  freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
   cells = Cell[]
   if(n < 1)
     Messagebox(title="Error", message=string("No cells placed, increase the number of cells"))
@@ -25,8 +23,8 @@ function init(n, r, categories)
   end
   for i in 1:n
     cell_cat = 1
-    for j in 1:length(type_freqs)
-      cell_cat = (i > sum(1:type_freqs[j])) ? cell_cat : cell_cat
+    for j in 1:length(freqs)
+      cell_cat = (i > sum(freqs[1:j])) ? j : cell_cat
     end
     placed = false
     fails = 0
