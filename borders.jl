@@ -41,14 +41,14 @@ function stick_if_req!(cell::Cell,source::Point)
   y_bound = (cell.loc.y < r ? r : Y_SIZE - r)
   grad = (cell.loc.y - source.y) / (cell.loc.x - source.x)
   offset = source.y - (grad * source.x)
-  x_intersect = (grad * x_bound) + offset
-  y_intersect = (y_bound - offset) / grad
+  wall_hit = (grad * x_bound) + offset
+  fc_hit = (y_bound - offset) / grad
 
-  if !(r <= cell.loc.x <= X_SIZE - r) && (0 <= x_intersect <= Y_SIZE)
-    stick_cell_y!(cell, source, x_bound, x_intersect)
+  if !(r <= cell.loc.x <= X_SIZE - r) && (r <= wall_hit <= Y_SIZE-r)
+    wall_stick!(cell, source, x_bound, wall_hit)
   end
   if !(r <= cell.loc.y <= Y_SIZE - r)
-    stick_cell_x!(cell, source, y_bound, y_intersect)
+    fc_stick!(cell, source, y_bound, fc_hit)
   end
 
   # maybe need to add pi here sometimes
@@ -59,33 +59,33 @@ function bounce_if_req!(cell)
   r = cell.r
   x_bound = (cell.loc.x < r ? r : X_SIZE - r)
   y_bound = (cell.loc.y < r ? r : Y_SIZE - r)
-  r <= cell.loc.x <= X_SIZE - r ? nothing : reflect_cell_x!(cell,x_bound)
-  r <= cell.loc.y <= Y_SIZE - r ? nothing : reflect_cell_y!(cell,y_bound)
+  r <= cell.loc.x <= X_SIZE - r ? nothing : wall_reflect!(cell,x_bound,wall_hit)
+  r <= cell.loc.y <= Y_SIZE - r ? nothing : fc_reflect!(cell,y_bound,fc_hit)
 
   # if out of bounds, redo
   (r <= cell.loc.x <= X_SIZE - r) && (r <= cell.loc.y <= Y_SIZE - r) ? nothing : bounce_if_req!(cell) 
 end
 
-function reflect_cell_x!(cell::Cell, x_bound)
+function wall_reflect!(cell::Cell, x_bound)
 	cell.loc.x = 2(x_bound) - cell.loc.x
   cell.angle = pi - cell.angle
 end
 
-function reflect_cell_y!(cell::Cell, y_bound)
+function fc_reflect!(cell::Cell, y_bound)
   cell.loc.y = 2(y_bound) - cell.loc.y
   cell.angle = - cell.angle
 end
 
-function stick_cell_x!(cell::Cell, source::Point, x_bound, x_intersect)
+function fc_stick!(cell::Cell, source::Point, y_bound, fc_hit)
   source = Point(cell.loc.x, cell.loc.y)
-	cell.loc = Point(x_intersect, x_bound)
+	cell.loc = Point(fc_hit, y_bound)
   cell.angle = 0.
   cell.speed = 0.
 end
 
-function stick_cell_y!(cell::Cell, source::Point, y_bound, y_intersect)
+function wall_stick!(cell::Cell, source::Point, x_bound, wall_hit)
   source = Point(cell.loc.x, cell.loc.y)
-  cell.loc = Point(y_bound, y_intersect)
+  cell.loc = Point(x_bound, wall_hit)
   cell.angle = 0.
   cell.speed = 0.
 end
