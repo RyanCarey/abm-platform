@@ -84,12 +84,13 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
 
     index = rand(1 : length(alive_cells))
     # Does all cell functions
+    # First checks to see if the cell dies; if not, it moves, grows, and if necessary divides
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
     	move_any!()
-    end
-    if !cell_died
+    #end
+    #if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)
 
     	alive_cells = division_decision!(alive_cells, index)
