@@ -140,25 +140,25 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	return Point(x1,y1)
 end
 ##########################################################################################################
-#function is_overlap(cells::Array, point::Point, radius::Real)
-#	n = length(cells)
-#		for i in 1:n
-#			if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
-#       return true
-#			end
-#		end
-#	return false
-#end
-#
-#function is_overlap(cells::Array, index::Int, point::Point, radius::Real)
-#  n = length(cells)
-#    for i in 1:n
-#      if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
-#        return true
-#      end
-#    end
-#  return false
-#end
-##########################################################################################################
+function is_overlap_divide(cells::Array, point::Point, radius::Real)
+	n = length(cells)
+		for i in 1:n
+			if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
+			    return true
+			end
+		end
+	return false
+end
+
+#=function is_overlap(cells::Array, index::Int, point::Point, radius::Real)
+  n = length(cells)
+    for i in 1:n
+      if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
+        return true
+      end
+    end
+  return false
+end
+=#
 
 

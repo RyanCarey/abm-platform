@@ -11,7 +11,7 @@ include("birth_and_death.jl")
 
 
 # Decides when to split a cell into two.
-function growth_decision!(alive_cells::Array, i::Int, avg_radius::Real)
+#=function growth_decision!(alive_cells::Array, i::Int, avg_radius::Real)
 	cell = alive_cells[i]
 	original_area = pi * avg_radius ^ 2
 	current_area = pi * cell.r ^ 2
@@ -22,7 +22,7 @@ function growth_decision!(alive_cells::Array, i::Int, avg_radius::Real)
 	end
 
 	return alive_cells
-end
+end=#
 			
 # Decides when to split a cell into two.
 function division_decision!(alive_cells::Array, i::Int, avg_radius::Real)
@@ -30,7 +30,7 @@ function division_decision!(alive_cells::Array, i::Int, avg_radius::Real)
 	original_area = pi * avg_radius ^ 2
 	current_area = pi * cell.r ^ 2
 
-	if current_area / original_area > 1.95
+	if current_area / original_area > categories[cell.cell_type].div_thres
 		# New Cell!
 		cell_division(alive_cells, i)
 	end
@@ -44,19 +44,31 @@ end
 # Note this randomness can be substituted for a value drawn from ligand concentration maybe,
 
 function cell_growth!(alive_cells::Array, i::Int)
-	println("Cell Growing")
+	
     cell = alive_cells[i]    
 
     area = pi * cell.r ^ 2
     area *= (1 + (categories[cell.cell_type].growth_rate * rand()))
+    println("Cell Type: ", cell.cell_type)
+    println("Growth Rate: ", categories[cell.cell_type].growth_rate)
     p_new_r = sqrt(area / pi)
 
 
-    if (is_overlap( i, cell.loc, i)!=i) && (p_new_r < cell.loc.x < X_SIZE - p_new_r) && (p_new_r < cell.loc.y < Y_SIZE - p_new_r)
+    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.loc.x < X_SIZE - p_new_r) && (p_new_r < cell.loc.y < Y_SIZE - p_new_r)
     	# Cell has space to grow
-    	# println("Growing Cell")
+    	#println("Growing Cell")
     	cell.r = sqrt(area / pi)
     end
     # Else, cell doesn't grow.
 	return alive_cells
+end
+
+function space_to_grow(cells::Array, index::Int, radius::Real)
+  n = length(cells)
+    for i in 1:n
+      if (cells[i].loc.x - cells[index].loc.x) ^ 2 + (cells[i].loc.y - cells[index].loc.y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
+        return false
+      end
+    end
+  return true
 end
