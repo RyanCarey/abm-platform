@@ -86,9 +86,9 @@ function init_window()
   #grid(ok, 1, 1)
 
   # make and activate controls
-  global prompts = ["Number of cells", "Speed of cells ", "Average cell radius ", "Number of timesteps ", 
+  global prompts = ["Number of cells", "Speed of cells ", "Number of timesteps ", 
 
-    "Width of environment ", "Height of environment ", "Growth Rate", "Probability of cell death"]
+    "Width of environment ", "Height of environment ", "Stem Threshold", "Probability of cell death"]
 
   n = length(prompts)
   global entries = []
@@ -102,18 +102,17 @@ function init_window()
   entries5 = Entry(ctrls)
   entries6 = Entry(ctrls)
   entries7 = Entry(ctrls)
-  entries8 = Entry(ctrls)
   
+    
   set_value(entries1, "10")
   set_value(entries2, "1")
-  set_value(entries3, "1")
-  set_value(entries4, "1000")
+  set_value(entries3, "1000")
+  set_value(entries4, "30")
   set_value(entries5, "30")
-  set_value(entries6, "30")
-  set_value(entries7, "0.05")
-  set_value(entries8, "0.001")
+  set_value(entries6, "1.5")
+  set_value(entries7, "0.001")  
   
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,]
 
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))

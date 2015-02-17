@@ -9,8 +9,8 @@
 include("cell_type.jl")
 include("move.jl")
 
-global STEM_CELLS = true
-global STEM_THRESHOLD = 1.5
+
+#global STEM_THRESHOLD = 1.5
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
 		alive_cells = divide_any(alive_cells)
@@ -42,10 +42,10 @@ function cell_division(cells, i)
 	new_x = cells[i].loc.x - cos(angle) * 2 * radius
 	new_y = cells[i].loc.y - sin(angle) * 2 * radius
 	new_point = Point(new_x, new_y)
-	in_empty_space = !(is_overlap(cells, new_point, radius))
+	in_empty_space = !(is_overlap_divide(cells, new_point, radius))
 
   if BORDER_SHAPE == "Ellipse"
-    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0, cells[i].category)
+    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0, cells[i].cell_type)
     in_empty_space = in_ellipse(cell) ? in_empty_space : false
   end
 
@@ -55,11 +55,11 @@ function cell_division(cells, i)
 		angle = 2 * pi * rand()
 		new_x = cells[i].loc.x - cos(angle) * 2 * radius
 		new_y = cells[i].loc.y - sin(angle) * 2 * radius
-		in_empty_space = !(is_overlap(cells, Point(new_x, new_y), radius))
+		in_empty_space = !(is_overlap_divide(cells, Point(new_x, new_y), radius))
     
     # check if within elliptical bounds
     if BORDER_SHAPE == "Ellipse"
-      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0,cells[i].category)
+      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0, cells[i].cell_type)
       in_empty_space = in_ellipse(cell) ? in_empty_space : false
     end
 
@@ -73,10 +73,10 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].category)
+			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].cell_type)
 			cells[i].r /= 2
 			cells[i].offspring += 1
-			if STEM_CELLS
+			if categories[cells[i].cell_type].stem_cell
 				# Sum ligands
 				sum_ligand = mean(list_ligand[:, 4])
 				println("Sum ligand: ", sum_ligand)
@@ -90,15 +90,15 @@ function cell_division(cells, i)
 				thres = rand()
 				if sum_ligand < STEM_THRESHOLD
 					if thres > 0.85
-						new_cell.category = 2
+						new_cell.cell_type = 2
 					else
-						new_cell.category = 2
-						cells[i].category = 2
+						new_cell.cell_type = 2
+						cells[i].cell_type = 2
 					end
 				end
 				if sum_ligand >= STEM_THRESHOLD
 					if thres > 0.85
-						new_cell.category = 2
+						new_cell.cell_type = 2
 					end
 				end
 				
