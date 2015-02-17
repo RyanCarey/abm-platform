@@ -31,6 +31,5 @@ type Cell_type
 	conc_response::Real
 	colour::String
 	left_placed::Bool
-	stem_cell::Bool
-	
+	stem_cell::Bool	
 end

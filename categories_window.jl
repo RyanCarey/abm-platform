@@ -1,6 +1,6 @@
 using Tk
 
-function get_categories()
+function get_categories(path)
   # Create a top level window and the assorted stuff with it
 	global w3 = Toplevel("Type Parameters", 300, 300) ## title, width, height
   global f3 = Frame(w3)
@@ -121,7 +121,7 @@ function check_cat_entries()
   global v9 = []
   for i in 1 : length(cat_entries)
     try
-      push!(v8, get_value(cat_entries[i]))
+      push!(v8, float(get_value(cat_entries[i])))
     catch
       Messagebox(title="Warning", message=string("Must enter a numeric for field ", cat_entries[i]))
       return
