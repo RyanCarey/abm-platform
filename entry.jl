@@ -6,12 +6,10 @@ include("show.jl")
 include("diffusion_window.jl")
 include("categories_window.jl")
 
-
 # TO DO :
 # Adapt the size of the canvas
 # Lower the cost of integration
 # Understabnd why v2[4] is 10 digit when modifying again the diffusion parameters
-
 
 ##########################################################################################################
 function simulate(path)
@@ -86,33 +84,25 @@ function init_window()
   #grid(ok, 1, 1)
 
   # make and activate controls
-  global prompts = ["Number of cells", "Speed of cells ", "Number of timesteps ", 
-
-    "Width of environment ", "Height of environment ", "Stem Threshold", "Probability of cell death"]
-
+  global prompts = ["Number of cells", "Number of timesteps ", "Width of environment",
+                    "Height of environment ", "Stem Threshold", "Probability of cell death"]
   n = length(prompts)
   global entries = []
 
   # make the input fields 
-
   entries1 = Entry(ctrls)
   entries2 = Entry(ctrls)
   entries3 = Entry(ctrls)
   entries4 = Entry(ctrls)
   entries5 = Entry(ctrls)
   entries6 = Entry(ctrls)
-  entries7 = Entry(ctrls)
-  
-    
   set_value(entries1, "10")
-  set_value(entries2, "1")
-  set_value(entries3, "300")
+  set_value(entries2, "300")
+  set_value(entries3, "30")
   set_value(entries4, "30")
-  set_value(entries5, "30")
-  set_value(entries6, "1.5")
-  set_value(entries7, "0.001")  
-  
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,]
+  set_value(entries5, "1.5")
+  set_value(entries6, "0.001")  
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6]
 
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))
@@ -121,7 +111,7 @@ function init_window()
   end
   focus(entries[1])
   
-  # To check if the diffusion coefficient have been modified	
+  # Check if the diffusion coefficient has been modified	
   global check_diffusion = false
   global check_location = false
   global changed_cell_type = false
@@ -137,14 +127,13 @@ function init_window()
   set_value(cb2, 1)
 
   #Choose diffusion parameters
-  b2 = Button(ctrls, "Choose the diffusion")
+  b2 = Button(ctrls, "Choose diffusion params")
   formlayout(b2, nothing)
   bind(b2, "command", window_diffusion)
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)
   bind(b3, "command", get_categories)
-
 
   # make checkbuttons
   global display_option = Checkbutton(ctrls, "Display Simulation")
@@ -154,7 +143,7 @@ function init_window()
   formlayout(txt_option, nothing)
  # set_value(display_option, 1)
 
-	# make, display and sensitise the button
+	# make, display and sensitise the 'run' button
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)

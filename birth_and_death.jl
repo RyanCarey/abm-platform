@@ -1,5 +1,5 @@
 # Module to generate new cells mid simulation, or kill cells
-# Takes the initial location of a cell, angle of travel, a threshold for chance to generate a new cell [0;1], and cell radius
+# Takes the initialation of a cell, angle of travel, a threshold for chance to generate a new cell [0;1], and cell radius
 # Threshold 0.1 = 10% chance each time step
 # Needs to know desired direction of parent cell
 # Returns [Original Cell Location] and [New Cell Location]
@@ -37,13 +37,13 @@ function cell_division(cells, i)
 	angle = 2 * pi * rand()		
 
 	#println("New Cell!")
-	new_x = cells[i].loc.x - cos(angle) * 2 * radius
-	new_y = cells[i].loc.y - sin(angle) * 2 * radius
+	new_x = cells[i].x - cos(angle) * 2 * radius
+	new_y = cells[i].y - sin(angle) * 2 * radius
 	new_point = Point(new_x, new_y)
 	in_empty_space = !(is_overlap_divide(cells, new_point, radius))
 
   if BORDER_SHAPE == "Ellipse"
-    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, 0, cells[i].cell_type)
+    cell = Cell(string(i), new_x, new_y, radius, 0, 0, 0, cells[i].cell_type)
     in_empty_space = in_ellipse(cell) ? in_empty_space : false
   end
 
@@ -51,13 +51,13 @@ function cell_division(cells, i)
 	give_up = false
 	while !in_empty_space || !(radius < new_x < X_SIZE - radius) || !(radius < new_y < Y_SIZE - radius)
 		angle = 2 * pi * rand()
-		new_x = cells[i].loc.x - cos(angle) * 2 * radius
-		new_y = cells[i].loc.y - sin(angle) * 2 * radius
+		new_x = cells[i].x - cos(angle) * 2 * radius
+		new_y = cells[i].y - sin(angle) * 2 * radius
 		in_empty_space = !(is_overlap_divide(cells, Point(new_x, new_y), radius))
     
     # check if within elliptical bounds
     if BORDER_SHAPE == "Ellipse"
-      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, 0, cells[i].cell_type)
+      cell = Cell(string(i), new_x, new_y, radius, 0, 0, 0, cells[i].cell_type)
       in_empty_space = in_ellipse(cell) ? in_empty_space : false
     end
 
@@ -71,7 +71,7 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, 0, cells[i].cell_type)
+			new_cell = Cell(offspring_name, new_x, new_y, radius / 2, 1, 1, 0, cells[i].cell_type)
 			cells[i].r /= 2
 			cells[i].offspring += 1
 			if categories[cells[i].cell_type].stem_cell

@@ -1,25 +1,22 @@
-
-r = 1
-walls = [0,10]
 wall_behaviour = ["r","a"]
 fc_behaviour = ["a","r"]
-fc = [0,10]
 
 # still need to make border mutate the cell's angle
 # still need to make another method that kills cells if they run off the field
 
-function check_borders(cell,source,wall_behaviour,fc_behaviour,walls,fc)
-  x = cell.loc.x
-  y = cell.loc.y
+function check_borders!(cell,source,wall_behaviour,fc_behaviour,walls,fc)
+  x = cell.x
+  y = cell.y
   r = cell.r
-  sx = source.x
-  sy = source.y
+  xi = source.x
+  yi = source.y
   x,y,xi,yi = border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
-  cell.loc = Point(x,y)
+  cell.x, cell.y = x,y
+  println("cell loc: ", cell.x,", ",cell.y)
   source = Point(xi,yi)
 end
 
-function border(x,y,xi,yi)
+function border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
   wall_lims = walls + [r,-r]
   fc_lims = fc + [r,-r]
 
@@ -59,7 +56,7 @@ function border(x,y,xi,yi)
       x,y = wall_absorb(x,y,wall_lims,wall_ints,wall_hit)
     end
   end
-  return float(x),float(y)
+  return float(x),float(y), float(xi), float(yi)
 end
 
 function find_wall_hit(x,y,xi,yi,wall_lims)
@@ -98,7 +95,7 @@ end
 
 function wall_absorb(x,y,wall_lims,wall_ints,wall_hit)
   println("absorbing collision")
-  println("mean of lims: ",mean(wall_lims),", expected hit loc: ",wall_lims[wall_hit])
+  println("mean of lims: ",mean(wall_lims),", expected hit: ",wall_lims[wall_hit])
   x = wall_lims[wall_hit
        ] +.001 * (mean(wall_lims) - (wall_lims[wall_hit])) # move a fraction to the centre
   y = wall_ints[wall_hit]
@@ -109,7 +106,7 @@ end
 function fc_absorb(x,y,fc_lims,fc_ints,fc_hit)
   println("absorbing collision")
   x = fc_ints[fc_hit]
-  println("mean of lims: ",mean(fc_lims),", expected hit loc: ",fc_lims[fc_hit])
+  println("mean of lims: ",mean(fc_lims),", expected hit: ",fc_lims[fc_hit])
   y = fc_lims[fc_hit
        ] +.001 * (mean(fc_lims) - (fc_lims[fc_hit])) # move a fraction to the centre
   println("new pos : ",x,", ",y)
@@ -117,19 +114,19 @@ function fc_absorb(x,y,fc_lims,fc_ints,fc_hit)
 end
 
 function kill_if_deserting(alive_cells,dead_cells,m, border)
-  if (wall_behaviour[1] == "d") && alive_cells[m].loc.x < walls[1] - r
+  if (wall_behaviour[1] == "d") && alive_cells[m].x < walls[1] - r
     cell_death(alive_cells,dead_cells,m)
   end
 
-  if (wall_behaviour[2] == "d") && alive_cells[m].loc.x > walls[2] + r
+  if (wall_behaviour[2] == "d") && alive_cells[m].x > walls[2] + r
     cell_death(alive_cells,dead_cells,m)
   end
 
-  if (fc_behaviour[1] == "d") && alive_cells[m].loc.x < fc[1] - r
+  if (fc_behaviour[1] == "d") && alive_cells[m].x < fc[1] - r
     cell_death(alive_cells,dead_cells,m)
   end
 
-  if (fc_behaviour[2] == "d") && alive_cells[m].loc.x < fc[2] + r
+  if (fc_behaviour[2] == "d") && alive_cells[m].x < fc[2] + r
     cell_death(alive_cells,dead_cells,m)
   end
 end

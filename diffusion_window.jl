@@ -56,7 +56,7 @@ function window_diffusion(path)
 
   #f3 = Frame(w2); pack(f3, expand = true, fill = "both")
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 2, 1,sticky="e")
-  global sc = Slider(f2, 1:int(v[4]))
+  global sc = Slider(f2, 1:int(v[3]))
   l = Label(f2)
   l[:textvariable] = sc[:variable]
   grid(sc, 2, 2, sticky="ew")
@@ -64,8 +64,8 @@ function window_diffusion(path)
   bind(sc, "command", plot_diffusion)
 
   #First plot of the concentration
-  result = Array(Float64,int(sqrt(v[3]^2*v[4]^2)),1)
-  for x in 1:int(sqrt(v[3]^2*v[4]^2)/700):int(sqrt(v[3]^2*v[4]^2))
+  result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
+  for x in 1:int(sqrt(v[4]^2+v[5]^2))
   	global distance_source_squared = int(x)
 	timediff = get_value(sc)	
 	tau0 = int(get_value(entries2[6]))
@@ -107,8 +107,8 @@ end
 ##########################################################################################################
 function plot_diffusion(path)
   check_entries2()
-  result = Array(Float64,int(sqrt(v[3]^2*v[4]^2)),1)
-  for x in 1:int(sqrt(v[3]^2*v[4]^2)/700):int(sqrt(v[3]^2*v[4]^2))
+  result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
+  for x in 1:int(sqrt(v[4]^2+v[5]^2))
   	global distance_source_squared = int(x)
 	timediff = get_value(sc)	
 	tau0 = v2[6]

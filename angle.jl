@@ -24,8 +24,8 @@ include("diffusion.jl")
 
 #Ze still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
 function angle_from_ligand(cell,k)
- 	x = cell.loc.x
-  	y = cell.loc.y
+ 	x = cell.x
+  	y = cell.y
   	r = cell.r
   	cat = cell.cell_type
 	#println(x," ",y)

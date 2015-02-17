@@ -6,9 +6,9 @@ include("ellipse.jl")
 # 3rd parameter: Width of environment
 # 4th parameter: Radius of the cell
 #
-# This function return a 2D cells of random located cells within the squares borders. The cells have a radius and they do not overlap.
-# We initilaize the first location of the cell and then for each new potential cell we look within the cells whether the cell is
-# overlapping with another cell. If yes, we choose another random location for the cell
+# This function return a 2D cells of randomated cells within the squares borders. The cells have a radius and they do not overlap.
+# We initilaize the firstation of the cell and then for each new potential cell we look within the cells whether the cell is
+# overlapping with another cell. If yes, we choose another randomation for the cell
 
 # Below variables need to be specified in the GUI eventually!!
 
@@ -51,7 +51,7 @@ function init(n, categories)
         in_ellipse(cell) ? overlap = true : nothing
       end
       for j in 1:i-1
-        if((xi - cells[j].loc.x) ^ 2 + (yi - cells[j].loc.y) ^ 2 < (ri + cells[j].r) ^ 2)
+        if((xi - cells[j].x) ^ 2 + (yi - cells[j].y) ^ 2 < (ri + cells[j].r) ^ 2)
           overlap = true
         end
       end
@@ -62,7 +62,7 @@ function init(n, categories)
           return cells
         end
       else
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
+        cell = Cell(string(i), xi, yi, ri, 0, 0, 0, cell_cat)
         push!(cells, cell)
         placed = true
       end

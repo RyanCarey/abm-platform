@@ -11,7 +11,7 @@ global categories = [Cell_type(0.5,.001,.1,1,1,1,"r",true,true),
                      Cell_type(0.5,.001,.1,1,1,1,"r",true,true),
                      Cell_type(0.5,.001,.1,1,1,1,"r",true,true)]
 
-alive_cells = init(10,1,categories)
+alive_cells = init(10,categories)
 
 #=
 type Cell_type

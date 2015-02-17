@@ -38,7 +38,7 @@ function window_ligand(path)
 		entries3=[entries3,Entry(ctrls3,"0.0")]
 		formlayout(entries3[i],string(prompts3[i],": "))
 	else
-		entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[6])")]
+		entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[5])")]
 		formlayout(entries3[i],string(prompts3[i],": "))
 	end
 	#else
@@ -50,7 +50,7 @@ function window_ligand(path)
 		#	entries3=[entries3,Entry(ctrls3,"0.0")]
 		#	formlayout(entries3[i],string(prompts3[i],": "))
 		#else
-		#	entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[6]-2)*v[6])")]
+		#	entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[6]-2)*v[5])")]
 		#	formlayout(entries3[i],string(prompts3[i],": "))
 		#end
 		#end

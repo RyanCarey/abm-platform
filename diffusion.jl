@@ -21,7 +21,8 @@ end
 
 function ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
 
-	global distance_source_squared = (abs(source_abscisse_ligand[number_source]-abscisse_ligand)+abs(source_ordinate_ligand[number_source]-ordinate_ligand))^2
+	global distance_source_squared = (abs(source_abscisse_ligand[number_source] - abscisse_ligand)
+                                   + abs(source_ordinate_ligand[number_source]-ordinate_ligand))^2
 	(res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
 	return res
 
@@ -46,11 +47,10 @@ end
 
 #fucntion to integrate when running the diffusion
 function integrand(tau)
-	result = A_coefficient[number_source]*exp(-distance_source_squared/(4*Diffusion_coefficient[number_source]*(iter-tau)))/(4*Diffusion_coefficient[number_source]*iter*pi)
+	result = A_coefficient[number_source]*exp(-distance_source_squared/(4*Diffusion_coefficient[number_source] *
+           (iter-tau)))/(4*Diffusion_coefficient[number_source]*iter*pi)
 	return result
 end
-
-
 
 function test_diffusion()
   X = init_diffusion(15,15)
@@ -63,7 +63,6 @@ function n_diffusion!(X,rate,n)
     diffusion!(X,rate)
   end
 end
-
 
 function n_diffusion_and_display!(X,rate,n)
   for i in 1:n
