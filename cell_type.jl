@@ -23,13 +23,14 @@ type Cell
 end
 
 type Cell_type
-	amount::Real
-	colour::String
+	amount::Real	
 	growth_rate::Real
 	div_thres::Real
 	avg_speed::Real
 	avg_r::Real
+	conc_response::Real
+	colour::String
 	left_placed::Bool
 	stem_cell::Bool
-	conc_response::Real
+	
 end
