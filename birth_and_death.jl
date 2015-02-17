@@ -19,6 +19,11 @@ include("move.jl")
 	return alive_cells, dead_cells
 end=#
 
+#=function divide_any(alive_cells)
+  i = rand(1:length(alive_cells))
+  return cell_division(alive_cells,i)
+end=#
+
 function chance_to_die(alive_cells, dead_cells, index)
 	if rand() < DIE_THRESHOLD
 		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
@@ -26,11 +31,6 @@ function chance_to_die(alive_cells, dead_cells, index)
 	end
 	return alive_cells, dead_cells, false
 end
-
-#=function divide_any(alive_cells)
-  i = rand(1:length(alive_cells))
-  return cell_division(alive_cells,i)
-end=#
 
 function cell_division(cells, i)
 	radius = cells[i].r		
