@@ -25,7 +25,7 @@ function solve_overlap(m::Int, startloc::Point)
 
 	#Parameters
 	minimum_ratio=0.01 # threshold to trigger cells to move
-	g = 0.9 #loss of energy while giving energy to the first cell to the other one
+	g = 0.8 #loss of energy while giving energy to the first cell to the other one
 	
 	k=m
 	k = is_overlap(m::Int, startloc::Point,k)	
