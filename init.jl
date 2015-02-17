@@ -41,7 +41,7 @@ function init(n, r, categories)
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
       #xi = rand()*x 
-      xi = categories[cell_cat].left_placed ? ri : ri + (x - 2ri) * rand()
+      xi = categories[cell_cat].left_placed ? ri + .001 : ri + (x - 2ri) * rand()
       #yi = rand()*y 
       yi = ri + (y - 2ri) * rand()
       overlap = false
