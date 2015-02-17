@@ -106,7 +106,7 @@ function init_window()
     
   set_value(entries1, "10")
   set_value(entries2, "1")
-  set_value(entries3, "1000")
+  set_value(entries3, "300")
   set_value(entries4, "30")
   set_value(entries5, "30")
   set_value(entries6, "1.5")
