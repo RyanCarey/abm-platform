@@ -16,18 +16,19 @@ function main()
   global cell_speed = v[2]
 
 
-  radius = v[3]
-  avg_radius = radius
-  const steps = int(v[4])
-  global X_SIZE = v[5]
-  global Y_SIZE = v[6]
-  growth_rate = v[7]
-  global DIE_THRESHOLD = v[8]
+#  radius = v[3]
+#  avg_radius = radius
+  const steps = int(v[3])
+  global X_SIZE = v[4]
+  global Y_SIZE = v[5]
+  global STEM_THRESHOLD = v[6]
+  global DIE_THRESHOLD = v[7]
+  
 
-  global categories = [Cell_type(10,"r",1,1,1,1,true,true,true),
-              Cell_type(0,"b",1,1,1,1,false,false,false),
-              Cell_type(0,"g",1,1,1,1,false,false,false),
-              Cell_type(0,"y",1,1,1,1,false,false,false)]
+  global categories = Cell_type[Cell_type(v8[1], v8[2], v8[3], v8[4], v8[5], v8[6], v9[1], v9[2], v9[3]),
+              Cell_type(v8[7], v8[8], v8[9], v8[10], v8[11], v8[12], v9[4], v9[5], v9[6]),
+              Cell_type(v8[13], v8[14], v8[15], v8[16], v8[17], v8[18], v9[7], v9[8], v9[9]),
+              Cell_type(v8[19], v8[20], v8[21], v8[22], v8[23], v8[24], v9[10], v9[11], v9[12])]
 
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
@@ -50,7 +51,7 @@ function main()
 
   println("building environment")
 
-  global alive_cells = init(n_cell,avg_radius, categories)
+  global alive_cells = init(n_cell, categories)
 
   global dead_cells = Cell[]
 
@@ -68,29 +69,31 @@ function main()
     start_output(filename::String, t::String, v::Array, alive_cells::Array)
   end
 
-  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, cell_speed, steps, avg_radius, growth_rate)
+  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, cell_speed, steps)
   println("simulation finished")
 end
 
-function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int, avg_radius::Real, growth_rate::Real)
+function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int)
   global iter
   for i = 1:steps
     iter = i
     if length(alive_cells) == 0
-      println("all cells have died after $i iterations")
+      println("All cells have died after $i iterations")
       return alive_cells, dead_cells 
     end
 
     index = rand(1 : length(alive_cells))
     # Does all cell functions
+    # First checks to see if the cell dies; if not, it moves, grows, and if necessary divides
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
     	move_any!()
-    end
-    if !cell_died
+    #end
+    #if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)
-    	alive_cells = division_decision!(alive_cells, index, avg_radius)
+
+    	alive_cells = division_decision!(alive_cells, index)
     end
 
     if DISPLAY_OUTPUT

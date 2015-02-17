@@ -17,19 +17,18 @@ type Cell
 	r::Real
 	angle::Real
 	speed::Real
-	state::String
 	offspring::Int
 	cell_type::Int
 end
 
 type Cell_type
-	amount::Real
-	colour::String
+	amount::Real	
 	growth_rate::Real
 	div_thres::Real
 	avg_speed::Real
 	avg_r::Real
-	left_placed::Bool
-	stem_cell::Bool
 	conc_response::Real
+	colour::String
+	left_placed::Bool
+	stem_cell::Bool	
 end

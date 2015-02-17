@@ -64,8 +64,8 @@ function window_diffusion(path)
   bind(sc, "command", plot_diffusion)
 
   #First plot of the concentration
-  result = Array(Float64,int(sqrt(v[5]^2*v[6]^2)),1)
-  for x in 1:int(sqrt(v[5]^2*v[6]^2)/700):int(sqrt(v[5]^2*v[6]^2))
+  result = Array(Float64,int(sqrt(v[3]^2*v[4]^2)),1)
+  for x in 1:int(sqrt(v[3]^2*v[4]^2)/700):int(sqrt(v[3]^2*v[4]^2))
   	global distance_source_squared = int(x)
 	timediff = get_value(sc)	
 	tau0 = int(get_value(entries2[6]))
@@ -107,8 +107,8 @@ end
 ##########################################################################################################
 function plot_diffusion(path)
   check_entries2()
-  result = Array(Float64,int(sqrt(v[5]^2*v[6]^2)),1)
-  for x in 1:int(sqrt(v[5]^2*v[6]^2)/700):int(sqrt(v[5]^2*v[6]^2))
+  result = Array(Float64,int(sqrt(v[3]^2*v[4]^2)),1)
+  for x in 1:int(sqrt(v[3]^2*v[4]^2)/700):int(sqrt(v[3]^2*v[4]^2))
   	global distance_source_squared = int(x)
 	timediff = get_value(sc)	
 	tau0 = v2[6]

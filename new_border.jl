@@ -116,7 +116,7 @@ function fc_absorb(x,y,fc_lims,fc_ints,fc_hit)
   return float(x),float(y)
 end
 
-function kill_if_deserting(alive_cells,dead_cells,m, border
+function kill_if_deserting(alive_cells,dead_cells,m, border)
   if (wall_behaviour[1] == "d") && alive_cells[m].loc.x < walls[1] - r
     cell_death(alive_cells,dead_cells,m)
   end
@@ -132,6 +132,6 @@ function kill_if_deserting(alive_cells,dead_cells,m, border
   if (fc_behaviour[2] == "d") && alive_cells[m].loc.x < fc[2] + r
     cell_death(alive_cells,dead_cells,m)
   end
-
+end
 
 

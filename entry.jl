@@ -26,20 +26,25 @@ function simulate(path)
   global TXT_OUTPUT = get_value(txt_option)
 
   if (!check_diffusion)
-	global v2=[0.5,8,1,10,100,150,4]
+		global v2=[0.5,8,1,10,100,150,4]
   end
   if (!check_location)
-	global v3=Array(Float64,2*int(v2[7]))
-	global v4=Array(Float64,3*int(v2[7]))
-	for i in 1:int(v2[7])
-		v3[2*i-1]=0
-		v3[2*i]=(i-1)/(v2[6]-1)*v[6]
+		global v3=Array(Float64,2*int(v2[7]))
+		global v4=Array(Float64,3*int(v2[7]))
+		for i in 1:int(v2[7])
+			v3[2*i-1]=0
+			v3[2*i]=(i-1)/(v2[6]-1)*v[6]
 
-		v4[3*i-2]=10
+			v4[3*i-2]=10
   		v4[3*i-1]=100
   		v4[3*i]=150		
+		end
 	end
-  end
+	if (!changed_cell_type)
+		global v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0]
+		global v9 = ["r",true,true,"b",false,false,"m",false,false,"g",false,false]
+	end
+  
   main()
 end
 
@@ -81,10 +86,9 @@ function init_window()
   #grid(ok, 1, 1)
 
   # make and activate controls
-  global prompts = ["Number of cells", "Speed of cells ", "Average cell radius ", "Number of timesteps ", 
+  global prompts = ["Number of cells", "Speed of cells ", "Number of timesteps ", 
 
-    "Width of environment ", "Height of environment ", "Growth Rate", "Probability of cell death"]#,"Type 1 Ratio", "Type 2 Ratio", "Type 3 Ratio", "Type 4 Ratio"
-    #]       #"persistence of cell movement (0-1)", "relative weight on bias (0-1)"]
+    "Width of environment ", "Height of environment ", "Stem Threshold", "Probability of cell death"]
 
   n = length(prompts)
   global entries = []
@@ -98,24 +102,17 @@ function init_window()
   entries5 = Entry(ctrls)
   entries6 = Entry(ctrls)
   entries7 = Entry(ctrls)
-  entries8 = Entry(ctrls)
-  #entries9 = Entry(ctrls)
-  #entries10 = Entry(ctrls)
-  #entries11 = Entry(ctrls)
-  #entries12 = Entry(ctrls)
+  
+    
   set_value(entries1, "10")
   set_value(entries2, "1")
-  set_value(entries3, "1")
-  set_value(entries4, "1000")
+  set_value(entries3, "300")
+  set_value(entries4, "30")
   set_value(entries5, "30")
-  set_value(entries6, "30")
-  set_value(entries7, "0.05")
-  set_value(entries8, "0.001")
-  #set_value(entries9, "1.0")
-  #set_value(entries10, "0")
-  #set_value(entries11, "0")
-  #set_value(entries12, "0")
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,entries8]# entries9, entries10, entries11, entries12]
+  set_value(entries6, "1.5")
+  set_value(entries7, "0.001")  
+  
+  entries = [entries1,entries2,entries3,entries4,entries5,entries6,entries7,]
 
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))
@@ -127,6 +124,7 @@ function init_window()
   # To check if the diffusion coefficient have been modified	
   global check_diffusion = false
   global check_location = false
+  global changed_cell_type = false
 
   # make comboboxes
   boundary_options = ["Reflecting","Absorbing","Killing"]
@@ -147,8 +145,10 @@ function init_window()
   formlayout(b3, nothing)
   bind(b3, "command", get_categories)
 
+
   # make checkbuttons
   global display_option = Checkbutton(ctrls, "Display Simulation")
+  set_value(display_option, true)
   global txt_option = Checkbutton(ctrls, "Write to text")
   formlayout(display_option, nothing)
   formlayout(txt_option, nothing)

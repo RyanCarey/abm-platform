@@ -12,10 +12,10 @@ include("ellipse.jl")
 
 # Below variables need to be specified in the GUI eventually!!
 
-function init(n, r, categories)
+function init(n, categories)
   x = X_SIZE
   y = Y_SIZE
-  freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
+  freqs = n * [categories[1].amount, categories[2].amount, categories[3].amount, categories[4].amount]
   cumul_freqs = round(float([sum(freqs[1:i]) for i in 1:length(freqs)]))
   print(cumul_freqs)
 
@@ -37,16 +37,17 @@ function init(n, r, categories)
     print("cell cat: ",cell_cat)
     placed = false
     fails = 0
+    r = categories[cell_cat].avg_r
     rvar = r/10 # Radius Variation
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
       #xi = rand()*x 
-      xi = categories[cell_cat].left_placed ? ri : ri + (x - 2ri) * rand()
+      xi = categories[cell_cat].left_placed ? ri + .001 : ri + (x - 2ri) * rand()
       #yi = rand()*y 
       yi = ri + (y - 2ri) * rand()
       overlap = false
       if BORDER_SHAPE == "Ellipse"
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
         in_ellipse(cell) ? overlap = true : nothing
       end
       for j in 1:i-1
@@ -61,7 +62,7 @@ function init(n, r, categories)
           return cells
         end
       else
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
         push!(cells, cell)
         placed = true
       end

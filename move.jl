@@ -1,3 +1,4 @@
+# Module containing functions pertaining to cell movement.
 include("angle.jl")
 include("borders.jl")
 include("cell_type.jl")
@@ -10,7 +11,7 @@ function move_any!()
 
 	startloc = Point(alive_cells[m].loc.x, alive_cells[m].loc.y)
 
-	alive_cells[m].speed = -2*log(rand())*cell_speed/5
+	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	alive_cells[m].angle = angle_from_both(alive_cells[m])
 	alive_cells[m].loc.x += alive_cells[m].speed * cos(alive_cells[m].angle)
 	alive_cells[m].loc.y += alive_cells[m].speed * sin(alive_cells[m].angle)
@@ -33,7 +34,7 @@ function solve_overlap(m::Int, startloc::Point)
 	  d=sqrt((startloc.x - alive_cells[m].loc.x)^2 + (startloc.y - alive_cells[m].loc.y)^2)
 	  remaining_distance = alive_cells[m].speed - d
 
-	  if(remaining_distance/cell_speed>minimum_ratio) #We can now make the cells to move
+	  if(remaining_distance / categories[alive_cells[m].cell_type].avg_speed > minimum_ratio) #We can now make the cells to move
 		alpha = alive_cells[m].angle
 		
 		xm=alive_cells[m].loc.x
@@ -140,25 +141,25 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	return Point(x1,y1)
 end
 ##########################################################################################################
-#function is_overlap(cells::Array, point::Point, radius::Real)
-#	n = length(cells)
-#		for i in 1:n
-#			if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
-#       return true
-#			end
-#		end
-#	return false
-#end
-#
-#function is_overlap(cells::Array, index::Int, point::Point, radius::Real)
-#  n = length(cells)
-#    for i in 1:n
-#      if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
-#        return true
-#      end
-#    end
-#  return false
-#end
-##########################################################################################################
+function is_overlap_divide(cells::Array, point::Point, radius::Real)
+	n = length(cells)
+		for i in 1:n
+			if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
+			    return true
+			end
+		end
+	return false
+end
+
+#=function is_overlap(cells::Array, index::Int, point::Point, radius::Real)
+  n = length(cells)
+    for i in 1:n
+      if (cells[i].loc.x - point.x) ^ 2 + (cells[i].loc.y - point.y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
+        return true
+      end
+    end
+  return false
+end
+=#
 
 
