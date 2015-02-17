@@ -44,6 +44,7 @@ end
 # Note this randomness can be substituted for a value drawn from ligand concentration maybe,
 
 function cell_growth!(alive_cells::Array, i::Int)
+	println("Cell Growing")
     cell = alive_cells[i]    
 
     area = pi * cell.r ^ 2

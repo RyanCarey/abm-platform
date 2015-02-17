@@ -77,18 +77,24 @@ function get_categories(path)
   grid(cat_entries7, 8, 2)
   grid(cat_entries8, 9, 2)
   grid(cat_entries9, 10, 2)
+  set_value(cat_entries7, "r")
+  set_value(cat_entries8, true)
+  set_value(cat_entries9, true)
 
   grid(cat_entries27, 8, 3)
   grid(cat_entries28, 9, 3)
   grid(cat_entries29, 10, 3)
+  set_value(cat_entries27, "b")
 
   grid(cat_entries37, 8, 4)
   grid(cat_entries38, 9, 4)
   grid(cat_entries39, 10, 4)
+  set_value(cat_entries37, "m")
 
   grid(cat_entries47, 8, 5)
   grid(cat_entries48, 9, 5)
   grid(cat_entries49, 10, 5)
+  set_value(cat_entries47, "g")
 
   # Place Ok button in bottom left
   b = Button(f3, "Ok")  
@@ -110,8 +116,6 @@ end
 # Function to get values and destroy window upon clicking OK
 function destroy_cat_window(path)
   check_cat_entries()
-  println(v8)
-  println(v9)
   destroy(w3)
 end
 
@@ -140,5 +144,6 @@ function check_cat_entries()
   push!(v9, get_value(cat_entries48))
   push!(v9, get_value(cat_entries49))
   
+  global changed_cell_type = true
    
 end

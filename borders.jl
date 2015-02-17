@@ -59,8 +59,8 @@ function bounce_if_req!(cell)
   r = cell.r
   x_bound = (cell.loc.x < r ? r : X_SIZE - r)
   y_bound = (cell.loc.y < r ? r : Y_SIZE - r)
-  r <= cell.loc.x <= X_SIZE - r ? nothing : wall_reflect!(cell,x_bound,wall_hit)
-  r <= cell.loc.y <= Y_SIZE - r ? nothing : fc_reflect!(cell,y_bound,fc_hit)
+  r <= cell.loc.x <= X_SIZE - r ? nothing : wall_reflect!(cell,x_bound)#,wall_hit)
+  r <= cell.loc.y <= Y_SIZE - r ? nothing : fc_reflect!(cell,y_bound)#,fc_hit)
 
   # if out of bounds, redo
   (r <= cell.loc.x <= X_SIZE - r) && (r <= cell.loc.y <= Y_SIZE - r) ? nothing : bounce_if_req!(cell) 

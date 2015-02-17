@@ -90,6 +90,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
     end
     if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)
+      
     	alive_cells = division_decision!(alive_cells, index, avg_radius)
     end
 
