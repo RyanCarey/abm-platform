@@ -43,7 +43,7 @@ function cell_division(cells, i)
 	in_empty_space = !(is_overlap_divide(cells, new_point, radius))
 
   if BORDER_SHAPE == "Ellipse"
-    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0, cells[i].cell_type)
+    cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, 0, cells[i].cell_type)
     in_empty_space = in_ellipse(cell) ? in_empty_space : false
   end
 
@@ -57,7 +57,7 @@ function cell_division(cells, i)
     
     # check if within elliptical bounds
     if BORDER_SHAPE == "Ellipse"
-      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, "Alive", 0, cells[i].cell_type)
+      cell = Cell(string(i), Point(new_x, new_y), radius, 0, 0, 0, cells[i].cell_type)
       in_empty_space = in_ellipse(cell) ? in_empty_space : false
     end
 
@@ -71,7 +71,7 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].cell_type)
+			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, 0, cells[i].cell_type)
 			cells[i].r /= 2
 			cells[i].offspring += 1
 			if categories[cells[i].cell_type].stem_cell
@@ -117,7 +117,7 @@ function cell_death(alive_cells, dead_cells, i)
 	# Dead Cell!
 	#println("Dead Cell!")
 	dead_cell = splice!(alive_cells, i)
-	dead_cell.state = "Dead"
+	#dead_cell.state = "Dead"
 	push!(dead_cells, dead_cell)
 	return alive_cells, dead_cells
 end

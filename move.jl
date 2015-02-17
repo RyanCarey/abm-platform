@@ -1,3 +1,4 @@
+# Module containing functions pertaining to cell movement.
 include("angle.jl")
 include("borders.jl")
 include("cell_type.jl")
@@ -10,7 +11,7 @@ function move_any!()
 
 	startloc = Point(alive_cells[m].loc.x, alive_cells[m].loc.y)
 
-	alive_cells[m].speed = -2*log(rand())*cell_speed/5
+	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	alive_cells[m].angle = angle_from_both(alive_cells[m])
 	alive_cells[m].loc.x += alive_cells[m].speed * cos(alive_cells[m].angle)
 	alive_cells[m].loc.y += alive_cells[m].speed * sin(alive_cells[m].angle)
@@ -33,7 +34,7 @@ function solve_overlap(m::Int, startloc::Point)
 	  d=sqrt((startloc.x - alive_cells[m].loc.x)^2 + (startloc.y - alive_cells[m].loc.y)^2)
 	  remaining_distance = alive_cells[m].speed - d
 
-	  if(remaining_distance/cell_speed>minimum_ratio) #We can now make the cells to move
+	  if(remaining_distance / categories[alive_cells[m].cell_type].avg_speed > minimum_ratio) #We can now make the cells to move
 		alpha = alive_cells[m].angle
 		
 		xm=alive_cells[m].loc.x

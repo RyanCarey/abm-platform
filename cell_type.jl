@@ -17,7 +17,6 @@ type Cell
 	r::Real
 	angle::Real
 	speed::Real
-	state::String
 	offspring::Int
 	cell_type::Int
 end

@@ -47,7 +47,7 @@ function init(n, categories)
       yi = ri + (y - 2ri) * rand()
       overlap = false
       if BORDER_SHAPE == "Ellipse"
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
         in_ellipse(cell) ? overlap = true : nothing
       end
       for j in 1:i-1
@@ -62,7 +62,7 @@ function init(n, categories)
           return cells
         end
       else
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, "Alive", 0, cell_cat)
+        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
         push!(cells, cell)
         placed = true
       end
