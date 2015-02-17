@@ -25,9 +25,9 @@ include("birth_and_death.jl")
 end=#
 			
 # Decides when to split a cell into two.
-function division_decision!(alive_cells::Array, i::Int, avg_radius::Real)
+function division_decision!(alive_cells::Array, i::Int)
 	cell = alive_cells[i]
-	original_area = pi * avg_radius ^ 2
+	original_area = pi * categories[cell.cell_type].avg_r ^ 2
 	current_area = pi * cell.r ^ 2
 
 	if current_area / original_area > categories[cell.cell_type].div_thres

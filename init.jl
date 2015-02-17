@@ -12,10 +12,10 @@ include("ellipse.jl")
 
 # Below variables need to be specified in the GUI eventually!!
 
-function init(n, r, categories)
+function init(n, categories)
   x = X_SIZE
   y = Y_SIZE
-  freqs = n * [categories[1].amount,categories[2].amount,categories[3].amount,categories[4].amount]
+  freqs = n * [categories[1].amount, categories[2].amount, categories[3].amount, categories[4].amount]
   cumul_freqs = round(float([sum(freqs[1:i]) for i in 1:length(freqs)]))
   print(cumul_freqs)
 
@@ -37,6 +37,7 @@ function init(n, r, categories)
     print("cell cat: ",cell_cat)
     placed = false
     fails = 0
+    r = categories[cell_cat].avg_r
     rvar = r/10 # Radius Variation
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
