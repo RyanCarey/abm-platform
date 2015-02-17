@@ -75,6 +75,7 @@ end
 
 function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int)
   global iter
+  global negative_distance = 0
   for i = 1:steps
     iter = i
     if length(alive_cells) == 0
@@ -95,7 +96,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
 
     	alive_cells = division_decision!(alive_cells, index)
     end
-
+    println(negative_distance)
     if DISPLAY_OUTPUT
       show_sim(alive_cells)
     end

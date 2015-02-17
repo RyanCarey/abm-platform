@@ -25,11 +25,11 @@ function solve_overlap(m::Int, startloc::Point)
 
 
 	#Parameters
-	minimum_ratio=0.01 # threshold to trigger cells to move
+	minimum_ratio=1 # threshold to trigger cells to move
 	g = 0.8 #loss of energy while giving energy to the first cell to the other one
 	
-	k=m
-	k = is_overlap(m::Int, startloc::Point,k)	
+	global counter_overlap = 0
+	k = is_overlap(m::Int, startloc::Point)	
 	if(k!=m)
 	  d=sqrt((startloc.x - alive_cells[m].loc.x)^2 + (startloc.y - alive_cells[m].loc.y)^2)
 	  remaining_distance = alive_cells[m].speed - d
@@ -62,8 +62,8 @@ function solve_overlap(m::Int, startloc::Point)
 		alive_cells[k].loc.x+=alive_cells[k].speed*cos(alive_cells[k].angle)
 		alive_cells[m].loc.y+=alive_cells[m].speed*sin(alive_cells[m].angle)
 		alive_cells[k].loc.y+=alive_cells[k].speed*sin(alive_cells[k].angle)
-		check_borders!(alive_cells,dead_cells,m,startlocm)
-		check_borders!(alive_cells,dead_cells,k,startlock)
+		#check_borders!(alive_cells,dead_cells,m,startlocm)
+		#check_borders!(alive_cells,dead_cells,k,startlock)
 		solve_overlap( k, startlock)
 		solve_overlap( m, startlocm)
 	  else
@@ -91,14 +91,15 @@ end
 #end
 
 ##########################################################################################################
-function is_overlap( m::Int, startloc::Point,k::Int)
+function is_overlap( m::Int, startloc::Point)
 #k is used if we want to exclude also another cell than the studied cell (m)  
-
+  global counter_overlap += 1
   index=[]
   distance=[]
+  k=m
   for i in 1:length(alive_cells)
-    if (alive_cells[i].loc.x - alive_cells[m].loc.x)^2 + (alive_cells[i].loc.y - alive_cells[m].loc.y)^2< (alive_cells[i].r + alive_cells[m].r) ^ 2
-	  if  (i != m && i!=k)
+    if (alive_cells[i].loc.x - alive_cells[m].loc.x)^2 + (alive_cells[i].loc.y - alive_cells[m].loc.y)^2< (0.99*(alive_cells[i].r + alive_cells[m].r)) ^ 2
+	  if  (i != m)
 		index=[index,i]
 	  end
     end
@@ -109,35 +110,57 @@ function is_overlap( m::Int, startloc::Point,k::Int)
 	  distance=[distance,d]
   	end
 	k=index[indmin(distance)]
-	alive_cells[m].loc = find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)		  
-	is_overlap(m, startloc,k)
+	alive_cells[m].loc = find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
+	if(counter_overlap<10)		  
+	  is_overlap(m, startloc)
+	end
   end
   return k
 end
 
 ##########################################################################################################
 function find_center_where_they_touch(cellm,cellk,startloc)
-	theta = cellm.angle
 	x1 = startloc.x
 	y1 = startloc.y
 	x2 = cellk.loc.x
 	y2 = cellk.loc.y
 	r1 = cellm.r
 	r2 = cellk.r
+	theta1 = acos((cellm.loc.x - x1)/sqrt((cellm.loc.x - x1)^2+(cellm.loc.y - y1)^2))*sign(cellm.loc.y - y1)
+	theta = cellm.angle
+	if(-0.001<theta1<0.001 || pi*0.999<theta1<pi*1.001)
+	  if(cellm.loc.x - x1<0)
+		theta1=pi
+	  else
+		theta1=0
+	  end
+	end
+
+	if(!(mod(theta1,2*pi) - 0.001<mod(theta,2*pi)<mod(theta1,2*pi) +0.001))
+	  println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	  println(theta,"  theta!=theta1  ",theta1)
+	  println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	end
+
 	println("x1: ",x1, ", y1: ",y1,"   r1: ",r1) 
 	println("x2: ",x2, ", y2: ",y2,"   r2: ",r2)
 	#Solving of an equation to know where the moving cell touch the overlapped cell first
 	a = 1
-	b = 2*(cos(theta)*(x1-x2) + sin(theta)*(y1-y2))
+	b = 2*(cos(theta1)*(x1-x2) + sin(theta1)*(y1-y2))
 	c = (x1-x2)^2 + (y1-y2)^2 - (r1+r2)^2 
 	delta = b^2 - 4*a*c
-
-	d =(-b - sqrt(delta))/2
-  
+	println("with minus: ",(-b - sqrt(delta))/2)
+	println("with plus: ",(-b + sqrt(delta))/2)
+	
+	d =min(((-b - sqrt(delta))/2),((-b + sqrt(delta))/2))
+  	if(d<-0.05)
+	 global negative_distance+=1
+	end
 	#We can now place the cell at the border of the touching cell
-	x1 = x1 + d*cos(theta)
-	y1 = y1 + d*sin(theta)
+	x1 = x1 + d*cos(theta1)
+	y1 = y1 + d*sin(theta1)
 	println("New x1: ",x1, ", New y1: ",y1)
+	println(" ")
 	return Point(x1,y1)
 end
 ##########################################################################################################

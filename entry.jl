@@ -33,11 +33,11 @@ function simulate(path)
 		global v4=Array(Float64,3*int(v2[7]))
 		for i in 1:int(v2[7])
 			v3[2*i-1]=0
-			v3[2*i]=(i-1)/(v2[6]-1)*v[6]
+			v3[2*i]=(i-1)/(v2[6]-1)*v[5]
 
 			v4[3*i-2]=10
-  		v4[3*i-1]=100
-  		v4[3*i]=150		
+  			v4[3*i-1]=100
+  			v4[3*i]=150		
 		end
 	end
 	if (!changed_cell_type)
