@@ -9,8 +9,8 @@
 include("cell_type.jl")
 include("move.jl")
 
-global STEM_CELLS = true
-global STEM_THRESHOLD = 1.5
+
+#global STEM_THRESHOLD = 1.5
 function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD
 		alive_cells = divide_any(alive_cells)
@@ -76,7 +76,7 @@ function cell_division(cells, i)
 			new_cell = Cell(offspring_name, Point(new_x, new_y), radius / 2, 1, 1, "Alive", 0, cells[i].cell_type)
 			cells[i].r /= 2
 			cells[i].offspring += 1
-			if STEM_CELLS
+			if categories[cells[i].cell_type].stem_cell
 				# Sum ligands
 				sum_ligand = mean(list_ligand[:, 4])
 				println("Sum ligand: ", sum_ligand)

@@ -16,13 +16,14 @@ function main()
   global cell_speed = v[2]
 
 
-  radius = v[3]
-  avg_radius = radius
-  const steps = int(v[4])
-  global X_SIZE = v[5]
-  global Y_SIZE = v[6]
-  growth_rate = v[7]
-  global DIE_THRESHOLD = v[8]
+#  radius = v[3]
+#  avg_radius = radius
+  const steps = int(v[3])
+  global X_SIZE = v[4]
+  global Y_SIZE = v[5]
+  global STEM_THRESHOLD = v[6]
+  global DIE_THRESHOLD = v[7]
+  
 
   global categories = Cell_type[Cell_type(v8[1], v8[2], v8[3], v8[4], v8[5], v8[6], v9[1], v9[2], v9[3]),
               Cell_type(v8[7], v8[8], v8[9], v8[10], v8[11], v8[12], v9[4], v9[5], v9[6]),
@@ -50,7 +51,7 @@ function main()
 
   println("building environment")
 
-  global alive_cells = init(n_cell,avg_radius, categories)
+  global alive_cells = init(n_cell, categories)
 
   global dead_cells = Cell[]
 
@@ -68,16 +69,16 @@ function main()
     start_output(filename::String, t::String, v::Array, alive_cells::Array)
   end
 
-  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, cell_speed, steps, avg_radius, growth_rate)
+  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, cell_speed, steps)
   println("simulation finished")
 end
 
-function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int, avg_radius::Real, growth_rate::Real)
+function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps::Int)
   global iter
   for i = 1:steps
     iter = i
     if length(alive_cells) == 0
-      println("all cells have died after $i iterations")
+      println("All cells have died after $i iterations")
       return alive_cells, dead_cells 
     end
 
@@ -90,7 +91,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, cell_speed::Real, steps
     end
     if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)
-      
+
     	alive_cells = division_decision!(alive_cells, index, avg_radius)
     end
 
