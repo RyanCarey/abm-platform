@@ -13,7 +13,8 @@ end
 
 type Cell
 	name::String
-	loc::Point
+  x::Real
+  y::Real
 	r::Real
 	angle::Real
 	speed::Real

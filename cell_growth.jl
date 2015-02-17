@@ -32,7 +32,7 @@ function cell_growth!(alive_cells::Array, i::Int)
     p_new_r = sqrt(area / pi)
 
 
-    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.loc.x < X_SIZE - p_new_r) && (p_new_r < cell.loc.y < Y_SIZE - p_new_r)
+    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.x < X_SIZE - p_new_r) && (p_new_r < cell.y < Y_SIZE - p_new_r)
     	# Cell has space to grow
     	#println("Growing Cell")
     	cell.r = sqrt(area / pi)
@@ -44,7 +44,7 @@ end
 function space_to_grow(cells::Array, index::Int, radius::Real)
   n = length(cells)
     for i in 1:n
-      if (cells[i].loc.x - cells[index].loc.x) ^ 2 + (cells[i].loc.y - cells[index].loc.y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
+      if (cells[i].x - cells[index].x) ^ 2 + (cells[i].y - cells[index].y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
         return false
       end
     end

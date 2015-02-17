@@ -14,7 +14,7 @@ end
 function show_agents(X::Array,colour = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
-  locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+  locations[i,:] = [X[i].x X[i].y X[i].r]
   end
   display_circles(locations, colour)
 end
@@ -45,7 +45,7 @@ end
 function display_cell_sets(X::Array, bools::BitArray)
   locations = zeros(length(X),3)
   for i in 1:length(X)
-    locations[i,:] = [X[i].loc.x X[i].loc.y X[i].r]
+    locations[i,:] = [X[i].x X[i].y X[i].r]
   end
   display_two(locations,bools)
 end
@@ -56,7 +56,7 @@ function display_two(cells::Array)
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 1
-      locations1[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+      locations1[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
   p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "ro")
@@ -68,7 +68,7 @@ function display_two(cells::Array)
   locations2 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 2
-      locations2[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+      locations2[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
   p2 = scatter(locations2[:, 1], locations2[:, 2], locations2[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "bo")
@@ -76,7 +76,7 @@ function display_two(cells::Array)
   locations3 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 3
-      locations3[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+      locations3[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
   p3 = scatter(locations3[:, 1], locations3[:, 2], locations3[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "mo")
@@ -84,7 +84,7 @@ function display_two(cells::Array)
   locations4 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 4
-      locations4[i,:] = [cells[i].loc.x cells[i].loc.y cells[i].r]
+      locations4[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
   p4 = scatter(locations4[:, 1], locations4[:, 2], locations4[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, "go")
