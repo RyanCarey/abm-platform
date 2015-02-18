@@ -1,4 +1,4 @@
-using Winston
+#using Winston
 
 function show_sim(X::Array)
   #show_agents(X)
@@ -22,7 +22,7 @@ end
 function display_circles(locations::Array, colour = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
-  # radius is adjusted so that cells are displayed at correct size for any window
+  # Radius is adjusted so that cells are displayed at correct size for any window
   r = locations[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10
   p = scatter(x,y,r,colour)
   xlim(0,X_SIZE)
@@ -41,7 +41,7 @@ function show_ellipse(c::Real,d::Real,a::Real,b::Real,n=72)
   display(canvas,r)
 end
 
-# for showing two sets of cells in different colours
+# For showing two sets of cells in different colours
 function display_cell_sets(X::Array, bools::BitArray)
   locations = zeros(length(X),3)
   for i in 1:length(X)
@@ -50,7 +50,7 @@ function display_cell_sets(X::Array, bools::BitArray)
   display_two(locations,bools)
 end
 
-
+# Displays four types of cells, using each cells radius and the colour specified by its type
 function display_two(cells::Array)
   
   locations1 = zeros(length(cells), 3)
@@ -61,10 +61,8 @@ function display_two(cells::Array)
   end
   p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, categories[1].colour)
   xlim(0, X_SIZE)
-  ylim(0, Y_SIZE) 
-
+  ylim(0, Y_SIZE)
   hold(true) 
-  
   locations2 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 2
@@ -92,8 +90,7 @@ function display_two(cells::Array)
   display(canvas, p1)
   display(canvas, p2)
   display(canvas, p3)
-  display(canvas, p4)
-  
+  display(canvas, p4)  
   hold(true)
 end
 

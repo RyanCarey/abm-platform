@@ -1,13 +1,13 @@
 using Winston
 
-include("init.jl")
-include("move.jl")
-include("show.jl")
-include("pause.jl")
-include("diffusion.jl")
-include("birth_and_death.jl")
-include("cell_type.jl")
-include("cell_growth.jl")
+#include("init.jl")
+#include("move.jl")
+#include("show.jl")
+#include("pause.jl")
+#include("diffusion.jl")
+#include("birth_and_death.jl")
+#include("cell_type.jl")
+#include("cell_growth.jl")
 #include("pickle.jl")
 
 function main()

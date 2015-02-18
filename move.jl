@@ -1,7 +1,7 @@
 # Module containing functions pertaining to cell movement.
-include("angle.jl")
-include("new_border.jl")
-include("cell_type.jl")
+#include("angle.jl")
+#include("new_border.jl")
+#include("cell_type.jl")
 using Distributions
 
 function move_any!(wall_behaviour,fc_behaviour,walls,fc)

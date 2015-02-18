@@ -1,4 +1,4 @@
-include("source_ligand_window.jl")
+#include("source_ligand_window.jl")
 
 function window_diffusion(path)
 

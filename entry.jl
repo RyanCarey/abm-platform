@@ -1,11 +1,12 @@
-using Tk
-using Winston
-include("pause.jl")
-include("simulator.jl")
-include("show.jl")
-include("diffusion_window.jl")
-include("categories_window.jl")
-
+#using Tk
+#using Winston
+#include("pause.jl")
+#include("simulator.jl")
+#include("show.jl")
+#include("diffusion_window.jl")
+#include("categories_window.jl")
+#include("cell_type.jl")
+include("import.jl")
 # TO DO :
 # Adapt the size of the canvas
 # Lower the cost of integration

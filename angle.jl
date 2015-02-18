@@ -1,7 +1,7 @@
 using Winston
 using Distributions
 
-include("diffusion.jl")
+#include("diffusion.jl")
 
 # Proposed angle of direction for the cell
 # Biased Random Walk V2

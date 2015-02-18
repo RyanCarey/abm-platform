@@ -6,8 +6,8 @@
 # If a cell is dividing, it stops desiring to move
 # If 2nd value is null, no new cell
 
-include("cell_type.jl")
-include("move.jl")
+#include("cell_type.jl")
+#include("move.jl")
 
 #=function life_or_death(alive_cells, dead_cells)
 	if rand() < DIVIDE_THRESHOLD

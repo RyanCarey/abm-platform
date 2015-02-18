@@ -1,8 +1,8 @@
 # Module to simulate cell growth
 # Receives the array of alive cells, and based on some undecided criteria grows a subsection of them each time step
 # Needs to check against neighbours for overlaps. Cells near other cells probably wouldn't grow.
-include("cell_type.jl")
-include("birth_and_death.jl")
+#include("cell_type.jl")
+#include("birth_and_death.jl")
 			
 # Decides when to split a cell into two.
 function division_decision!(alive_cells::Array, i::Int)

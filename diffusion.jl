@@ -1,5 +1,5 @@
-include("pause.jl")
-using Winston
+#include("pause.jl")
+#using Winston
 
 #Returns the ligand's concentration of one point thanks to an ODE
 #

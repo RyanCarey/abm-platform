@@ -1,0 +1,18 @@
+using Winston
+using Tk
+include("cell_type.jl")
+include("birth_and_death.jl")
+include("move.jl")
+include("source_ligand_window.jl")
+include("ellipse.jl")
+include("angle.jl")
+include("new_border.jl")
+include("init.jl")
+include("show.jl")
+include("pause.jl")
+include("diffusion.jl")
+include("cell_growth.jl")
+#include("pickle.jl")
+include("simulator.jl")
+include("diffusion_window.jl")
+include("categories_window.jl")

@@ -1,6 +1,6 @@
 # find whether a circle is entirely contained within an ellipse
-include("cell_type.jl")
-include("show.jl")
+#include("cell_type.jl")
+#include("show.jl")
 
 function ellipse_borders!(cell::Cell,source::Point)
   if in_ellipse(cell)

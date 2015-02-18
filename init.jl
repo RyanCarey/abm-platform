@@ -1,5 +1,5 @@
-include("cell_type.jl")
-include("ellipse.jl")
+#include("cell_type.jl")
+#include("ellipse.jl")
 # Initialization Function
 # 1st parameter: Number of cells
 # 2nd parameter: Height of environment
