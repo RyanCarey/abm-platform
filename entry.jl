@@ -41,7 +41,7 @@ function simulate(path)
 	end
 	if (!changed_cell_type)
 		global v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0]
-		global v9 = ["r",true,true,"b",false,false,"m",false,false,"g",false,false]
+		global v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
 	end
   
   main()
