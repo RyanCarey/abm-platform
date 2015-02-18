@@ -17,7 +17,8 @@ function get_categories(path)
     grid(Label(f3, cat_prompts[i]), i + 1, 1, sticky = "se")
   end
   n = length(cat_prompts)  
-  # Each entry field
+  # Inititalise and set defaults for each entry. Could probably be cleaner / more efficient. At the moment this happens every time the button is pressed, and then occasionally overwritten by previously
+  # entered options.
 	cat_entries1 = Entry(f3)
   cat_entries2 = Entry(f3)
   cat_entries3 = Entry(f3)
@@ -94,7 +95,7 @@ function get_categories(path)
   set_value(cat_entries48, false)
   set_value(cat_entries49, false)
 
-
+  # If options have already been specified, overwrites entries with those previously given.
   if(changed_cell_type)
     set_value(cat_entries1, "$(v8[1])")
     set_value(cat_entries2, "$(v8[2])")
