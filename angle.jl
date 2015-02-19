@@ -85,10 +85,8 @@ end
 function angle_from_both(cell::Cell)
 	if(rand() < probability_persistent && iter > 1)
 		angle = cell.angle
-	elseif(rand() < categories[cell.cell_type].randomness)
-		angle = angle_from_ligand(cell, 2)
 	else
-		angle = angle_from_ligand(cell, 1)
+		angle = mod(angle_from_ligand(cell, 1)*(1-RANDOMNESS)+RANDOMNESS*2*pi,2*pi)
 	end
 	return angle
 end
