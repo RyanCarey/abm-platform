@@ -81,7 +81,7 @@ function angle_from_ligand(cell,k)
 end
 
 #Combination of the two methods
-#probability is the probability of choosing the angle from the persistent random walk over the direction fro; the ligand
+#probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
 function angle_from_both(cell::Cell)
 	if(rand()<probability_persistent && iter>1)
 		angle=cell.angle

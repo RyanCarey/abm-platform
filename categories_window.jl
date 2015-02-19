@@ -28,15 +28,7 @@ function get_categories(path)
   global cat_entries7 = Combobox(f3, colours)
   global cat_entries8 = Checkbutton(f3, "Left Placed")
   global cat_entries9 = Checkbutton(f3, "Stem Cell")
-  set_value(cat_entries1, "1.0")
-  set_value(cat_entries2, "0.05")
-  set_value(cat_entries3, "2.0")
-  set_value(cat_entries4, "1.0")
-  set_value(cat_entries5, "1.0")
-  set_value(cat_entries6, "1.0")
-  set_value(cat_entries7, "ro")
-  set_value(cat_entries8, true)
-  set_value(cat_entries9, true)
+  
   cat_entries21 = Entry(f3)
   cat_entries22 = Entry(f3)
   cat_entries23 = Entry(f3)
@@ -45,16 +37,7 @@ function get_categories(path)
   cat_entries26 = Entry(f3)
   global cat_entries27 = Combobox(f3, colours)
   global cat_entries28 = Checkbutton(f3, "Left Placed")
-  global cat_entries29 = Checkbutton(f3, "Stem Cell")
-  set_value(cat_entries21, "0.0")
-  set_value(cat_entries22, "0.05")
-  set_value(cat_entries23, "2.0")
-  set_value(cat_entries24, "1.0")
-  set_value(cat_entries25, "1.0")
-  set_value(cat_entries26, "-1.0")
-  set_value(cat_entries27, "bo")
-  set_value(cat_entries28, false)
-  set_value(cat_entries29, false)
+  global cat_entries29 = Checkbutton(f3, "Stem Cell")  
  
   cat_entries31 = Entry(f3)
   cat_entries32 = Entry(f3)
@@ -65,36 +48,55 @@ function get_categories(path)
   global cat_entries37 = Combobox(f3, colours)
   global cat_entries38 = Checkbutton(f3, "Left Placed")
   global cat_entries39 = Checkbutton(f3, "Stem Cell")
-  set_value(cat_entries31, "0.0")
-  set_value(cat_entries32, "0.05")
-  set_value(cat_entries33, "2.0")
-  set_value(cat_entries34, "1.0")
-  set_value(cat_entries35, "1.0")
-  set_value(cat_entries36, "1.0")
-  set_value(cat_entries37, "mo")
-  set_value(cat_entries38, false)
-  set_value(cat_entries39, false)
   
-
   cat_entries41 = Entry(f3)
-  cat_entries42 = Entry(f3, "0.05")
-  cat_entries43 = Entry(f3, "2.0")
-  cat_entries44 = Entry(f3, "1.0")
-  cat_entries45 = Entry(f3, "1.0")
-  cat_entries46 = Entry(f3, "1.0")
+  cat_entries42 = Entry(f3)
+  cat_entries43 = Entry(f3)
+  cat_entries44 = Entry(f3)
+  cat_entries45 = Entry(f3)
+  cat_entries46 = Entry(f3)
   global cat_entries47 = Combobox(f3, colours)
   global cat_entries48 = Checkbutton(f3, "Left Placed")
-  global cat_entries49 = Checkbutton(f3, "Stem Cell")
-  set_value(cat_entries41, "0.0")
-  set_value(cat_entries42, "0.05")
-  set_value(cat_entries43, "2.0")
-  set_value(cat_entries44, "1.0")
-  set_value(cat_entries45, "1.0")
-  set_value(cat_entries46, "1.0")
-  set_value(cat_entries47, "go")
-  set_value(cat_entries48, false)
-  set_value(cat_entries49, false)
+  global cat_entries49 = Checkbutton(f3, "Stem Cell")  
 
+  if(!changed_cell_type)
+    set_value(cat_entries1, "1.0")
+    set_value(cat_entries2, "0.05")
+    set_value(cat_entries3, "2.0")
+    set_value(cat_entries4, "1.0")
+    set_value(cat_entries5, "1.0")
+    set_value(cat_entries6, "1.0")
+    set_value(cat_entries7, "ro")
+    set_value(cat_entries8, true)
+    set_value(cat_entries9, true)
+    set_value(cat_entries21, "0.0")
+    set_value(cat_entries22, "0.05")
+    set_value(cat_entries23, "2.0")
+    set_value(cat_entries24, "1.0")
+    set_value(cat_entries25, "1.0")
+    set_value(cat_entries26, "-1.0")
+    set_value(cat_entries27, "bo")
+    set_value(cat_entries28, false)
+    set_value(cat_entries29, false)
+    set_value(cat_entries31, "0.0")
+    set_value(cat_entries32, "0.05")
+    set_value(cat_entries33, "2.0")
+    set_value(cat_entries34, "1.0")
+    set_value(cat_entries35, "1.0")
+    set_value(cat_entries36, "1.0")
+    set_value(cat_entries37, "mo")
+    set_value(cat_entries38, false)
+    set_value(cat_entries39, false)
+    set_value(cat_entries41, "0.0")
+    set_value(cat_entries42, "0.05")
+    set_value(cat_entries43, "2.0")
+    set_value(cat_entries44, "1.0")
+    set_value(cat_entries45, "1.0")
+    set_value(cat_entries46, "1.0")
+    set_value(cat_entries47, "go")
+    set_value(cat_entries48, false)
+    set_value(cat_entries49, false)
+  end
   # If options have already been specified, overwrites entries with those previously given.
   if(changed_cell_type)
     set_value(cat_entries1, "$(v8[1])")
@@ -198,13 +200,18 @@ end
 function check_cat_entries()
   global v8 = []
   global v9 = []
-  for i in 1 : length(cat_entries)
-    try
-      push!(v8, float(get_value(cat_entries[i])))
-    catch
-      Messagebox(title="Warning", message=string("Must enter a numeric for field ", cat_entries[i]))
-      return
+  for i in 1 : length(cat_entries)      
+    if i == 1 || i == 7 || i == 13 || i == 19
+      if float(get_value(cat_entries[i])) < 0.0
+        set_value(cat_entries[i], "0.0")
+        Messagebox(title = "Warning", message = string("Ratio must be above 0. \nResetting value to 0."))          
+      end
     end
+
+    push!(v8, float(get_value(cat_entries[i])))
+    
+      
+    
   end
   push!(v9, get_value(cat_entries7))
   push!(v9, get_value(cat_entries8))
@@ -220,5 +227,9 @@ function check_cat_entries()
   push!(v9, get_value(cat_entries49))
   
   global changed_cell_type = true
-   
+  n = v8[1] + v8[7] + v8[13] + v8[19]
+  v8[1] /= n
+  v8[7] /= n
+  v8[13] /= n
+  v8[19] /= n
 end
