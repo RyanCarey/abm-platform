@@ -19,10 +19,10 @@ function main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
   fc = [0,Y_SIZE]
   global STEM_THRESHOLD = v[5]
   global DIE_THRESHOLD = v[6]
-  global categories = Cell_type[Cell_type(v8[1], v8[2], v8[3], v8[4], v8[5], v8[6], v9[1], v9[2], v9[3]),
-              Cell_type(v8[7], v8[8], v8[9], v8[10], v8[11], v8[12], v9[4], v9[5], v9[6]),
-              Cell_type(v8[13], v8[14], v8[15], v8[16], v8[17], v8[18], v9[7], v9[8], v9[9]),
-              Cell_type(v8[19], v8[20], v8[21], v8[22], v8[23], v8[24], v9[10], v9[11], v9[12])]
+  global categories = Cell_type[Cell_type(v8[1], v8[2], v8[3], v8[4], v8[5], v8[6], v8[25], v9[1], v9[2], v9[3]),
+              Cell_type(v8[7], v8[8], v8[9], v8[10], v8[11], v8[12], v8[26], v9[4], v9[5], v9[6]),
+              Cell_type(v8[13], v8[14], v8[15], v8[16], v8[17], v8[18], v8[27], v9[7], v9[8], v9[9]),
+              Cell_type(v8[19], v8[20], v8[21], v8[22], v8[23], v8[24], v8[28], v9[10], v9[11], v9[12])]
 
   global wall_behaviour = [lowercase(v10[1]),lowercase(v10[3])]
   global fc_behaviour = [lowercase(v10[2]),lowercase(v10[4])]
@@ -74,7 +74,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc,dis
     iter = i
     if length(alive_cells) == 0
       println("All cells have died after $i iterations")
-      return alive_cells, dead_cells 
+      return alive_cells, dead_cells
     end
 
     index = rand(1 : length(alive_cells))

@@ -10,8 +10,8 @@ using Distributions
 # ML is the matrix of ligand's concentration
 # degree_precision is an integer and the numnber of ligants we are going to use to assess the favorite direction
 # 1-We first need to adapt the localization of the cell to the matrix. The cell will be spotted by the cooridnates (they can be float)
-# whereas the matrix is located thaks to integer. We assume that the localisation of the cell matches with the coordinates of the matrix. 
-# If C=(5.2,6.3) then the center of teh cell will be in the cell (6,7). We start to count the colums at 1 for the matrix. 
+# whereas the matrix is located thaks to integer. We assume that the localisation of the cell matches with the coordinates of the matrix.
+# If C=(5.2,6.3) then the center of teh cell will be in the cell (6,7). We start to count the colums at 1 for the matrix.
 # We cannot have a localization (0.2,0.1) within the matrix but we can for the cell center.
 # We call a ligand-concentration vector the product of teh concentration of ligand with the vector going from the center of the cell to the cell of the ligand concentration
 # Moreover, the matrix of the cocnetration starts from the top left and the localization of the celle starts form the bottom left
@@ -22,9 +22,9 @@ using Distributions
 # nb_ligands : number of ligands around the cell ie the number of possible directions
 # cell : data from the cell we want to assess the next angle
 
-#Ze still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
+# We still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
 function angle_from_ligand(cell,k)
- 	x = cell.x
+   	x = cell.x
   	y = cell.y
   	r = cell.r
   	cat = cell.cell_type
@@ -49,7 +49,7 @@ function angle_from_ligand(cell,k)
 		end
 	end
 	#Cumulative ligand concentration probability
-	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1	
+	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1
 	if(maximum(list_ligand[:,5]!=0))
 		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
 
@@ -63,14 +63,14 @@ function angle_from_ligand(cell,k)
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
 
-	
+
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
 	if cat == 1
   		return choosen_angle[k]
   	end
   	if cat == 2
-  		return choosen_angle[k]- pi
+  		return choosen_angle[k] - pi
   	end
   	if cat == 3
   		return choosen_angle[k] - (pi / 2)
@@ -83,12 +83,12 @@ end
 #Combination of the two methods
 #probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
 function angle_from_both(cell::Cell)
-	if(rand()<probability_persistent && iter>1)
-		angle=cell.angle
-	elseif(rand()<RANDOMNESS)
-		angle=angle_from_ligand(cell,2)
+	if(rand() < probability_persistent && iter > 1)
+		angle = cell.angle
+	elseif(rand() < categories[cell.cell_type].randomness)
+		angle = angle_from_ligand(cell, 2)
 	else
-		angle=angle_from_ligand(cell,1)
+		angle = angle_from_ligand(cell, 1)
 	end
 	return angle
 end
