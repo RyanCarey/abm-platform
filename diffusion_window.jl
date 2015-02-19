@@ -1,7 +1,6 @@
 #include("source_ligand_window.jl")
 
 function window_diffusion(path)
-
   check_entries1()
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
@@ -15,7 +14,6 @@ function window_diffusion(path)
 
   #Button definition
   b2 = Button(ctrls2, "See diffusion")
-
 
   global prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness","D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of ligand's sources"]
   n2=length(prompts2)
@@ -133,6 +131,29 @@ end
 
 
 ##########################################################################################################
+function check_entries1()
+  n = length(prompts)
+  global v = zeros(n,1)
+  for i in 1:n
+    if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
+      if !(0 <= float(get_value(entries[i])) <= 1)
+        Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
+        return
+      end
+    end
+    if !(0 <= float(get_value(entries[i])))
+      Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
+      return
+    end
+    try
+      v[i] = float(get_value(entries[i]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
+      return
+    end
+  end
+end
+
 function check_entries2()
   n2 = length(prompts2)
   global v2 = zeros(n2,1)

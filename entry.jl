@@ -129,7 +129,16 @@ println("starting program")
   end
 
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b,i,path -> ok_press(v,v2,v3,v4,v8,v9,v10,get_value(display_status),get_value(txt_status)))
+    bind(b,i,path -> ok_press(
+                     v::Array,
+                     v2::Array,
+                     v3::Array,
+                     v4::Array,
+                     v8::Array,
+                     v9::Array,
+                     v10::Array,
+                     get_value(display_status),
+                     get_value(txt_status)))
   end
 
   # keeps program open
