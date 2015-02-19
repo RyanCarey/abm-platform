@@ -1,6 +1,6 @@
 #include("source_ligand_window.jl")
 
-function window_diffusion(path)
+function window_diffusion(v2)
   check_entries1()
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
@@ -17,36 +17,26 @@ function window_diffusion(path)
 
   global prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness","D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of ligand's sources"]
   n2=length(prompts2)
-  if(!check_diffusion)
-	entries21 = Entry(ctrls2,"0.5")
-	entries22 = Entry(ctrls2,"8")
-	entries23 = Entry(ctrls2,"1")
-	entries24 = Entry(ctrls2,"10")
-	entries25 = Entry(ctrls2,"100")
-	entries26 = Entry(ctrls2,"150")
-	entries27 = Entry(ctrls2,"4")
-  else
-	entries21 = Entry(ctrls2,"$(float(v2[1]))")
-	entries22 = Entry(ctrls2,"$(int(v2[2]))")
-	entries23 = Entry(ctrls2,"$(float(v2[3]))")
-	entries24 = Entry(ctrls2,"$(int(v2[4]))")
-	entries25 = Entry(ctrls2,"$(int(v2[5]))")
-	entries26 = Entry(ctrls2,"$(int(v2[6]))")
-	entries27 = Entry(ctrls2,"$(int(v2[7]))")
-  end	
+  entries21 = Entry(ctrls2,"$(float(v2[1]))")
+  entries22 = Entry(ctrls2,"$(int(v2[2]))")
+  entries23 = Entry(ctrls2,"$(float(v2[3]))")
+  entries24 = Entry(ctrls2,"$(int(v2[4]))")
+  entries25 = Entry(ctrls2,"$(int(v2[5]))")
+  entries26 = Entry(ctrls2,"$(int(v2[6]))")
+  entries27 = Entry(ctrls2,"$(int(v2[7]))")
   
   global entries2 = [entries21,entries22,entries23,entries24,entries25,entries26,entries27]
   for i in 1:n2
     if(i==4)
-	l  = Label(ctrls2, "")
-	formlayout(l,nothing)	
-    end	
+  l  = Label(ctrls2, "")
+  formlayout(l,nothing) 
+    end 
 
-    if(i==7)	
-	formlayout(b2, nothing)
-	l  = Label(ctrls2, "")
-	formlayout(l,nothing)
-    end	
+    if(i==7)  
+  formlayout(b2, nothing)
+  l  = Label(ctrls2, "")
+  formlayout(l,nothing)
+    end 
     formlayout(entries2[i],string(prompts2[i],": "))
   end
   focus(entries2[1]) 
@@ -59,16 +49,16 @@ function window_diffusion(path)
   l[:textvariable] = sc[:variable]
   grid(sc, 2, 2, sticky="ew")
   grid(l,  3, 2, sticky="w")
-  bind(sc, "command", plot_diffusion)
+  bind(sc, "command", path -> plot_diffusion(v2))
 
   #First plot of the concentration
   result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
   for x in 1:int(sqrt(v[4]^2+v[5]^2))
-  	global distance_source_squared = int(x)
-	timediff = get_value(sc)	
-	tau0 = int(get_value(entries2[6]))
-  	(res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-	result[x]=res
+    global distance_source_squared = int(x)
+  timediff = get_value(sc)  
+  tau0 = int(get_value(entries2[6]))
+    (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
+  result[x]=res
   end
   p=plot(result)
   xlabel("Distance from source")
@@ -77,7 +67,7 @@ function window_diffusion(path)
 
   #If the button b2 is clicked on
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b2,i,plot_diffusion)
+     bind(b2,i,path -> plot_diffusion(v2))
   end
 
   b1 = Button(ctrls2, "Ligand's source location")
@@ -103,15 +93,15 @@ function destroy_diffusion_window(path)
 end
 
 ##########################################################################################################
-function plot_diffusion(path)
+function plot_diffusion(v2)
   check_entries2()
   result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
   for x in 1:int(sqrt(v[4]^2+v[5]^2))
-  	global distance_source_squared = int(x)
-	timediff = get_value(sc)	
-	tau0 = v2[6]
-  	(res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-	result[x]=res
+    global distance_source_squared = int(x)
+  timediff = get_value(sc)  
+  tau0 = v2[6]
+    (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
+  result[x]=res
   end
   p=plot(result)
   xlabel("Distance from source")
@@ -122,11 +112,11 @@ end
 
 ##########################################################################################################
 function integrand_entry(tau)
-	timediff = get_value(sc)
-	A=int(get_value(entries2[5]))
-	D=int(get_value(entries2[4]))
-	result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
-	return result
+  timediff = get_value(sc)
+  A=int(get_value(entries2[5]))
+  D=int(get_value(entries2[4]))
+  result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
+  return result
 end
 
 
@@ -174,6 +164,6 @@ function check_entries2()
       Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(prompts2[i])))
       return
     end
-    global check_diffusion = true
   end  
 end
+

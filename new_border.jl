@@ -4,22 +4,35 @@
 # still need to make border mutate the cell's angle
 # still need to make another method that kills cells if they run off the field
 
-function check_borders!(cell,source,wall_behaviour,fc_behaviour,walls,fc)
+function check_borders!(cell::Cell,
+                        source::Point,
+                        wall_behaviour::Array,
+                        fc_behaviour::Array,
+                        wall::Real,
+                        ceil::Real)
   x = cell.x
   y = cell.y
   r = cell.r
   xi = source.x
   yi = source.y
-  x,y,xi,yi = border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
+  x,y,xi,yi = border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,wall,ceil)
   cell.x, cell.y = x,y
   source = Point(xi,yi)
   println("final cell loc: ", cell.x,", ",cell.y)
-  println("final cell loc within borders: ", (walls[1] + r < x < walls[2] - 2) && (fc[1] + r < y < fc[2] - r))
+  println("final cell loc within borders: ", (r < x < wall - 2) && (r < y < ceil - r))
 end
 
-function border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
-  wall_lims = walls + [r,-r]
-  fc_lims = fc + [r,-r]
+function border(x::Real,
+                y::Real,
+                xi::Real,
+                yi::Real,
+                r::Real,
+                wall_behaviour::Array,
+                fc_behaviour::Array,
+                wall::Real,
+                ceil::Real)
+  wall_lims = [0, wall] + [r,-r]
+  fc_lims = [0, ceil] + [r,-r]
 
   wall_ints, wall_hit = find_wall_hit(x,y,xi,yi,wall_lims)
   if wall_hit > 0.5
@@ -75,7 +88,11 @@ function border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
   return float(x),float(y), float(xi), float(yi)
 end
 
-function find_wall_hit(x,y,xi,yi,wall_lims)
+function find_wall_hit(x::Real,
+                       y::Real,
+                       xi::Real,
+                       yi::Real,
+                       wall_lims::Array)
   # returns: wall_ints - where the line would hit the wall if current trajectory extended forward and back
   #          wall_hit - whether the current arc will actually hit the walls [left right]
   m = (y-yi)/(x-xi)
@@ -85,7 +102,11 @@ function find_wall_hit(x,y,xi,yi,wall_lims)
   return wall_ints,wall_hit
 end
 
-function find_fc_hit(x,y,xi,yi,fc_lims)
+function find_fc_hit(x::Real,
+                     y::Real,
+                     xi::Real,
+                     yi::Real,
+                     fc_lims::Array)
   # returns: fc_ints - where the line would hit the [floor ceiling] if current trajectory extended up and down 
   #          fc_hit - whether the current arc will actually hit the [floor ceiling]
   m = (y-yi)/(x-xi)
@@ -95,21 +116,37 @@ function find_fc_hit(x,y,xi,yi,fc_lims)
   return fc_ints,fc_hit
 end
 
-function wall_reflect(x,y,xi,yi,wall_lims,wall_ints,wall_hit)
+function wall_reflect(x::Real,
+                      y::Real,
+                      xi::Real,
+                      yi::Real,
+                      wall_lims::Array,
+                      wall_ints::Array,
+                      wall_hit::Int)
   x = 2 * wall_lims[wall_hit] - x
   xi, yi = wall_lims[wall_hit], wall_ints[wall_hit]
   println("new pos after wall reflect : ",x,", ",y)
   return float(x),float(y),float(xi),float(yi)
 end
 
-function fc_reflect(x,y,xi,yi,fc_lims,fc_ints,fc_hit)
+function fc_reflect(x::Real,
+                    y::Real,
+                    xi::Real,
+                    yi::Real,
+                    fc_lims::Array,
+                    fc_ints::Array,
+                    fc_hit::Int)
   y = 2 * fc_lims[fc_hit] - y
   xi, yi = fc_lims[fc_hit], fc_ints[fc_hit]
   println("new pos after fc reflect : ",x,", ",y)
   return float(x),float(y),float(xi),float(yi)
 end
 
-function wall_absorb(x,y,wall_lims,wall_ints,wall_hit)
+function wall_absorb(x::Real,
+                     y::Real,
+                     wall_lims::Array,
+                     wall_ints::Array,
+                     wall_hit::Int)
   println("absorbing collision")
   println("mean of lims: ",mean(wall_lims),", expected hit: ",wall_lims[wall_hit])
   x = wall_lims[wall_hit
@@ -119,7 +156,11 @@ function wall_absorb(x,y,wall_lims,wall_ints,wall_hit)
   return float(x),float(y)
 end
 
-function fc_absorb(x,y,fc_lims,fc_ints,fc_hit)
+function fc_absorb(x::Real,
+                   y::Real,
+                   fc_lims::Array,
+                   fc_ints::Array,
+                   fc_hit::Array)
   println("absorbing collision")
   x = fc_ints[fc_hit]
   println("mean of lims: ",mean(fc_lims),", expected hit: ",fc_lims[fc_hit])

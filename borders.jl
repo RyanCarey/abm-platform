@@ -20,7 +20,6 @@ function check_borders!(alive_cells, dead_cells,n::Int, source::Point)
     elseif BORDER_BEHAVIOUR == "Killing"
       cell_died = killing_borders!(alive_cells, dead_cells, n)
     end
-  #end
   return cell_died
 end
 

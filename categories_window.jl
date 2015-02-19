@@ -105,8 +105,6 @@ function get_categories(v8::Array,v9::Array)
   set_value(cat_entries48, v9[11])
   set_value(cat_entries49, v9[12])
 
-  println("v8 after setting cat entries: ",v8)
-
   global cat_entries = Tk.Tk_Entry[cat_entries1, cat_entries2, cat_entries3, cat_entries4, cat_entries5, cat_entries6, cat_entries21, cat_entries22, cat_entries23, cat_entries24, cat_entries25, cat_entries26,
    cat_entries31, cat_entries32, cat_entries33, cat_entries34, cat_entries35, cat_entries36, cat_entries41, cat_entries42, cat_entries43, cat_entries44, cat_entries45, cat_entries46,
   cat_entries6_1, cat_entries26_1, cat_entries36_1, cat_entries46_1]
@@ -145,7 +143,6 @@ function get_categories(v8::Array,v9::Array)
   grid(cat_entries48, 10, 5)
   grid(cat_entries49, 11, 5)
 
-  println("v8 after placing form: ",v8)
 
   # Place Ok button in bottom right
   b = Button(f3, "Ok")
@@ -166,7 +163,6 @@ end
 
 # Function to get values and destroy window upon clicking OK
 function destroy_cat_window(v8,v9,n)
-  println("v8 when destroying window",v8)
   check_cat_entries(v8,v9,n)
   destroy(w3)
 end

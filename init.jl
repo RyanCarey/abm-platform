@@ -12,13 +12,11 @@
 
 # Below variables need to be specified in the GUI eventually!!
 
-function init(n, categories)
+function init(n::Real, categories::Array)
   x = X_SIZE
   y = Y_SIZE
   freqs = n * [categories[1].amount, categories[2].amount, categories[3].amount, categories[4].amount]
   cumul_freqs = round(float([sum(freqs[1:i]) for i in 1:length(freqs)]))
-  print(cumul_freqs)
-
   cells = Cell[]
 
   if(n < 1)
@@ -34,7 +32,6 @@ function init(n, categories)
         break
       end
     end
-    print("cell cat: ",cell_cat)
     placed = false
     fails = 0
     r = categories[cell_cat].avg_r
@@ -70,10 +67,11 @@ function init(n, categories)
       end
     end
   end
-  return cells
+  print("initialised")
+  return cells::Array
 end
 
-function rand_radius(mean, stdev)
+function rand_radius(mean::Real, stdev::Real)
   radius = mean + (stdev * randn())
   # if radius is negative, try again
   if radius <= 0

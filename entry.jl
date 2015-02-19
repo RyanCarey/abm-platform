@@ -39,7 +39,7 @@ end
 
 ##########################################################################################################
 function init_window()
-println("starting program")
+println("starting up window...")
   # window parameters
   global w = Toplevel("Agent-based modeller",350,385)
   global frame = Frame(w); pack(frame, expand=true, fill="both")
@@ -79,17 +79,12 @@ println("starting program")
   end
   focus(entries[1])
   
-  # Check if the diffusion coefficient has been modified	
-  global check_diffusion = false
-  global check_location = false
-  global changed_cell_type = false
-
   # make comboboxes
 
   #Choose diffusion parameters
   b2 = Button(ctrls, "Choose diffusion params")
   formlayout(b2, nothing)
-  bind(b2, "command", window_diffusion)
+  bind(b2, "command", path -> window_diffusion(v2))
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)

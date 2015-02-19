@@ -10,13 +10,22 @@ using Winston
 #include("cell_growth.jl")
 #include("pickle.jl")
 
-function main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
+function main(
+              v::Array,
+              v2::Array,
+              v3::Array,
+              v4::Array,
+              v8::Array,
+              v9::Array,
+              v10::Array,
+              display_output::Bool,
+              txt_output::Bool)
   n_cell = int(v[1])
   const steps = int(v[2])
   global X_SIZE = v[3]
   global Y_SIZE = v[4]
-  walls = [0,X_SIZE]
-  fc = [0,Y_SIZE]
+  wall = X_SIZE
+  ceil = Y_SIZE
   global STEM_THRESHOLD = v[5]
   global DIE_THRESHOLD = v[6]
   global categories = Cell_type[Cell_type(v8[1], v8[2], v8[3], v8[4], v8[5], v8[6], v8[25], v9[1], v9[2], v9[3]),
@@ -46,7 +55,8 @@ function main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
   end
 
   println("building environment")
-  global alive_cells = init(n_cell, categories)
+  global alive_cells = Cell[] 
+  alive_cells = init(n_cell, categories)
   global dead_cells = Cell[]
 
   if display_output
@@ -63,11 +73,17 @@ function main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
     start_output(filename::String, t::String, v::Array, alive_cells::Array)
   end
 
-  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, steps,walls,fc,display_output,txt_output)
+  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, steps, wall, ceil, display_output,txt_output)
   println("simulation finished")
 end
 
-function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc,display_output::Bool,txt_output::Bool)
+function iter_sim(alive_cells::Array, 
+                  dead_cells::Array, 
+                  steps::Int,
+                  wall::Real,
+                  ceil::Real,
+                  display_output::Bool,
+                  txt_output::Bool)
   global iter
   global negative_distance = 0
   for i = 1:steps
@@ -83,7 +99,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc,dis
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
-    	move_any!(wall_behaviour,fc_behaviour,walls,fc)
+    	move_any!(wall_behaviour,fc_behaviour,wall,ceil)
     #end
     #if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)
