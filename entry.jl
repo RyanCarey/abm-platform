@@ -13,44 +13,9 @@ include("import.jl")
 # Understabnd why v2[4] is 10 digit when modifying again the diffusion parameters
 
 ##########################################################################################################
-function simulate(path)
-  check_entries1()
-  # store combobox data
-  # store checkbox data
-  global DISPLAY_OUTPUT  = get_value(display_option)
-  global TXT_OUTPUT = get_value(txt_option)
-
-  if (!check_diffusion)
-		global v2=[0.5,8,1,10,100,150,4]
-  end
-  if (!check_location)
-		global v3=Array(Float64,2*int(v2[7]))
-		global v4=Array(Float64,3*int(v2[7]))
-		for i in 1:int(v2[7])
-			v3[2*i-1]=0
-			v3[2*i]=(i-1)/(v2[6]-1)*v[5]
-
-			v4[3*i-2]=10
-  			v4[3*i-1]=100
-  			v4[3*i]=150		
-		end
-	end
-	if (!changed_cell_type)
-		global v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0]
-		global v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
-	end
-  
-	if (!changed_border_type)
-		global v10 = ["Absorbing","Killing","Killing","Killing"]
-	end
-
-  main()
-end
-
-##########################################################################################################
-function check_entries1()
+function ok_press(v::Array,v2::Array,v3::Array,v4::Array,v8::Array,
+                  v9::Array,v10::Array,display_output::Bool,txt_output::Bool)
   n = length(prompts)
-  global v = zeros(n,1)
   for i in 1:n
     if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
@@ -69,8 +34,9 @@ function check_entries1()
       return
     end
   end
+  main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
 end
-   
+
 ##########################################################################################################
 function init_window()
 println("starting program")
@@ -108,8 +74,8 @@ println("starting program")
 
   for i in 1:n
     formlayout(entries[i],string(prompts[i],": "))
-    #bind(entries[i], "<Return>", simulate)
-    #bind(entries[i], "<KP_Enter>", simulate)
+    #bind(entries[i], "<Return>", ok_press)
+    #bind(entries[i], "<KP_Enter>", ok_press)
   end
   focus(entries[1])
   
@@ -117,7 +83,6 @@ println("starting program")
   global check_diffusion = false
   global check_location = false
   global changed_cell_type = false
-  global changed_border_type = false
 
   # make comboboxes
 
@@ -128,25 +93,43 @@ println("starting program")
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)
-  bind(b3, "command", get_categories)
+  bind(b3, "command", path -> get_categories(v8,v9))
 
   b4 = Button(ctrls, "Edit Border Types")
   formlayout(b4, nothing)
-  bind(b4, "command", get_borders)
+  bind(b4, "command", path -> get_borders(v10))
 
   # make checkbuttons
-  global display_option = Checkbutton(ctrls, "Display Simulation")
-  set_value(display_option, true)
-  global txt_option = Checkbutton(ctrls, "Write to text")
-  formlayout(display_option, nothing)
-  formlayout(txt_option, nothing)
-  # set_value(display_option, 1)
+  display_status = Checkbutton(ctrls, "Display Simulation")
+  set_value(display_status, true)
+  txt_status = Checkbutton(ctrls, "Write to text")
+  formlayout(display_status, nothing)
+  formlayout(txt_status, nothing)
+  # set_value(display_status, 1)
 
 	# make, display and sensitise the 'run' button
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
-  for i in ["command","<Return>","<KP_Enter>"] bind(b,i,simulate)
+  v = zeros(n,1)
+
+  # set defaults
+	v2=[0.5,8,1,10,100,150,4]
+	v3=Array(Float64,2*int(v2[7]))
+	v4=Array(Float64,3*int(v2[7]))
+  v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0]
+  v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
+  v10 = ["Absorbing","Killing","Killing","Killing"]
+	for i in 1:int(v2[7])
+		v3[2*i-1]=0
+		v3[2*i]=(i-1)/(v2[6]-1)*v[5]
+		v4[3*i-2]=10
+ 		v4[3*i-1]=100
+ 		v4[3*i]=150		
+  end
+
+  for i in ["command","<Return>","<KP_Enter>"] 
+    bind(b,i,path -> ok_press(v,v2,v3,v4,v8,v9,v10,get_value(display_status),get_value(txt_status)))
   end
 
   # keeps program open

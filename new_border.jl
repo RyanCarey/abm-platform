@@ -12,8 +12,9 @@ function check_borders!(cell,source,wall_behaviour,fc_behaviour,walls,fc)
   yi = source.y
   x,y,xi,yi = border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
   cell.x, cell.y = x,y
-  println("cell loc: ", cell.x,", ",cell.y)
   source = Point(xi,yi)
+  println("final cell loc: ", cell.x,", ",cell.y)
+  println("final cell loc within borders: ", (walls[1] + r < x < walls[2] - 2) && (fc[1] + r < y < fc[2] - r))
 end
 
 function border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)

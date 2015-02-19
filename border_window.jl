@@ -1,6 +1,6 @@
 using Tk
 
-function get_borders(path)
+function get_borders(v10)
   # Create a top level window and frames
 	global w4 = Toplevel("Border Parameters", 250, 300) ## title, width, height
   global f4 = Frame(w4)
@@ -17,12 +17,12 @@ function get_borders(path)
   global border_entries4 = Combobox(f4, behaviours)
   set_value(border_entries4, "Killing")
 
-  if changed_border_type
-    set_value(border_entries1, "$(v10[1])")
-    set_value(border_entries2, "$(v10[2])")
-    set_value(border_entries3, "$(v10[3])")
-    set_value(border_entries4, "$(v10[4])")
-  end
+  println(v10)
+
+  set_value(border_entries1, "$(v10[1])")
+  set_value(border_entries2, "$(v10[2])")
+  set_value(border_entries3, "$(v10[3])")
+  set_value(border_entries4, "$(v10[4])")
 
   # Place entry fields in columns
   border_entries = [border_entries1,border_entries2,border_entries3,border_entries4]
@@ -33,16 +33,13 @@ function get_borders(path)
     grid(border_entries[i],i+1,1)
     #grid(Label(f4, border_prompts[i]),i+1,1,sticky = "se")
     formlayout(border_entries[i],string(border_prompts[i],": "))
-    bind(entries[i], "<Return>", simulate)
-    bind(entries[i], "<KP_Enter>", simulate)
+    bind(entries[i], "<Return>", destroy_cat_window)
+    bind(entries[i], "<KP_Enter>", destroy_cat_window)
   end
 
   # Place Ok button in bottom left
   bbord = Button(f4, "Ok")  
-  #grid(bbord, 5, 1)
-  for i in ["command","<Return>","<KP_Enter>"] 
-     bind(bbord, i, destroy_cat_window)
-  end
+  bind(bbord, "command", path -> destroy_border_window(v10))
   formlayout(bbord, nothing)
 
   if !isinteractive()
@@ -56,17 +53,15 @@ function get_borders(path)
 end
 
 # Function to get values and destroy window upon clicking OK
-function destroy_cat_window(path)
-  check_border_entries()
+function destroy_border_window(v10)
+  check_border_entries(v10)
   destroy(w4)
 end
 
 # Function to collect values.
-function check_border_entries()
-  global v10 = []
-  push!(v10, get_value(border_entries1))
-  push!(v10, get_value(border_entries2))
-  push!(v10, get_value(border_entries3))
-  push!(v10, get_value(border_entries4))
-  global changed_border_type = true
+function check_border_entries(v10)
+  v10[1] = get_value(border_entries1)
+  v10[2] = get_value(border_entries2)
+  v10[3] = get_value(border_entries3)
+  v10[4] = get_value(border_entries4)
 end

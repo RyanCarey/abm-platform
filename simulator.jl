@@ -10,7 +10,7 @@ using Winston
 #include("cell_growth.jl")
 #include("pickle.jl")
 
-function main()
+function main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
   n_cell = int(v[1])
   const steps = int(v[2])
   global X_SIZE = v[3]
@@ -49,7 +49,7 @@ function main()
   global alive_cells = init(n_cell, categories)
   global dead_cells = Cell[]
 
-  if DISPLAY_OUTPUT
+  if display_output
     canvas[:height] = 400
     canvas[:width] = 400 * X_SIZE/Y_SIZE
     w[:width] = 400 + int(canvas[:width])
@@ -57,17 +57,17 @@ function main()
     show_sim(alive_cells)
   end
 
-  if TXT_OUTPUT
+  if txt_output
     t = strftime(time())[5:27] #store date and time as string
     file = "out_$t.txt"
     start_output(filename::String, t::String, v::Array, alive_cells::Array)
   end
 
-  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, steps,walls,fc)
+  alive_cells, dead_cells = iter_sim(alive_cells, dead_cells, steps,walls,fc,display_output,txt_output)
   println("simulation finished")
 end
 
-function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc)
+function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc,display_output::Bool,txt_output::Bool)
   global iter
   global negative_distance = 0
   for i = 1:steps
@@ -91,11 +91,11 @@ function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc)
     	alive_cells = division_decision!(alive_cells, index)
     end
     println(negative_distance)
-    if DISPLAY_OUTPUT
+    if display_output
       show_sim(alive_cells)
     end
     # for speed, it will be necessary to batch these outputs in groups of 100+
-    if TXT_OUTPUT
+    if txt_output
       ## call pickle output here
     end
     if i % 1000 == 0
