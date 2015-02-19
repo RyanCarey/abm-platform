@@ -8,9 +8,11 @@ include("ellipse.jl")
 
 function check_borders!(alive_cells, dead_cells,n::Int, source::Point)
   cell_died = false
+  #=
   if BORDER_SHAPE == "Ellipse"
     ellipse_borders!(alive_cells[n], source)
   else
+  =#
     if BORDER_BEHAVIOUR == "Reflecting"
       bounce_if_req!(alive_cells[n])
     elseif BORDER_BEHAVIOUR == "Absorbing"
@@ -18,7 +20,7 @@ function check_borders!(alive_cells, dead_cells,n::Int, source::Point)
     elseif BORDER_BEHAVIOUR == "Killing"
       cell_died = killing_borders!(alive_cells, dead_cells, n)
     end
-  end
+  #end
   return cell_died
 end
 

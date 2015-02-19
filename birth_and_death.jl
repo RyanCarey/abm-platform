@@ -42,10 +42,12 @@ function cell_division(cells, i)
 	new_point = Point(new_x, new_y)
 	in_empty_space = !(is_overlap_divide(cells, new_point, radius))
 
+  #=
   if BORDER_SHAPE == "Ellipse"
     cell = Cell(string(i), new_x, new_y, radius, 0, 0, 0, cells[i].cell_type)
     in_empty_space = in_ellipse(cell) ? in_empty_space : false
   end
+  =#
 
 	attempt = 0
 	give_up = false
@@ -56,10 +58,12 @@ function cell_division(cells, i)
 		in_empty_space = !(is_overlap_divide(cells, Point(new_x, new_y), radius))
     
     # check if within elliptical bounds
+    #=
     if BORDER_SHAPE == "Ellipse"
       cell = Cell(string(i), new_x, new_y, radius, 0, 0, 0, cells[i].cell_type)
       in_empty_space = in_ellipse(cell) ? in_empty_space : false
     end
+    =#
 
 		attempt += 1
 		if attempt > 100

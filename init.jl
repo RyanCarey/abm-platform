@@ -46,10 +46,12 @@ function init(n, categories)
       #yi = rand()*y 
       yi = ri + (y - 2ri) * rand()
       overlap = false
+      #=
       if BORDER_SHAPE == "Ellipse"
         cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
         in_ellipse(cell) ? overlap = true : nothing
       end
+      =#
       for j in 1:i-1
         if((xi - cells[j].x) ^ 2 + (yi - cells[j].y) ^ 2 < (ri + cells[j].r) ^ 2)
           overlap = true

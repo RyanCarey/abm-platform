@@ -1,5 +1,6 @@
 using Winston
 using Tk
+println("loading...")
 include("cell_type.jl")
 include("birth_and_death.jl")
 include("move.jl")
@@ -16,3 +17,4 @@ include("cell_growth.jl")
 include("simulator.jl")
 include("diffusion_window.jl")
 include("categories_window.jl")
+include("border_window.jl")

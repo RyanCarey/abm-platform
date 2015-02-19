@@ -24,6 +24,8 @@ function main()
               Cell_type(v8[13], v8[14], v8[15], v8[16], v8[17], v8[18], v9[7], v9[8], v9[9]),
               Cell_type(v8[19], v8[20], v8[21], v8[22], v8[23], v8[24], v9[10], v9[11], v9[12])]
 
+  global wall_behaviour = [lowercase(v10[1]),lowercase(v10[3])]
+  global fc_behaviour = [lowercase(v10[2]),lowercase(v10[4])]
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
   global RANDOMNESS = v2[3]

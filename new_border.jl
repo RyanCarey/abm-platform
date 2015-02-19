@@ -1,5 +1,5 @@
-wall_behaviour = ["r","a"]
-fc_behaviour = ["a","r"]
+#wall_behaviour = ["r","a"]
+#fc_behaviour = ["a","r"]
 
 # still need to make border mutate the cell's angle
 # still need to make another method that kills cells if they run off the field
@@ -21,38 +21,53 @@ function border(x,y,xi,yi,r,wall_behaviour,fc_behaviour,walls,fc)
   fc_lims = fc + [r,-r]
 
   wall_ints, wall_hit = find_wall_hit(x,y,xi,yi,wall_lims)
-  if wall_hit > 0
+  if wall_hit > 0.5
     println("source: ",xi,", ",yi)
     println("target: ",x,", ",y)
+    println("wall_ints: ",wall_ints)
+    println("wall lims: ",wall_lims)
+    println("wall hit: ",wall_hit)
     println("hits wall at ",wall_lims[wall_hit],", ",wall_ints[wall_hit])
     println("kind of collision: ",wall_behaviour[wall_hit])
-    if wall_behaviour[wall_hit]=="r"
+    println("reflecting = ",wall_behaviour[wall_hit]=="reflecting")
+    if wall_behaviour[wall_hit]=="reflecting"
       x,y = wall_reflect(x,y,xi,yi,wall_lims,wall_ints,wall_hit)
-    elseif wall_behaviour[wall_hit]=="a"
+    elseif wall_behaviour[wall_hit]=="absorbing"
       x,y = wall_absorb(x,y,wall_lims,wall_ints,wall_hit)
     end
+    println("target after wall interaction: ",x,", ",y)
   end
 
   fc_ints, fc_hit = find_fc_hit(x,y,xi,yi,fc_lims)
-  if fc_hit > 0
+  if fc_hit > 0.5
     println("source: ",xi,", ",yi)
     println("target: ",x,", ",y)
+    println("fc_ints: ",fc_ints)
+    println("fc lims: ",fc_lims)
+    println("fc hit: ",fc_hit)
     println("hits ceil/floor at ",fc_ints[fc_hit],", ",fc_lims[fc_hit])
-    if fc_behaviour[fc_hit]=="r"
+    println("kind of collision: ",wall_behaviour[fc_hit])
+    println("reflecting = ",wall_behaviour[fc_hit]=="reflecting")
+    if fc_behaviour[fc_hit]=="reflecting"
       x,y = fc_reflect(x,y,xi,yi,fc_lims,fc_ints,fc_hit)
-    elseif fc_behaviour[fc_hit]=="a"
+    elseif fc_behaviour[fc_hit]=="absorbing"
       x,y = fc_absorb(x,y,fc_lims,fc_ints,fc_hit)
     end
   end
 
   wall_ints, wall_hit = find_wall_hit(x,y,xi,yi,wall_lims)
-  if wall_hit > 0
+  if wall_hit > 0.5
     println("source: ",xi,", ",yi)
     println("target: ",x,", ",y)
     println("hits wall at ",wall_lims[wall_hit],", ",wall_ints[wall_hit])
-    if wall_behaviour[wall_hit]=="r"
+    println("wall_ints: ",wall_ints)
+    println("wall lims: ",wall_lims)
+    println("wall hit: ",wall_hit)
+    println("kind of collision: ",wall_behaviour[wall_hit])
+    println("reflecting = ",wall_behaviour[wall_hit]=="reflecting")
+    if wall_behaviour[wall_hit]=="reflecting"
       x,y = wall_reflect(x,y,xi,yi,wall_lims,wall_ints,wall_hit)
-    elseif wall_behaviour[wall_hit]=="a"
+    elseif wall_behaviour[wall_hit]=="absorbing"
       x,y = wall_absorb(x,y,wall_lims,wall_ints,wall_hit)
     end
   end
@@ -130,5 +145,4 @@ function kill_if_deserting(alive_cells,dead_cells,m, border)
     cell_death(alive_cells,dead_cells,m)
   end
 end
-
 
