@@ -1,6 +1,6 @@
 using Tk
 
-function get_categories(v8,v9)
+function get_categories(v8::Array,v9::Array)
   # Create a top level window and the assorted stuff with it
 	global w3 = Toplevel("Type Parameters", 300, 300) ## title, width, height
   global f3 = Frame(w3)
@@ -64,48 +64,48 @@ function get_categories(v8,v9)
   global cat_entries49 = Checkbutton(f3, "Stem Cell")
 
   # If options have already been specified, overwrites entries with those previously given.
-  if(changed_cell_type)
-    set_value(cat_entries1, "$(v8[1])")
-    set_value(cat_entries2, "$(v8[2])")
-    set_value(cat_entries3, "$(v8[3])")
-    set_value(cat_entries4, "$(v8[4])")
-    set_value(cat_entries5, "$(v8[5])")
-    set_value(cat_entries6, "$(v8[6])")
-    set_value(cat_entries6_1, "$(v8[25])")
-    set_value(cat_entries7, "$(v9[1])")
-    set_value(cat_entries8, v9[2])
-    set_value(cat_entries9, v9[3])
-    set_value(cat_entries21, "$(v8[7])")
-    set_value(cat_entries22, "$(v8[8])")
-    set_value(cat_entries23, "$(v8[9])")
-    set_value(cat_entries24, "$(v8[10])")
-    set_value(cat_entries25, "$(v8[11])")
-    set_value(cat_entries26, "$(v8[12])")
-    set_value(cat_entries26_1, "$(v8[26])")
-    set_value(cat_entries27, "$(v9[4])")
-    set_value(cat_entries28, v9[5])
-    set_value(cat_entries29, v9[6])
-    set_value(cat_entries31, "$(v8[13])")
-    set_value(cat_entries32, "$(v8[14])")
-    set_value(cat_entries33, "$(v8[15])")
-    set_value(cat_entries34, "$(v8[16])")
-    set_value(cat_entries35, "$(v8[17])")
-    set_value(cat_entries36, "$(v8[18])")
-    set_value(cat_entries36_1, "$(v8[27])")
-    set_value(cat_entries37, "$(v9[7])")
-    set_value(cat_entries38, v9[8])
-    set_value(cat_entries39, v9[9])
-    set_value(cat_entries41, "$(v8[19])")
-    set_value(cat_entries42, "$(v8[20])")
-    set_value(cat_entries43, "$(v8[21])")
-    set_value(cat_entries44, "$(v8[22])")
-    set_value(cat_entries45, "$(v8[23])")
-    set_value(cat_entries46, "$(v8[24])")
-    set_value(cat_entries46_1, "$(v8[28])")
-    set_value(cat_entries47, "$(v9[10])")
-    set_value(cat_entries48, v9[11])
-    set_value(cat_entries49, v9[12])
-  end
+  set_value(cat_entries1, "$(v8[1])")
+  set_value(cat_entries2, "$(v8[2])")
+  set_value(cat_entries3, "$(v8[3])")
+  set_value(cat_entries4, "$(v8[4])")
+  set_value(cat_entries5, "$(v8[5])")
+  set_value(cat_entries6, "$(v8[6])")
+  set_value(cat_entries6_1, "$(v8[25])")
+  set_value(cat_entries7, "$(v9[1])")
+  set_value(cat_entries8, v9[2])
+  set_value(cat_entries9, v9[3])
+  set_value(cat_entries21, "$(v8[7])")
+  set_value(cat_entries22, "$(v8[8])")
+  set_value(cat_entries23, "$(v8[9])")
+  set_value(cat_entries24, "$(v8[10])")
+  set_value(cat_entries25, "$(v8[11])")
+  set_value(cat_entries26, "$(v8[12])")
+  set_value(cat_entries26_1, "$(v8[26])")
+  set_value(cat_entries27, "$(v9[4])")
+  set_value(cat_entries28, v9[5])
+  set_value(cat_entries29, v9[6])
+  set_value(cat_entries31, "$(v8[13])")
+  set_value(cat_entries32, "$(v8[14])")
+  set_value(cat_entries33, "$(v8[15])")
+  set_value(cat_entries34, "$(v8[16])")
+  set_value(cat_entries35, "$(v8[17])")
+  set_value(cat_entries36, "$(v8[18])")
+  set_value(cat_entries36_1, "$(v8[27])")
+  set_value(cat_entries37, "$(v9[7])")
+  set_value(cat_entries38, v9[8])
+  set_value(cat_entries39, v9[9])
+  set_value(cat_entries41, "$(v8[19])")
+  set_value(cat_entries42, "$(v8[20])")
+  set_value(cat_entries43, "$(v8[21])")
+  set_value(cat_entries44, "$(v8[22])")
+  set_value(cat_entries45, "$(v8[23])")
+  set_value(cat_entries46, "$(v8[24])")
+  set_value(cat_entries46_1, "$(v8[28])")
+  set_value(cat_entries47, "$(v9[10])")
+  set_value(cat_entries48, v9[11])
+  set_value(cat_entries49, v9[12])
+
+  println("v8 after setting cat entries: ",v8)
 
   global cat_entries = Tk.Tk_Entry[cat_entries1, cat_entries2, cat_entries3, cat_entries4, cat_entries5, cat_entries6, cat_entries21, cat_entries22, cat_entries23, cat_entries24, cat_entries25, cat_entries26,
    cat_entries31, cat_entries32, cat_entries33, cat_entries34, cat_entries35, cat_entries36, cat_entries41, cat_entries42, cat_entries43, cat_entries44, cat_entries45, cat_entries46,
@@ -145,12 +145,13 @@ function get_categories(v8,v9)
   grid(cat_entries48, 10, 5)
   grid(cat_entries49, 11, 5)
 
+  println("v8 after placing form: ",v8)
 
   # Place Ok button in bottom right
   b = Button(f3, "Ok")
   grid(b, 10, 6)
   for i in ["command","<Return>","<KP_Enter>"]
-     bind(b, i, destroy_cat_window)
+     bind(b, i, path -> destroy_cat_window(v8,v9,n))
   end
 
  if !isinteractive()
@@ -164,13 +165,14 @@ function get_categories(v8,v9)
 end
 
 # Function to get values and destroy window upon clicking OK
-function destroy_cat_window(v8,v9)
-  check_cat_entries(v8,v9)
+function destroy_cat_window(v8,v9,n)
+  println("v8 when destroying window",v8)
+  check_cat_entries(v8,v9,n)
   destroy(w3)
 end
 
 # Function to collect values.
-function check_cat_entries(v8,v9)
+function check_cat_entries(v8,v9,n)
   for i in 1 : length(cat_entries)      
     if i == 1 || i == 7 || i == 13 || i == 19
       if float(get_value(cat_entries[i])) < 0.0
@@ -178,9 +180,7 @@ function check_cat_entries(v8,v9)
         Messagebox(title = "Warning", message = string("Ratio must be above 0. \nResetting value to 0."))
       end
     end
-
-  v8[i] = float(get_value(cat_entries[i]))
-    
+    v8[i] = float(get_value(cat_entries[i]))
   end
   v9[1] = get_value(cat_entries7)
   v9[2] = get_value(cat_entries8)
@@ -195,11 +195,8 @@ function check_cat_entries(v8,v9)
   v9[11] = get_value(cat_entries48)
   v9[12] = get_value(cat_entries49)
   
-  push!(v8, float(get_value(cat_entries[i])))
-
-  n = v8[1] + v8[7] + v8[13] + v8[19]
-  v8[1] /= n
-  v8[7] /= n
-  v8[13] /= n
-  v8[19] /= n
+  #v8[1] /= n
+  #v8[7] /= n
+  #v8[13] /= n
+  #v8[19] /= n
 end
