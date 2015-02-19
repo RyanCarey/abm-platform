@@ -28,7 +28,7 @@ function get_borders(path)
   border_entries = [border_entries1,border_entries2,border_entries3,border_entries4]
 
   border_prompts = ["Left border","Lower border","Right border","Top border"]
-  n = length(border_prompts)  
+  n = length(border_prompts)
   for i in 1:length(border_prompts)
     grid(border_entries[i],i+1,1)
     #grid(Label(f4, border_prompts[i]),i+1,1,sticky = "se")
@@ -38,10 +38,10 @@ function get_borders(path)
   end
 
   # Place Ok button in bottom left
-  bbord = Button(f4, "Ok")  
+  bbord = Button(f4, "Ok")
   #grid(bbord, 5, 1)
-  for i in ["command","<Return>","<KP_Enter>"] 
-     bind(bbord, i, destroy_cat_window)
+  for i in ["command","<Return>","<KP_Enter>"]
+     bind(bbord, i, destroy_border_window)
   end
   formlayout(bbord, nothing)
 
@@ -56,7 +56,7 @@ function get_borders(path)
 end
 
 # Function to get values and destroy window upon clicking OK
-function destroy_cat_window(path)
+function destroy_border_window(path)
   check_border_entries()
   destroy(w4)
 end
