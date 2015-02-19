@@ -1,7 +1,7 @@
 # Module containing functions pertaining to cell movement.
-include("angle.jl")
-include("new_border.jl")
-include("cell_type.jl")
+#include("angle.jl")
+#include("new_border.jl")
+#include("cell_type.jl")
 using Distributions
 
 function move_any!(wall_behaviour,fc_behaviour,walls,fc)
@@ -15,65 +15,42 @@ function move_any!(wall_behaviour,fc_behaviour,walls,fc)
 	alive_cells[m].y += alive_cells[m].speed * sin(alive_cells[m].angle)
 
 	check_borders!(alive_cells[m],startloc,wall_behaviour,fc_behaviour,walls,fc)
-  	println("cell loc in move function: ", alive_cells[m].x,", ",alive_cells[m].y)
+  println("cell loc in move function: ", alive_cells[m].x,", ",alive_cells[m].y)
 	solve_overlap(m,startloc,walls,fc)	
 
 end
 ##########################################################################################################
 function solve_overlap(m::Int, startloc::Point,walls,fc)
 	#Parameters
-	minimum_ratio=0.05 # threshold to trigger cells to move
+	minimum_ratio=0.01 # threshold to trigger cells to move
 	g = 0.8 #loss of energy while giving energy to the first cell to the other one
 	
 	global counter_overlap = 0
-	k,d_move = is_overlap(m::Int, startloc::Point,walls,fc)	
+	k = is_overlap(m::Int, startloc::Point,walls,fc)	
 	if(k!=m)
 	  d=sqrt((startloc.x - alive_cells[m].x)^2 + (startloc.y - alive_cells[m].y)^2)
 	  remaining_distance = alive_cells[m].speed - d
 
 	  if(remaining_distance / categories[alive_cells[m].cell_type].avg_speed > minimum_ratio) #We can now make the cells to move
-		x1 = startloc.x
-		y1 = startloc.y
+		alpha = alive_cells[m].angle
+		
 		xm=alive_cells[m].x
 		xk=alive_cells[k].x
 		ym=alive_cells[m].y
 		yk=alive_cells[k].y
 
-		println("Bouncing: different locations: ")
-		println("x1: ",x1, ", y1: ",y1) 
-		println("xm: ",xm, ", ym: ",ym)
-		println("xk: ",xk, ", yk: ",yk) 
-	
 		alive_cells[k].angle=acos((xk-xm)/sqrt((xk-xm)^2+(yk-ym)^2))*sign(yk-ym)
 		a=sign(-sin(alive_cells[k].angle)*cos(alive_cells[m].angle)+cos(alive_cells[k].angle)*sin(alive_cells[m].angle))
-
-		if(abs(d_move)>0.01*alive_cells[m].r)
-			alpha = acos((xm - x1)/sqrt((xm - x1)^2+(ym - y1)^2))*sign(ym - y1)
-			if(-0.001<alpha<0.001 || pi*0.999<alpha<pi*1.001)
-	 	 	  if(xm - x1<0)
-				alpha=pi
-		 	  else
-				alpha=0
-			   end
-			end
-
-			if(a>0)
-		  	  alive_cells[m].angle=acos(-sin(alive_cells[k].angle))*sign(cos(alive_cells[k].angle))
-			else
-			  alive_cells[m].angle=acos(-sin(alive_cells[k].angle))*sign(cos(alive_cells[k].angle))+pi
-			end
-		
-			beta = abs(alpha - alive_cells[k].angle)/(pi/2)
-			println("")
-			println("alphak: ", alive_cells[k].angle, " - alpham: ", alive_cells[m].angle, " - alpha: ", alpha)
-			println("beta: ", beta)
-			#beta = mod(beta,1)
-			println("")
+		if(a>0)
+		  alive_cells[m].angle=acos(-sin(alive_cells[k].angle))*sign(cos(alive_cells[k].angle))
 		else
-			beta=0
+		  alive_cells[m].angle=acos(-sin(alive_cells[k].angle))*sign(cos(alive_cells[k].angle))+pi
 		end
-		alive_cells[m].speed=remaining_distance*g*beta
-		alive_cells[k].speed=remaining_distance*g*(1-beta)
+		
+		beta = abs(alpha - alive_cells[k].angle)
+
+		alive_cells[m].speed=remaining_distance*g*(beta/(pi/2))
+		alive_cells[k].speed=remaining_distance*g*(1-beta/(pi/2))
 
 		startlock=Point(xk,yk)
 		startlocm=Point(xm,ym)
@@ -82,10 +59,9 @@ function solve_overlap(m::Int, startloc::Point,walls,fc)
 		alive_cells[k].x+=alive_cells[k].speed*cos(alive_cells[k].angle)
 		alive_cells[m].y+=alive_cells[m].speed*sin(alive_cells[m].angle)
 		alive_cells[k].y+=alive_cells[k].speed*sin(alive_cells[k].angle)
-		
+		check_borders!(alive_cells[m],startlocm,wall_behaviour,fc_behaviour,walls,fc)
 		check_borders!(alive_cells[k],startlock,wall_behaviour,fc_behaviour,walls,fc)
 		solve_overlap(k, startlock,walls,fc)
-		check_borders!(alive_cells[m],startlocm,wall_behaviour,fc_behaviour,walls,fc)
 		solve_overlap(m, startlocm,walls,fc)
 
 	  else
@@ -119,11 +95,11 @@ function is_overlap( m::Int, startloc::Point,walls,fc)
   index=[]
   distance=[]
   k=m
-  d=0
   for i in 1:length(alive_cells)
 
     if (alive_cells[i].x - alive_cells[m].x)^2 + (alive_cells[i].y - alive_cells[m].y)^2< (0.99*(alive_cells[i].r + alive_cells[m].r)) ^ 2
 	  if  (i != m)
+
 		index=[index,i]
 	  end
     end
@@ -134,15 +110,15 @@ function is_overlap( m::Int, startloc::Point,walls,fc)
 	  distance=[distance,d]
   	end
 	k=index[indmin(distance)]
-	d=minimum(distance)
-	alive_cells[m].x,alive_cells[m].y,d = find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
-	#check_borders!(alive_cells[m],startloc,wall_behaviour,fc_behaviour,walls,fc)
+
+	alive_cells[m].x,alive_cells[m].y = find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
 	if(counter_overlap<10)		  
 	  is_overlap(m, startloc,walls,fc)
+	  check_borders!(alive_cells[m],startloc,wall_behaviour,fc_behaviour,walls,fc)
 	end
-	
+
   end
-  return k,d
+  return k
 end
 
 ##########################################################################################################
@@ -153,8 +129,8 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	y2 = cellk.y
 	r1 = cellm.r
 	r2 = cellk.r
-	theta=cellm.angle
 	theta1 = acos((cellm.x - x1)/sqrt((cellm.x - x1)^2+(cellm.y - y1)^2))*sign(cellm.y - y1)
+	#theta = cellm.angle
 	if(-0.001<theta1<0.001 || pi*0.999<theta1<pi*1.001)
 	  if(cellm.x - x1<0)
 		theta1=pi
@@ -163,14 +139,14 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	  end
 	end
 
-	if(!(mod(theta1,2*pi) - 0.001<mod(theta,2*pi)<mod(theta1,2*pi) +0.001))
-	  println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-	  println(theta,"  theta!=theta1  ",theta1)
-	  println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-	end
+	#=if(!(mod(theta1,2*pi) - 0.001<mod(theta,2*pi)<mod(theta1,2*pi) +0.001))
+	 # println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	 # println(theta,"  theta!=theta1  ",theta1)
+	 # println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+	#end
 
-	println("x1: ",x1, ", y1: ",y1,"   r1: ",r1) 
-	println("x2: ",x2, ", y2: ",y2,"   r2: ",r2)
+	#println("x1: ",x1, ", y1: ",y1,"   r1: ",r1) 
+	#println("x2: ",x2, ", y2: ",y2,"   r2: ",r2)=#
 
 	#Solving of an equation to know where the moving cell touch the overlapped cell first
 	a = 1
@@ -187,9 +163,9 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	#We can now place the cell at the border of the touching cell
 	x1 = x1 + d*cos(theta1)
 	y1 = y1 + d*sin(theta1)
-	println("New x1: ",x1, ", New y1: ",y1)
+	#println("New x1: ",x1, ", New y1: ",y1)
 
-	return x1,y1,d
+	return x1,y1
 
 end
 ##########################################################################################################
