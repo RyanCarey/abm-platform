@@ -87,7 +87,7 @@ println("starting up window...")
   #Choose diffusion parameters
   b2 = Button(ctrls, "Choose diffusion params")
   formlayout(b2, nothing)
-  bind(b2, "command", path -> window_diffusion(v2))
+  bind(b2, "command", path -> window_diffusion(v2,v4,entries4))
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)
