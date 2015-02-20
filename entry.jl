@@ -79,6 +79,9 @@ println("starting up window...")
   end
   focus(entries[1])
   
+  # globals - should be removed asap
+  global check_location = false
+
   # make comboboxes
 
   #Choose diffusion parameters
