@@ -102,7 +102,7 @@ function iter_sim(alive_cells::Array,
 
 	println("");println("");println("")
 	println("iteration: ", i)
-    	move_any!(wall_behaviour,fc_behaviour,walls,fc)
+    	move_any!()
 
     #end
     #if !cell_died
