@@ -31,20 +31,20 @@ function main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
   global RANDOMNESS = v2[3]
   global const nb_source= int(v2[7])
 
-  global source_abscisse_ligand =[]
-  global source_ordinate_ligand =[]
-  global Diffusion_coefficient = []
-  global A_coefficient= []
-  global tau0 = []
-
+  global source_abscisse_ligand =Array(Float64,nb_source)
+  global source_ordinate_ligand =Array(Float64,nb_source)
+  global Diffusion_coefficient = Array(Float64,nb_source)
+  global A_coefficient= Array(Float64,nb_source)
+  global tau0 = Array(Float64,nb_source)
+	
   for i in 1:nb_source
-	  source_abscisse_ligand=[source_abscisse_ligand,v3[2*i-1]]
-	  source_ordinate_ligand=[source_ordinate_ligand,v3[2*i]]
-	  Diffusion_coefficient = [Diffusion_coefficient,v4[3*i-2]]
-  	A_coefficient = [A_coefficient,v4[3*i-1]]
-	  tau0 = [tau0,v4[3*i]]
+	  source_abscisse_ligand[i]=v3[2*i-1]
+	  source_ordinate_ligand[i]=v3[2*i]
+	  Diffusion_coefficient[i] =v4[3*i-2]
+  	  A_coefficient[i] = v4[3*i-1]
+	  tau0[i] = v4[3*i]
   end
-
+  println("source abscisse: ", source_abscisse_ligand, " source_ordinate_ligand: ", source_ordinate_ligand)
   println("building environment")
   global alive_cells = init(n_cell, categories)
   global dead_cells = Cell[]
@@ -83,6 +83,8 @@ function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc,dis
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
+	println("");println("");println("")
+	println("iteration: ", i)
     	move_any!(wall_behaviour,fc_behaviour,walls,fc)
     #end
     #if !cell_died
@@ -101,7 +103,7 @@ function iter_sim(alive_cells::Array, dead_cells::Array, steps::Int,walls,fc,dis
     if i % 1000 == 0
       println("$i iterations completed")
     end
-    #pause(0)
+    pause(0)
   end
   return alive_cells, dead_cells
 end

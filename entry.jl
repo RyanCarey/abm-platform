@@ -34,9 +34,34 @@ function ok_press(v::Array,v2::Array,v3::Array,v4::Array,v8::Array,
       return
     end
   end
+
   main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
 end
 
+##########################################################################################################
+function check_entries1()
+
+  n = length(prompts)
+  global v = Array(Float64,n)
+  for i in 1:n
+    if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
+      if !(0 <= float(get_value(entries[i])) <= 1)
+        Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
+        return
+      end
+    end
+    if !(0 <= float(get_value(entries[i])))
+        Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
+        return
+    end
+    try
+			v[i] = float(get_value(entries[i]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
+      return
+    end
+  end
+end
 ##########################################################################################################
 function init_window()
 println("starting program")
@@ -65,7 +90,7 @@ println("starting program")
   entries5 = Entry(ctrls)
   entries6 = Entry(ctrls)
   set_value(entries1, "10")
-  set_value(entries2, "300")
+  set_value(entries2, "1000")
   set_value(entries3, "30")
   set_value(entries4, "30")
   set_value(entries5, "1.5")
@@ -111,22 +136,23 @@ println("starting program")
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
-  v = zeros(n,1)
+ 
 
-  # set defaults
-	v2=[0.5,8,1,10,100,150,4]
+  # set defaults        
+	check_entries1()
+	v2=[0.5,8,0.5,10,100,150,4]
 	v3=Array(Float64,2*int(v2[7]))
 	v4=Array(Float64,3*int(v2[7]))
-  v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
-  v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
-  v10 = ["Absorbing","Killing","Killing","Killing"]
-	for i in 1:int(v2[7])
+  	v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
+  	v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
+  	v10 = ["Reflecting","Reflecting","Reflecting","Reflecting"]
+	for i in 1:v2[7]
 		v3[2*i-1]=0
-		v3[2*i]=(i-1)/(v2[6]-1)*v[5]
+		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
 		v4[3*i-2]=10
  		v4[3*i-1]=100
- 		v4[3*i]=150		
-  end
+ 		v4[3*i]=150	
+  	end
 
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b,i,path -> ok_press(
