@@ -13,7 +13,7 @@ function show_sim(X::Array)
   hold(false)
 end
 
-function show_agents(X::Array,colour = "ro")
+function show_agents(X::Array, colour::String = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
   locations[i,:] = [X[i].x X[i].y X[i].r]
@@ -21,7 +21,7 @@ function show_agents(X::Array,colour = "ro")
   display_circles(locations, colour)
 end
 
-function display_circles(locations::Array, colour = "ro")
+function display_circles(locations::Array, colour::String = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
   # Radius is adjusted so that cells are displayed at correct size for any window
@@ -36,7 +36,7 @@ function show_elliptical_border()
   show_ellipse(X_SIZE/2,Y_SIZE/2,X_SIZE/2,Y_SIZE/2)
 end
 
-function show_ellipse(c::Real,d::Real,a::Real,b::Real,n=72)
+function show_ellipse(c::Real,d::Real,a::Real,b::Real,n::Int=72)
   t = [0:1/n:1]*2pi
   X = [c+a*cos(t) d+b*sin(t)]
   r = plot(X[:,1],X[:,2])

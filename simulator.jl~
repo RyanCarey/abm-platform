@@ -99,11 +99,13 @@ function iter_sim(alive_cells::Array,
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
-
+<<<<<<< HEAD
 	println("");println("");println("")
 	println("iteration: ", i)
     	move_any!(wall_behaviour,fc_behaviour,walls,fc)
-
+=======
+    	move_any!(wall_behaviour,fc_behaviour,wall,ceil)
+>>>>>>> 5b6cecd7bab6fccad0b58ca2e07d6723480d8b9f
     #end
     #if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)

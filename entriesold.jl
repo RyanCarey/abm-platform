@@ -42,7 +42,7 @@ end
 function check_entries1()
 
   n = length(prompts)
-  v = Array(Float64,n)
+  global v = Array(Float64,n)
   for i in 1:n
     if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
@@ -61,11 +61,10 @@ function check_entries1()
       return
     end
   end
-  return v
 end
 ##########################################################################################################
 function init_window()
-println("starting up window...")
+println("starting program")
   # window parameters
   global w = Toplevel("Agent-based modeller",350,385)
   global frame = Frame(w); pack(frame, expand=true, fill="both")
@@ -105,15 +104,17 @@ println("starting up window...")
   end
   focus(entries[1])
   
-  # globals - should be removed asap
+  # Check if the diffusion coefficient has been modified	
+  global check_diffusion = false
   global check_location = false
+  global changed_cell_type = false
 
   # make comboboxes
 
   #Choose diffusion parameters
   b2 = Button(ctrls, "Choose diffusion params")
   formlayout(b2, nothing)
-  bind(b2, "command", path -> window_diffusion(v2,v4,entries4))
+  bind(b2, "command", window_diffusion)
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)
@@ -135,22 +136,21 @@ println("starting up window...")
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
- 
+  v = zeros(n,1)
 
-  # set defaults        
-	v=check_entries1()
-	v2=[0.5,8,0.5,10,100,150,4]
-	v3=Array(Float64,2*int(v2[7]))
-	v4=Array(Float64,3*int(v2[7]))
+  # set defaults
+	global v2=[0.5,8,1,10,100,150,4]
+	global v3=Array(Float64,2*int(v2[7]))
+	global v4=Array(Float64,3*int(v2[7]))
   	v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
   	v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
   	v10 = ["Reflecting","Reflecting","Reflecting","Reflecting"]
-	for i in 1:v2[7]
+	for i in 1:int(v2[7])
 		v3[2*i-1]=0
-		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+		v3[2*i]=(i-1)/(v2[6]-1)*v[4]
 		v4[3*i-2]=10
  		v4[3*i-1]=100
- 		v4[3*i]=150	
+ 		v4[3*i]=150		
   	end
 
   for i in ["command","<Return>","<KP_Enter>"] 
