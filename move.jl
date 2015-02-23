@@ -4,7 +4,7 @@ include("new_border.jl")
 include("cell_type.jl")
 using Distributions
 
-function move_any!(wall_behaviour,fc_behaviour,walls,fc)
+function move_any!()
  	m = rand(1:length(alive_cells))	
 
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
@@ -18,11 +18,11 @@ function move_any!(wall_behaviour,fc_behaviour,walls,fc)
 	println("alive_cells[m].y: ",alive_cells[m].y)
 	println("alive_cells[m].r: ",alive_cells[m].r)
 	println("startloc: ",startloc)
-	solve_overlap(m,startloc,walls,fc)	
+	solve_overlap(m,startloc)	
 
 end
 ##########################################################################################################
-function solve_overlap(m::Int, startloc::Point,walls,fc)
+function solve_overlap(m::Int, startloc::Point)
 	#Parameters
 	minimum_ratio=0.05 # threshold to trigger cells to move
 	g = 0.8 #loss of energy while giving energy to the first cell to the other one
@@ -63,12 +63,12 @@ function solve_overlap(m::Int, startloc::Point,walls,fc)
 			println("remaining distance: ", alive_cells[m].speed)
 			#quit()
 			#The cell need to have its startloc at the border with a new speed and a new location.
-			solve_overlap(m,startloc,walls,fc)
+			solve_overlap(m,startloc)
 			k=m
 		end
 	else
 		println("not going toward the wall")
-		k,d_move = is_overlap(m, startloc,walls,fc,m)	
+		k,d_move = is_overlap(m, startloc,m)	
 	end
 
 	if(k!=m)
@@ -162,8 +162,8 @@ function solve_overlap(m::Int, startloc::Point,walls,fc)
 		#println("")
 		println("")
 		#is_overlap(m,startlocm,walls,fc)
-		solve_overlap(k,startlock,walls,fc)	
-		solve_overlap(m, startlocm,walls,fc)
+		solve_overlap(k,startlock)	
+		solve_overlap(m, startlocm)
 
 		#if d_move <0
 		else
@@ -194,7 +194,7 @@ end
 #end
 
 ##########################################################################################################
-function is_overlap( m::Int, startloc::Point,walls,fc,k)
+function is_overlap( m::Int, startloc::Point,k)
 #k is used if we want to exclude also another cell than the studied cell (m)  
   println("Looking for overlap")
   global counter_overlap += 1
@@ -228,7 +228,7 @@ function is_overlap( m::Int, startloc::Point,walls,fc,k)
 			println("xk: ",xk, ", yk: ",yk) 
 	alive_cells[m].x,alive_cells[m].y,d = find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
 	if(counter_overlap<10)		  
-	  is_overlap(m, startloc,walls,fc,k)
+	  is_overlap(m, startloc,k)
 	end
   else
 	println("no overlap at is_overlap")
