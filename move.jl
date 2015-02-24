@@ -7,6 +7,7 @@ using Distributions
 
 function move_any!()
  	m = rand(1:length(alive_cells))	
+	println("cell number: $m")
 	global testqwe = 0
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 	println("startloc: ",startloc)
@@ -262,8 +263,8 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 	y2 = cellk.y
 	r1 = cellm.r
 	r2 = cellk.r
-	theta=mod(cellm.angle,2*pi)
-	theta1 = mod(acos((cellm.x - x1)/sqrt((cellm.x - x1)^2+(cellm.y - y1)^2))*sign(cellm.y - y1),2*pi)
+	theta1=mod(cellm.angle,2*pi)
+	theta = mod(acos((cellm.x - x1)/sqrt((cellm.x - x1)^2+(cellm.y - y1)^2))*sign(cellm.y - y1),2*pi)
 
 	println("Find Center Where they Touch")
 	println("angle cellm (theta): ", theta)	
@@ -335,7 +336,7 @@ function check_any_cell_between(startloc,m)
 	println("Angle: ", alive_cells[m].angle)
 	j=m
 	index=[]
-	distance30=[]
+	distance04=[]
 	d_move=0
 
 	x1=alive_cells[m].x
@@ -353,68 +354,53 @@ function check_any_cell_between(startloc,m)
 		n=(y1-y0)/(x1-x0)
 		p=(x1*y0-y1*x0)/(x1-x0)
 		println("D: y=$(n)x+$(p)")
-		#We need  to change the triangle in which the angle are calculated, indeed we need to work within the triangle 2,0,1+r0, 
-		#to know whether the point 2 is clos enough from the points 1 and 0
-		#a1=1+n^2
-		#b1=-2*x1+2*n*(p-y1)
-		#c1=x1^2+(p-y1)^2-r1^2
-		#delta1 = b1^2 - 4*a1*c1
-		#x1plus=(-b1+sqrt(delta1))/(2*a1)
-		#x1minus=(-b1-sqrt(delta1))/(2*a1)
-		##println("x1plus: ",x1plus,", x1minus: ",x1minus)
-		#if(x1<x0)
-		#  x1=min(x1minus,x1plus)
-		#else
-		#  x1=max(x1minus,x1plus)
-		#end
-		#y1=n*x1+p
-#
-		#a0=1+n^2
-		#b0=-2*x0+2*n*(p-y0)
-		#c0=x0^2+(p-y0)^2-r1^2
-		#delta0 = b0^2 - 4*a0*c0
-		#x0plus=(-b0+sqrt(delta0))/(2*a0)
-		#x0minus=(-b0-sqrt(delta0))/(2*a0)
-		#println("x1plus: ",x1plus,", x1minus: ",x1minus)
-		#if(x0<x1)
-		#  x0=min(x0minus,x0plus)
-		#else
-		#  x0=max(x0minus,x0plus)
-		#end
-		#y0=n*x0+p
-		#println("new x0 for triangle: ", x0,", new y0 for triangle: ",y0) 
 	
 
 		for i in 1:length(alive_cells)
 			x2=alive_cells[i].x
 			y2=alive_cells[i].y
+			r2=alive_cells[i].r
+
 			d23=abs(n*x2 - y2 +p)/sqrt(1+n^2)
 			d10=sqrt((x0-x1)^2 + (y0-y1)^2)
 			d12=sqrt((x2-x1)^2 + (y2-y1)^2)
 			d20=sqrt((x2-x0)^2 + (y2-y0)^2)
 			cos1=(-d20^2+d10^2+d12^2)/(2*d10*d12)
 			cos0=(-d12^2+d10^2+d20^2)/(2*d10*d20)
-			d30=cos0*d20
-			r2=alive_cells[i].r
+
+
 			if(i!=m && d23<(r1+r2)-0.0001 && (cos1>0 || d12<r1+r2) && (cos0>0))
-				println("cell number ",i," ",d23)
+				#To know which overlaping cell is the closest from the startlocation we need to calculate the distance
+				d24=r1+r2
+				a=1
+				b=-2*d20*cos0
+				c=d20^2-d24^2
+				delta=b^2-4*a*c
+				d04=(-b-sqrt(delta))/(2*a)
+
 				d=sqrt((startloc.x - alive_cells[i].x)^2 + (startloc.y - alive_cells[i].y)^2)
 				if(!(0>d-r1-r2>-0.000001))
 				index=[index,i]
-				distance30=[distance30,d30]
+				distance04=[distance04,d04]
 				end
 			end
 		end
 	else
 		for i in 1:length(alive_cells)
-			d02=abs(alive_cells[i].x - x0)
-			d03=abs(alive_cells[i].y - y0)
+			x2=alive_cells[i].x
+			y2=alive_cells[i].y
+			d23=abs(alive_cells[i].x - x0)
 			r2=alive_cells[i].r
-			if(i!=m && d02<(r1+r2)-0.0001 && min(y0-r1,y1-r1)<alive_cells[i].y<max(y0+r1,y1+r1))
-				d=sqrt((startloc.x - alive_cells[i].x)^2 + (startloc.y - alive_cells[i].y)^2)
-				if(d-r1-r2>0)
+			if(i!=m && d23<(r1+r2)-0.0001 && min(y0-r1,y1-r1)<y2<max(y0+r1,y1+r1))
+				d=sqrt((startloc.x - x2)^2 + (startloc.y - y2)^2)
+				a=1
+				b=-2*y2
+				c=(x0-x2)^2+y2^2-(r1+r2)^2
+				delta=b^2-4*a*c
+				d04=(-b-sqrt(delta))/(2*a)
+				if(!(0>d-r1-r2>-0.000001))
 				index=[index,i]
-				distance30=[distance30,d03]
+				distance04=[distance04,d04]
 				end				
 			end
 		end
@@ -422,9 +408,9 @@ function check_any_cell_between(startloc,m)
 	
 	if(length(index)>0)
   		for j in 1:length(index)
-			println("x$(index[j]): ",alive_cells[index[j]].x, ", y$(index[j]): ",alive_cells[index[j]].y,"   r$(index[j]): ",alive_cells[index[j]].r," distance: ",distance30[j])
+			println("x$(index[j]): ",alive_cells[index[j]].x, ", y$(index[j]): ",alive_cells[index[j]].y,"   r$(index[j]): ",alive_cells[index[j]].r," distance: ",distance04[j])
   		end
-		j=index[indmin(distance30)]
+		j=index[indmin(distance04)]
 
 		#The cell can touch the border before touching the cell, then we need to put the cell at the border
 		#We need to check wether the new location of the cell when touching the closest cell
@@ -547,14 +533,10 @@ function put_at_the_border(m,startloc)
 	  alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
 	end
 
-	if(alive_cells[m].speed>categories[alive_cells[m].cell_type].avg_speed*0.01)
-	  alive_cells[m].x=startloc.x + alive_cells[m].speed*cos(alive_cells[m].angle)
-	  alive_cells[m].y=startloc.y + alive_cells[m].speed*sin(alive_cells[m].angle)
-	else
-	  alive_cells[m].y=startloc.y
-	  alive_cells[m].x=startloc.x
-	  alive_cells[m].speed=0
-	end
+
+	alive_cells[m].x=startloc.x + alive_cells[m].speed*cos(alive_cells[m].angle)
+	alive_cells[m].y=startloc.y + alive_cells[m].speed*sin(alive_cells[m].angle)
+
 
 	end
 
