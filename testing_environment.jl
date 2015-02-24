@@ -1,17 +1,20 @@
 using Tk
 using Winston
 include("init.jl")
+include("cell_type.jl")
 
 X_SIZE = 10
 Y_SIZE = 12
 BORDER_SHAPE = "Rectangle"
 
-global categories = [Cell_type(0.5,.001,.1,1,1,1,"r",true,true),
-                     Cell_type(0.5,.001,.1,1,1,1,"r",true,true),
-                     Cell_type(0.5,.001,.1,1,1,1,"r",true,true),
-                     Cell_type(0.5,.001,.1,1,1,1,"r",true,true)]
+global categories = [Cell_type(0.5,.001,.1,1,1,1,.5,"r",true,true),
+                     Cell_type(0.5,.001,.1,1,1,1,.5,"r",true,true),
+                     Cell_type(0.0,.001,.1,1,1,1,.5,"r",true,true),
+                     Cell_type(0.0,.001,.1,1,1,1,.5,"r",true,true)]
 
-alive_cells = init(10,categories)
+global border_settings = ["r","r","r","r"]
+
+alive_cells = init(2,categories)
 
 #=
 type Cell_type
