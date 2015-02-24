@@ -1,92 +1,125 @@
-# Module to evaluate border - cell interactions.
-# Receives the original location and desired location of a cell as an array [x, y].
-# Call with Cell, false to use sticking behaviour.
-# Needs the bounds of the environment explicitly stated globally.
+# include radius
 
-include("cell_type.jl")
-include("ellipse.jl")
+function check_borders(x::Real,
+                       y::Real,
+                       xi::Real,
+                       yi::Real,
+                       angle::Real,
+                       speed::Real,
+                       wlim::Real,
+                       slim::Real,
+                       elim::Real,
+                       nlim::Real,
+                       settings::Array)
+  x,y, xi, yi, angle, speed = check_borders_iter(x,y,xi,yi, angle, speed, wlim, slim, elim, nlim, settings)
+  x,y, xi, yi, angle, speed = check_borders_iter(x,y,xi,yi, angle, speed, wlim, slim, elim, nlim, settings)
+  return x,y,xi,yi,angle,speed
+end
 
-function check_borders!(alive_cells, dead_cells,n::Int, source::Point)
-  cell_died = false
-  #=
-  if BORDER_SHAPE == "Ellipse"
-    ellipse_borders!(alive_cells[n], source)
+function check_borders_iter(x::Real,
+                            y::Real,
+                            xi::Real,
+                            yi::Real,
+                            angle::Real,
+                            speed::Real,
+                            wlim::Real,
+                            slim::Real,
+                            elim::Real,
+                            nlim::Real,
+                            settings::Array)
+  hits, intercept, limit = hits_east(x,y,xi,yi,elim,slim,nlim)
+  if hits
+    x, xi, yi, angle, speed = reflect_horizontal(x,y,xi,yi,angle,speed,intercept,limit)
+    return x,y,xi,yi,angle,speed
+  end
+  hits, intercept, limit = hits_west(x,y,xi,yi,wlim,slim,nlim)
+  if hits
+    x, xi, yi, angle, speed = reflect_horizontal(x,y,xi,yi,angle,speed,intercept,limit)
+    return x,y,xi,yi,angle,speed
+  end
+  hits, intercept, limit = hits_north(x,y,xi,yi,nlim,wlim,elim)
+  if hits
+    println("hits north")
+    y, xi, yi, angle, speed = reflect_vertical(x,y,xi,yi,angle,speed,intercept,limit)
+    return x,y,xi,yi,angle,speed
+  end
+  hits, intercept, limit = hits_south(x,y,xi,yi,slim,wlim,elim)
+  if hits
+    println("hits south")
+    y, xi, yi, angle, speed = reflect_vertical(x,y,xi,yi,angle,speed,intercept,limit)
+    return x,y,xi,yi,angle,speed
+  end
+  return x,y,xi,yi,angle,speed
+end
+
+function hits_east(x::Real,y::Real,xi::Real,yi::Real,elim::Real,slim::Real,nlim::Real)
+  if x - xi > 0 
+    m = (y-yi)/(x-xi)
+    efar = x >= elim
+    eint = yi + m*(elim-xi)
+    etargeting = slim <= eint <= nlim
+    hits = efar && etargeting
+    return hits, eint, elim
   else
-  =#
-    if BORDER_BEHAVIOUR == "Reflecting"
-      bounce_if_req!(alive_cells[n])
-    elseif BORDER_BEHAVIOUR == "Absorbing"
-      stick_if_req!(alive_cells[n],source)
-    elseif BORDER_BEHAVIOUR == "Killing"
-      cell_died = killing_borders!(alive_cells, dead_cells, n)
-    end
-  return cell_died
-end
-
-function killing_borders!(alive_cells, dead_cells, n::Int )
-  r = alive_cells[n].r
-  cell_died = false
-  in_bounds = true
-  in_bounds = (-r < alive_cells[n].x < X_SIZE+r) ? in_bounds : false
-  in_bounds = (-r < alive_cells[n].y < Y_SIZE+r) ? in_bounds : false
-  if !in_bounds
-    cell_death(alive_cells, dead_cells, n)
-    cell_died = true
+    return false, nothing, nothing
   end
-	return alive_cells, dead_cells, cell_died
 end
 
-function stick_if_req!(cell::Cell,source::Point)
-  r = cell.r
-  x_bound = (cell.x < r ? r : X_SIZE - r)
-  y_bound = (cell.y < r ? r : Y_SIZE - r)
-  grad = (cell.y - source.y) / (cell.x - source.x)
-  offset = source.y - (grad * source.x)
-  wall_hit = (grad * x_bound) + offset
-  fc_hit = (y_bound - offset) / grad
-
-  if !(r <= cell.x <= X_SIZE - r) && (r <= wall_hit <= Y_SIZE-r)
-    wall_stick!(cell, source, x_bound, wall_hit)
+function hits_west(x::Real,y::Real,xi::Real,yi::Real,wlim::Real,slim::Real,nlim::Real)
+  if x - xi < 0
+    m = (y-yi)/(x-xi)
+    wfar = x <= wlim
+    wint = yi + m*(wlim-xi)
+    wtargeting = slim <= wint <= nlim
+    hits = wfar && wtargeting
+    return hits, wint, wlim
+  else
+    return false, nothing, nothing
   end
-  if !(r <= cell.y <= Y_SIZE - r)
-    fc_stick!(cell, source, y_bound, fc_hit)
+end
+
+function hits_north(x::Real,y::Real,xi::Real,yi::Real,nlim::Real,wlim::Real,elim::Real)
+  if y - yi > 0
+    m = (y-yi)/(x-xi) # may equal Inf or -Inf
+    nfar = y >= nlim
+    nint = (nlim-yi)/m + xi
+    ntargeting = wlim <= nint <= elim
+    hits = nfar && ntargeting
+    return hits, nint, nlim 
+  else
+    return false, nothing, nothing
   end
-
-  # maybe need to add pi here sometimes
-  cell.angle = atan((cell.y - source.y) / (cell.x - source.x))
 end
 
-function bounce_if_req!(cell)
-  r = cell.r
-  x_bound = (cell.x < r ? r : X_SIZE - r)
-  y_bound = (cell.y < r ? r : Y_SIZE - r)
-  r <= cell.x <= X_SIZE - r ? nothing : wall_reflect!(cell,x_bound)#,wall_hit)
-  r <= cell.y <= Y_SIZE - r ? nothing : fc_reflect!(cell,y_bound)#,fc_hit)
-
-  # if out of bounds, redo
-  (r <= cell.x <= X_SIZE - r) && (r <= cell.y <= Y_SIZE - r) ? nothing : bounce_if_req!(cell) 
+function hits_south(x::Real,y::Real,xi::Real,yi::Real,slim::Real,wlim::Real,elim::Real)
+  if y - yi < 0
+    m = (y-yi)/(x-xi) # may equal Inf or -Inf
+    sfar = y <= slim
+    sint = (slim-yi)/m + xi
+    stargeting = wlim <= sint <= elim
+    hits = sfar && stargeting
+    return hits, sint, slim
+  else
+    return false, nothing, nothing
+  end
 end
 
-function wall_reflect!(cell::Cell, x_bound)
-	cell.x = 2(x_bound) - cell.x
-  cell.angle = pi - cell.angle
+function reflect_horizontal(x::Real,y::Real,xi::Real,yi::Real,angle::Real,speed::Real,intercept::Real,lim::Real)
+  speed = distance(x,y,xi,yi) - distance(xi,yi,lim,intercept)
+  x = 2 * lim - x
+  angle = pi - angle
+  xi = lim
+  yi = intercept
+  return x, xi, yi, angle, speed 
 end
 
-function fc_reflect!(cell::Cell, y_bound)
-  cell.y = 2(y_bound) - cell.y
-  cell.angle = - cell.angle
+function reflect_vertical(x::Real,y::Real,xi::Real,yi::Real,angle::Real,speed::Real,intercept::Real,lim::Real)
+  speed = distance(x,y,xi,yi) - distance(xi,yi,intercept,lim)
+  y = 2 * lim - y
+  angle = - angle
+  xi = intercept
+  yi = lim
+  return y, xi, yi, angle, speed
 end
 
-function fc_stick!(cell::Cell, source::Point, y_bound, fc_hit)
-  source = Point(cell.x, cell.y)
-	cell.loc = Point(fc_hit, y_bound)
-  cell.angle = 0.
-  cell.speed = 0.
-end
-
-function wall_stick!(cell::Cell, source::Point, x_bound, wall_hit)
-  source = Point(cell.x, cell.y)
-  cell.loc = Point(x_bound, wall_hit)
-  cell.angle = 0.
-  cell.speed = 0.
-end
+distance(x::Real,y::Real,xi::Real,yi::Real) = sqrt((x-xi)^2 + (y-yi)^2)
