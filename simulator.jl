@@ -53,6 +53,9 @@ function main(
   	  A_coefficient[i] = v4[3*i-1]
 	  tau0[i] = v4[3*i]
   end
+
+  println(source_ordinate_ligand)
+
   println("building environment")
   global alive_cells = Cell[] 
   alive_cells = init(n_cell, categories)
