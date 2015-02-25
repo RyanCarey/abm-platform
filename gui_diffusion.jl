@@ -1,5 +1,10 @@
-function window_diffusion(v2)
-  check_entries1()
+function window_diffusion()
+  v=check_entries1()
+  if(!check_diffusion)
+    global v2 = [0.5,8,0.5,10,100,150,4]
+  end
+
+  global check_diffusion=true
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
   pack(f2, expand=true, fill="both")
@@ -89,7 +94,7 @@ function destroy_diffusion_window(path)
 end
 
 ##########################################################################################################
-function plot_diffusion(v2)
+function plot_diffusion()
   check_entries2()
   result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
   for x in 1:int(sqrt(v[4]^2+v[5]^2))
@@ -116,30 +121,11 @@ end
 
 
 ##########################################################################################################
-function check_entries1()
-  n = length(prompts)
-  global v = zeros(n,1)
-  for i in 1:n
-    if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
-      if !(0 <= float(get_value(entries[i])) <= 1)
-        Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
-        return
-      end
-    end
-    if !(0 <= float(get_value(entries[i])))
-      Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
-      return
-    end
-    try
-      v[i] = float(get_value(entries[i]))
-    catch
-      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
-      return
-    end
-  end
-end
-
 function check_entries2()
+  if(!check_diffusion)
+    global v2 = [0.5,8,0.5,10,100,150,4]
+
+  else
   n2 = length(prompts2)
   global v2 = zeros(n2,1)
   for i in 1:n2
@@ -160,6 +146,8 @@ function check_entries2()
       return
     end
   end  
+
+  end
 end
 
 

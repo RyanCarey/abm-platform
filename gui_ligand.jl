@@ -1,7 +1,19 @@
 function window_ligand()
-  check_entries1()
+  v=check_entries1()
   check_entries2()
-  check_entries3(v2)
+
+  if(!check_location)
+	global v3=Array(Float64,2*int(v2[7]))
+	global v4=Array(Float64,3*int(v2[7]))
+	for i in 1:v2[7]
+		v3[2*i-1]=0
+		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+		v4[3*i-2]=10
+ 		v4[3*i-1]=100
+ 		v4[3*i]=150	
+  	end
+  end
+
   global check_location = true
 
   global w3 = Toplevel("Ligand's source location") ## title, width, height
@@ -32,13 +44,13 @@ function window_ligand()
       l  = Label(ctrls3, "Source $(int((i+1)/2)):")
       formlayout(l,nothing)	
     end
-    if(mod(i,2)==1)
-      entries3=[entries3,Entry(ctrls3,"0.0")]
+    #if(mod(i,2)==1)
+      entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
       formlayout(entries3[i],string(prompts3[i],": "))
-    else
-      entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[4])")]
-      formlayout(entries3[i],string(prompts3[i],": "))
-    end
+    #else
+      #entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[4])")]
+      #formlayout(entries3[i],string(prompts3[i],": "))
+    #end
 
     if(mod(i,2)==1)
       if(i!=1)
@@ -58,16 +70,16 @@ function window_ligand()
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,path -> destroy_ligand_window(v2))
+     bind(b,i,path -> destroy_ligand_window())
   end
 end
 ##########################################################################################################
-function check_entries3(v2)
+function check_entries3()
   if(!check_location)
-	check_entries1()
+	v=check_entries1()
 	check_entries2()
-	v3=Array(Float64,2*int(v2[7]))
-	v4=Array(Float64,3*int(v2[7]))
+	global v3=Array(Float64,2*int(v2[7]))
+	global v4=Array(Float64,3*int(v2[7]))
 	for i in 1:v2[7]
 		v3[2*i-1]=0
 		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
@@ -98,10 +110,9 @@ function check_entries3(v2)
     end
   end
   end
-  return v3,v4
 end
 ##########################################################################################################
-function destroy_ligand_window(v2)
-  check_entries3(v2)
+function destroy_ligand_window()
+  check_entries3()
   destroy(w3)
 end
