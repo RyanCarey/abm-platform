@@ -48,6 +48,10 @@ function window_diffusion()
   end
   focus(entries2[1]) 
 
+  ##########
+  #Global variable
+  global type_source = get_value(rb)
+
   #f3 = Frame(w2); pack(f3, expand = true, fill = "both")
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 2, 1,sticky="e")
   global sc = Slider(f2, 1:int(v[3]))
@@ -128,8 +132,6 @@ end
 
 ##########################################################################################################
 function check_entries2()
-  global type_source = get_value(rb)
-
   if(!check_diffusion)
     global v2 = [0.5,8,0.5,10,100,150,4]
 

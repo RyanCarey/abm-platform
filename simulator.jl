@@ -45,7 +45,10 @@ function main(
   global Diffusion_coefficient = Array(Float64,nb_source)
   global A_coefficient= Array(Float64,nb_source)
   global tau0 = Array(Float64,nb_source)
-	
+
+
+ println(type_source) 
+ if(type_source=="Point")	
   for i in 1:nb_source
 	  source_abscisse_ligand[i]=v3[2*i-1]
 	  source_ordinate_ligand[i]=v3[2*i]
@@ -53,8 +56,15 @@ function main(
   	  A_coefficient[i] = v4[3*i-1]
 	  tau0[i] = v4[3*i]
   end
+ else
+    for i in 1:nb_source
+	  source_abscisse_ligand[i]=v3[i]
+	  Diffusion_coefficient[i] =v4[3*i-2]
+  	  A_coefficient[i] = v4[3*i-1]
+	  tau0[i] = v4[3*i]
+    end
+ end
 
-  println(source_ordinate_ligand)
 
   println("building environment")
   global alive_cells = Cell[] 

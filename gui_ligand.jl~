@@ -16,7 +16,7 @@ function window_ligand()
 ###########################
 #Discrete case
 
-if(get_value(rb)=="Point")
+if(get_value(rb)=="Discrete")
   if(!check_location)
 	global v3=Array(Float64,2*int(v2[7]))
 	global v4=Array(Float64,3*int(v2[7]))

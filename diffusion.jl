@@ -11,14 +11,6 @@
 # A is another coefficient
 # tau0 is the number of steps possible
 
-function ligand_concentration_onesource(abscisse_ligand)
-
-	global distance_source_squared = (source_abscisse_ligand-abscisse_ligand)^2
-	(res,tmp)=quadgk(integrand,0,min(iter,tau0))
-	return res
-
-end
-
 function ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
 
 	global distance_source_squared = (abs(source_abscisse_ligand[number_source] - abscisse_ligand)
@@ -35,6 +27,24 @@ function ligand_concentration_multiplesource_2D(abscisse_ligand,ordinate_ligand)
 		res = res + ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
 	end
 	return res
+end
+#######################################################################################################################
+function ligand_concentration_multiplesource_1D(abscisse_ligand)
+	res=0
+	for i in 1:nb_source
+		global number_source=i
+		res = res + ligand_concentration_onesource_1D(abscisse_ligand)
+	end
+	return res
+end
+
+
+function ligand_concentration_onesource_1D(abscisse_ligand)
+
+	global distance_source_squared = (source_abscisse_ligand[number_source]-abscisse_ligand)^2
+	(res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
+	return res
+
 end
 
 #Ligand initiation for a rectangle

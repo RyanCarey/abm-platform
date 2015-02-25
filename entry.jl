@@ -98,6 +98,7 @@ function init_window()
   
   global check_location = false
   global check_diffusion = false
+  global type_source = "Point"
 
   # make comboboxes
 
