@@ -1,10 +1,5 @@
-function window_diffusion()
-  v=check_entries1()
-  if(!check_diffusion)
-    global v2 = [0.5,8,0.5,10,100,150,4]
-  end
-
-  global check_diffusion=true
+function window_diffusion(v::Array, v2::Array, entries, prompts)
+  check_entries1(v, entries, prompts)
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
   pack(f2, expand=true, fill="both")
@@ -17,32 +12,28 @@ function window_diffusion()
 
   #Button definition
   b2 = Button(ctrls2, "See diffusion")
-
-  global prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness","D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of sources"]
+  prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness",
+             "D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of sources"]
   n2=length(prompts2)
-  entries21 = Entry(ctrls2,"$(float(v2[1]))")
-  entries22 = Entry(ctrls2,"$(int(v2[2]))")
-  entries23 = Entry(ctrls2,"$(float(v2[3]))")
-  entries24 = Entry(ctrls2,"$(int(v2[4]))")
-  entries25 = Entry(ctrls2,"$(int(v2[5]))")
-  entries26 = Entry(ctrls2,"$(int(v2[6]))")
-  entries27 = Entry(ctrls2,"$(int(v2[7]))")
   
-  global entries2 = [entries21,entries22,entries23,entries24,entries25,entries26,entries27]
+  global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
+                     Entry(ctrls2,"$(int(v2[2]))"),
+                     Entry(ctrls2,"$(float(v2[3]))"), 
+                     Entry(ctrls2,"$(int(v2[4]))"),
+                     Entry(ctrls2,"$(int(v2[5]))"),
+                     Entry(ctrls2,"$(int(v2[6]))"),
+                     Entry(ctrls2,"$(int(v2[7]))")]
   for i in 1:n2
     if(i==4)
-  l  = Label(ctrls2, "")
-  formlayout(l,nothing) 
+      l  = Label(ctrls2, "")
+      formlayout(l,nothing) 
     end 
-
     if(i==7)  
-  formlayout(b2, nothing)
-  l  = Label(ctrls2, "")
-  formlayout(l,nothing)
-
-  global rb = Radio(ctrls2, ["Point", "Line"])
-  formlayout(rb, "Type of source: ")
-
+      formlayout(b2, nothing)
+      l  = Label(ctrls2, "")
+      formlayout(l,nothing)
+      global rb = Radio(ctrls2, ["Point", "Line"])
+      formlayout(rb, "Type of source: ")
     end 
     formlayout(entries2[i],string(prompts2[i],": "))
   end
@@ -50,20 +41,20 @@ function window_diffusion()
 
   #f3 = Frame(w2); pack(f3, expand = true, fill = "both")
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 2, 1,sticky="e")
-  global sc = Slider(f2, 1:int(v[3]))
+  global sc = Slider(f2, 1:int(v[2]))
   l = Label(f2)
   l[:textvariable] = sc[:variable]
   grid(sc, 2, 2, sticky="ew")
   grid(l,  3, 2, sticky="w")
-  bind(sc, "command", path -> plot_diffusion(v2))
+  bind(sc, "command", path -> plot_diffusion(v, v2, prompts2))
 
   #First plot of the concentration
-  result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
-  for x in 1:int(sqrt(v[4]^2+v[5]^2))
-    global distance_source_squared = int(x)
+  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
+  for x in 1:int(sqrt(v[3]^2+v[4]^2))
+  global distance_source_squared = int(x)
   timediff = get_value(sc)  
   tau0 = int(get_value(entries2[6]))
-    (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
+  (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
   result[x]=res
   end
   p=plot(result)
@@ -71,44 +62,41 @@ function window_diffusion()
   ylabel("Concentration")
   display(canvas2,p)
 
-  #If the button b2 is clicked on
+  #If the button b2 is clicked
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b2,i,path -> plot_diffusion(v2))
+    bind(b2,i,path -> plot_diffusion(v, v2, prompts2))
   end
 
   b1 = Button(ctrls2, "Ligand's source location")
   # displays the button
   formlayout(b1, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b1,i,path -> window_ligand())
+    bind(b1,i,path -> gui_ligand(v, v2, prompts2))
   end
   b3 = Button(ctrls2, "Ok")
   # displays the button
   formlayout(b3, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b3,i,destroy_diffusion_window)
+    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2))
   end
-
-
 end
 
-
 ##########################################################################################################
-function destroy_diffusion_window(path)
-  check_entries2()
+function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array)
+  check_entries2(v2, prompts2)
   destroy(w2) 
 end
 
 ##########################################################################################################
-function plot_diffusion()
-  check_entries2()
-  result = Array(Float64,int(sqrt(v[4]^2+v[5]^2)),1)
-  for x in 1:int(sqrt(v[4]^2+v[5]^2))
+function plot_diffusion(v::Array, v2::Array, prompts2::Array)
+  check_entries2(v2, prompts2)
+  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
+  for x in 1:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
-  timediff = get_value(sc)  
-  tau0 = v2[6]
+    timediff = get_value(sc)  
+    tau0 = v2[6]
     (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-  result[x]=res
+    result[x]=res
   end
   p=plot(result)
   xlabel("Distance from source")
@@ -117,7 +105,7 @@ function plot_diffusion()
 end
 
 ##########################################################################################################
-function integrand_entry(tau)
+function integrand_entry(tau::Real)
   timediff = get_value(sc)
   A=int(get_value(entries2[5]))
   D=int(get_value(entries2[4]))
@@ -125,21 +113,14 @@ function integrand_entry(tau)
   return result
 end
 
-
 ##########################################################################################################
-function check_entries2()
+function check_entries2(v2::Array, prompts2::Array)
   global type_source = get_value(rb)
-
-  if(!check_diffusion)
-    global v2 = [0.5,8,0.5,10,100,150,4]
-
-  else
   n2 = length(prompts2)
-  global v2 = zeros(n2,1)
   for i in 1:n2
     if !(0 <= float(get_value(entries2[i])))
-        Messagebox(title="Warning", message=string(string(prompts2[i])," must be positive"))
-        return
+      Messagebox(title="Warning", message=string(string(prompts2[i])," must be positive"))
+      return
     end
     if prompts2[i][1:10]=="Probabilit"
       if !(0 <= float(get_value(entries2[i])) <= 1)
@@ -153,8 +134,6 @@ function check_entries2()
       Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(prompts2[i])))
       return
     end
-  end  
-
   end
 end
 
