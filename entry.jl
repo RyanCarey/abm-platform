@@ -1,11 +1,3 @@
-#using Tk
-#using Winston
-#include("pause.jl")
-#include("simulator.jl")
-#include("show.jl")
-#include("diffusion_window.jl")
-#include("categories_window.jl")
-#include("cell_type.jl")
 include("import.jl")
 # TO DO :
 # Adapt the size of the canvas
@@ -13,19 +5,9 @@ include("import.jl")
 # Understabnd why v2[4] is 10 digit when modifying again the diffusion parameters
 
 ##########################################################################################################
-function ok_press(v8::Array,v9::Array,v10::Array,display_output::Bool,txt_output::Bool)
-
-  v=check_entries1()
-  v2=check_entries2()
-  v3,v4=check_entries3()
-  main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
-end
-
-##########################################################################################################
-function check_entries1()
-
+function ok_press(v::Array,v2::Array,v3::Array,v4::Array,v8::Array,
+                  v9::Array,v10::Array,display_output::Bool,txt_output::Bool)
   n = length(prompts)
-  v = Array(Float64,n)
   for i in 1:n
     if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
@@ -38,17 +20,18 @@ function check_entries1()
         return
     end
     try
-			v[i] = float(get_value(entries[i]))
+      v[i] = float(get_value(entries[i]))
     catch
       Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
       return
     end
   end
-  return v
+  main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
 end
+
 ##########################################################################################################
 function init_window()
-  println("starting up window...")
+println("starting up window...")
   # window parameters
   global w = Toplevel("Agent-based modeller",350,385)
   global frame = Frame(w); pack(frame, expand=true, fill="both")
@@ -67,12 +50,18 @@ function init_window()
   global entries = []
 
   # make the input fields 
-  entries1 = Entry(ctrls, "10")
-  entries2 = Entry(ctrls, "1000")
-  entries3 = Entry(ctrls, "30")
-  entries4 = Entry(ctrls, "30")
-  entries5 = Entry(ctrls, "1.5")
-  entries6 = Entry(ctrls, "0.001")
+  entries1 = Entry(ctrls)
+  entries2 = Entry(ctrls)
+  entries3 = Entry(ctrls)
+  entries4 = Entry(ctrls)
+  entries5 = Entry(ctrls)
+  entries6 = Entry(ctrls)
+  set_value(entries1, "10")
+  set_value(entries2, "300")
+  set_value(entries3, "30")
+  set_value(entries4, "30")
+  set_value(entries5, "1.5")
+  set_value(entries6, "0.001")  
   entries = [entries1,entries2,entries3,entries4,entries5,entries6]
 
   for i in 1:n
@@ -83,17 +72,14 @@ function init_window()
   focus(entries[1])
   
   # globals - should be removed asap
-  
   global check_location = false
-  global check_diffusion = false
 
   # make comboboxes
 
   #Choose diffusion parameters
-
   b2 = Button(ctrls, "Choose diffusion params")
   formlayout(b2, nothing)
-  bind(b2, "command", path -> window_diffusion())
+  bind(b2, "command", path -> window_diffusion(v2))
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)
@@ -111,20 +97,33 @@ function init_window()
   formlayout(txt_status, nothing)
   # set_value(display_status, 1)
 
-	# make, display and sensitise the 'run' button
+  # make, display and sensitise the 'run' button
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
- 
+  v = zeros(n,1)
 
-  # set defaults        
-
-  	v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
-  	v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
-  	v10 = ["Reflecting","Reflecting","Reflecting","Reflecting"]
+  # set defaults
+  v2=[0.5,8,1,10,100,150,4]
+  v3=Array(Float64,2*int(v2[7]))
+  v4=Array(Float64,3*int(v2[7]))
+  v8 = [1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
+  v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
+  v10 = ["Absorbing","Killing","Killing","Killing"]
+  for i in 1:int(v2[7])
+    v3[2*i-1]=0
+    v3[2*i]=(i-1)/(v2[6]-1)*v[5]
+    v4[3*i-2]=10
+    v4[3*i-1]=100
+    v4[3*i]=150   
+  end
 
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b,i,path -> ok_press(
+                     v::Array,
+                     v2::Array,
+                     v3::Array,
+                     v4::Array,
                      v8::Array,
                      v9::Array,
                      v10::Array,

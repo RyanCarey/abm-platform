@@ -1,8 +1,7 @@
 function window_ligand()
-
-  v=check_entries1()
-  v2=check_entries2()
-  v3,v4=check_entries3()
+  check_entries1()
+  check_entries2()
+  check_entries3(v2)
   global check_location = true
 
   global w3 = Toplevel("Ligand's source location") ## title, width, height
@@ -59,16 +58,14 @@ function window_ligand()
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,path -> destroy_ligand_window())
+     bind(b,i,path -> destroy_ligand_window(v2))
   end
-
 end
 ##########################################################################################################
-function check_entries3()
-
+function check_entries3(v2)
   if(!check_location)
-	v=check_entries1()
-	v2=check_entries2()
+	check_entries1()
+	check_entries2()
 	v3=Array(Float64,2*int(v2[7]))
 	v4=Array(Float64,3*int(v2[7]))
 	for i in 1:v2[7]
@@ -102,10 +99,9 @@ function check_entries3()
   end
   end
   return v3,v4
-
 end
 ##########################################################################################################
-function destroy_ligand_window()
-  check_entries3()
+function destroy_ligand_window(v2)
+  check_entries3(v2)
   destroy(w3)
 end
