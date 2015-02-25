@@ -84,9 +84,9 @@ end
 #probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
 function angle_from_both(cell::Cell)
 	if(rand() < probability_persistent && iter > 1)
-		angle = cell.angle
+		angle = mod(cell.angle,2*pi)
 	else
-		angle = mod(angle_from_ligand(cell, 1)*(1-RANDOMNESS)+RANDOMNESS*2*pi,2*pi)
+		angle = mod(angle_from_ligand(cell, 1)+RANDOMNESS*randn()*pi,2*pi)
 	end
 	return angle
 end

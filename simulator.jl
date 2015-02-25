@@ -53,7 +53,9 @@ function main(
   	  A_coefficient[i] = v4[3*i-1]
 	  tau0[i] = v4[3*i]
   end
-  println("source abscisse: ", source_abscisse_ligand, " source_ordinate_ligand: ", source_ordinate_ligand)
+
+  println(source_ordinate_ligand)
+
   println("building environment")
   global alive_cells = Cell[] 
   alive_cells = init(n_cell, categories)
@@ -99,9 +101,6 @@ function iter_sim(alive_cells::Array,
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
-
-	println("");println("");println("")
-	println("iteration: ", i)
     	move_any!()
 
     #end
@@ -110,7 +109,6 @@ function iter_sim(alive_cells::Array,
 
     	alive_cells = division_decision!(alive_cells, index)
     end
-    println(negative_distance)
     if display_output
       show_sim(alive_cells)
     end
@@ -121,7 +119,7 @@ function iter_sim(alive_cells::Array,
     if i % 1000 == 0
       println("$i iterations completed")
     end
-    pause(0)
+   #pause(0)
   end
   return alive_cells, dead_cells
 end

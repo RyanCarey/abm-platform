@@ -1,5 +1,10 @@
-function window_ligand(v4,entries4)
-  check_entries2()
+function window_ligand()
+
+  v=check_entries1()
+  v2=check_entries2()
+  v3,v4=check_entries3()
+  global check_location = true
+
   global w3 = Toplevel("Ligand's source location") ## title, width, height
   global f3 = Frame(w3) 
   pack(f3, expand=true, fill="both")
@@ -17,6 +22,7 @@ function window_ligand(v4,entries4)
   global prompts4 = ["D Diffusion Coefficient","A Diffusion Coefficient","Tau Diffusion Coefficent"]
   n3=length(prompts3) # 2 times the number of sources
   global entries3=[]
+  global entries4=[]
 
   for i in 1:n3
     if(mod(i,2)==1)
@@ -31,54 +37,48 @@ function window_ligand(v4,entries4)
       entries3=[entries3,Entry(ctrls3,"0.0")]
       formlayout(entries3[i],string(prompts3[i],": "))
     else
-      entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[5])")]
+      entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[7]-2)*v[4])")]
       formlayout(entries3[i],string(prompts3[i],": "))
     end
-    #else
-      #try
-      ##entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
-      #formlayout(entries3[i],string(prompts3[i],": "))
-      #catch
-      #if(mod(i,2)==1)
-      #	entries3=[entries3,Entry(ctrls3,"0.0")]
-      #	formlayout(entries3[i],string(prompts3[i],": "))
-      #else
-      #	entries3=[entries3,Entry(ctrls3,"$((i-2)/(2*v2[6]-2)*v[5])")]
-      #	formlayout(entries3[i],string(prompts3[i],": "))
-      #end
-      #end
+
     if(mod(i,2)==1)
       if(i!=1)
         l  = Label(ctrls4, " ")
         formlayout(l,nothing)	
       end
-      try
         entries4=[entries4,Entry(ctrls4,"$(v4[3*(floor((i+1)/2))-2])")]
         formlayout(entries4[end],string(prompts4[1],": "))
         entries4=[entries4,Entry(ctrls4,"$(v4[3*(floor((i+1)/2))-1])")]
         formlayout(entries4[end],string(prompts4[2],": "))
         entries4=[entries4,Entry(ctrls4,"$(v4[3*(floor((i+1)/2))])")]
         formlayout(entries4[end],string(prompts4[3],": "))
-      catch
-        entries4=[entries4,Entry(ctrls4,"10.0")]
-        formlayout(entries4[end],string(prompts4[1],": "))
-        entries4=[entries4,Entry(ctrls4,"100.0")]
-        formlayout(entries4[end],string(prompts4[2],": "))
-        entries4=[entries4,Entry(ctrls4,"150.0")]
-        formlayout(entries4[end],string(prompts4[3],": "))
-      end
-	  end
+    end
   end
 
   b = Button(ctrls3, "Ok")
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,path -> check_entries3(entries4))
+     bind(b,i,path -> destroy_ligand_window())
   end
+
 end
 ##########################################################################################################
-function check_entries3(entries4)
+function check_entries3()
+
+  if(!check_location)
+	v=check_entries1()
+	v2=check_entries2()
+	v3=Array(Float64,2*int(v2[7]))
+	v4=Array(Float64,3*int(v2[7]))
+	for i in 1:v2[7]
+		v3[2*i-1]=0
+		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+		v4[3*i-2]=10
+ 		v4[3*i-1]=100
+ 		v4[3*i]=150	
+  	end
+  else
   n3=length(prompts3)
   global v3 = zeros(n3,1)
   for i in 1:n3
@@ -100,5 +100,12 @@ function check_entries3(entries4)
       return
     end
   end
+  end
+  return v3,v4
+
+end
+##########################################################################################################
+function destroy_ligand_window()
+  check_entries3()
   destroy(w3)
 end

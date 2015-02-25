@@ -1,7 +1,7 @@
 using Winston
 using Distributions
 
-include("diffusion.jl")
+#include("diffusion.jl")
 
 # Proposed angle of direction for the cell
 # Biased Random Walk V2
@@ -28,7 +28,8 @@ function angle_from_ligand(cell,k)
   	y = cell.y
   	r = cell.r
   	cat = cell.cell_type
-
+	#println(x," ",y)
+	#println(nb_ligands)
 	choosen_angle=Array(Float64,3)
   	global list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
 
@@ -36,8 +37,8 @@ function angle_from_ligand(cell,k)
 		angle=(i-1)*2*pi/nb_ligands
 
 		list_ligand[i,1] = angle
-		list_ligand[i,2] = x+cos(angle)*r
-		list_ligand[i,3] = y+sin(angle)*r
+		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
+		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
 
 		list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
 
@@ -53,7 +54,7 @@ function angle_from_ligand(cell,k)
 		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
 
 	end
-
+	#println(list_ligand)
 	#Method 1: we choose the angle which has the maximum concentration
 	choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
 
@@ -61,6 +62,7 @@ function angle_from_ligand(cell,k)
 	#and the cumulative probability of the ligand concentration:
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
+
 
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
@@ -82,7 +84,7 @@ end
 #probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
 function angle_from_both(cell::Cell)
 	if(rand() < probability_persistent && iter > 1)
-		angle = cell.angle
+		angle = mod(cell.angle,2*pi)
 	else
 		angle = mod(angle_from_ligand(cell, 1)+RANDOMNESS*randn()*pi,2*pi)
 	end

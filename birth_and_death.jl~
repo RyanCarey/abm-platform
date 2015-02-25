@@ -67,7 +67,7 @@ function cell_division(cells, i)
 
 		attempt += 1
 		if attempt > 100
-			#println("Tried 100 times to place new cell, giving up!")
+			println("Tried 100 times to place new cell, giving up!")
 			give_up = true
 			break
 		end
