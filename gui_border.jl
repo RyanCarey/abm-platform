@@ -8,15 +8,9 @@ function gui_border(v::Array, v10::Array, prompts::Array, entries::Array)
   behaviours = ["Reflecting","Absorbing","Killing"]
 
   global border_entries1 = Combobox(f4, behaviours)
-  set_value(border_entries1, "Absorbing")
   global border_entries2 = Combobox(f4, behaviours)
-  set_value(border_entries2, "Killing")
   global border_entries3 = Combobox(f4, behaviours)
-  set_value(border_entries3, "Killing")
   global border_entries4 = Combobox(f4, behaviours)
-  set_value(border_entries4, "Killing")
-
-  println(v10)
 
   set_value(border_entries1, "$(v10[1])")
   set_value(border_entries2, "$(v10[2])")

@@ -71,7 +71,7 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array)
   # displays the button
   formlayout(b1, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b1,i,path -> gui_ligand(v, v2, prompts2, entries2))
+    bind(b1,i,path -> gui_ligand(v2, prompts2, entries2))
   end
   b3 = Button(ctrls2, "Ok")
   # displays the button

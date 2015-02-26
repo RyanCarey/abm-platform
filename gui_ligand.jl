@@ -1,6 +1,6 @@
-function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
+function gui_ligand(v2::Array, prompts2::Array, entries2::Array)
   # check data from diffusion window
-  check_entries1(v2, entries2, prompts2)
+  check_entries1(v2, prompts2, entries2)
   global w3 = Toplevel("Ligand's source location") ## title, width, height
   global f3 = Frame(w3) 
   pack(f3, expand=true, fill="both")
@@ -21,7 +21,7 @@ function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
       v3[2*i]=(i-1)/(v2[7]-1)*v[4]
       v4[3*i-2]=10
       v4[3*i-1]=100
-      v4[3*i]=150	
+      v4[3*i]=150 
     end
     global check_location = true
     global prompts3=[]
@@ -37,17 +37,17 @@ function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
       if(mod(i,2)==1)
         if(i!=1)
           l  = Label(ctrls3, " ")
-          formlayout(l,nothing)	
+          formlayout(l,nothing) 
         end
         l  = Label(ctrls3, "Source $(int((i+1)/2)):")
-        formlayout(l,nothing)	
+        formlayout(l,nothing) 
       end
       entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
       formlayout(entries3[i],string(prompts3[i],": "))
       if(mod(i,2)==1)
         if(i!=1)
           l  = Label(ctrls4, " ")
-          formlayout(l,nothing)	
+          formlayout(l,nothing) 
         end
           entries4=[entries4,Entry(ctrls4,"$(v4[3*(floor((i+1)/2))-2])")]
           formlayout(entries4[end],string(prompts4[1],": "))
@@ -67,7 +67,7 @@ function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
         v3[i]=(i-1)/(v2[7]-1)*v[3]
         v4[3*i-2]=10
         v4[3*i-1]=100
-        v4[3*i]=150	
+        v4[3*i]=150 
       end
     end
     global check_location = true
@@ -83,10 +83,10 @@ function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
     for i in 1:n3
       if(i!=1)
         l  = Label(ctrls3, " ")
-        formlayout(l,nothing)	
+        formlayout(l,nothing) 
       end
       l  = Label(ctrls3, "Source $(i):")
-      formlayout(l,nothing)	
+      formlayout(l,nothing) 
 
       entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
       formlayout(entries3[i],string(prompts3[i],": "))
@@ -96,7 +96,7 @@ function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
     for i in 1 : length(prompts4)
       if(i!=1 && mod(i,3)==1)
         l  = Label(ctrls4, " ")
-        formlayout(l,nothing)	
+        formlayout(l,nothing) 
       end
         entries4=[entries4,Entry(ctrls4,"$(v4[i])")]
         formlayout(entries4[i],string(prompts4[i],": "))
@@ -112,17 +112,16 @@ end
 ##########################################################################################################
 function check_entries3()
   if(!check_location)
-	v=check_entries1()
-	check_entries2()
-	global v3=Array(Float64,2*int(v2[7]))
-	global v4=Array(Float64,3*int(v2[7]))
-	for i in 1:v2[7]
-		v3[2*i-1]=0
-		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
-		v4[3*i-2]=10
- 		v4[3*i-1]=100
- 		v4[3*i]=150	
-  	end
+  check_entries2()
+  global v3=Array(Float64,2*int(v2[7]))
+  global v4=Array(Float64,3*int(v2[7]))
+  for i in 1:v2[7]
+    v3[2*i-1]=0
+    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+    v4[3*i-2]=10
+    v4[3*i-1]=100
+    v4[3*i]=150 
+  end
   else
     n3=length(prompts3)
     global v3 = zeros(n3,1)
@@ -138,7 +137,7 @@ function check_entries3()
   global v4 = zeros(n4,1)
   for i in 1:n4
     try
-	    v4[i] = float(get_value(entries4[i]))
+      v4[i] = float(get_value(entries4[i]))
     catch
       Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts4[mod(i,3)])," of the source $(floor(i/3+1))."))
       return

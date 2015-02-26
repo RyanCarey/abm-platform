@@ -22,7 +22,6 @@ using Distributions
 # nb_ligands : number of ligands around the cell ie the number of possible directions
 # cell : data from the cell we want to assess the next angle
 
-# We still need to correct the possible borders porblems: the min works for rectangle only!!!!!!!!!!!!!!!
 function angle_from_ligand(cell,k)
    	x = cell.x
   	y = cell.y
@@ -35,14 +34,13 @@ function angle_from_ligand(cell,k)
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands
-
 		list_ligand[i,1] = angle
 		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
 		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
 		if(type_source=="Point")
-		list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
+      list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
 		else
-		list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
+      list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
 		end
 
 		if(i==1)
@@ -55,8 +53,8 @@ function angle_from_ligand(cell,k)
 	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1
 	if(maximum(list_ligand[:,5]!=0))
 		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
-
 	end
+
 	#println(list_ligand)
 	#Method 1: we choose the angle which has the maximum concentration
 	choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
@@ -65,7 +63,6 @@ function angle_from_ligand(cell,k)
 	#and the cumulative probability of the ligand concentration:
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
-
 
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
@@ -85,16 +82,14 @@ end
 
 #Combination of the two methods
 #probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
-function angle_from_both(cell::Cell)
+function angle_from_both(cell::Cell, randomness::Real)
 	if(rand() < probability_persistent && iter > 1)
 		angle = mod(cell.angle,2*pi)
 	else
-		angle = mod(angle_from_ligand(cell, 1)+RANDOMNESS*randn()*pi,2*pi)
+		angle = mod(angle_from_ligand(cell, 1)+randomness*randn()*pi,2*pi)
 	end
 	return angle
 end
-
-
 
 
 #Persistent Biased Random walk

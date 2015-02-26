@@ -24,53 +24,45 @@ function put_at_border!(n::Int,source::Point)
   return Point(xi,yi)
 end
 
-
-function check_borders(x::Real,
-                       y::Real,
-                       xi::Real,
-                       yi::Real,
+function check_borders(x::Real,y::Real,
+                       xi::Real,yi::Real,
                        angle::Real,
                        speed::Real,
-                       wlim::Real,
-                       slim::Real,
-                       elim::Real,
-                       nlim::Real,
+                       wlim::Real,slim::Real,elim::Real, nlim::Real,
                        settings::Array)
   x,y, xi, yi, angle, speed = check_borders_iter(x,y,xi,yi, angle, speed, wlim, slim, elim, nlim, settings)
   x,y, xi, yi, angle, speed = check_borders_iter(x,y,xi,yi, angle, speed, wlim, slim, elim, nlim, settings)
   return x,y,xi,yi,angle,speed
 end
 
-function check_borders_iter(x::Real,
-                            y::Real,
-                            xi::Real,
-                            yi::Real,
+function check_borders_iter(x::Real,y::Real,
+                            xi::Real,yi::Real,
                             angle::Real,
                             speed::Real,
-                            wlim::Real,
-                            slim::Real,
-                            elim::Real,
-                            nlim::Real,
+                            wlim::Real,slim::Real,elim::Real, nlim::Real,
                             settings::Array)
-  hits, intercept, limit = hits_east(x,y,xi,yi,elim,slim,nlim)
+  hits, intercept, limit = hits_west(x,y,xi,yi,wlim,slim,nlim, settings[1])
   if hits
     x, xi, yi, angle, speed = reflect_horizontal(x,y,xi,yi,angle,speed,intercept,limit,settings[1])
-    return x,y,xi,yi,angle,speed
-  end
-  hits, intercept, limit = hits_west(x,y,xi,yi,wlim,slim,nlim)
-  if hits
-    x, xi, yi, angle, speed = reflect_horizontal(x,y,xi,yi,angle,speed,intercept,limit,settings[2])
     println("after reflection x: ",x,", y: ",y,", xi: ",xi," yi: ",yi)
     return x,y,xi,yi,angle,speed
   end
-  hits, intercept, limit = hits_north(x,y,xi,yi,nlim,wlim,elim)
+  hits, intercept, limit = hits_north(x,y,xi,yi,nlim,wlim,elim, settings[2])
+
   if hits
     println("hits north")
-    y, xi, yi, angle, speed = reflect_vertical(x,y,xi,yi,angle,speed,intercept,limit,settings[3])
+    y, xi, yi, angle, speed = reflect_vertical(x,y,xi,yi,angle,speed,intercept,limit,settings[2])
     println("after reflection x: ",x,", y: ",y,", xi: ",xi," yi: ",yi)
     return x,y,xi,yi,angle,speed
   end
-  hits, intercept, limit = hits_south(x,y,xi,yi,slim,wlim,elim)
+
+  hits, intercept, limit = hits_east(x,y,xi,yi,elim,slim,nlim, settings[3])
+  if hits
+    x, xi, yi, angle, speed = reflect_horizontal(x,y,xi,yi,angle,speed,intercept,limit,settings[2])
+    return x,y,xi,yi,angle,speed
+  end
+
+  hits, intercept, limit = hits_south(x,y,xi,yi,slim,wlim,elim, settings[3])
   if hits
     println("hits south")
     y, xi, yi, angle, speed = reflect_vertical(x,y,xi,yi,angle,speed,intercept,limit,settings[4])
@@ -185,19 +177,19 @@ end
 # for move
 function blah()
   put_at_border()
-  killed = kill_if_wandering
+  killed == kill_if_wandering
   if !killed
     nothing
   end
 end
 
 # inside hits south
-function pick response()
-  if setting = "r"
+function pick_response()
+  if setting == "r"
     reflect_horizontal(x,y,xi,yi,angle,speed,intercept,lim)
-  elseif setting = "a"
+  elseif setting == "a"
     reflect_vertical(x,y,xi,yi,angle,speed,intercept,lim)
-  elseif setting = "k"
+  elseif setting == "k"
     nothing
   end
 end
