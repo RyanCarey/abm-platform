@@ -3,15 +3,6 @@ include("import.jl")
 ##########################################################################################################
 function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,txt_output::Bool, entries, prompts)
   check_entries1(v, prompts, entries)
-	v3=Array(Float64,2*int(v2[7]))
-	v4=Array(Float64,3*int(v2[7]))
-	for i in 1:v2[7]
-    v3[2*i-1]=0
-    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
-    v4[3*i-2]=10
-    v4[3*i-1]=100
-    v4[3*i]=150	
-  end
 
   # set variables
   n_cell = int(v[1])
@@ -109,8 +100,18 @@ function init_window()
   grid_rowconfigure(frame, 1, weight=1)
 
   # set defaults        
-  v = Float64[10,1000,30,30,1.5,.001]
-  v2 = Float64[0.5,8,0.5,10,100,150,4]
+  v = [10, 300, 30, 30, 1.5, 0.001]
+  v2=[0.5, 8, 1, 10, 100, 150, 4]
+  global check_location = false
+	global v3=Array(Float64,2*int(v2[7]))
+	global v4=Array(Float64,3*int(v2[7]))
+	for i in 1:v2[7]
+    v3[2*i-1]=0
+    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+    v4[3*i-2]=10
+    v4[3*i-1]=100
+    v4[3*i]=150	
+  end
   v8 = Float64[1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
   v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
