@@ -1,6 +1,6 @@
 using Tk
 
-function get_categories(v8::Array,v9::Array)
+function gui_type(v8::Array,v9::Array)
   # Create a top level window and the assorted stuff with it
 	global w3 = Toplevel("Type Parameters", 300, 300) ## title, width, height
   global f3 = Frame(w3)

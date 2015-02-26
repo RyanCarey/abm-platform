@@ -2,24 +2,22 @@ include("import.jl")
 
 ##########################################################################################################
 function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,txt_output::Bool, entries, prompts)
-  v = check_entries1(v, entries, prompts)
+  check_entries1(v, prompts, entries)
 	v3=Array(Float64,2*int(v2[7]))
 	v4=Array(Float64,3*int(v2[7]))
 	for i in 1:v2[7]
-		v3[2*i-1]=0
-		v3[2*i]=(i-1)/(v2[7]-1)*v[4]
-		v4[3*i-2]=10
- 		v4[3*i-1]=100
- 		v4[3*i]=150	
+    v3[2*i-1]=0
+    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+    v4[3*i-2]=10
+    v4[3*i-1]=100
+    v4[3*i]=150	
   end
   main(v,v2,v3,v4,v8,v9,v10,display_output,txt_output)
 end
 
 ##########################################################################################################
-function check_entries1(v::Array, entries::Array, prompts::Array)
-  n = length(prompts)
-  v = Array(Float64,n)
-  for i in 1:n
+function check_entries1(v::Array, prompts::Array, entries::Array)
+  for i in 1:length(prompts)
     if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
@@ -27,8 +25,8 @@ function check_entries1(v::Array, entries::Array, prompts::Array)
       end
     end
     if !(0 <= float(get_value(entries[i])))
-        Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
-        return
+      Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
+      return
     end
     try
 			v[i] = float(get_value(entries[i]))
@@ -37,7 +35,6 @@ function check_entries1(v::Array, entries::Array, prompts::Array)
       return
     end
   end
-  return v
 end
 ##########################################################################################################
 function init_window()
@@ -85,17 +82,17 @@ function init_window()
 
   b2 = Button(ctrls, "Choose diffusion params")
   formlayout(b2, nothing)
-  bind(b2, "command", path -> window_diffusion(v,v2, entries, prompts))
+  bind(b2, "command", path -> gui_diffusion(v,v2, prompts, entries))
 
   b3 = Button(ctrls, "Edit Cell Types")
   formlayout(b3, nothing)
-  bind(b3, "command", path -> get_categories(v8,v9))
+  bind(b3, "command", path -> gui_type(v8,v9))
 
   b4 = Button(ctrls, "Edit Border Types")
   formlayout(b4, nothing)
-  bind(b4, "command", path -> get_borders(v10))
+  bind(b4, "command", path -> gui_border(v, v10, prompts, entries))
 
-  # make checkbuttons
+  # make checkboxes
   display_status = Checkbutton(ctrls, "Display Simulation")
   set_value(display_status, true)
   txt_status = Checkbutton(ctrls, "Write to text")

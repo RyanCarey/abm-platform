@@ -1,5 +1,5 @@
-function window_diffusion(v::Array, v2::Array, entries, prompts)
-  check_entries1(v, entries, prompts)
+function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array)
+  check_entries1(v, prompts, entries)
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
   pack(f2, expand=true, fill="both")
@@ -46,7 +46,7 @@ function window_diffusion(v::Array, v2::Array, entries, prompts)
   l[:textvariable] = sc[:variable]
   grid(sc, 2, 2, sticky="ew")
   grid(l,  3, 2, sticky="w")
-  bind(sc, "command", path -> plot_diffusion(v, v2, prompts2))
+  bind(sc, "command", path -> plot_diffusion(v, v2, prompts2, entries2))
 
   #First plot of the concentration
   result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
@@ -62,34 +62,34 @@ function window_diffusion(v::Array, v2::Array, entries, prompts)
   ylabel("Concentration")
   display(canvas2,p)
 
-  #If the button b2 is clicked
+  #If button b2 is clicked
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b2,i,path -> plot_diffusion(v, v2, prompts2))
+    bind(b2,i,path -> plot_diffusion(v, v2, prompts2, entries2))
   end
 
   b1 = Button(ctrls2, "Ligand's source location")
   # displays the button
   formlayout(b1, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b1,i,path -> gui_ligand(v, v2, prompts2))
+    bind(b1,i,path -> gui_ligand(v, v2, prompts2, entries2))
   end
   b3 = Button(ctrls2, "Ok")
   # displays the button
   formlayout(b3, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2))
+    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2, entries2))
   end
 end
 
 ##########################################################################################################
-function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array)
-  check_entries2(v2, prompts2)
+function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array, entries2::Array)
+  check_entries1(v2, prompts2, entries2)
   destroy(w2) 
 end
 
 ##########################################################################################################
-function plot_diffusion(v::Array, v2::Array, prompts2::Array)
-  check_entries2(v2, prompts2)
+function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array)
+  check_entries1(v2, prompts2, entries2)
   result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
   for x in 1:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
@@ -114,27 +114,3 @@ function integrand_entry(tau::Real)
 end
 
 ##########################################################################################################
-function check_entries2(v2::Array, prompts2::Array)
-  global type_source = get_value(rb)
-  n2 = length(prompts2)
-  for i in 1:n2
-    if !(0 <= float(get_value(entries2[i])))
-      Messagebox(title="Warning", message=string(string(prompts2[i])," must be positive"))
-      return
-    end
-    if prompts2[i][1:10]=="Probabilit"
-      if !(0 <= float(get_value(entries2[i])) <= 1)
-        Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
-        return
-      end
-    end  
-    try
-      v2[i] = float(get_value(entries2[i]))
-    catch
-      Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(prompts2[i])))
-      return
-    end
-  end
-end
-
-

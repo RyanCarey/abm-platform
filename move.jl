@@ -324,27 +324,27 @@ function put_at_the_border(m,startloc)
 
 	if(xm>X_SIZE-r || xm<r || ym>Y_SIZE-r || ym<r)
 	  if(xm!=x0)
-		n=(ym-y0)/(xm-x0)
+      n=(ym-y0)/(xm-x0)
 	  	p=(-ym*x0 + xm*y0)/(xm-x0)
 
-		x[1]=r
-		x2[1]=0
-		y[1]=n*r+p
-		y2[1]=r
-		x[2]=X_SIZE-r
-		x2[2]=X_SIZE
-		y[2]=n*x[2]+p	
-		y2[2]=n*x[2]+p
+      x[1]=r
+      x2[1]=0
+      y[1]=n*r+p
+      y2[1]=r
+      x[2]=X_SIZE-r
+      x2[2]=X_SIZE
+      y[2]=n*x[2]+p	
+      y2[2]=n*x[2]+p
 	  end
 	  if(ym!=y0)
-		x[3]=(r*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-		x2[3]=(-xm*y0+x0*ym)/(ym-y0)
-		y[3]=r
-		y2[3]=0
-		x[4]=((Y_SIZE-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-		x2[4]==((Y_SIZE)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-		y[4]=Y_SIZE-r	
-		y2[4]=Y_SIZE
+      x[3]=(r*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+      x2[3]=(-xm*y0+x0*ym)/(ym-y0)
+      y[3]=r
+      y2[3]=0
+      x[4]=((Y_SIZE-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+      x2[4]==((Y_SIZE)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+      y[4]=Y_SIZE-r	
+      y2[4]=Y_SIZE
 	  end
 	end
 	
@@ -355,12 +355,12 @@ function put_at_the_border(m,startloc)
 
 	if(xm>x0)#going east
 	  if(ym>y0)#going north and east
-		if(d[2]>d[4]) #nort border is hit first
-		  j=4
-		else
-		  j=2
-		end
-	  else#going south and east	
+      if(d[2]>d[4]) #nort border is hit first
+        j=4
+      else
+        j=2
+      end
+    else#going south and east	
 		if(d[2]>d[3])
 		  j=3
 		else

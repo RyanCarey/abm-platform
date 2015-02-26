@@ -1,6 +1,6 @@
-function gui_ligand(v::Array, v2::Array, prompts2::Array)
+function gui_ligand(v::Array, v2::Array, prompts2::Array, entries2::Array)
   # check data from diffusion window
-  check_entries2(v2, prompts2)
+  check_entries1(v2, entries2, prompts2)
   global w3 = Toplevel("Ligand's source location") ## title, width, height
   global f3 = Frame(w3) 
   pack(f3, expand=true, fill="both")

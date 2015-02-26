@@ -1,6 +1,5 @@
-using Tk
-
-function get_borders(v10)
+function gui_border(v::Array, v10::Array, prompts::Array, entries::Array)
+  check_entries1(v, prompts, entries)
   # Create a top level window and frames
 	global w4 = Toplevel("Border Parameters", 250, 300) ## title, width, height
   global f4 = Frame(w4)
