@@ -1,7 +1,7 @@
 include("import.jl")
 
 ##########################################################################################################
-function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,txt_output::Bool, entries, prompts)
+function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts)
   check_entries1(v, prompts, entries)
 
   # set variables
@@ -55,13 +55,13 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     show_sim(alive_cells)
   end
 
-  if txt_output
+  if pickle_output
     t = strftime(time())[5:27] #store date and time as string
-    file = "out_$t.txt"
+    file = "out_$t.pickle"
     start_output(filename::String, t::String, v::Array, alive_cells::Array)
   end
 
-  simulator(alive_cells, dead_cells, steps, display_output, txt_output)
+  simulator(alive_cells, dead_cells, steps, display_output, pickle_output)
 end
 
 ##########################################################################################################
@@ -100,7 +100,7 @@ function init_window()
   grid_rowconfigure(frame, 1, weight=1)
 
   # set defaults        
-  v = [10, 300, 30, 30, 1.5, 0.001]
+  v = [10, 300, 30, 30, 1.5, 0.000]
   v2=[0.5, 8, 1, 10, 100, 150, 4]
   global check_location = false
 	global v3=Array(Float64,2*int(v2[7]))
@@ -113,7 +113,7 @@ function init_window()
     v4[3*i]=150	
   end
   v8 = Float64[1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
-  v9 = ["ro",true,true,"bo",false,false,"mo",false,false,"go",false,false]
+  v9 = ["ro",false,true,"bo",false,false,"mo",false,false,"go",false,false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
 
   # make and activate controls

@@ -19,8 +19,7 @@ function gui_border(v::Array, v10::Array, prompts::Array, entries::Array)
 
   # Place entry fields in columns
   border_entries = [border_entries1,border_entries2,border_entries3,border_entries4]
-
-  border_prompts = ["Left border","Lower border","Right border","Top border"]
+  border_prompts = ["Left border","Right border","Lower border","Top border"]
   n = length(border_prompts)
   for i in 1:length(border_prompts)
     grid(border_entries[i],i+1,1)

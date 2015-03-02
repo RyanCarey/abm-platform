@@ -18,12 +18,18 @@ function simulator(alive_cells::Array,
     cell_died = false
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
-    	move_any!()
-
-    #end
-    #if !cell_died
+      dying_indices = Int[]
+    	dying_indices = move_any!(dying_indices)
+      dying_indices = sort([j for j in Set(dying_indices)])
+      println("dying cells: ",dying_indices)
+      while length(dying_indices) > 0
+        println("living cells: ",length(alive_cells))
+        cell_death(alive_cells, dead_cells, pop!(dying_indices))
+        cell_died = true
+      end
+    end
+    if !cell_died
     	alive_cells = cell_growth!(alive_cells, index)
-
     	alive_cells = division_decision!(alive_cells, index)
     end
     if display_output
