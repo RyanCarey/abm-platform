@@ -354,9 +354,14 @@ function put_at_the_border(m,startloc)
     end
     alive_cells[m].speed=0.95*(alive_cells[m].speed-d[j])
     startloc=Point(x[j],y[j])
-    if j==3 || j==4
+
+  if j==3      # hits s
       alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
-    else
+    elseif j==4  # hits n
+      alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
+    elseif j==1  # hits w
+      alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
+    elseif j==2  # hits e
       alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
     end
     alive_cells[m].x=startloc.x + alive_cells[m].speed*cos(alive_cells[m].angle)
