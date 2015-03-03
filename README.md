@@ -7,7 +7,7 @@ Open the program by running "entry.jl"
 ### Initialisation Options
 It is possible to specify the starting conditions for the model in the main screen.
 
-Number of cells: The total number of cells at the start of the simulation.
+#### Number of cells: The total number of cells at the start of the simulation.
 Number of timesteps: The total number of iterations made by the simulation.
 Height/Width of Environment: This denotes the size of the simulation environment in some arbitrary units.
 Stem Threshold: This specifies the concentration of ligand at which a reproducing stem cell will switch between self-replication and progenitor production
