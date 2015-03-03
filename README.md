@@ -6,6 +6,7 @@ Open the program by running "entry.jl"
 ## Main Screen
 ### Initialisation Options
 It is possible to specify the starting conditions for the model in the main screen.
+(main_screen.png)
 
 * Number of cells: The total number of cells at the start of the simulation.
 * Number of timesteps: The total number of iterations made by the simulation.
@@ -16,6 +17,8 @@ It is possible to specify the starting conditions for the model in the main scre
 * Write to text: Selecting this option will save an output of the simulation to file.
 
 ## Diffusion Settings
+These settings allow the user to alter the behaviour of ligand sources and their placement within the environment.
+(diffusion_screen.png)
 * Probability of Persistance: The chance that a cell will disregard the information about future moves from it surroundings and continue its movement.
 * Numbers of direction: The amount of directions a cell can calculate possible moves in. They are spaced out evenly along the cell surface.
 * Coefficients: Antoine needs to write this bit!!
@@ -27,6 +30,7 @@ It is possible to specify the starting conditions for the model in the main scre
 
 ## Cell Settings
 The simulation allows for 4 different cell types, but can run with only one.
+(cell_type_screen.png)
 * Ratio: The ratio of the total number of cells given over to that type upon the start of the simulation. Ratios are normalised and as such do not have to sum to one.
 * Growth Rate: The rate at which a cells area will increase per timestep.
 * Division Threshold: The ratio of current area to initial area at which a cell division event will occur.
@@ -40,6 +44,7 @@ The simulation allows for 4 different cell types, but can run with only one.
 
 ## Border Settings
 This window allows the specification of each border within the environment. Possible options are 'Reflecting', 'Absorbing' and 'Killing'.
+(border_screen.png)
 * Reflecting: Cells will bounce off these walls.
 * Absorbing: Upon contact, these cells will stick to these walls.
 * Killing: Upon contact, these cells will die and be removed from the simulation.
