@@ -1,7 +1,7 @@
 include("import.jl")
 
 ##########################################################################################################
-function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts,rb_value)
+function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts,rb_value,diff_type)
   check_entries1(v, prompts, entries)
 
   # set variables
@@ -24,24 +24,43 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   global Diffusion_coefficient = Array(Float64,nb_source)
   global A_coefficient= Array(Float64,nb_source)
   global tau0 = Array(Float64,nb_source)
+  global diffusion_maximum = Array(Float64,nb_source)
+  global speed_variance = Array(Float64,nb_source)
+  global initial_variance = Array(Float64,nb_source)
   global type_source=rb_value[1]
+  global type_diffusion=diff_type
+
 
   if(type_source=="Point")	
     for i in 1:nb_source
       source_abscisse_ligand[i]=v3[2*i-1]
       source_ordinate_ligand[i]=v3[2*i]
-      Diffusion_coefficient[i] =v4[3*i-2]
-      A_coefficient[i] = v4[3*i-1]
-      tau0[i] = v4[3*i]
+      if(type_diffusion == "Integrative")
+        Diffusion_coefficient[i] =v4[3*i-2]
+        A_coefficient[i] = v4[3*i-1]
+        tau0[i] = v4[3*i]
+      else
+        diffusion_maximum[i] =v5[3*i-2]
+        speed_variance[i] = v5[3*i-1]
+        initial_variance[i] = v5[3*i]
+      end
     end
   else
     for i in 1:nb_source
       source_abscisse_ligand[i]=v3[i]
-      Diffusion_coefficient[i] =v4[3*i-2]
-      A_coefficient[i] = v4[3*i-1]
-      tau0[i] = v4[3*i]
+      if(type_diffusion == "Integrative")
+        Diffusion_coefficient[i] =v4[3*i-2]
+        A_coefficient[i] = v4[3*i-1]
+        tau0[i] = v4[3*i]
+      else
+        diffusion_maximum[i] =v4[3*i-2]
+        speed_variance[i] = v4[3*i-1]
+        initial_variance[i] = v4[3*i]
+      end
     end
   end
+
+
 
   println("building environment")
   global alive_cells = Cell[] 
@@ -102,17 +121,21 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30, 1.5, 0.000]
-  v2=[0.5, 8, 1, 10, 100, 150, 4]
+  v2=[0.5, 8, 1, 10, 100, 150, 4,10,10,0.1]
   global rb_value=["Point"]
   global check_location = false
   global v3=Array(Float64,2*int(v2[7]))
   global v4=Array(Float64,3*int(v2[7]))
+  global v5=Array(Float64,3*int(v2[7]))
   for i in 1:v2[7]
     v3[2*i-1]=0
     v3[2*i]=(i-1)/(v2[7]-1)*v[4]
     v4[3*i-2]=10
     v4[3*i-1]=100
     v4[3*i]=150	
+    v5[3*i-2]=10
+    v5[3*i-1]=10
+    v5[3*i]=0.1	
   end
   v8 = Float64[1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
   v9 = ["ro",false,true,"bo",false,false,"mo",false,false,"go",false,false]
@@ -139,9 +162,12 @@ function init_window()
   end
   focus(entries[1])
 
+  rb2 = Radio(ctrls, ["Integrative", "Normal"])
+  formlayout(rb2, "Type of diffusion: ")
+
   b2 = Button(ctrls, "Diffusion Settings")
   formlayout(b2, nothing)
-  bind(b2, "command", path -> gui_diffusion(v,v2, prompts, entries,rb_value))
+  bind(b2, "command", path -> gui_diffusion(v,v2, prompts, entries,rb_value,get_value(rb2)))
 
   b3 = Button(ctrls, "Cell Type Settings")
   formlayout(b3, nothing)
@@ -164,7 +190,7 @@ function init_window()
   formlayout(b, nothing)
 
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts,rb_value))
+    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts,rb_value,get_value(rb2)))
   end
 
   # keeps program open

@@ -38,9 +38,9 @@ function angle_from_ligand(cell,k)
 		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
 		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
 		if(type_source=="Point")
-      list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
+      			list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
 		else
-      list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
+      			list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
 		end
 
 		if(i==1)

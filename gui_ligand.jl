@@ -1,4 +1,4 @@
-function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array, prompts2::Array, entries2::Array,value_rb)
+function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2::Array, entries2::Array,value_rb,diff_type)
   println(v3)
   check_entries1(v2, prompts2, entries2)
   global w3 = Toplevel("Ligand's source location") ## title, width, height
@@ -18,8 +18,12 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array, prompts2::Array, e
   else
     prompts3=["X ordinate of the injury"]
   end
+  if(diff_type=="Integrative")
+    global prompts4 = ["D Diffusion Coefficient","A Diffusion Coefficient","Tau Diffusion Coefficent"]
+  else
+    global prompts4 = ["Maximum Concentration","Initial variance value","Rate of variance's change"]
+  end
 
-  global prompts4 = ["D Diffusion Coefficient","A Diffusion Coefficient","Tau Diffusion Coefficent"]
   global entries3=[]
   global entries4=[]
 
@@ -35,9 +39,15 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array, prompts2::Array, e
 	else
 	  entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
 	end
-      entries4=[entries4,Entry(ctrls4,"$(v4[3*i-2])")] 
-      entries4=[entries4,Entry(ctrls4,"$(v4[3*i-1])")] 
-      entries4=[entries4,Entry(ctrls4,"$(v4[3*i])")] 
+      if(diff_type=="Integrative")
+        entries4=[entries4,Entry(ctrls4,"$(v4[3*i-2])")] 
+        entries4=[entries4,Entry(ctrls4,"$(v4[3*i-1])")] 
+        entries4=[entries4,Entry(ctrls4,"$(v4[3*i])")] 
+      else
+        entries4=[entries4,Entry(ctrls4,"$(v5[3*i-2])")] 
+        entries4=[entries4,Entry(ctrls4,"$(v5[3*i-1])")] 
+        entries4=[entries4,Entry(ctrls4,"$(v5[3*i])")] 
+      end
     end
     if i > length(v3) / 2
 	if(value_rb=="Point")
@@ -46,9 +56,15 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array, prompts2::Array, e
 	else
 	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
 	end
-      entries4=[entries4,Entry(ctrls4,"$(10.0)")]
-      entries4=[entries4,Entry(ctrls4,"$(100.0)")]
-      entries4=[entries4,Entry(ctrls4,"$(150.0)")]
+      if(diff_type=="Integrative")
+        entries4=[entries4,Entry(ctrls4,"$(10.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(100.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(150.0)")]
+      else
+        entries4=[entries4,Entry(ctrls4,"$(10.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(1)")]
+        entries4=[entries4,Entry(ctrls4,"$(0.1)")]
+      end
     end
     if(value_rb=="Point")
       formlayout(entries3[2*i-1],string(prompts3[1],": ")) 
@@ -73,11 +89,11 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array, prompts2::Array, e
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,path -> check_entries3(v2[7],value_rb))
+     bind(b,i,path -> check_entries3(v2[7],value_rb,diff_type))
   end
 end
 ##########################################################################################################
-function check_entries3(n_sources::Real,value_rb)
+function check_entries3(n_sources::Real,value_rb,diff_type)
   println("n sources: ",n_sources)
 
   if(value_rb=="Point")
@@ -97,9 +113,11 @@ function check_entries3(n_sources::Real,value_rb)
   end
 
   global v4 = zeros(3*int(n_sources),1)
+  global v5 = zeros(3*int(n_sources),1)
   for i in 1:3*n_sources
     try
       v4[i] = float(get_value(entries4[i]))
+      v5[i] = float(get_value(entries4[i]))
     catch
       Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts4[mod(i,3)])," of the source $(floor(i/3+1))."))
       return

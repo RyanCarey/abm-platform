@@ -1,25 +1,21 @@
-#include("pause.jl")
-#using Winston
-
-#Returns the ligand's concentration of one point thanks to an ODE
-#
-# time
-# i,j coordinates of the points where we want the concentration
-# source abscisse of the source (1D at the moment)
-# tau must be linked to a possible delay
-# D is the diffusion coefficient
-# A is another coefficient
-# tau0 is the number of steps possible
-
 function ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
 
-	global distance_source_squared = (abs(source_abscisse_ligand[number_source] - abscisse_ligand)
+  global distance_source_squared = (abs(source_abscisse_ligand[number_source] - abscisse_ligand)
                                    + abs(source_ordinate_ligand[number_source]-ordinate_ligand))^2
-	(res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
-	return res
+
+  if(type_diffusion=="Integrative")
+    (res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
+  else
+    res=diffusion_maximum[number_source]/(speed_variance[number_source]*initial_variance[number_source]*iter)*exp(-distance_source_squared/(2*(speed_variance[number_source]*initial_variance[number_source]*iter)^2))
+println("diffusion_maximum: ",diffusion_maximum)
+println("speed_variance: ",speed_variance)
+println("initial_variance: ",initial_variance)
+println(res)
+  end
+  return res
 
 end
-
+#############################
 function ligand_concentration_multiplesource_2D(abscisse_ligand,ordinate_ligand)
 	res=0
 	for i in 1:nb_source
@@ -29,6 +25,7 @@ function ligand_concentration_multiplesource_2D(abscisse_ligand,ordinate_ligand)
 	return res
 end
 #######################################################################################################################
+
 function ligand_concentration_multiplesource_1D(abscisse_ligand)
 	res=0
 	for i in 1:nb_source
@@ -37,16 +34,21 @@ function ligand_concentration_multiplesource_1D(abscisse_ligand)
 	end
 	return res
 end
-
-
+#############################
 function ligand_concentration_onesource_1D(abscisse_ligand)
 
-	global distance_source_squared = (source_abscisse_ligand[number_source]-abscisse_ligand)^2
-	(res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
-	return res
+    global distance_source_squared = (source_abscisse_ligand[number_source]-abscisse_ligand)^2
+
+    if(type_diffusion=="Integrative")
+      (res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
+    else
+      res=diffusion_maximum[number_source]/(speed_variance[number_source]*initial_variance[number_source]*iter)*exp(-distance_source_squared/(2*(speed_variance[number_source]*initial_variance[number_source]*iter)^2))
+    end
+
+    return res
 
 end
-
+#######################################################################################################################
 #Ligand initiation for a rectangle
 function ligand_initiation(x=X_SIZE/2)
 	j=int(floor(x))+1
