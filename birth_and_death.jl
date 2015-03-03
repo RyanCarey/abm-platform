@@ -91,15 +91,15 @@ function cell_division(cells, i)
 				thres = rand()
 				if sum_ligand < STEM_THRESHOLD
 					if thres > 0.85
-						new_cell.cell_type = 2
+						new_cell.cell_type = cells[i].cell_type + 1
 					else
-						new_cell.cell_type = 2
-						cells[i].cell_type = 2
+						new_cell.cell_type = cells[i].cell_type + 1
+						cells[i].cell_type = cells[i].cell_type + 1
 					end
 				end
 				if sum_ligand >= STEM_THRESHOLD
 					if thres > 0.85
-						new_cell.cell_type = 2
+						new_cell.cell_type = cells[i].cell_type + 1
 					end
 				end
 				

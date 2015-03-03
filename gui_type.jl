@@ -61,7 +61,7 @@ function gui_type(v8::Array,v9::Array)
   cat_entries46_1 = Entry(f3)
   global cat_entries47 = Combobox(f3, colours)
   global cat_entries48 = Checkbutton(f3, "Left Placed")
-  global cat_entries49 = Checkbutton(f3, "Stem Cell")
+  #global cat_entries49 = Checkbutton(f3, "Stem Cell")
 
   # If options have already been specified, overwrites entries with those previously given.
   set_value(cat_entries1, "$(v8[1])")
@@ -103,7 +103,7 @@ function gui_type(v8::Array,v9::Array)
   set_value(cat_entries46_1, "$(v8[28])")
   set_value(cat_entries47, "$(v9[10])")
   set_value(cat_entries48, v9[11])
-  set_value(cat_entries49, v9[12])
+  #set_value(cat_entries49, v9[12])
 
   global cat_entries = Tk.Tk_Entry[cat_entries1, cat_entries2, cat_entries3, cat_entries4, cat_entries5, cat_entries6, cat_entries21, cat_entries22, cat_entries23, cat_entries24, cat_entries25, cat_entries26,
    cat_entries31, cat_entries32, cat_entries33, cat_entries34, cat_entries35, cat_entries36, cat_entries41, cat_entries42, cat_entries43, cat_entries44, cat_entries45, cat_entries46,
@@ -141,7 +141,7 @@ function gui_type(v8::Array,v9::Array)
   grid(cat_entries46_1, 8, 5)
   grid(cat_entries47, 9, 5)
   grid(cat_entries48, 10, 5)
-  grid(cat_entries49, 11, 5)
+  #grid(cat_entries49, 11, 5)
 
 
   # Place Ok button in bottom right
@@ -189,7 +189,7 @@ function check_cat_entries(v8,v9,n)
   v9[9] = get_value(cat_entries39)
   v9[10] = get_value(cat_entries47)
   v9[11] = get_value(cat_entries48)
-  v9[12] = get_value(cat_entries49)
+  #v9[12] = get_value(cat_entries49)
   
   #v8[1] /= n
   #v8[7] /= n

@@ -3,6 +3,8 @@
 
 Open the program by running "entry.jl"
 
+This project allows the user to simulate a specified quantity of cells within a square or elliptical environment.
+
 ## Main Screen
 ### Initialisation Options
 It is possible to specify the starting conditions for the model in the main screen.
@@ -22,7 +24,6 @@ These settings allow the user to alter the behaviour of ligand sources and their
 * Probability of Persistance: The chance that a cell will disregard the information about future moves from it surroundings and continue its movement.
 * Numbers of direction: The amount of directions a cell can calculate possible moves in. They are spaced out evenly along the cell surface.
 * Coefficients: Antoine needs to write this bit!!
-
 * Type of source: Select which type of source is required.
 * Number of sources: The total number of sources present in the simulation from the start.
 * Source Locations: Allows the user to select the locations of each possible source.
@@ -40,11 +41,12 @@ The simulation allows for 4 different cell types, but can run with only one.
 * Randomness: The percentage of a cells move that will be random.
 * Colour: Possible cell type colours are: Red('ro'), Blue('bo'), Purple('mo'), Green('go') and Yellow('yo').
 * Left Placed: Selecting this option will initialise all cells of the particular time close to the left wall of the environment.
-* Stem Cell: Selecting this option will allow this type of cell to have stem cell behaviour.
+* Stem Cell: Selecting this option will allow this type of cell to have stem cell behaviour. A stem cell will change the type of its progeny depending upon its local ligand concentration and the stem threshold specified in the main menu. Progeny will be either of the same type (stem cell replication), or the type below (1 -> 2 -> 3 -> 4). Note that type 4 cells cannot be stem cells. Unselecting this option means that all types will only produce the same type.
 
 ## Border Settings
-This window allows the specification of each border within the environment. Possible options are 'Reflecting', 'Absorbing' and 'Killing'.
+This window allows the specification of each border within the environment.
 ![Border Screen](border_screen.png)
 * Reflecting: Cells will bounce off these walls.
 * Absorbing: Upon contact, these cells will stick to these walls.
 * Killing: Upon contact, these cells will die and be removed from the simulation.
+
