@@ -1,7 +1,7 @@
 include("import.jl")
 
 ##########################################################################################################
-function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts)
+function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts,rb_value)
   check_entries1(v, prompts, entries)
 
   # set variables
@@ -24,6 +24,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   global Diffusion_coefficient = Array(Float64,nb_source)
   global A_coefficient= Array(Float64,nb_source)
   global tau0 = Array(Float64,nb_source)
+  global type_source=rb_value[1]
 
   if(type_source=="Point")	
     for i in 1:nb_source
@@ -102,10 +103,11 @@ function init_window()
   # set defaults        
   v = [10, 300, 30, 30, 1.5, 0.000]
   v2=[0.5, 8, 1, 10, 100, 150, 4]
+  global rb_value=["Point"]
   global check_location = false
-	global v3=Array(Float64,2*int(v2[7]))
-	global v4=Array(Float64,3*int(v2[7]))
-	for i in 1:v2[7]
+  global v3=Array(Float64,2*int(v2[7]))
+  global v4=Array(Float64,3*int(v2[7]))
+  for i in 1:v2[7]
     v3[2*i-1]=0
     v3[2*i]=(i-1)/(v2[7]-1)*v[4]
     v4[3*i-2]=10
@@ -115,6 +117,7 @@ function init_window()
   v8 = Float64[1.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,-1.0,0.0,0.05,2.0,1.0,1.0,1.0,0.0,0.05,2.0,1.0,1.0,1.0,.5,.5,.5,.5]
   v9 = ["ro",false,true,"bo",false,false,"mo",false,false,"go",false,false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
+  
 
   # make and activate controls
   prompts = ["Number of cells", "Number of timesteps ", "Width of environment",
@@ -135,14 +138,10 @@ function init_window()
     #bind(entries[i], "<KP_Enter>", ok_press)
   end
   focus(entries[1])
-  
-  # globals - should be removed asap
-  global check_location = false
-  global type_source = "Point"
 
   b2 = Button(ctrls, "Diffusion Settings")
   formlayout(b2, nothing)
-  bind(b2, "command", path -> gui_diffusion(v,v2, prompts, entries))
+  bind(b2, "command", path -> gui_diffusion(v,v2, prompts, entries,rb_value))
 
   b3 = Button(ctrls, "Cell Type Settings")
   formlayout(b3, nothing)
@@ -159,13 +158,13 @@ function init_window()
   formlayout(display_status, nothing)
   formlayout(pickle_status, nothing)
 
-	# make, display and sensitise the 'run' button
+  # make, display and sensitise the 'run' button
   b = Button(ctrls, "Run")
   # displays the button
   formlayout(b, nothing)
 
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts))
+    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts,rb_value))
   end
 
   # keeps program open

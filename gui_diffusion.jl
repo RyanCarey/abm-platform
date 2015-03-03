@@ -1,4 +1,4 @@
-function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array)
+function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_value)
   check_entries1(v, prompts, entries)
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
@@ -9,6 +9,7 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array)
   grid(ctrls2, 1, 1, sticky="nw", pady=5, padx=5)
   grid_columnconfigure(f2, 1, weight=1)
   grid_rowconfigure(f2, 1, weight=1)
+
 
   #Button definition
   b2 = Button(ctrls2, "See diffusion")
@@ -33,11 +34,13 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array)
       l  = Label(ctrls2, "")
       formlayout(l,nothing)
       global rb = Radio(ctrls2, ["Point", "Line"])
+      set_value(rb,rb_value[1])
       formlayout(rb, "Type of source: ")
     end 
     formlayout(entries2[i],string(prompts2[i],": "))
   end
   focus(entries2[1]) 
+
 
   #f3 = Frame(w2); pack(f3, expand = true, fill = "both")
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 2, 1,sticky="e")
@@ -71,18 +74,19 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array)
   # displays the button
   formlayout(b1, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b1,i,path -> gui_ligand(v, v2, v3, v4, prompts2, entries2))
+    bind(b1,i,path -> gui_ligand(v, v2, v3, v4, prompts2, entries2,get_value(rb)))
   end
   b3 = Button(ctrls2, "Ok")
   # displays the button
   formlayout(b3, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2, entries2))
+    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2, entries2,get_value(rb)))
   end
 end
 
 ##########################################################################################################
-function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array, entries2::Array)
+function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array, entries2::Array,value_rb)
+  rb_value[1]=value_rb
   check_entries1(v2, prompts2, entries2)
   destroy(w2) 
 end
