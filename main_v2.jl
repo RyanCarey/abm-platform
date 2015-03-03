@@ -1,14 +1,14 @@
-global const aff_min = 0.002
-global const aff_max = 1.0
-global const regen = 1.1
-global const degen = 1.05
-global cells = Array{Float64}[]
+global const aff_min = 0.002 # Minimum affinity
+global const aff_max = 1.0 # Maximum affinity
+global const regen = 1.1 # Affinity Regeneration Rate
+global const degen = 1.05 # Affinity Degeneration Rate
+global cells = Array[]
 global const TC = 48
 global const TS = 8
 global const TGM = 8
 global const c1 = TC - (TS + TGM)
-global const LP = 24 * 2
-global const LM = 24 * 2
+global const LP = 24 * 8
+global const LM = 24 * 20
 global const TCD = 24
 
 
@@ -30,7 +30,7 @@ function init!(n::Int)
 	end
 end
 
-function calc_num_cells(cells::Array)
+function calc_num_cells(cells)
 	amt_A = 0
 	amt_O = 0
 	for i in 1 : length(cells)
@@ -46,7 +46,7 @@ function calc_num_cells(cells::Array)
 	return amt_A, amt_O
 end
 
-function update_cells!(cells::Array)
+function update_cells!(cells)
 	dead_cells = 0
 	new_cells = 0
 	dead_cell_indexes = []
@@ -102,11 +102,11 @@ function main(steps::Int, start_cells::Int)
 	for i in 1 : steps
 		dostuff(i, cells)
 		update_cells!(cells)
-		println(cells)
+		#println(cells)
 	end
 end
 
-function dostuff(i::Int, cells::Array)
+function dostuff(i::Int, cells)
 	println("Step: ", i)
 		# Calculate the number of cells in each environment
 		amt_A, amt_O = calc_num_cells(cells)
