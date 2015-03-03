@@ -124,7 +124,6 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int})
       end
     end   
   end
-  println("dying indices: ",dying_indices)
   return dying_indices
 end
 
@@ -371,7 +370,6 @@ function put_at_the_border(m,startloc, dying_indices::Array{Int})
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
         push!(dying_indices, m)
-        print("dying_indices",dying_indices)
       end
     end
   end
@@ -389,7 +387,6 @@ function put_at_the_border(m,startloc, dying_indices::Array{Int})
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
         push!(dying_indices, m)
-        print("dying_indices",dying_indices)
       end
     end
   end

@@ -2,14 +2,15 @@ function simulator(alive_cells::Array,
                   dead_cells::Array, 
                   steps::Int,
                   display_output::Bool,
-                  txt_output::Bool)
+                  pickle_output::Bool,
+                  filename::String)
   global iter
   global negative_distance = 0
   for i = 1:steps
     iter = i
     if length(alive_cells) == 0
       println("All cells have died after $i iterations")
-      return alive_cells, dead_cells
+      break
     end
 
     index = rand(1 : length(alive_cells))
@@ -21,9 +22,7 @@ function simulator(alive_cells::Array,
       dying_indices = Int[]
     	dying_indices = move_any!(dying_indices)
       dying_indices = sort([j for j in Set(dying_indices)])
-      println("dying cells: ",dying_indices)
       while length(dying_indices) > 0
-        println("living cells: ",length(alive_cells))
         cell_death(alive_cells, dead_cells, pop!(dying_indices))
         cell_died = true
       end
@@ -36,13 +35,13 @@ function simulator(alive_cells::Array,
       show_sim(alive_cells)
     end
     # for speed, it will be necessary to batch these outputs in groups of 100+
-    if txt_output
-      ## call pickle output here
-    end
-    if i % 1000 == 0
+    if i % 100 == 0
       println("$i iterations completed")
     end
    #pause(0)
+    if pickle_output
+      pickle_out(filename, alive_cells, dead_cells)
+    end
   end
   println("simulation finished")
 end

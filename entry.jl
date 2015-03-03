@@ -55,13 +55,13 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     show_sim(alive_cells)
   end
 
+  t = strftime(time())[5:27] #store date and time as string
+  filename = "out_$t.pickle"
   if pickle_output
-    t = strftime(time())[5:27] #store date and time as string
-    file = "out_$t.pickle"
-    start_output(filename::String, t::String, v::Array, alive_cells::Array)
+    pickle_start(filename, t, v, v2, v3, v4, v8, v9, border_settings, alive_cells)
   end
 
-  simulator(alive_cells, dead_cells, steps, display_output, pickle_output)
+  simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename)
 end
 
 ##########################################################################################################
@@ -155,9 +155,9 @@ function init_window()
   # make checkboxes
   display_status = Checkbutton(ctrls, "Display Simulation")
   set_value(display_status, true)
-  txt_status = Checkbutton(ctrls, "Write to text")
+  pickle_status = Checkbutton(ctrls, "Write to pickle")
   formlayout(display_status, nothing)
-  formlayout(txt_status, nothing)
+  formlayout(pickle_status, nothing)
 
 	# make, display and sensitise the 'run' button
   b = Button(ctrls, "Run")
@@ -165,7 +165,7 @@ function init_window()
   formlayout(b, nothing)
 
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(txt_status), entries, prompts))
+    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts))
   end
 
   # keeps program open
