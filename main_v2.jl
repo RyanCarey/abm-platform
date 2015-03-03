@@ -1,6 +1,3 @@
-include("types.jl")
-include("functions.jl")
-
 global const aff_min = 0.002
 global const aff_max = 1.0
 global const regen = 1.1
@@ -105,6 +102,7 @@ function main(steps::Int, start_cells::Int)
 	for i in 1 : steps
 		dostuff(i, cells)
 		update_cells!(cells)
+		println(cells)
 	end
 end
 

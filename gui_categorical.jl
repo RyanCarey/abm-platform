@@ -1,7 +1,7 @@
 # GUI for program that simulates stem cells via categorical locations
-include("main_v2.jl")
-include("types.jl")
-include("functions.jl")
+@everywhere include("main_v2.jl")
+@everywhere include("new_types.jl")
+@everywhere include("functions.jl")
 using Tk
 using Cairo
 
@@ -17,8 +17,17 @@ formlayout(amt_cells, prompts[1])
 formlayout(timesteps, prompts[2])
 formlayout(ok_button, nothing)
 
-bind(ok_button, "command", path -> run(get_value(amt_cells), get_value(timesteps)))
+bind(ok_button, "command", path -> run(int(get_value(amt_cells)), int(get_value(timesteps))))
 
 function run(cells::Int, tsteps::Int)
 	main(tsteps, cells)
+end
+
+if !isinteractive()
+    while true
+      a = readline(STDIN)
+      if a == "exit"
+        return
+      end
+    end
 end

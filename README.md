@@ -3,7 +3,7 @@
 
 Open the program by running "entry.jl"
 
-This project allows the user to simulate a specified quantity of cells within a square or elliptical environment. At each timestep, a cell is chosen at random to be the subject of several functions:
+This project allows the user to simulate a specified quantity of cells within a square environment. At each timestep, a cell is chosen at random to be the subject of several functions:
 * Cell Movement
 * Cell Growth
 * Cell Divison (if applicable)
