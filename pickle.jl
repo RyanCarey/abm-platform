@@ -1,9 +1,6 @@
-using PyCall
-@pyimport pickle
-
-function pickle_dict(filename,dict)
+function pickle_dict(filename::String,dict::Dict)
   pickle_string = pickle.dumps(dict)
-  f = open(filename,"a")
+  f = open(filename, "a")
   write(f, pickle_string)
   close(f)
 end
@@ -31,8 +28,8 @@ function unpickle_file(filename::String)
   return output
 end
 
-function pickle_out(filename::String, alive_cells::Array, dead_cells::Array)
-  output = Dict("alive_cells"=>cells_to_matrix(alive_cells), "dead_cells"=> cells_to_matrix(dead_cells))
+function pickle_out(filename::String,i::Int, alive_cells::Array{Cell}, dead_cells::Array{Cell})
+  output = Dict("iteration"=>i,"alive_cells"=>cells_to_matrix(alive_cells), "dead_cells"=> cells_to_matrix(dead_cells))
   pickle_dict(filename,output)
 end
 
@@ -45,11 +42,12 @@ function pickle_start(filename::String, t::String, v::Array, v2::Array, v3::Arra
   pickle_dict(filename,output)
 end
 
-function cells_to_matrix(cells)
-  # takes array of cell objects and returns matrix of Any (but no Cell types), facilitating pickling
-  cell_matrix = fill("",length(cells),8)
+function cells_to_matrix(cells::Array{Cell})
+  # turns array of cell objects into matrix of strings and floats, facilitating pickling
+  cell_matrix = Array(Any,length(cells),8)
   for (i,j) in enumerate(cells)
-    cell_matrix[i,1:end] = [string(j.name) string(j.x) string(j.y) string(j.r) string(j.angle) string(j.speed) string(j.offspring) string(j.cell_type)]
+    cell_matrix[i,1:end] =  [j.name j.x j.y j.r j.angle j.speed j.offspring j.cell_type]
   end
-  return cell_matrix
+  return cell_matrix::Array{Any}
 end
+
