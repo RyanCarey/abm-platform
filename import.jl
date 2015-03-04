@@ -18,3 +18,5 @@ include("gui_diffusion.jl")
 include("gui_type.jl")
 include("gui_border.jl")
 include("gui_ligand.jl")
+using PyCall
+@pyimport pickle

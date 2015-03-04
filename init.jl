@@ -38,17 +38,9 @@ function init(n::Real, categories::Array)
     rvar = r/10 # Radius Variation
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
-      #xi = rand()*x 
       xi = categories[cell_cat].left_placed ? ri + .001 : ri + (x - 2ri) * rand()
-      #yi = rand()*y 
       yi = ri + (y - 2ri) * rand()
       overlap = false
-      #=
-      if BORDER_SHAPE == "Ellipse"
-        cell = Cell(string(i), Point(xi, yi), ri, 0, 0, 0, cell_cat)
-        in_ellipse(cell) ? overlap = true : nothing
-      end
-      =#
       for j in 1:i-1
         if((xi - cells[j].x) ^ 2 + (yi - cells[j].y) ^ 2 < (ri + cells[j].r) ^ 2)
           overlap = true

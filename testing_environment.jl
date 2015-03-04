@@ -1,7 +1,4 @@
-using Tk
-using Winston
-include("init.jl")
-include("cell_type.jl")
+include("import.jl")
 
 X_SIZE = 10
 Y_SIZE = 12
