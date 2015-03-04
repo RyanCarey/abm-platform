@@ -63,7 +63,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
 
   println("building environment")
-  global alive_cells = Cell[] 
+  alive_cells = Cell[] 
   alive_cells = init(n_cell, categories)
   global dead_cells = Cell[]
 
@@ -121,8 +121,8 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30, 1.5, 0.000]
-  v2=[0.5, 8, 1, 10, 100, 150, 4,10,10,0.1]
-  global rb_value=["Point"]
+  v2=[0.5, 8, 1, 10, 100, 150, 1,10,10,0.1]
+  global rb_value=["Line"]
   global check_location = false
   global v3=Array(Float64,2*int(v2[7]))
   global v4=Array(Float64,3*int(v2[7]))

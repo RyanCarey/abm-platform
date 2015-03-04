@@ -125,7 +125,7 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
       amplitude=float(get_value(entries2[4]))
       speed=float(get_value(entries2[5]))
       init=float(get_value(entries2[6]))
-      result[x]=amplitude/(speed*init*timediff)*exp(-x^2/(2*(speed*init*timediff)^2))
+      result[x]=float(amplitude/(speed*init*timediff)*exp(-x^2/(2*(speed*init*timediff)^2)))
     end
   end
   p=plot(result)
