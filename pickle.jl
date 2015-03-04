@@ -43,11 +43,11 @@ function pickle_start(filename::String, t::String, v::Array, v2::Array, v3::Arra
 end
 
 function cells_to_matrix(cells::Array{Cell})
-  # takes array of cell objects and returns matrix of Any (but no Cell types), facilitating pickling
+  # turns array of cell objects into matrix of strings and floats, facilitating pickling
   cell_matrix = Array(Any,length(cells),8)
   for (i,j) in enumerate(cells)
     cell_matrix[i,1:end] =  [j.name j.x j.y j.r j.angle j.speed j.offspring j.cell_type]
   end
-  return cell_matrix
+  return cell_matrix::Array{Any}
 end
 
