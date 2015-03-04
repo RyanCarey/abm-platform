@@ -7,6 +7,9 @@ function ligand_concentration_onesource_2D(abscisse_ligand,ordinate_ligand)
     (res,tmp)=quadgk(integrand,0,min(iter,tau0[number_source]))
   else
     res=diffusion_maximum[number_source]/(speed_variance[number_source]*initial_variance[number_source]*iter)*exp(-distance_source_squared/(2*(speed_variance[number_source]*initial_variance[number_source]*iter)^2))
+println("diffusion_maximum: ",diffusion_maximum)
+println("speed_variance: ",speed_variance)
+println("initial_variance: ",initial_variance)
 println(res)
   end
   return res

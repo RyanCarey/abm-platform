@@ -112,7 +112,7 @@ end
 ##########################################################################################################
 function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,diff_type)
   check_entries1(v2, prompts2, entries2)
-  println("entries2: ", get_value(entries2[1])," ",get_value(entries2[2])," ",get_value(entries2[3])," ",get_value(entries2[4])," ",get_value(entries2[5])," ",get_value(entries2[6]))
+  #println("entries2: ", get_value(entries2[1])," ",get_value(entries2[2])," ",get_value(entries2[3])," ",get_value(entries2[4])," ",get_value(entries2[5])," ",get_value(entries2[6]))
   result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
   for x in 1:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
