@@ -42,7 +42,8 @@ function gui_type(v8::Array,v9::Array)
     end
 
     # set and place dropdown boxes
-    set_value(colour_entries[i], "$(v9[i,1])")
+    co_to_colour = Dict("ro"=>"red", "bo"=>"blue", "mo"=>"magenta", "go"=>"green", "yo"=>"yellow",)
+    set_value(colour_entries[i], co_to_colour[v9[i,1]])
     grid(colour_entries[i], 9, i+1)
 
     # set and place checkboxes
@@ -89,9 +90,9 @@ function check_cat_entries(v8::Array{Float64,2},v9::Array{Any,2})
     end
   end
 
-  colour_dict = Dict("red"=>"ro", "blue"=>"bo", "magenta"=>"yo", "green"=>"go", "yellow"=>"yo",)
+  colour_to_co = Dict("red"=>"ro", "blue"=>"bo", "magenta"=>"yo", "green"=>"go", "yellow"=>"yo",)
   for i in 1:4
-    v9[i,1] = colour_dict[get_value(colour_entries[i])]
+    v9[i,1] = colour_to_co[get_value(colour_entries[i])]
     v9[i,2] = get_value(cat_entries_bool[i,1])
     v9[i,3] = get_value(cat_entries_bool[i,2])
   end

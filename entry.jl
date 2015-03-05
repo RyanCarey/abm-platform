@@ -19,7 +19,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   global border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
-  global const nb_source= int(v2[6])
+  global const nb_source= int(v2[7])
   global source_abscisse_ligand =Array(Float64,nb_source)
   global source_ordinate_ligand =Array(Float64,nb_source)
   global Diffusion_coefficient = Array(Float64,nb_source)
@@ -116,15 +116,15 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30, 1.5, 0.000]
-  v2=[0.5, 8, 10, 100, 150, 1,10,1]
+  v2=[0.5, 8, 1, 10, 100, 150, 1,10,1]
   global rb_value=["Line"]
   global check_location = false
-  global v3=Array(Float64,2*int(v2[6]))
-  global v4=Array(Float64,3*int(v2[6]))
-  global v5=Array(Float64,3*int(v2[6]))
-  for i in 1:v2[6]
+  global v3=Array(Float64,2*int(v2[7]))
+  global v4=Array(Float64,3*int(v2[7]))
+  global v5=Array(Float64,3*int(v2[7]))
+  for i in 1:v2[7]
     v3[2*i-1]=0
-    v3[2*i]=(i-1)/(v2[6]-1)*v[4]
+    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
     v4[3*i-2]=10
     v4[3*i-1]=100
     v4[3*i]=150	
@@ -137,7 +137,7 @@ function init_window()
                0.0 0.05 2.0 1.0 1.0 1.0 .5;
                0.0 0.05 2.0 1.0 1.0 1.0 .5]
 
-  v9 = ["red" false true;"blue" false false;"magenta" false false;"green" false false]
+  v9 = ["ro" false true;"bo" false false;"mo" false false;"go" false false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
 
   # make and activate controls
