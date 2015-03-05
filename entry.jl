@@ -25,8 +25,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   global A_coefficient= Array(Float64,nb_source)
   global tau0 = Array(Float64,nb_source)
   global diffusion_maximum = Array(Float64,nb_source)
-  global speed_variance = Array(Float64,nb_source)
-  global initial_variance = Array(Float64,nb_source)
+  global diffusion_coefficient = Array(Float64,nb_source)
   global type_source=rb_value[1]
   global type_diffusion=diff_type
 
@@ -40,9 +39,8 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
         A_coefficient[i] = v4[3*i-1]
         tau0[i] = v4[3*i]
       else
-        diffusion_maximum[i] =v5[3*i-2]
-        speed_variance[i] = v5[3*i-1]
-        initial_variance[i] = v5[3*i]
+        diffusion_maximum[i] =v5[2*i-1]
+        diffusion_coefficient[i] = v5[2*i]
       end
     end
   else
@@ -53,9 +51,8 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
         A_coefficient[i] = v4[3*i-1]
         tau0[i] = v4[3*i]
       else
-        diffusion_maximum[i] =v4[3*i-2]
-        speed_variance[i] = v4[3*i-1]
-        initial_variance[i] = v4[3*i]
+        diffusion_maximum[i] =v5[2*i-1]
+        diffusion_coefficient[i] = v5[2*i]
       end
     end
   end
@@ -121,7 +118,7 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30, 1.5, 0.000]
-  v2=[0.5, 8, 1, 10, 100, 150, 1,10,10,0.1]
+  v2=[0.5, 8, 1, 10, 100, 150, 1,10,1]
   global rb_value=["Line"]
   global check_location = false
   global v3=Array(Float64,2*int(v2[7]))
@@ -192,6 +189,14 @@ function init_window()
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts,rb_value,get_value(rb2)))
   end
+
+  #=
+  bq = Button (ctrls, "Quit")
+  formlayout(bq, nothing)
+  for i in ["command","<Return>","<KP_Enter>"] 
+    bind(bq,i,path -> destroy(w))
+  end
+  =#
 
   # keeps program open
   if !isinteractive()
