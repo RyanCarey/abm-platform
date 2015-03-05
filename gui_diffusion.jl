@@ -16,7 +16,7 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
 
   if(diff_type=="Integrative")
     prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness",
-             "D diffusion coefficient","A diffusion coefficient","Tau coefficient","Number of sources"]
+             "Gradient Coeffient","Initial Coencentration","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
@@ -26,13 +26,12 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
                        Entry(ctrls2,"$(int(v2[7]))")]
   else
     prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness",
-             "Maximum Concentration","Initial variance value","Rate of variance's change","Number of sources"]
+             "Initial Concentration","Gradient Coeffient","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
                        Entry(ctrls2,"$(int(v2[8]))"),
                        Entry(ctrls2,"$(float(v2[9]))"),
-                       Entry(ctrls2,"$(float(v2[10]))"),
                        Entry(ctrls2,"$(int(v2[7]))")]
   end
 
@@ -43,7 +42,7 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
       l  = Label(ctrls2, "")
       formlayout(l,nothing) 
     end 
-    if(i==7)  
+    if(i==7 && diff_type=="Integrative" || i==6 && diff_type=="Normal")  
       formlayout(b2, nothing)
       l  = Label(ctrls2, "")
       formlayout(l,nothing)
@@ -66,16 +65,16 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
   bind(sc, "command", path -> plot_diffusion(v, v2, prompts2, entries2,diff_type))
 
   #First plot of the concentration
-  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
-  for x in 1:int(sqrt(v[3]^2+v[4]^2))
+  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2))+1,1)
+  for x in 0:int(sqrt(v[3]^2+v[4]^2))
   global distance_source_squared = int(x)
   timediff = get_value(sc)  
     if(diff_type=="Integrative")
       tau0 = int(v2[6])
       (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-      result[x]=res
+      result[x+1]=res
     else
-      result[x]=v2[8]/(v2[9]*v2[10]*timediff)*exp(-x^2/(2*(v2[9]*v2[10]*timediff)^2))
+      result[x+1]=v2[8]/sqrt(v2[9]*timediff*4*pi)*exp(-x^2/(v2[9]*timediff*4))
     end
   end
   p=plot(result)
@@ -88,9 +87,9 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
     bind(b2,i,path -> plot_diffusion(v, v2, prompts2, entries2,diff_type))
   end
 
-  b1 = Button(ctrls2, "Ligand's source location")
+  b1 = Button(ctrls2, "Location and Coefficients")
   # displays the button
-  formlayout(b1, nothing)
+  formlayout(b1, "Choose source ligand location and coefficients")
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b1,i,path -> gui_ligand(v, v2, v3, v4,v5, prompts2, entries2,get_value(rb),diff_type))
   end
@@ -112,20 +111,18 @@ end
 ##########################################################################################################
 function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,diff_type)
   check_entries1(v2, prompts2, entries2)
-  #println("entries2: ", get_value(entries2[1])," ",get_value(entries2[2])," ",get_value(entries2[3])," ",get_value(entries2[4])," ",get_value(entries2[5])," ",get_value(entries2[6]))
-  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2)),1)
-  for x in 1:int(sqrt(v[3]^2+v[4]^2))
+  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2))+1,1)
+  for x in 0:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
     timediff = get_value(sc)  
     if(diff_type=="Integrative")
       tau0 = int(get_value(entries2[6]))
       (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-      result[x]=res
+      result[x+1]=res
     else
       amplitude=float(get_value(entries2[4]))
-      speed=float(get_value(entries2[5]))
-      init=float(get_value(entries2[6]))
-      result[x]=float(amplitude/(speed*init*timediff)*exp(-x^2/(2*(speed*init*timediff)^2)))
+      D=float(get_value(entries2[5]))
+      result[x+1]=float(amplitude/sqrt(4*pi*D*timediff)*exp(-x^2/(4*D*timediff)))
     end
   end
   p=plot(result)
@@ -138,7 +135,7 @@ end
 function integrand_entry(tau::Real)
   timediff = get_value(sc)
   A=int(get_value(entries2[5]))
-  D=int(get_value(entries2[4]))
+  D=float(get_value(entries2[4]))
   result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
   return result
 end

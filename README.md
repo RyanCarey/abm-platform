@@ -21,6 +21,7 @@ It is possible to specify the starting conditions for the model in the main scre
 * Height/Width of Environment: This denotes the size of the simulation environment in some arbitrary units.
 * Stem Threshold: This specifies the concentration of ligand at which a reproducing stem cell will switch between self-replication and progenitor production
 * Probability of cell death: At every timestep, the cell under scrutiny will have this chance to die and be removed from the simulation.
+* Type of diffusion: Choose between two ways for calculating ligand's concentration
 * Display Simulation: Selecting this option will produce an image of the simulation to the right hand side.
 * Write to text: Selecting this option will save an output of the simulation to file.
 
@@ -29,11 +30,17 @@ These settings allow the user to alter the behaviour of ligand sources and their
 ![Diffusion Screen](diffusion_screen.png)
 * Probability of Persistance: The chance that a cell will disregard the information about future moves from it surroundings and continue its movement.
 * Numbers of direction: The amount of directions a cell can calculate possible moves in. They are spaced out evenly along the cell surface.
-* Coefficients: Antoine needs to write this bit!!
+* Coefficients: Integrative diffusion
+	-A coefficient: Change it to linearly change the concentration
+	-D coefficient: Change it to change the gradient of concentration
+	-tau: Maximum upper time limit of the integration
+* Coefficients: Integrative diffusion
+	-A coefficient: Change it to linearly change the concentration
+	-D coefficient
 * Type of source: Select which type of source is required.
 * Number of sources: The total number of sources present in the simulation from the start.
 * Source Locations: Allows the user to select the locations of each possible source.
-* Diffusion Over Time: Antoine again?
+* Diffusion Over Time: This slider can be used to display the concentration of ligand from one source with the above coefficients over time. Move the slider to change time. 
 
 ## Cell Settings
 The simulation allows for 4 different cell types, but can run with only one.

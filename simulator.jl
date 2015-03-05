@@ -7,11 +7,12 @@ function simulator(alive_cells::Array,
   global iter
   global negative_distance = 0
   for i = 1:steps
-    iter = i
+
     if length(alive_cells) == 0
       println("All cells have died after $i iterations")
       break
     end
+    iter = i/length(alive_cells)+1
 
     index = rand(1 : length(alive_cells))
     # Does all cell functions
@@ -35,7 +36,7 @@ function simulator(alive_cells::Array,
       show_sim(alive_cells)
     end
     # for speed, it will be necessary to batch these outputs in groups of 100+
-    if i % 100 == 0
+    if i % 1000 == 0
       println("$i iterations completed")
       if pickle_output
         pickle_out(filename, i, alive_cells, dead_cells)
