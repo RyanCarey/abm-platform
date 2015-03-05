@@ -112,7 +112,7 @@ function dostuff(i::Int, cells)
 		amt_A, amt_O = calc_num_cells(cells)
 		# For each cell
 		for j in 1 : length(cells)
-			cell = cells[j]
+			cell = copy(cells[j])
 			if cell[4] == 1
 				continue
 			end
@@ -175,6 +175,7 @@ function dostuff(i::Int, cells)
 					end
 				end
 			end
+			cells[j] = copy(cell)
 		end
 end
 
