@@ -65,10 +65,10 @@ function angle_from_ligand(cell,k)
 	#and the cumulative probability of the ligand concentration:
 	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
 	choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
- 	println(list_ligand)
-        println("choosen_angle[1]: ",choosen_angle[1])
-        println("choosen_angle[2]: ",choosen_angle[2])
-	pause(0)
+ 	#println(list_ligand)
+        #println("choosen_angle[1]: ",choosen_angle[1])
+        #println("choosen_angle[2]: ",choosen_angle[2])
+	#pause(0)
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
 	if cat == 1
