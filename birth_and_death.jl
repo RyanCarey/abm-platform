@@ -33,7 +33,9 @@ function chance_to_die(alive_cells, dead_cells, index)
 end
 
 function cell_division(cells, i)
-	radius = cells[i].r		
+	radius = cells[i].r
+	area = pi * radius ^ 2
+	new_r = sqrt( (area / 2) / pi)
 	angle = 2 * pi * rand()		
 
 	#println("New Cell!")
@@ -75,8 +77,8 @@ function cell_division(cells, i)
 		
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
-			new_cell = Cell(offspring_name, new_x, new_y, radius / 2, 1, 1, 0, cells[i].cell_type)
-			cells[i].r /= 2
+			new_cell = Cell(offspring_name, new_x, new_y, new_r, 1, 1, 0, cells[i].cell_type)
+			cells[i].r = new_r
 			cells[i].offspring += 1
 			if categories[cells[i].cell_type].stem_cell
 				# Sum ligands
