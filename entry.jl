@@ -12,10 +12,10 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   global STEM_THRESHOLD = v[5]
   global DIE_THRESHOLD = v[6]
   global categories = Cell_type[
-                      Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v9[1,1], v9[1,2], v9[1,3]),
-                      Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v9[2,1], v9[2,2], v9[2,3]),
-                      Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v9[3,1], v9[3,2], v9[3,3]),
-                      Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v9[4,1], v9[4,2], v9[4,3])]
+          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[4,9], v8[4,10], v9[1,1], v9[1,2], v9[1,3]),
+          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[4,9], v8[4,10], v9[2,1], v9[2,2], v9[2,3]),
+          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[4,9], v8[4,10], v9[3,1], v9[3,2], v9[3,3]),
+          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], v9[4,3])]
   global border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
@@ -132,10 +132,10 @@ function init_window()
     v5[3*i-1]=10
     v5[3*i]=0.1	
   end
-  v8 = Float64[1.0 0.05 2.0 1.0 1.0 1.0 .5;
-               0.0 0.05 2.0 1.0 1.0 -1.0 .5;
-               0.0 0.05 2.0 1.0 1.0 1.0 .5;
-               0.0 0.05 2.0 1.0 1.0 1.0 .5]
+  v8 = Float64[1.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5;
+               0.0 0.05 2.0 1.0 1.0 -1.0 1.5 .0001 .5 .5;
+               0.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5;
+               0.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5]
 
   v9 = ["ro" false true;"bo" false false;"mo" false false;"go" false false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]

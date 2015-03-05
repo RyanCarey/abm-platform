@@ -31,6 +31,9 @@ type Cell_type
 	avg_r::Real
 	conc_response::Real
   randomness::Real
+  persistence::Real
+  stem_threshold::Real
+  death_rate::Real
 	colour::String
 	left_placed::Bool
 	stem_cell::Bool

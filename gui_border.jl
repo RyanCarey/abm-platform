@@ -5,33 +5,33 @@ function gui_border(v::Array, v10::Array, prompts::Array, entries::Array)
   global f4 = Frame(w4)
   pack(f4, expand = true, fill = "both")
   grid(canvas, 1, 2, sticky="nsew")
-  behaviours = ["Reflecting","Absorbing","Killing"]
+  behaviours = ["Reflecting","Absorbing","Removing"]
 
   global border_entries1 = Combobox(f4, behaviours)
   global border_entries2 = Combobox(f4, behaviours)
   global border_entries3 = Combobox(f4, behaviours)
   global border_entries4 = Combobox(f4, behaviours)
 
-  set_value(border_entries1, "$(v10[1])")
-  set_value(border_entries2, "$(v10[2])")
-  set_value(border_entries3, "$(v10[3])")
-  set_value(border_entries4, "$(v10[4])")
+  border_entries = [border_entries1, border_entries2, border_entries3, border_entries4]
+  for i in 1:4
+    set_value(border_entries[i], "$(v10[i])")
+  end
 
   # Place entry fields in columns
   border_entries = [border_entries1,border_entries2,border_entries3,border_entries4]
   border_prompts = ["Left border","Right border","Lower border","Top border"]
-  n = length(border_prompts)
+
   for i in 1:length(border_prompts)
     grid(border_entries[i],i+1,1)
     #grid(Label(f4, border_prompts[i]),i+1,1,sticky = "se")
     formlayout(border_entries[i],string(border_prompts[i],": "))
-    bind(entries[i], "<Return>", destroy_cat_window)
-    bind(entries[i], "<KP_Enter>", destroy_cat_window)
+    bind(border_entries[i], "<Return>", path -> destroy_border_window(v10, border_entries))
+    bind(border_entries[i], "<KP_Enter>", path -> destroy_border_window(v10, border_entries))
   end
 
   # Place Ok button in bottom left
   bbord = Button(f4, "Ok")  
-  bind(bbord, "command", path -> destroy_border_window(v10))
+  bind(bbord, "command", path -> destroy_border_window(v10, border_entries))
   formlayout(bbord, nothing)
 
   if !isinteractive()
@@ -45,15 +45,14 @@ function gui_border(v::Array, v10::Array, prompts::Array, entries::Array)
 end
 
 # Function to get values and destroy window upon clicking OK
-function destroy_border_window(v10)
-  check_border_entries(v10)
+function destroy_border_window(v10, border_entries)
+  check_border_entries(v10, border_entries)
   destroy(w4)
 end
 
 # Function to collect values.
-function check_border_entries(v10)
-  v10[1] = get_value(border_entries1)
-  v10[2] = get_value(border_entries2)
-  v10[3] = get_value(border_entries3)
-  v10[4] = get_value(border_entries4)
+function check_border_entries(v10, border_entries)
+  for i in 1:4
+    v10[i] = get_value(border_entries[i])
+  end
 end
