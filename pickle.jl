@@ -5,7 +5,7 @@ function pickle_dict(filename::String,dict::Dict)
   close(f)
 end
 
-function unpickle_from_point(filename::String, pointer::Int=1)
+function unpickle_from_pointer(filename::String, pointer::Int=1)
   # unpickles a pickle file starting from a particular character and returns the next unread character
   # this is a workaround for pickle.load, which doesn't work in pycall for julia
   pickle_file = readall(filename)
@@ -18,11 +18,11 @@ function unpickle_from_point(filename::String, pointer::Int=1)
   return dict, pickle_string_length
 end
 
-function unpickle_file(filename::String)
+function unpickle(filename::String)
   pointer = 1
   output = []
   while pointer >= 0
-    input_dict, pointer = unpickle_from_point(filename,pointer)
+    input_dict, pointer = unpickle_from_pointer(filename,pointer)
     output = push!(output, input_dict)
   end
   return output
