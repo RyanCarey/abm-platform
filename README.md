@@ -31,12 +31,12 @@ These settings allow the user to alter the behaviour of ligand sources and their
 * Probability of Persistance: The chance that a cell will disregard the information about future moves from it surroundings and continue its movement.
 * Numbers of direction: The amount of directions a cell can calculate possible moves in. They are spaced out evenly along the cell surface.
 * Coefficients: Integrative diffusion
-** Initial Concentration: Linearly linked to the concentration
-** Gradient Coefficient: Decrease this parameter to increase the slope of the concentration
-** Tau: Maximum upper time limit of the integration
+* * Initial Concentration: Linearly linked to the concentration
+* * Gradient Coefficient: Decrease this parameter to increase the slope of the concentration
+* * Tau: Maximum upper time limit of the integration
 * Coefficients: Integrative diffusion
-** Initial Concentration: Linearly linked to the concentration
-** Gradient Coefficient: Decrease this parameter to increase the slope of the concentration
+* * Initial Concentration: Linearly linked to the concentration
+* * Gradient Coefficient: Decrease this parameter to increase the slope of the concentration
 * Type of source: Select which type of source is required.
 * Number of sources: The total number of sources present in the simulation from the start.
 * Source Locations: Allows the user to select the locations of each possible source.
