@@ -1,6 +1,5 @@
 include("import.jl")
 
-##########################################################################################################
 function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts,rb_value,diff_type)
   check_entries1(v, prompts, entries)
 
@@ -65,7 +64,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     canvas[:width] = 400 * x_size/y_size
     w[:width] = 400 + int(canvas[:width])
     pack(frame, expand=true, fill="both")
-    show_sim(alive_cells)
+    show_sim(alive_cells, x_size, y_size)
   end
 
   t = strftime(time())[5:27] #store date and time as string
@@ -76,9 +75,9 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename, x_size, y_size, border_settings)
 end
-# Function to check entered data for correct values and then store each value in it's relevant array.
-##########################################################################################################
+
 function check_entries1(v::Array, prompts::Array, entries::Array)
+  # sanitises inputted data and stores it as a float in the relevant array
   for i in 1:length(prompts)
     if prompts[i][1:10]=="Probability" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
@@ -99,7 +98,6 @@ function check_entries1(v::Array, prompts::Array, entries::Array)
   end
 end
 
-##########################################################################################################
 function init_window()
   println("Starting up window...")
   # window parameters
@@ -208,4 +206,5 @@ function init_window()
   end
 end
 
+#run program
 init_window()

@@ -1,6 +1,7 @@
 # Module containing functions pertaining to cell movement.
 
-function move_any!(dying_indices,index,alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
+function move_any!(dying_indices::Array{Int,1},index::Int,
+                   alive_cells::Array{Cell,1}, x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1})
   x=Array(Float64,length(alive_cells))
   y=Array(Float64,length(alive_cells))
   for i in 1:length(alive_cells)
@@ -12,13 +13,14 @@ function move_any!(dying_indices,index,alive_cells::Array{Cell,1}, x_size::Real,
   startloc = Point(alive_cells[m].x, alive_cells[m].y)
 
   alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
-  alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness), 2pi, x_size, y_size)
+  proposed_angle = angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness, x_size, y_size) 
+  alive_cells[m].angle = mod(proposed_angle, 2pi)
   alive_cells[m].x += alive_cells[m].speed * cos(alive_cells[m].angle)
   alive_cells[m].y += alive_cells[m].speed * sin(alive_cells[m].angle)
 
   global overlap=false
 
-  dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells, x_size, y_size)
+  dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells, x_size, y_size, border_settings)
   
   if overlap
     for i in 1:length(alive_cells)
@@ -29,7 +31,8 @@ function move_any!(dying_indices,index,alive_cells::Array{Cell,1}, x_size::Real,
   return dying_indices
 end
 ##########################################################################################################
-function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
+function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1}, 
+                       x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1})
   if is_overlap(m,startloc,alive_cells)!=m
     overlap=true
   end
@@ -45,8 +48,8 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
     if k!=m
       alive_cells[m].x,alive_cells[m].y,d_move=find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
     else
-      startloc, dying_indices=put_at_the_border(m,startloc, dying_indices,alive_cells)
-      dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells, x_size, y_size)
+      startloc, dying_indices=put_at_the_border(m,startloc, dying_indices,alive_cells, x_size, y_size, border_settings)
+      dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells, x_size, y_size, border_settings)
     end
   else
     if k!=m
@@ -70,7 +73,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
       else
         alive_cells[k].angle=pi
       end
-#If the cell is going forward
+  #If the cell is going forward
       if d_move>0
         if ym!=y1
           alpha = mod(acos((xm - x1)/sqrt((xm - x1)^2+(ym - y1)^2))*sign(ym - y1),2*pi)
@@ -112,7 +115,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
       saved_anglem=alive_cells[m].angle
       saved_speedm=alive_cells[m].speed
 
-      dying_indices = solve_overlap(k,startlock, dying_indices,alive_cells, x_size, y_size)
+      dying_indices = solve_overlap(k,startlock, dying_indices,alive_cells, x_size, y_size, border_settings)
 
       alive_cells[m].angle=saved_anglem
       alive_cells[m].speed=saved_speedm
@@ -121,8 +124,8 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
       alive_cells[m].x+=alive_cells[m].speed*cos(alive_cells[m].angle)
       alive_cells[m].y+=alive_cells[m].speed*sin(alive_cells[m].angle)
 
-      dying_indices = solve_overlap(m,startlocm, dying_indices,alive_cells, x_size, y_size)
-#if d_move <0, the cell is going backward => error
+      dying_indices = solve_overlap(m,startlocm, dying_indices,alive_cells, x_size, y_size, border_settings)
+  #if d_move <0, the cell is going backward => error
       else
         alive_cells[m].speed=0
         alive_cells[k].speed=0
@@ -133,7 +136,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
 end
 
 ##########################################################################################################
-function find_center_where_they_touch(cellm,cellk,startloc::Point)
+function find_center_where_they_touch(cellm::Cell,cellk::Cell,startloc::Point)
   x1 = startloc.x
   y1 = startloc.y
   x2 = cellk.x
@@ -217,7 +220,6 @@ function check_any_cell_between(startloc::Point,m::Int,alive_cells::Array{Cell,1
       cos1=(-d20^2+d10^2+d12^2)/(2*d10*d12)
       cos0=(-d12^2+d10^2+d20^2)/(2*d10*d20)
 
-
       if i!=m && d23<(r1+r2)-0.0001 && (cos1>0 || d12<r1+r2+0.00001) && (cos0>0||d20<r1+r2+0.00001)
         #To know which overlaping cell is the closest from the startlocation we need to calculate the distance
         d24=r1+r2
@@ -267,7 +269,8 @@ function check_any_cell_between(startloc::Point,m::Int,alive_cells::Array{Cell,1
   return j
 end
 ##########################################################################################################
-function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
+function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int,1},alive_cells::Array{Cell,1}, 
+                           x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1})
   xm=alive_cells[m].x
   ym=alive_cells[m].y
   x0=startloc.x
