@@ -6,24 +6,7 @@
 # If a cell is dividing, it stops desiring to move
 # If 2nd value is null, no new cell
 
-#include("cell_type.jl")
-#include("move.jl")
-
-#=function life_or_death(alive_cells, dead_cells)
-	if rand() < DIVIDE_THRESHOLD
-		alive_cells = divide_any(alive_cells)
-  	end
-	if rand() < DIE_THRESHOLD
-		alive_cells, dead_cells = kill_any(alive_cells, dead_cells)
-	end
-	return alive_cells, dead_cells
-end=#
-
-#=function divide_any(alive_cells)
-  i = rand(1:length(alive_cells))
-  return cell_division(alive_cells,i)
-end=#
-
+# Checks if cell in question will die at this iteration. Chance is defined by cell type.
 function chance_to_die(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}, index::Int)
 	if rand() < categories[alive_cells[index].cell_type].death_rate
 		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
@@ -32,27 +15,19 @@ function chance_to_die(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}
 	return alive_cells, dead_cells, false
 end
 
-
+# Function to divide a cell. Will assign new radii and locations to both cells (original and new) and check that they don't overlap.
 function cell_division(cells::Array{Cells, 1}, i::Int)
 	radius = cells[i].r
 	area = pi * radius ^ 2
 	new_r = sqrt( (area / 2) / pi)
 	angle = 2 * pi * rand()		
 
-	#println("New Cell!")
 	new_x = cells[i].x - cos(angle) * 2 * new_r
 	new_y = cells[i].y - sin(angle) * 2 * new_r
 	new_point = Point(new_x, new_y)
 	in_empty_space = !(is_overlap_divide(cells, new_point, new_r))
 
-  #=
-  if BORDER_SHAPE == "Ellipse"
-    cell = Cell(string(i), new_x, new_y, radius, 0, 0, 0, cells[i].cell_type)
-    in_empty_space = in_ellipse(cell) ? in_empty_space : false
-  end
-  =#
-
-	attempt = 0
+ 	attempt = 0
 	give_up = false
 	while !in_empty_space || !(radius < new_x < X_SIZE - radius) || !(radius < new_y < Y_SIZE - radius)
 		angle = 2 * pi * rand()
@@ -62,15 +37,7 @@ function cell_division(cells::Array{Cells, 1}, i::Int)
 		cells[i].r = new_r
 		in_empty_space = !(is_overlap_divide(cells, Point(new_x, new_y), new_r))
     
-    # check if within elliptical bounds
-    #=
-    if BORDER_SHAPE == "Ellipse"
-      cell = Cell(string(i), new_x, new_y, radius, 0, 0, 0, cells[i].cell_type)
-      in_empty_space = in_ellipse(cell) ? in_empty_space : false
-    end
-    =#
-
-		attempt += 1
+    	attempt += 1
 		if attempt > 100
 			println("Tried 100 times to place new cell, giving up!")
 			cells[i].r = temp_r

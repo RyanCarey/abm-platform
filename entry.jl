@@ -57,7 +57,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     end
   end
 
-  println("building environment")
+  println("Building Environment")
   alive_cells = Cell[] 
   alive_cells = init(n_cell, categories)
   global dead_cells = Cell[]
@@ -78,11 +78,11 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename)
 end
-
+# Function to check entered data for correct values and then store each value in it's relevant array.
 ##########################################################################################################
 function check_entries1(v::Array, prompts::Array, entries::Array)
   for i in 1:length(prompts)
-    if prompts[i][1:10]=="Probabilit" || prompts[i][end-4:end]=="(0-1)"
+    if prompts[i][1:10]=="Probability" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
         Messagebox(title="Warning", message=string(string(prompts[i])," must be between 0 and 1"))
         return

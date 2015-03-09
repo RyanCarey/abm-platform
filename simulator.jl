@@ -37,7 +37,7 @@ function simulator(alive_cells::Array,
     end
     # for speed, it will be necessary to batch these outputs in groups of 100+
     if i % 1000 == 0
-      println("$i iterations completed")
+      println("$i Iterations Completed")
       if pickle_output
         pickle_out(filename, i, alive_cells, dead_cells)
       end
@@ -47,5 +47,5 @@ function simulator(alive_cells::Array,
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
-  println("simulation finished")
+  println("Simulation Finished")
 end
