@@ -7,16 +7,14 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   # set variables
   n_cell = int(v[1])
   const steps = int(v[2])
-  global X_SIZE = v[3]
-  global Y_SIZE = v[4]
-  #global STEM_THRESHOLD = v[5]
-  #global DIE_THRESHOLD = v[6]
+  x_size = v[3]
+  y_size = v[4]
   global categories = Cell_type[
           Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], v9[1,1], v9[1,2], v9[1,3]),
           Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], v9[2,1], v9[2,2], v9[2,3]),
           Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], v9[3,1], v9[3,2], v9[3,3]),
           Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], false)]
-  global border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
+  border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
   global const nb_source= int(v2[7])
@@ -59,12 +57,12 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   println("building environment")
   alive_cells = Cell[] 
-  alive_cells = init(n_cell, categories)
+  alive_cells = init(n_cell, categories, x_size, y_size)
   global dead_cells = Cell[]
 
   if display_output
     canvas[:height] = 400
-    canvas[:width] = 400 * X_SIZE/Y_SIZE
+    canvas[:width] = 400 * x_size/y_size
     w[:width] = 400 + int(canvas[:width])
     pack(frame, expand=true, fill="both")
     show_sim(alive_cells)
@@ -76,7 +74,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     pickle_start(filename, t, v, v2, v3, v4, v8, v9, border_settings, alive_cells)
   end
 
-  simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename)
+  simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename, x_size, y_size, border_settings)
 end
 
 ##########################################################################################################

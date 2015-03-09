@@ -1,6 +1,6 @@
 # Module containing functions pertaining to cell movement.
 
-function move_any!(dying_indices,index,alive_cells::Array{Cell,1})
+function move_any!(dying_indices,index,alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
   x=Array(Float64,length(alive_cells))
   y=Array(Float64,length(alive_cells))
   for i in 1:length(alive_cells)
@@ -12,13 +12,13 @@ function move_any!(dying_indices,index,alive_cells::Array{Cell,1})
   startloc = Point(alive_cells[m].x, alive_cells[m].y)
 
   alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
-  alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness), 2pi)
+  alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness), 2pi, x_size, y_size)
   alive_cells[m].x += alive_cells[m].speed * cos(alive_cells[m].angle)
   alive_cells[m].y += alive_cells[m].speed * sin(alive_cells[m].angle)
 
   global overlap=false
 
-  dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells::Array{Cell,1}) 
+  dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells, x_size, y_size)
   
   if overlap
     for i in 1:length(alive_cells)
@@ -29,7 +29,7 @@ function move_any!(dying_indices,index,alive_cells::Array{Cell,1})
   return dying_indices
 end
 ##########################################################################################################
-function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1})
+function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
   if is_overlap(m,startloc,alive_cells)!=m
     overlap=true
   end
@@ -39,14 +39,14 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
   g = 0.8 #loss of energy while giving energy to the first cell to the other one
   global counter_overlap = 0
 
-  k=check_any_cell_between(startloc,m,alive_cells::Array{Cell,1})  
-  if(alive_cells[m].x>X_SIZE-alive_cells[m].r || alive_cells[m].y>Y_SIZE-alive_cells[m].r || 
+  k=check_any_cell_between(startloc,m,alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
+  if(alive_cells[m].x>x_size-alive_cells[m].r || alive_cells[m].y>y_size-alive_cells[m].r || 
      alive_cells[m].x<0+alive_cells[m].r || alive_cells[m].y<0+alive_cells[m].r)
     if k!=m
       alive_cells[m].x,alive_cells[m].y,d_move=find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
     else
       startloc, dying_indices=put_at_the_border(m,startloc, dying_indices,alive_cells)
-      dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells)
+      dying_indices = solve_overlap(m,startloc, dying_indices,alive_cells, x_size, y_size)
     end
   else
     if k!=m
@@ -112,7 +112,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
       saved_anglem=alive_cells[m].angle
       saved_speedm=alive_cells[m].speed
 
-      dying_indices = solve_overlap(k,startlock, dying_indices,alive_cells)
+      dying_indices = solve_overlap(k,startlock, dying_indices,alive_cells, x_size, y_size)
 
       alive_cells[m].angle=saved_anglem
       alive_cells[m].speed=saved_speedm
@@ -121,7 +121,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
       alive_cells[m].x+=alive_cells[m].speed*cos(alive_cells[m].angle)
       alive_cells[m].y+=alive_cells[m].speed*sin(alive_cells[m].angle)
 
-      dying_indices = solve_overlap(m,startlocm, dying_indices,alive_cells)
+      dying_indices = solve_overlap(m,startlocm, dying_indices,alive_cells, x_size, y_size)
 #if d_move <0, the cell is going backward => error
       else
         alive_cells[m].speed=0
@@ -190,7 +190,7 @@ function is_overlap_divide(cells::Array, point::Point, radius::Real)
   return false
 end
 ##########################################################################################################
-function check_any_cell_between(startloc::Point,m::Int,alive_cells::Array{Cell,1})
+function check_any_cell_between(startloc::Point,m::Int,alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
   j=m
   index=[]
   distance04=[]
@@ -261,14 +261,14 @@ function check_any_cell_between(startloc::Point,m::Int,alive_cells::Array{Cell,1
     #The cell can touch the border before touching the cell, then we need to put the cell at the border
     #We need to check wether the new location of the cell when touching the closest cell
     x,y,d=find_center_where_they_touch(alive_cells[m],alive_cells[j],startloc)
-    if x>X_SIZE-r1 || x<r1 || y>Y_SIZE-r1 || y<r1
+    if x>x_size-r1 || x<r1 || y>y_size-r1 || y<r1
       j=m
     end
   end
   return j
 end
 ##########################################################################################################
-function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1})
+function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},alive_cells::Array{Cell,1}, x_size::Real, y_size::Real)
   xm=alive_cells[m].x
   ym=alive_cells[m].y
   x0=startloc.x
@@ -276,15 +276,15 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
   r=alive_cells[m].r
 
   #If start is out of bounds
-  if x0>X_SIZE-r || x0<r || y0>Y_SIZE-r || y0<r
-    if x0>X_SIZE-r
-      alive_cells[m].x=X_SIZE-r
+  if x0>x_size-r || x0<r || y0>y_size-r || y0<r
+    if x0>x_size-r
+      alive_cells[m].x=x_size-r
     end
     if x0<r
       alive_cells[m].x=r
     end
-    if y0>Y_SIZE-r
-      alive_cells[m].y=Y_SIZE-r
+    if y0>y_size-r
+      alive_cells[m].y=y_size-r
     end
     if y0<r
       alive_cells[m].y=r
@@ -294,13 +294,13 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
 
   #Otherwise
   else
-    x=(3*X_SIZE).*ones(4)#w,e,s,n
-    x2=(3*X_SIZE).*ones(4)#w,e,s,n
-    y=(3*Y_SIZE).*ones(4)
-    y2=(3*Y_SIZE).*ones(4)
+    x=(3*x_size).*ones(4)#w,e,s,n
+    x2=(3*x_size).*ones(4)#w,e,s,n
+    y=(3*y_size).*ones(4)
+    y2=(3*y_size).*ones(4)
     d2=Array(Float64,4)
     d=Array(Float64,4)
-    if xm>X_SIZE-r || xm<r || ym>Y_SIZE-r || ym<r
+    if xm>x_size-r || xm<r || ym>y_size-r || ym<r
       if xm!=x0
         n=(ym-y0)/(xm-x0)
         p=(-ym*x0 + xm*y0)/(xm-x0)
@@ -309,8 +309,8 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
         x2[1]=0
         y[1]=n*r+p
         y2[1]=r
-        x[2]=X_SIZE-r
-        x2[2]=X_SIZE
+        x[2]=x_size-r
+        x2[2]=x_size
         y[2]=n*x[2]+p 
         y2[2]=n*x[2]+p
       end
@@ -319,10 +319,10 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
         x2[3]=(-xm*y0+x0*ym)/(ym-y0)
         y[3]=r
         y2[3]=0
-        x[4]=((Y_SIZE-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-        x2[4]==((Y_SIZE)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-        y[4]=Y_SIZE-r 
-        y2[4]=Y_SIZE
+        x[4]=((y_size-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+        x2[4]==((y_size)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+        y[4]=y_size-r 
+        y2[4]=y_size
       end
     end
     for i in 1:4

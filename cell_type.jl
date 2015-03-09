@@ -30,10 +30,10 @@ type Cell_type
 	avg_speed::Real
 	avg_r::Real
 	conc_response::Real  	
-  	stem_threshold::Real
-  	death_rate::Real
-  	persistence::Real
-  	randomness::Real
+ 	stem_threshold::Real
+ 	death_rate::Real
+ 	persistence::Real
+ 	randomness::Real
 	colour::String
 	left_placed::Bool
 	stem_cell::Bool
