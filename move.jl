@@ -169,7 +169,7 @@ function find_center_where_they_touch(cellm,cellk,startloc::Point)
 end
 
 ##########################################################################################################
-function is_overlap(k::Int,startloc::Point,alive_cells::Array{Cell,1})
+function is_overlap(k::Int, startloc::Point, alive_cells::Array{Cell,1})
    for i in 1:length(alive_cells)
     if i!=k
       if (alive_cells[i].x - startloc.x) ^ 2 + (alive_cells[i].y - startloc.y) ^ 2 < 0.999*(alive_cells[i].r + alive_cells[k].r) ^ 2
@@ -181,12 +181,11 @@ function is_overlap(k::Int,startloc::Point,alive_cells::Array{Cell,1})
 end
 ##########################################################################################################
 function is_overlap_divide(cells::Array, point::Point, radius::Real)
-  n = length(cells)
-    for i in 1:n
-      if (cells[i].x - point.x) ^ 2 + (cells[i].y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
-        return true
-      end
+  for i in 1 : length(cells)
+    if (cells[i].x - point.x) ^ 2 + (cells[i].y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
+      return true
     end
+  end
   return false
 end
 ##########################################################################################################
