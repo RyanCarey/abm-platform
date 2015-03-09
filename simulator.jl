@@ -21,7 +21,7 @@ function simulator(alive_cells::Array,
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, index)
     if !cell_died
       dying_indices = Int[]
-    	dying_indices = move_any!(dying_indices,index,alive_cells)
+    	dying_indices = move_any!(dying_indices,index)
       dying_indices = sort([j for j in Set(dying_indices)])
       while length(dying_indices) > 0
         cell_death(alive_cells, dead_cells, pop!(dying_indices))
@@ -32,12 +32,12 @@ function simulator(alive_cells::Array,
     	alive_cells = cell_growth!(alive_cells, index)
     	alive_cells = division_decision!(alive_cells, index)
     end
-    if display_output
+    if display_output  && i%1000 == 1 
       show_sim(alive_cells)
     end
     # for speed, it will be necessary to batch these outputs in groups of 100+
     if i % 1000 == 0
-      println("$i iterations completed")
+      println("$i Iterations Completed")
       if pickle_output
         pickle_out(filename, i, alive_cells, dead_cells)
       end
@@ -47,5 +47,5 @@ function simulator(alive_cells::Array,
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
-  println("simulation finished")
+  println("Simulation Finished")
 end

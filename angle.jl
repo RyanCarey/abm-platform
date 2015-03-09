@@ -22,15 +22,15 @@ using Distributions
 # nb_ligands : number of ligands around the cell ie the number of possible directions
 # cell : data from the cell we want to assess the next angle
 
-function angle_from_ligand(cell,k)
+function angle_from_ligand(cell)
 
-	concentration_threshold=0.01
+	
    	x = cell.x
   	y = cell.y
   	r = cell.r
   	cat = cell.cell_type
 	choosen_angle=Array(Float64,3)
-  	global list_ligand=Array(Float64,int(nb_ligands),6) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
+  	global list_ligand=Array(Float64,int(nb_ligands),4) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands
@@ -43,55 +43,17 @@ function angle_from_ligand(cell,k)
       		  list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
 		end
 
-		if(i==1)
-		  list_ligand[i,5]=list_ligand[i,4]
-		else
-		  list_ligand[i,5]=list_ligand[i-1,5]+(list_ligand[i,4])
-		end
 	end
 
-	ratio = maximum(list_ligand[:,4])/minimum(list_ligand[:,4])
+	ratio = maximum(list_ligand[:,4])/mean(list_ligand[:,4])
+	concentration_threshold=categories[cell.cell_type].stem_threshold
 
-	if (maximum(list_ligand[:,4])<concentration_threshold)
-
-	  choosen_angle[1]=randn()*pi
-	  choosen_angle[2]=randn()*pi
-	  choosen_angle[3]=randn()*pi
-
-	elseif(ratio < log(steps)/log(10))
-	  for i in 1:nb_ligands
-		list_ligand[i,6]=1-10^(1-list_ligand[i,4]/minimum(list_ligand[:,4]))
-	  end
-	  list_ligand[:,6]=list_ligand[:,6]./sum(list_ligand[:,6])
-	  for i in 2:nb_ligands
-		list_ligand[i,6]+=list_ligand[i-1,6]
-	  end
-	  choosen_angle[3]=list_ligand[findfirst(list_ligand[:,6].>rand()),1]
-
-	  list_ligand[:,5]=list_ligand[:,5].-mean(list_ligand[:,5])
-	  for i in 1:nb_ligands
-	    if(list_ligand[i,5]<0)
-		list_ligand[i,5]=0
-	    end
-	  end
-	  list_ligand[:,5]=(list_ligand[:,5].^2)
-	  list_ligand[:,5]=list_ligand[:,5]./maximum(list_ligand[:,5])
-
-
-  	  choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
-
-	  choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
-
- 	println(list_ligand)
-        println("choosen_angle[1]: ",choosen_angle[1])
-        println("choosen_angle[2]: ",choosen_angle[2])
-        println("choosen_angle[3]: ",choosen_angle[3])
-	#pause(0)
+	if (maximum(list_ligand[:,4])<concentration_threshold || ratio<1.1)
+	  choosen_angle=randn()*pi
 
 	else
-	  choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
-	  choosen_angle[2]=list_ligand[indmax(list_ligand[:,4]),1]
-	  choosen_angle[3]=list_ligand[indmax(list_ligand[:,4]),1]
+	  choosen_angle=list_ligand[indmax(list_ligand[:,4]),1]
+
 	end
 	
 
@@ -101,16 +63,16 @@ function angle_from_ligand(cell,k)
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
 	if cat == 1
-  		return choosen_angle[k]
+  		return choosen_angle
   	end
   	if cat == 2
-  		return choosen_angle[k] - pi
+  		return choosen_angle - pi
   	end
   	if cat == 3
-  		return choosen_angle[k] - (pi / 2)
+  		return choosen_angle - (pi / 2)
   	end
   	if cat == 4
-  		return choosen_angle[k] + (pi / 2)
+  		return choosen_angle + (pi / 2)
   	end
 end
 
@@ -120,7 +82,7 @@ function angle_from_both(cell::Cell, randomness::Real)
 	if(rand() < probability_persistent && iter > 1)
 		angle = mod(cell.angle,2*pi)
 	else
-		angle = mod(angle_from_ligand(cell, 1)+randomness*randn()*pi,2*pi)
+		angle = mod(angle_from_ligand(cell)+randomness*randn()*pi,2*pi)
 	end
 	return angle
 end
