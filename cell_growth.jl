@@ -23,7 +23,7 @@ end
 # Will only grow if it will not overlap another cell, nor violate a boundary
 # Note this randomness can be substituted for a value drawn from ligand concentration maybe,
 
-function cell_growth!(alive_cells::Array, i::Int)
+function cell_growth!(alive_cells::Array, i::Int,x_size::Real, y_size::Real)
 	
     cell = alive_cells[i]    
 
@@ -32,7 +32,7 @@ function cell_growth!(alive_cells::Array, i::Int)
     p_new_r = sqrt(area / pi)
 
 
-    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.x < X_SIZE - p_new_r) && (p_new_r < cell.y < Y_SIZE - p_new_r)
+    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.x < x_size - p_new_r) && (p_new_r < cell.y < y_size - p_new_r)
     	# Cell has space to grow
     	#println("Growing Cell")
     	cell.r = sqrt(area / pi)

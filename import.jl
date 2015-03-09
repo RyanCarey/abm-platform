@@ -12,11 +12,11 @@ include("show.jl")
 include("pause.jl")
 include("diffusion.jl")
 include("cell_growth.jl")
-#include("pickle.jl")
+include("pickle.jl")
 include("simulator.jl")
 include("gui_diffusion.jl")
 include("gui_type.jl")
 include("gui_border.jl")
 include("gui_ligand.jl")
-#using PyCall
-#@pyimport pickle
+using PyCall
+@pyimport pickle

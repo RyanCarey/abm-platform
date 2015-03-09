@@ -33,14 +33,34 @@ function pickle_out(filename::String,i::Int, alive_cells::Array{Cell}, dead_cell
   pickle_dict(filename,output)
 end
 
-function pickle_start(filename::String, t::String, v::Array, v2::Array, v3::Array, v4::Array, v8::Array, v9::Array,
+function pickle_start(filename::String, t::String, n_cell::Real, steps::Int, x_size::Real, y_size::Real, 
+                      probability_persistent::Real, nb_ligands::Int, nb_source::Int, source_abscisse_ligand::Array,
+                      source_ordinate_ligand::Array,
+                      v3::Array, v4::Array, v8::Array, v9::Array,
                       border_settings::Array, alive_cells::Array)
   alive_cell_matrix = cells_to_matrix(alive_cells)
-  output = Dict("simulation_start_time"=>t, "global_parameters"=>v, "diffusion_parameters"=>v2, "ligand_parameters"=>v3, 
-                            "ligand_diffusion_parameters"=>v4, "cell_type_parameters"=>v8, "more_cell_type_parameters"=>v9, 
-                            "border_settings"=>border_settings, "alive_cells"=>alive_cell_matrix)
+  output = Dict("simulation_start_time"=>t, "n_cell"=>n_cell, "steps"=>steps, "x_size"=>x_size,"y_size"=>y_size, 
+                "probability_persistent"=>probability_persistent, "nb_ligands"=>nb_ligands, "nb_source"=>nb_source,
+                "source_abscisse_ligand"=>source_abscisse_ligand, "source_ordinate_ligand"=>source_ordinate_ligand,
+                "v3"=>v3, "v4"=>v4,"v8"=>v8,"v9"=>v9, "border_settings"=>border_settings, "alive_cells"=>alive_cells,
+                "alive_cells"=>alive_cell_matrix)
   pickle_dict(filename,output)
 end
+
+          #=
+  global categories = Cell_type[
+          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], v9[1,1], v9[1,2], v9[1,3]),
+          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], v9[2,1], v9[2,2], v9[2,3]),
+          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], v9[3,1], v9[3,2], v9[3,3]),
+          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], false)]
+  global Diffusion_coefficient = Array(Float64,nb_source)
+  global A_coefficient= Array(Float64,nb_source)
+  global tau0 = Array(Float64,nb_source)
+  global diffusion_maximum = Array(Float64,nb_source)
+  global diffusion_coefficient = Array(Float64,nb_source)
+  global type_source=rb_value[1]
+  global type_diffusion=diff_type
+  =#
 
 function cells_to_matrix(cells::Array{Cell})
   # turns array of cell objects into matrix of strings and floats, facilitating pickling

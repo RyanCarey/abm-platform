@@ -22,7 +22,7 @@ using Distributions
 # nb_ligands : number of ligands around the cell ie the number of possible directions
 # cell : data from the cell we want to assess the next angle
 
-function angle_from_ligand(cell,k)
+function angle_from_ligand(cell::Cell,k::Int, x_size::Real, y_size::Real)
    	x = cell.x
   	y = cell.y
   	r = cell.r
@@ -30,13 +30,13 @@ function angle_from_ligand(cell,k)
 	#println(x," ",y)
 	#println(nb_ligands)
 	choosen_angle=Array(Float64,3)
-  	global list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
+  global list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands
 		list_ligand[i,1] = angle
-		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
-		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
+		list_ligand[i,2] = x+cos(angle)*r#min(y_size-(floor(y + sin(angle)*r)),y_size)
+		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,x_size)
 		if(type_source=="Point")
       			list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
 		else
@@ -87,11 +87,11 @@ end
 
 #Combination of the two methods
 #probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
-function angle_from_both(cell::Cell, randomness::Real)
+function angle_from_both(cell::Cell, randomness::Real, x_size::Real, y_size::Real)
 	if(rand() < probability_persistent && iter > 1)
 		angle = mod(cell.angle,2*pi)
 	else
-		angle = mod(angle_from_ligand(cell, 1)+randomness*randn()*pi,2*pi)
+		angle = mod(angle_from_ligand(cell, 1, x_size, y_size)+randomness*randn()*pi,2*pi)
 	end
 	return angle
 end
