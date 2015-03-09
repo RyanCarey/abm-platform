@@ -24,7 +24,7 @@ end=#
   return cell_division(alive_cells,i)
 end=#
 
-function chance_to_die(alive_cells, dead_cells, index)
+function chance_to_die(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}, index::Int)
 	if rand() < categories[alive_cells[index].cell_type].death_rate
 		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
 		return alive_cells, dead_cells, true
@@ -32,17 +32,18 @@ function chance_to_die(alive_cells, dead_cells, index)
 	return alive_cells, dead_cells, false
 end
 
-function cell_division(cells, i)
+
+function cell_division(cells::Array{Cells, 1}, i::Int)
 	radius = cells[i].r
 	area = pi * radius ^ 2
 	new_r = sqrt( (area / 2) / pi)
 	angle = 2 * pi * rand()		
 
 	#println("New Cell!")
-	new_x = cells[i].x - cos(angle) * 2 * radius
-	new_y = cells[i].y - sin(angle) * 2 * radius
+	new_x = cells[i].x - cos(angle) * 2 * new_r
+	new_y = cells[i].y - sin(angle) * 2 * new_r
 	new_point = Point(new_x, new_y)
-	in_empty_space = !(is_overlap_divide(cells, new_point, radius))
+	in_empty_space = !(is_overlap_divide(cells, new_point, new_r))
 
   #=
   if BORDER_SHAPE == "Ellipse"
@@ -55,9 +56,11 @@ function cell_division(cells, i)
 	give_up = false
 	while !in_empty_space || !(radius < new_x < X_SIZE - radius) || !(radius < new_y < Y_SIZE - radius)
 		angle = 2 * pi * rand()
-		new_x = cells[i].x - cos(angle) * 2 * radius
-		new_y = cells[i].y - sin(angle) * 2 * radius
-		in_empty_space = !(is_overlap_divide(cells, Point(new_x, new_y), radius))
+		new_x = cells[i].x - cos(angle) * 2 * new_r
+		new_y = cells[i].y - sin(angle) * 2 * new_r
+		temp_r = cells[i].r
+		cells[i].r = new_r
+		in_empty_space = !(is_overlap_divide(cells, Point(new_x, new_y), new_r))
     
     # check if within elliptical bounds
     #=
@@ -69,7 +72,8 @@ function cell_division(cells, i)
 
 		attempt += 1
 		if attempt > 100
-			#println("Tried 100 times to place new cell, giving up!")
+			println("Tried 100 times to place new cell, giving up!")
+			cells[i].r = temp_r
 			give_up = true
 			break
 		end
@@ -112,13 +116,13 @@ function cell_division(cells, i)
 	return cells
 end
 
-function kill_any(alive_cells, dead_cells)
+function kill_any(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1})
   i = rand(1:length(alive_cells))
   return cell_death(alive_cells, dead_cells, i)
 end
 
 
-function cell_death(alive_cells, dead_cells, i)
+function cell_death(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}, i::Int)
 	# Dead Cell!
 	#println("Dead Cell!")
 	dead_cell = splice!(alive_cells, i)
