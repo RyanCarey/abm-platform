@@ -1,5 +1,12 @@
 # Module containing functions pertaining to cell movement.
 
+function stick_to_source!(cell::Cell)
+  threshold = categories[cell.cell_type].stem_threshold
+  sum_ligand = mean(list_ligand[:, 4])
+  cell.speed *= (threshold / sum_ligand^4)
+end
+
+
 function move_any!(dying_indices::Array{Int,1},index::Int,
                    alive_cells::Array{Cell,1}, x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1})
   x=Array(Float64,length(alive_cells))
@@ -11,8 +18,11 @@ function move_any!(dying_indices::Array{Int,1},index::Int,
 
   m = index
   startloc = Point(alive_cells[m].x, alive_cells[m].y)
-
-  alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
+  if categories[alive_cells[m].cell_type].sticking
+    stick_to_source!(alive_cells[m])
+  else
+    alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
+  end
   proposed_angle = angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness, x_size, y_size) 
   alive_cells[m].angle = mod(proposed_angle, 2pi)
   alive_cells[m].x += alive_cells[m].speed * cos(alive_cells[m].angle)
