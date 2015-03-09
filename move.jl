@@ -368,7 +368,7 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
       elseif border_settings[i] == "absorbing"
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
-      elseif border_settings[i] == "killing"
+      elseif border_settings[i] == "removing"
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
         push!(dying_indices, m)
@@ -384,8 +384,8 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
         println("absorbed")
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
-      elseif border_settings[i] == "killing"
-        println("killed")
+      elseif border_settings[i] == "removing"
+        println("removed")
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
         push!(dying_indices, m)
