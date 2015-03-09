@@ -12,9 +12,7 @@
 
 # Below variables need to be specified in the GUI eventually!!
 
-function init(n::Real, categories::Array)
-  x = X_SIZE
-  y = Y_SIZE
+function init(n::Real, categories::Array, x_size::Real, y_size::Real)
   freqs = n * [categories[1].amount, categories[2].amount, categories[3].amount, categories[4].amount]
   cumul_freqs = round(float([sum(freqs[1:i]) for i in 1:length(freqs)]))
   cells = Cell[]
@@ -38,8 +36,8 @@ function init(n::Real, categories::Array)
     rvar = r/10 # Radius Variation
     ri = max(rand_radius(r, rvar),.00001)
     while !placed
-      xi = categories[cell_cat].left_placed ? ri + .001 : ri + (x - 2ri) * rand()
-      yi = ri + (y - 2ri) * rand()
+      xi = categories[cell_cat].left_placed ? ri + .001 : ri + (x_size - 2ri) * rand()
+      yi = ri + (y_size - 2ri) * rand()
       overlap = false
       for j in 1:i-1
         if((xi - cells[j].x) ^ 2 + (yi - cells[j].y) ^ 2 < (ri + cells[j].r) ^ 2)
