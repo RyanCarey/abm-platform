@@ -95,7 +95,7 @@ function check_entries1(v::Array, prompts::Array, entries::Array)
     try
 			v[i] = float(get_value(entries[i]))
     catch
-      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts[i])))
+      Messagebox(title="Warning", message=string("Must enter a numeric for field ", string(prompts[i])))
       return
     end
   end
@@ -103,7 +103,7 @@ end
 
 ##########################################################################################################
 function init_window()
-  println("starting up window...")
+  println("Starting up window...")
   # window parameters
   global w = Toplevel("Agent-based modeller",350,385)
   global frame = Frame(w); pack(frame, expand=true, fill="both")
