@@ -11,8 +11,8 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
 
   # row labels
   cat_prompts = String["Ratio: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ", 
-                       "Average Radius: ", "Response to ligand: ", "Stem threshold",
-                       "Death rate", "Persistence (0-1)", "Randomness", "Colour: "]
+                       "Average Radius: ", "Response to ligand: ", "Stem Threshold",
+                       "Death Rate", "Persistence (0-1)", "Randomness", "Colour: "]
   for i in 1:length(cat_prompts)
     grid(Label(f3, cat_prompts[i]), i+1, 1, sticky = "se")
   end
@@ -34,8 +34,8 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
   for i in 1:4
     # set and place forms
     for j in 1 : size(cat_entries,2)
-      set_value(cat_entries[i,j], "$(v8[i,j])")
-      grid(cat_entries[i,j], j + 1, i+1)
+        set_value(cat_entries[i,j], "$(v8[i,j])")
+        grid(cat_entries[i,j], j + 1, i+1)
     end
 
     # set and place dropdown boxes
@@ -45,6 +45,9 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
 
     # set and place checkboxes
     for j in 1:size(cat_entries_bool,2)
+      if i == 4 && j == 2
+        continue
+      end
       set_value(cat_entries_bool[i,j], v9[i,j+1])
       grid(cat_entries_bool[i,j], length(cat_prompts)+1+j, i+1)
     end

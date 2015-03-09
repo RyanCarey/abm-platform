@@ -25,7 +25,7 @@ end=#
 end=#
 
 function chance_to_die(alive_cells, dead_cells, index)
-	if rand() < DIE_THRESHOLD
+	if rand() < categories[alive_cells[index].cell_type].death_rate
 		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
 		return alive_cells, dead_cells, true
 	end
@@ -91,7 +91,7 @@ function cell_division(cells, i)
 				# 30% of the time it will spawn a stem cell and a progenitor cell.
 				# 70% of the time it will spawn 2 stem cells.
 				thres = rand()
-				if sum_ligand < STEM_THRESHOLD
+				if sum_ligand < categories[cells[i].cell_type].stem_threshold
 					if thres > 0.85
 						new_cell.cell_type = cells[i].cell_type + 1
 					else
@@ -99,7 +99,7 @@ function cell_division(cells, i)
 						cells[i].cell_type = cells[i].cell_type + 1
 					end
 				end
-				if sum_ligand >= STEM_THRESHOLD
+				if sum_ligand >= categories[cells[i].cell_type].stem_threshold
 					if thres > 0.85
 						new_cell.cell_type = cells[i].cell_type + 1
 					end

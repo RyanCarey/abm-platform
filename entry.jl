@@ -9,13 +9,13 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   const steps = int(v[2])
   global X_SIZE = v[3]
   global Y_SIZE = v[4]
-  global STEM_THRESHOLD = v[5]
-  global DIE_THRESHOLD = v[6]
+  #global STEM_THRESHOLD = v[5]
+  #global DIE_THRESHOLD = v[6]
   global categories = Cell_type[
-          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[4,9], v8[4,10], v9[1,1], v9[1,2], v9[1,3]),
-          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[4,9], v8[4,10], v9[2,1], v9[2,2], v9[2,3]),
-          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[4,9], v8[4,10], v9[3,1], v9[3,2], v9[3,3]),
-          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], v9[4,3])]
+          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], v9[1,1], v9[1,2], v9[1,3]),
+          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], v9[2,1], v9[2,2], v9[2,3]),
+          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], v9[3,1], v9[3,2], v9[3,3]),
+          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], false)]
   global border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
@@ -115,7 +115,7 @@ function init_window()
   grid_rowconfigure(frame, 1, weight=1)
 
   # set defaults        
-  v = [10, 300, 30, 30, 1.5, 0.000]
+  v = [10, 300, 30, 30]
   v2=[0.5, 8, 1, 10, 100, 150, 1,10,1]
   global rb_value=["Line"]
   global check_location = false
@@ -142,16 +142,16 @@ function init_window()
 
   # make and activate controls
   prompts = ["Number of cells", "Number of timesteps ", "Width of environment",
-             "Height of environment ", "Stem Threshold", "Probability of cell death"]
+             "Height of environment "]
 
   # make the input fields 
   entries1 = Entry(ctrls, "$(Int(v[1]))")
   entries2 = Entry(ctrls, "$(Int(v[2]))")
   entries3 = Entry(ctrls, "$(v[3])")
   entries4 = Entry(ctrls, "$(v[4])")
-  entries5 = Entry(ctrls, "$(v[5])")
-  entries6 = Entry(ctrls, "$(v[6])")
-  entries = [entries1,entries2,entries3,entries4,entries5,entries6]
+  #entries5 = Entry(ctrls, "$(v[5])")
+  #entries6 = Entry(ctrls, "$(v[6])")
+  entries = [entries1,entries2,entries3,entries4]
 
   for i in 1:length(prompts)
     formlayout(entries[i],string(prompts[i],": "))
