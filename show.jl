@@ -1,15 +1,6 @@
-#using Winston
-
-function show_sim(X::Array)
-  #show_agents(X)
-  display_two(X)
+function show_sim(X::Array{Cell,1}, x_size::Real, y_size::Real)
+  display_two(X, x_size, y_size)
   hold(true)
-  #display(canvas,plot(ones(int(Y_SIZE)+1,1).*source_abscisse_ligand,[0:1:int(Y_SIZE)]))
-  #=
-  if BORDER_SHAPE == "Ellipse"
-    show_elliptical_border()
-  end
-  =#
   hold(false)
 end
 
@@ -25,45 +16,25 @@ function display_circles(locations::Array, colour::String = "ro")
   x = locations[:, 1]
   y = locations[:, 2]
   # Radius is adjusted so that cells are displayed at correct size for any window
-  r = locations[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10
+  r = locations[:, 3].*70/sqrt(y_size*X_SIZE)*max(X_SIZE/y_size,y_size/X_SIZE)^.10
   p = scatter(x,y,r,colour)
   xlim(0,X_SIZE)
-  ylim(0,Y_SIZE)
+  ylim(0,y_size)
   display(canvas,p)
 end
 
-function show_elliptical_border()
-  show_ellipse(X_SIZE/2,Y_SIZE/2,X_SIZE/2,Y_SIZE/2)
-end
-
-function show_ellipse(c::Real,d::Real,a::Real,b::Real,n::Int=72)
-  t = [0:1/n:1]*2pi
-  X = [c+a*cos(t) d+b*sin(t)]
-  r = plot(X[:,1],X[:,2])
-  display(canvas,r)
-end
-
-# For showing two sets of cells in different colours
-function display_cell_sets(X::Array, bools::BitArray)
-  locations = zeros(length(X),3)
-  for i in 1:length(X)
-    locations[i,:] = [X[i].x X[i].y X[i].r]
-  end
-  display_two(locations,bools)
-end
-
 # Displays four types of cells, using each cells radius and the colour specified by its type
-function display_two(cells::Array)
-  
+function display_two(cells::Array{Cell,1}, x_size::Real, y_size::Real)
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 1
       locations1[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
-  p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, categories[1].colour)
-  xlim(0, X_SIZE)
-  ylim(0, Y_SIZE)
+  p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(y_size*x_size)
+               *max(x_size/y_size,y_size/x_size)^.10, categories[1].colour)
+  xlim(0, x_size)
+  ylim(0, y_size)
   hold(true) 
   locations2 = zeros(length(cells), 3)
   for i in 1 : length(cells)
@@ -71,7 +42,8 @@ function display_two(cells::Array)
       locations2[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
-  p2 = scatter(locations2[:, 1], locations2[:, 2], locations2[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, categories[2].colour)
+  p2 = scatter(locations2[:, 1], locations2[:, 2], locations2[:, 3].*70/sqrt(y_size*x_size)
+               * max(x_size/y_size,y_size/x_size)^.10, categories[2].colour)
   hold(true)
   locations3 = zeros(length(cells), 3)
   for i in 1 : length(cells)
@@ -79,7 +51,8 @@ function display_two(cells::Array)
       locations3[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
-  p3 = scatter(locations3[:, 1], locations3[:, 2], locations3[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, categories[3].colour)
+  p3 = scatter(locations3[:, 1], locations3[:, 2], locations3[:, 3].*70/sqrt(y_size*x_size)
+               * max(x_size/y_size,y_size/x_size)^.10, categories[3].colour)
   hold(true)
   locations4 = zeros(length(cells), 3)
   for i in 1 : length(cells)
@@ -87,7 +60,8 @@ function display_two(cells::Array)
       locations4[i,:] = [cells[i].x cells[i].y cells[i].r]
     end
   end
-  p4 = scatter(locations4[:, 1], locations4[:, 2], locations4[:, 3].*70/sqrt(Y_SIZE*X_SIZE)*max(X_SIZE/Y_SIZE,Y_SIZE/X_SIZE)^.10, categories[4].colour)
+  p4 = scatter(locations4[:, 1], locations4[:, 2], locations4[:, 3].*70/sqrt(y_size*x_size)
+               * max(x_size/y_size,y_size/x_size)^.10, categories[4].colour)
   hold(true)
   display(canvas, p1)
   display(canvas, p2)
@@ -96,6 +70,7 @@ function display_two(cells::Array)
   hold(true)
 end
 
+#=
 function display_two(locs::Array, bools::BitArray)
   print(" locs: ",locs)
   print(" bools: ",bools)
@@ -124,48 +99,6 @@ function display_two(locs::Array, bools::BitArray)
     display(q)
     hold(false)
   end
-end
-
-# text output
-#=
-function csv_out(filename::String,output::String)
-  f = open(filename,"a")
-  write(f,output)
-  close(f)
-end
-
-function csv_out(filename::String, alive_cells::Array, dead_cells::Array)
-  f = open(filename,"a")
-  write(f, "> New Time Step\n")
-  for i in 1:size(alive_cells,1)
-    write(f,string(alive_cells[i])[6:end-1],"\n")
-  end
-  close(f)
-end
-
-function start_output(filename::String, t::String, v::Array, conc_map::Array, alive_cells::Array, diffusion_rate::Float64)
-  f = open(filename,"a")
-  write(f, "> Time, Diffusion Rate\n")
-  write(f, "> $t,$diffusion_rate\n")
-  write(f, ">", string(join(prompts,","),"\n"))
-  write(f, ">", string(join(v,","),"\n"))
-  write(f, "> Starting Concentration Map\n")
-  write(f, array_to_string(conc_map))
-  write(f, "\n")
-  write(f, ">Starting Cell Matrix\n")
-  for i in 1:size(alive_cells,1)
-    write(f, string(alive_cells[i])[6:end-1],"\n")
-  end
-  write(f, "> Subsequent Cell Matrices\n")
-  close(f)
-end
-
-function array_to_string(X::Array)
-  rows_as_strings = repmat([""],size(X,1),1)
-  for i in 1:size(X,1)
-    rows_as_strings[i] = join(X[i,:],",")
-  end
-  join(rows_as_strings,"\n")
 end
 =#
 

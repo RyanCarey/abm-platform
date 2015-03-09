@@ -1,4 +1,4 @@
-# Module to generate new cells mid simulation, or kill cells
+# Module for growth, mitosis and death
 # Takes the initialation of a cell, angle of travel, a threshold for chance to generate a new cell [0;1], and cell radius
 # Threshold 0.1 = 10% chance each time step
 # Needs to know desired direction of parent cell
@@ -16,7 +16,7 @@ function chance_to_die(alive_cells::Array{Cell, 1}, dead_cells::Array{Cell, 1}, 
 end
 
 # Function to divide a cell. Will assign new radii and locations to both cells (original and new) and check that they don't overlap.
-function cell_division(cells::Array{Cell, 1}, i::Int)
+function cell_division(cells::Array{Cell, 1}, i::Int, x_size::Real, y_size::Real)
 	radius = cells[i].r
 	area = pi * radius ^ 2
 	new_r = sqrt( (area / 2) / pi)
@@ -29,7 +29,7 @@ function cell_division(cells::Array{Cell, 1}, i::Int)
 
  	attempt = 0
 	give_up = false
-	while !in_empty_space || !(radius < new_x < X_SIZE - radius) || !(radius < new_y < Y_SIZE - radius)
+	while !in_empty_space || !(radius < new_x < x_size - radius) || !(radius < new_y < y_size - radius)
 		angle = 2 * pi * rand()
 		new_x = cells[i].x - cos(angle) * 2 * new_r
 		new_y = cells[i].y - sin(angle) * 2 * new_r
@@ -98,3 +98,48 @@ function cell_death(alive_cells::Array{Cell, 1}, dead_cells::Array{Cell, 1}, i::
 	return alive_cells, dead_cells
 end
 		
+# Decides when to split a cell into two.
+function division_decision!(alive_cells::Array{Cell,1}, i::Int, x_size::Real, y_size::Real)
+  # gets a cell to divide if it is sufficiently large and has space
+	cell = alive_cells[i]
+	original_area = pi * categories[cell.cell_type].avg_r ^ 2
+	current_area = pi * cell.r ^ 2
+
+	if current_area / original_area > categories[cell.cell_type].div_thres
+		# New Cell!
+		cell_division(alive_cells, i, x_size, y_size)
+	end
+
+	return alive_cells
+end
+			
+
+# Increases cell area by a certain random percentage of its types maximal growth rate.
+# Will only grow if it will not overlap another cell, nor violate a boundary
+# Note this randomness can be substituted for a value drawn from ligand concentration maybe,
+
+function cell_growth!(alive_cells::Array{Cell,1}, i::Int,x_size::Real, y_size::Real)
+  # Receives the array of alive cells, and grows a subsection of them
+    cell = alive_cells[i]    
+    area = pi * cell.r ^ 2
+    area *= (1 + (categories[cell.cell_type].growth_rate * rand()))
+    p_new_r = sqrt(area / pi)
+
+    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.x < x_size - p_new_r) && (p_new_r < cell.y < y_size - p_new_r)
+    	# Cell has space to grow
+    	#println("Growing Cell")
+    	cell.r = sqrt(area / pi)
+    end
+    # Else, cell doesn't grow.
+	return alive_cells
+end
+
+function space_to_grow(cells::Array{Cell,1}, index::Int, radius::Real)
+  n = length(cells)
+    for i in 1:n
+      if (cells[i].x - cells[index].x) ^ 2 + (cells[i].y - cells[index].y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
+        return false
+      end
+    end
+  return true
+end
