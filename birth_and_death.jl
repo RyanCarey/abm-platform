@@ -7,7 +7,7 @@
 # If 2nd value is null, no new cell
 
 # Checks if cell in question will die at this iteration. Chance is defined by cell type.
-function chance_to_die(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}, index::Int)
+function chance_to_die(alive_cells::Array{Cell, 1}, dead_cells::Array{Cell, 1}, index::Int)
 	if rand() < categories[alive_cells[index].cell_type].death_rate
 		alive_cells, dead_cells = cell_death(alive_cells, dead_cells, index)
 		return alive_cells, dead_cells, true
@@ -16,7 +16,7 @@ function chance_to_die(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}
 end
 
 # Function to divide a cell. Will assign new radii and locations to both cells (original and new) and check that they don't overlap.
-function cell_division(cells::Array{Cells, 1}, i::Int)
+function cell_division(cells::Array{Cell, 1}, i::Int)
 	radius = cells[i].r
 	area = pi * radius ^ 2
 	new_r = sqrt( (area / 2) / pi)
@@ -83,13 +83,13 @@ function cell_division(cells::Array{Cells, 1}, i::Int)
 	return cells
 end
 
-function kill_any(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1})
+function kill_any(alive_cells::Array{Cell, 1}, dead_cells::Array{Cell, 1})
   i = rand(1:length(alive_cells))
   return cell_death(alive_cells, dead_cells, i)
 end
 
 
-function cell_death(alive_cells::Array{Cells, 1}, dead_cells::Array{Cells, 1}, i::Int)
+function cell_death(alive_cells::Array{Cell, 1}, dead_cells::Array{Cell, 1}, i::Int)
 	# Dead Cell!
 	#println("Dead Cell!")
 	dead_cell = splice!(alive_cells, i)

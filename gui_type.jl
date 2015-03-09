@@ -11,14 +11,14 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
 
   # row labels
   cat_prompts = String["Ratio: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ", 
-                       "Average Radius: ", "Response to ligand: ", "Stem Threshold",
-                       "Death Rate", "Persistence (0-1)", "Randomness", "Colour: "]
+                       "Average Radius: ", "Response to ligand: ", "Stem Threshold: ",
+                       "Death Rate: ", "Persistence (0-1): ", "Randomness: ", "Colour: "]
   for i in 1:length(cat_prompts)
     grid(Label(f3, cat_prompts[i]), i+1, 1, sticky = "se")
   end
 
   # initialise dropdown boxes
-  colours = String["red", "blue", "magenta", "green", "yellow"]
+  colours = String["Red", "Blue", "Magenta", "Green", "Yellow"]
   colour_entries = Tk.Tk_Combobox[Combobox(f3,colours),Combobox(f3,colours),Combobox(f3,colours),Combobox(f3,colours)]
 
   # initialise checkboxes
@@ -39,7 +39,7 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
     end
 
     # set and place dropdown boxes
-    co_to_colour = Dict("ro"=>"red", "bo"=>"blue", "mo"=>"magenta", "go"=>"green", "yo"=>"yellow",)
+    co_to_colour = Dict("ro"=>"Red", "bo"=>"Blue", "mo"=>"Magenta", "go"=>"Green", "yo"=>"Yellow",)
     set_value(colour_entries[i], co_to_colour[v9[i,1]])
     grid(colour_entries[i], length(cat_prompts) + 1, i+1)
 
@@ -83,7 +83,7 @@ function check_cat_entries(v8::Array{Float64,2},v9::Array{Any,2},cat_entries::Ar
     end
   end
 
-  colour_to_co = Dict("red"=>"ro", "blue"=>"bo", "magenta"=>"yo", "green"=>"go", "yellow"=>"yo",)
+  colour_to_co = Dict("Red"=>"ro", "Blue"=>"bo", "Magenta"=>"yo", "Green"=>"go", "Yellow"=>"yo",)
   for i in 1:4
     v9[i,1] = colour_to_co[get_value(colour_entries[i])]
     v9[i,2] = get_value(cat_entries_bool[i,1])
