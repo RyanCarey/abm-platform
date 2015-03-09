@@ -6,7 +6,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   # set variables
   n_cell = int(v[1])
-  const steps = int(v[2])
+  global const steps = int(v[2])
   global X_SIZE = v[3]
   global Y_SIZE = v[4]
   global STEM_THRESHOLD = v[5]
@@ -32,11 +32,11 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   if(type_source=="Point")	
     for i in 1:nb_source
-      source_abscisse_ligand[i]=v3[2*i-1]
-      source_ordinate_ligand[i]=v3[2*i]
+      source_abscisse_ligand[i]=v3p[2*i-1]
+      source_ordinate_ligand[i]=v3p[2*i]
       if(type_diffusion == "Integrative")
-        Diffusion_coefficient[i] =v4[3*i-2]
-        A_coefficient[i] = v4[3*i-1]
+        Diffusion_coefficient[i] =v4[3*i-1]
+        A_coefficient[i] = v4[3*i-2]
         tau0[i] = v4[3*i]
       else
         diffusion_maximum[i] =v5[2*i-1]
@@ -45,10 +45,10 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     end
   else
     for i in 1:nb_source
-      source_abscisse_ligand[i]=v3[i]
+      source_abscisse_ligand[i]=v3l[i]
       if(type_diffusion == "Integrative")
-        Diffusion_coefficient[i] =v4[3*i-2]
-        A_coefficient[i] = v4[3*i-1]
+        Diffusion_coefficient[i] =v4[3*i-1]
+        A_coefficient[i] = v4[3*i-2]
         tau0[i] = v4[3*i]
       else
         diffusion_maximum[i] =v5[2*i-1]
@@ -116,21 +116,21 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30, 1.5, 0.000]
-  v2=[0.5, 8, 1, 10, 100, 150, 1,10,1]
+  v2=[0.5, 8, 1, 100, 1, 150, 1,1000,0.5]
   global rb_value=["Line"]
-  global check_location = false
-  global v3=Array(Float64,2*int(v2[7]))
+  global v3p=Array(Float64,2*int(v2[7]))
+  global v3l=Array(Float64,int(v2[7]))
   global v4=Array(Float64,3*int(v2[7]))
-  global v5=Array(Float64,3*int(v2[7]))
+  global v5=Array(Float64,2*int(v2[7]))
   for i in 1:v2[7]
-    v3[2*i-1]=0
-    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
-    v4[3*i-2]=10
-    v4[3*i-1]=100
+    v3l[i]=0
+    v3p[2*i-1]=0
+    v3p[2*i]=0
+    v4[3*i-2]=100
+    v4[3*i-1]=1
     v4[3*i]=150	
-    v5[3*i-2]=10
-    v5[3*i-1]=10
-    v5[3*i]=0.1	
+    v5[2*i-1]=1000
+    v5[2*i]=0.5
   end
   v8 = Float64[1.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5;
                0.0 0.05 2.0 1.0 1.0 -1.0 1.5 .0001 .5 .5;

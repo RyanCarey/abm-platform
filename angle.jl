@@ -23,14 +23,14 @@ using Distributions
 # cell : data from the cell we want to assess the next angle
 
 function angle_from_ligand(cell,k)
+
+	concentration_threshold=0.01
    	x = cell.x
   	y = cell.y
   	r = cell.r
   	cat = cell.cell_type
-	#println(x," ",y)
-	#println(nb_ligands)
 	choosen_angle=Array(Float64,3)
-  	global list_ligand=Array(Float64,int(nb_ligands),5) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
+  	global list_ligand=Array(Float64,int(nb_ligands),6) #angle,x,y,ligand concentration in (x,y), cumulative distribution probability
 
 	for i in 1:nb_ligands
 		angle=(i-1)*2*pi/nb_ligands
@@ -38,37 +38,66 @@ function angle_from_ligand(cell,k)
 		list_ligand[i,2] = x+cos(angle)*r#min(Y_SIZE-(floor(y + sin(angle)*r)),Y_SIZE)
 		list_ligand[i,3] = y+sin(angle)*r#min(floor(x + cos(angle)*r) + 1,X_SIZE)
 		if(type_source=="Point")
-      			list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
+      		  list_ligand[i,4] = ligand_concentration_multiplesource_2D(list_ligand[i,2],list_ligand[i,3])
 		else
-      			list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
+      		  list_ligand[i,4] = ligand_concentration_multiplesource_1D(list_ligand[i,2])
 		end
 
 		if(i==1)
-			list_ligand[i,5]=list_ligand[i,4]
+		  list_ligand[i,5]=list_ligand[i,4]
 		else
-			list_ligand[i,5]=list_ligand[i-1,5]+list_ligand[i,4]
+		  list_ligand[i,5]=list_ligand[i-1,5]+(list_ligand[i,4])
 		end
 	end
-	#Cumulative ligand concentration probability
-	#0<list_ligand(1,5)<list_ligand(2,5)<...<list_ligand(last,5)=1
-	#list_ligand[:,5]=list_ligand[:,5].-minimum(list_ligand[:,5])
 
-	if(maximum(list_ligand[:,5]!=0))
-		list_ligand[:,5] = list_ligand[:,5]./maximum(list_ligand[:,5])
-	end
+	ratio = maximum(list_ligand[:,4])/minimum(list_ligand[:,4])
 
-	#println(list_ligand)
-	#Method 1: we choose the angle which has the maximum concentration
-	choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
+	if (maximum(list_ligand[:,4])<concentration_threshold)
 
-	#Method 2: we chose the angle thanks to a uniform distribution
-	#and the cumulative probability of the ligand concentration:
-	#We need to round to the rand() to the ceil of an element of list_ligand(:,5)
-	choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
- 	#println(list_ligand)
-        #println("choosen_angle[1]: ",choosen_angle[1])
-        #println("choosen_angle[2]: ",choosen_angle[2])
+	  choosen_angle[1]=randn()*pi
+	  choosen_angle[2]=randn()*pi
+	  choosen_angle[3]=randn()*pi
+
+	elseif(ratio < log(steps)/log(10))
+	  for i in 1:nb_ligands
+		list_ligand[i,6]=1-10^(1-list_ligand[i,4]/minimum(list_ligand[:,4]))
+	  end
+	  list_ligand[:,6]=list_ligand[:,6]./sum(list_ligand[:,6])
+	  for i in 2:nb_ligands
+		list_ligand[i,6]+=list_ligand[i-1,6]
+	  end
+	  choosen_angle[3]=list_ligand[findfirst(list_ligand[:,6].>rand()),1]
+
+	  list_ligand[:,5]=list_ligand[:,5].-mean(list_ligand[:,5])
+	  for i in 1:nb_ligands
+	    if(list_ligand[i,5]<0)
+		list_ligand[i,5]=0
+	    end
+	  end
+	  list_ligand[:,5]=(list_ligand[:,5].^2)
+	  list_ligand[:,5]=list_ligand[:,5]./maximum(list_ligand[:,5])
+
+
+  	  choosen_angle[2]=list_ligand[findfirst(list_ligand[:,5].>rand()),1]
+
+	  choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
+
+ 	println(list_ligand)
+        println("choosen_angle[1]: ",choosen_angle[1])
+        println("choosen_angle[2]: ",choosen_angle[2])
+        println("choosen_angle[3]: ",choosen_angle[3])
 	#pause(0)
+
+	else
+	  choosen_angle[1]=list_ligand[indmax(list_ligand[:,4]),1]
+	  choosen_angle[2]=list_ligand[indmax(list_ligand[:,4]),1]
+	  choosen_angle[3]=list_ligand[indmax(list_ligand[:,4]),1]
+	end
+	
+
+
+
+
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
 	if cat == 1

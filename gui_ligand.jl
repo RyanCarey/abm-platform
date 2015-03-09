@@ -1,4 +1,4 @@
-function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2::Array, entries2::Array,value_rb,diff_type)
+function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Array, prompts2::Array, entries2::Array,value_rb,diff_type)
 
   check_entries1(v2, prompts2, entries2)
   global w3 = Toplevel("Ligand's source location") ## title, width, height
@@ -19,7 +19,7 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2
     prompts3=["X ordinate of the injury"]
   end
   if(diff_type=="Integrative")
-    global prompts4 = ["Gradient Coeffient","Initial Coencentration","Upper time integrative limit"]
+    global prompts4 = ["Initial Concentration","Gradient Coeffient","Upper time integrative limit"]
     choice_source=7
   else
     global prompts4 = ["Initial Concentration","Gradient Coeffient"]
@@ -30,17 +30,17 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2
   global entries4=[]
 
 
-
   for i in 1:v2[choice_source]   # for each source 
 
     l = Label(ctrls3, "Source $(int(i)):") 
     formlayout(l,nothing) 
-    if i <= length(v3)/2    # fill in any values that have previously been entered
+    #if (i <= length(v4)/3 && value_rb=="Point") ||  (i <=length(v5)/2 && value_rb=="Line")  # fill in any values that have previously been entered
+    try
 	if(value_rb=="Point")
-      	  entries3=[entries3,Entry(ctrls3,"$(v3[2*i-1])")]
-      	  entries3=[entries3,Entry(ctrls3,"$(v3[2*i])")] 
+      	  entries3=[entries3,Entry(ctrls3,"$(v3p[2*i-1])")]
+      	  entries3=[entries3,Entry(ctrls3,"$(v3p[2*i])")] 
 	else
-	  entries3=[entries3,Entry(ctrls3,"$(v3[i])")]
+	  entries3=[entries3,Entry(ctrls3,"$(v3l[i])")]
 	end
       if(diff_type=="Integrative")
         entries4=[entries4,Entry(ctrls4,"$(v4[3*i-2])")] 
@@ -50,8 +50,8 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2
         entries4=[entries4,Entry(ctrls4,"$(v5[2*i-1])")] 
         entries4=[entries4,Entry(ctrls4,"$(v5[2*i])")] 
       end
-    end
-    if i > length(v3) / 2
+    catch
+    #if (i > length(v4)/3 && value_rb=="Point") ||  (i > length(v5)/2 && value_rb=="Line")
 	if(value_rb=="Point")
 	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
       	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
@@ -59,13 +59,14 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2
 	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
 	end
       if(diff_type=="Integrative")
-        entries4=[entries4,Entry(ctrls4,"$(10.0)")]
         entries4=[entries4,Entry(ctrls4,"$(100.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(1.0)")]
         entries4=[entries4,Entry(ctrls4,"$(150.0)")]
       else
-        entries4=[entries4,Entry(ctrls4,"$(10.0)")]
-        entries4=[entries4,Entry(ctrls4,"$(1)")]
+        entries4=[entries4,Entry(ctrls4,"$(1000.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(0.5)")]
       end
+    #end
     end
     if(value_rb=="Point")
       formlayout(entries3[2*i-1],string(prompts3[1],": ")) 
@@ -97,27 +98,39 @@ function gui_ligand(v::Array, v2::Array,v3::Array, v4::Array,v5::Array, prompts2
   # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,path -> check_entries3(v2[7],value_rb,diff_type))
+     bind(b,i,path -> check_entries3(v2[choice_source],value_rb,diff_type))
   end
 end
 ##########################################################################################################
 function check_entries3(n_sources::Real,value_rb,diff_type)
 
   if(value_rb=="Point")
-    n_coordinate3=2*int(n_sources)
+
+    global v3p = zeros(2*int(n_sources),1)
+    for i in 1:2*int(n_sources)
+      try
+        v3p[i] = float(get_value(entries3[i]))
+      catch
+        Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts3[mod(i,2)])))
+        return
+      end
+    end
+
   else
-    n_coordinate3=int(n_sources)
+
+    global v3l = zeros(int(n_sources),1)
+    for i in 1:int(n_sources)
+      try
+        v3l[i] = float(get_value(entries3[i]))
+      catch
+        Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts3[1])))
+        return
+      end
+    end
+
   end
 
-  global v3 = zeros(n_coordinate3,1)
-  for i in 1:n_coordinate3
-    try
-      v3[i] = float(get_value(entries3[i]))
-    catch
-      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts3[mod(i,2)])))
-      return
-    end
-  end
+
 
   if(diff_type=="Integrative")
 
@@ -138,13 +151,12 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
       try
         v5[i] = float(get_value(entries4[i]))
       catch
-        Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts4[mod(i,2)])," of the source $(floor(i/3+1))."))
+        Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts4[mod(i,2)])," of the source $(floor(i/2+1))."))
         return
       end
     end
 
   end
 
-  global check_location = true
   destroy(w3)
 end

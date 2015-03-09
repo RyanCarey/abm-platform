@@ -10,18 +10,16 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
   grid_columnconfigure(f2, 1, weight=1)
   grid_rowconfigure(f2, 1, weight=1)
 
-
-  #Button definition
-  b2 = Button(ctrls2, "See diffusion")
+  println(v2)
 
   if(diff_type=="Integrative")
     prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness",
-             "Gradient Coeffient","Initial Coencentration","Upper time integrative limit","Number of sources"]
+             "Initial Concentration","Gradient Coeffient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
                        Entry(ctrls2,"$(int(v2[4]))"),
-                       Entry(ctrls2,"$(int(v2[5]))"),
+                       Entry(ctrls2,"$(float(v2[5]))"),
                        Entry(ctrls2,"$(int(v2[6]))"),
                        Entry(ctrls2,"$(int(v2[7]))")]
   else
@@ -30,13 +28,14 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
-                       Entry(ctrls2,"$(int(v2[8]))"),
+                       Entry(ctrls2,"$(float(v2[8]))"),
                        Entry(ctrls2,"$(float(v2[9]))"),
                        Entry(ctrls2,"$(int(v2[7]))")]
   end
 
+  #Display
   n2=length(prompts2)
-  
+  b2 = Button(ctrls2, "See diffusion")
   for i in 1:n2
     if(i==4)
       l  = Label(ctrls2, "")
@@ -54,8 +53,7 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
   end
   focus(entries2[1]) 
 
-
-  #f3 = Frame(w2); pack(f3, expand = true, fill = "both")
+  #Time Slider
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 2, 1,sticky="e")
   global sc = Slider(f2, 1:int(v[2]))
   l = Label(f2)
@@ -65,60 +63,46 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
   bind(sc, "command", path -> plot_diffusion(v, v2, prompts2, entries2,diff_type))
 
   #First plot of the concentration
-  result = Array(Float64,int(sqrt(v[3]^2+v[4]^2))+1,1)
-  for x in 0:int(sqrt(v[3]^2+v[4]^2))
-  global distance_source_squared = int(x)
-  timediff = get_value(sc)  
-    if(diff_type=="Integrative")
-      tau0 = int(v2[6])
-      (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-      result[x+1]=res
-    else
-      result[x+1]=v2[8]/sqrt(v2[9]*timediff*4*pi)*exp(-x^2/(v2[9]*timediff*4))
-    end
-  end
-  p=plot(result)
-  xlabel("Distance from source")
-  ylabel("Concentration")
-  display(canvas2,p)
+  plot_diffusion(v, v2, prompts2, entries2,diff_type)
 
   #If button b2 is clicked
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b2,i,path -> plot_diffusion(v, v2, prompts2, entries2,diff_type))
   end
 
+  # display
   b1 = Button(ctrls2, "Location and Coefficients")
-  # displays the button
   formlayout(b1, "Choose source ligand location and coefficients")
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b1,i,path -> gui_ligand(v, v2, v3, v4,v5, prompts2, entries2,get_value(rb),diff_type))
+    bind(b1,i,path -> gui_ligand(v, v2, v3p,v3l, v4,v5, prompts2, entries2,get_value(rb),diff_type))
   end
+
+  # display
   b3 = Button(ctrls2, "Ok")
-  # displays the button
   formlayout(b3, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2, entries2,get_value(rb)))
+    bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2, entries2,get_value(rb),diff_type))
   end
 end
 
 ##########################################################################################################
-function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array, entries2::Array,value_rb)
+function destroy_diffusion_window(w2::Tk.Tk_Toplevel, v2::Array, prompts2::Array, entries2::Array,value_rb,diff_type)
   rb_value[1]=value_rb
-  check_entries1(v2, prompts2, entries2)
+  check_entries2(v2, prompts2, entries2,diff_type)
   destroy(w2) 
 end
 
 ##########################################################################################################
 function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,diff_type)
-  check_entries1(v2, prompts2, entries2)
+  check_entries2(v2, prompts2, entries2,diff_type)
   result = Array(Float64,int(sqrt(v[3]^2+v[4]^2))+1,1)
+  timediff=int(get_value(sc)/v[1]+1)
+  try
   for x in 0:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
-    timediff = get_value(sc)  
     if(diff_type=="Integrative")
       tau0 = int(get_value(entries2[6]))
-      (res,tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-      result[x+1]=res
+      (result[x+1],tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
     else
       amplitude=float(get_value(entries2[4]))
       D=float(get_value(entries2[5]))
@@ -129,15 +113,64 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   xlabel("Distance from source")
   ylabel("Concentration")
   display(canvas2,p)
+  catch
+	Messagebox(title="Warning", message="Cannot display with those parameters. Please choose others.")
+        return
+  end
 end
 
 ##########################################################################################################
-function integrand_entry(tau::Real)
-  timediff = get_value(sc)
-  A=int(get_value(entries2[5]))
-  D=float(get_value(entries2[4]))
+function integrand_entry(tau::Float64)
+
+  timediff = int(get_value(sc))
+  A=float(get_value(entries2[4]))
+  D=float(get_value(entries2[5]))
   result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
   return result
 end
 
-##########################################################################################################
+############################################################################################################
+function check_entries2(v2::Array, prompts2::Array, entries2::Array,diff_type)
+
+if(diff_type=="Integrative")
+
+  for i in 1:length(prompts2)
+    try
+      v2[i] = float(get_value(entries2[i]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[i])))
+      return
+    end
+  end
+
+  else
+
+    for i in 1:3
+      try
+        v2[i] = float(get_value(entries2[i]))
+      catch
+        Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[i])))
+        return
+      end
+    end
+    try
+      v2[8] = float(get_value(entries2[4]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[4])))
+      return
+    end
+    try
+      v2[9] = float(get_value(entries2[5]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[5])))
+      return
+    end
+    try
+      v2[7] = float(get_value(entries2[6]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[6])))
+      return
+    end
+  end
+
+end

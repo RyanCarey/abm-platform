@@ -86,11 +86,8 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},alive_
           end
         end
 
-      if abs(alive_cells[k].angle-alpha+pi/2)<pi/2
-        alive_cells[m].angle=mod(alive_cells[k].angle+pi/2,2*pi)
-      else
-        alive_cells[m].angle=mod(alive_cells[k].angle-pi/2,2*pi)
-      end
+      #To choose properly alpham we need to put alpha and alphak between -pi and pi
+      alive_cells[m].angle=anglem(alpha,alive_cells[k].angle)
       
       #beta distributes the energy thanks to angle of collision
       #g*mm*v0 = mm*vm + mk*vk
@@ -398,4 +395,32 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int},ali
   alive_cells[m].y=startloc.y + alive_cells[m].speed*sin(alive_cells[m].angle)
   end
   return startloc, dying_indices
+end
+
+##########################################################################################################
+function anglem(alphak,alpha)
+
+     if(abs(alphak - alpha)  <= pi/2)
+        if alphak>alpha
+          alpham=mod(alphak-pi/2,2*pi)
+        else
+          alpham=mod(alphak+pi/2,2*pi)
+        end
+      end
+      if(abs(alphak+2*pi - alpha)  <= pi/2)
+        if alphak+2*pi>alpha
+          alpham=mod(alphak-pi/2,2*pi)
+        else
+          alpham=mod(alphak+pi/2,2*pi)
+        end
+      end
+      if(abs(alphak-2*pi - alpha)  <= pi/2)
+        if alphak-2*pi>alpha
+          alpham=mod(alphak-pi/2,2*pi)
+        else
+          alpham=mod(alphak+pi/2,2*pi)
+        end
+      end
+
+ return alpham
 end
