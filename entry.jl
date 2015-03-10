@@ -14,7 +14,6 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
           Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], v9[3,1], v9[3,2], v9[3,3], v9[3, 4]),
           Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], false, v9[4, 4])]
   border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
-  global const probability_persistent=v2[1]
   global const nb_ligands= int(v2[2])
   global const nb_source= int(v2[7])
   global source_abscisse_ligand =Array(Float64,nb_source)
@@ -112,22 +111,21 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30]
-  v2=[0.5, 8, 1, 10, 100, 150, 1,100.0,1.0]
+  v2=[8, 100, 1, 150, 1,100,1]
   global rb_value=["Line"]
-  global v3p=Array(Float64,2*int(v2[7]))
-  global v3l=Array(Float64,int(v2[7]))
-  global v4=Array(Float64,3*int(v2[7]))
-  global v5=Array(Float64,3*int(v2[7]))
-  for i in 1:v2[7]
+  global v3p=Array(Float64,2*int(v2[5]))
+  global v3l=Array(Float64,int(v2[5]))
+  global v4=Array(Float64,3*int(v2[5]))
+  global v5=Array(Float64,2*int(v2[5]))
+  for i in 1:v2[5]
     v3p[2*i-1]=0
     v3p[2*i]=0
     v3l[i]=0
     v4[3*i-2]=10
     v4[3*i-1]=100
     v4[3*i]=150	
-    v5[3*i-2]=10
-    v5[3*i-1]=10
-    v5[3*i]=0.1	
+    v5[2*i-1]=100
+    v5[2*i]=1
   end
   v8 = Float64[1.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5;
                0.0 0.05 2.0 1.0 1.0 -1.0 1.5 .0001 .5 .5;
@@ -146,8 +144,6 @@ function init_window()
   entries2 = Entry(ctrls, "$(Int(v[2]))")
   entries3 = Entry(ctrls, "$(v[3])")
   entries4 = Entry(ctrls, "$(v[4])")
-  #entries5 = Entry(ctrls, "$(v[5])")
-  #entries6 = Entry(ctrls, "$(v[6])")
   entries = [entries1,entries2,entries3,entries4]
 
   for i in 1:length(prompts)

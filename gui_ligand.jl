@@ -1,6 +1,6 @@
 function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Array, prompts2::Array, entries2::Array,value_rb,diff_type)
 
-  check_entries1(v2, prompts2, entries2)
+  check_entries2(v2, prompts2, entries2,diff_type)
   global w3 = Toplevel("Ligand's source location") ## title, width, height
   global f3 = Frame(w3) 
   pack(f3, expand=true, fill="both")
@@ -20,10 +20,10 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
   end
   if(diff_type=="Integrative")
     global prompts4 = ["Initial Concentration","Gradient Coeffient","Upper time integrative limit"]
-    choice_source=7
+    choice_source=5
   else
     global prompts4 = ["Initial Concentration","Gradient Coeffient"]
-    choice_source=6
+    choice_source=4
   end
 
   global entries3=[]
@@ -63,8 +63,8 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
         entries4=[entries4,Entry(ctrls4,"$(1.0)")]
         entries4=[entries4,Entry(ctrls4,"$(150.0)")]
       else
-        entries4=[entries4,Entry(ctrls4,"$(1000.0)")]
-        entries4=[entries4,Entry(ctrls4,"$(0.5)")]
+        entries4=[entries4,Entry(ctrls4,"$(100.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(1.0)")]
       end
     #end
     end

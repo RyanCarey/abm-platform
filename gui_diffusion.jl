@@ -13,35 +13,29 @@ function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_va
   println(v2)
 
   if(diff_type=="Integrative")
-    prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness",
-             "Initial Concentration","Gradient Coeffient","Upper time integrative limit","Number of sources"]
+    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coeffient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
                        Entry(ctrls2,"$(int(v2[4]))"),
-                       Entry(ctrls2,"$(float(v2[5]))"),
-                       Entry(ctrls2,"$(int(v2[6]))"),
-                       Entry(ctrls2,"$(int(v2[7]))")]
+                       Entry(ctrls2,"$(float(v2[5]))")]
   else
-    prompts2 =["Probability of persistance","Numbers of direction for a cell","Randomness",
-             "Initial Concentration","Gradient Coeffient","Number of sources"]
+    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coeffient","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
-                       Entry(ctrls2,"$(int(v2[2]))"),
-                       Entry(ctrls2,"$(float(v2[3]))"), 
-                       Entry(ctrls2,"$(float(v2[8]))"),
-                       Entry(ctrls2,"$(float(v2[9]))"),
-                       Entry(ctrls2,"$(int(v2[7]))")]
+                       Entry(ctrls2,"$(float(v2[6]))"),
+                       Entry(ctrls2,"$(float(v2[7]))"),
+                       Entry(ctrls2,"$(int(v2[5]))")]
   end
 
   #Display
   n2=length(prompts2)
   b2 = Button(ctrls2, "See diffusion")
   for i in 1:n2
-    if(i==4)
+    if(i==2)
       l  = Label(ctrls2, "")
       formlayout(l,nothing) 
     end 
-    if(i==7 && diff_type=="Integrative" || i==6 && diff_type=="Normal")  
+    if(i==5 && diff_type=="Integrative" || i==4 && diff_type=="Normal")  
       formlayout(b2, nothing)
       l  = Label(ctrls2, "")
       formlayout(l,nothing)
@@ -101,11 +95,11 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   for x in 0:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
     if(diff_type=="Integrative")
-      tau0 = int(get_value(entries2[6]))
+      tau0 = int(get_value(entries2[4]))
       (result[x+1],tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
     else
-      amplitude=float(get_value(entries2[4]))
-      D=float(get_value(entries2[5]))
+      amplitude=float(get_value(entries2[2]))
+      D=float(get_value(entries2[3]))
       result[x+1]=float(amplitude/sqrt(4*pi*D*timediff)*exp(-x^2/(4*D*timediff)))
     end
   end
@@ -123,8 +117,8 @@ end
 function integrand_entry(tau::Float64)
 
   timediff = int(get_value(sc))
-  A=float(get_value(entries2[4]))
-  D=float(get_value(entries2[5]))
+  A=float(get_value(entries2[2]))
+  D=float(get_value(entries2[3]))
   result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/(4*D*timediff*pi)
   return result
 end
@@ -143,32 +137,31 @@ if(diff_type=="Integrative")
     end
   end
 
-  else
+else
 
-    for i in 1:3
-      try
-        v2[i] = float(get_value(entries2[i]))
-      catch
-        Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[i])))
-        return
-      end
+
+    try
+      v2[1] = float(get_value(entries2[1]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[1])))
+      return
     end
     try
-      v2[8] = float(get_value(entries2[4]))
+      v2[6] = float(get_value(entries2[2]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[2])))
+      return
+    end
+    try
+      v2[7] = float(get_value(entries2[3]))
+    catch
+      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[3])))
+      return
+    end
+    try
+      v2[5] = float(get_value(entries2[4]))
     catch
       Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[4])))
-      return
-    end
-    try
-      v2[9] = float(get_value(entries2[5]))
-    catch
-      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[5])))
-      return
-    end
-    try
-      v2[7] = float(get_value(entries2[6]))
-    catch
-      Messagebox(title="Warning", message=string("must enter a numeric for field ", string(prompts2[6])))
       return
     end
   end
