@@ -1,6 +1,7 @@
 # Module containing functions pertaining to cell movement.
 
-function move_any!(dying_indices,index,x_size, y_size, border_settings,alive_cells::Array{Cell,1})
+function move_any!(dying_indices::Array{Int,1},index::Int,x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1},
+                   alive_cells::Array{Cell,1})
 	x=Array(Float64,length(alive_cells))
 	y=Array(Float64,length(alive_cells))
 	for i in 1:length(alive_cells)
@@ -12,7 +13,7 @@ function move_any!(dying_indices,index,x_size, y_size, border_settings,alive_cel
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)	
 	alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness,x_size, y_size), 2*pi)
 	sum_ligand = mean(list_ligand[:, 4])
-	threshold = alive_cells[m].stem_threshold
+	threshold = categories[alive_cells[m].cell_type].stem_threshold
 	if categories[alive_cells[m].cell_type].sticking && sum_ligand > threshold
 		alive_cells[m].speed /= 100
 	else
@@ -43,8 +44,8 @@ function move_any!(dying_indices,index,x_size, y_size, border_settings,alive_cel
 
 end
 ##########################################################################################################
-function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size, y_size, border_settings,alive_cells::Array{Cell,1})
-
+function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1},
+                       alive_cells::Array{Cell,1})
 
 	#Parameters
 	minimum_ratio=0.05 # threshold to trigger cells to move
@@ -201,7 +202,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
 end
 
 ##########################################################################################################
-function find_center_where_they_touch(cellm,cellk,startloc)
+function find_center_where_they_touch(cellm::Cell,cellk::Cell,startloc::Point)
 	x1 = startloc.x
 	y1 = startloc.y
 	x2 = cellk.x
@@ -237,7 +238,7 @@ function find_center_where_they_touch(cellm,cellk,startloc)
 end
 
 ##########################################################################################################
-function is_overlap(k,startloc,alive_cells::Array{Cell,1})
+function is_overlap(k::Int,startloc::Point,alive_cells::Array{Cell,1})
 	 for i in 1:length(alive_cells)
 		if(i!=k)
 			if (alive_cells[i].x - startloc.x) ^ 2 + (alive_cells[i].y - startloc.y) ^ 2 < 0.999*(alive_cells[i].r + alive_cells[k].r) ^ 2
@@ -249,7 +250,7 @@ function is_overlap(k,startloc,alive_cells::Array{Cell,1})
 	return k
 end
 ##########################################################################################################
-function is_overlap_divide(cells::Array, point::Point, radius::Real)
+function is_overlap_divide(cells::Array{Cell,1}, point::Point, radius::Real)
 	n = length(cells)
 		for i in 1:n
 			if (cells[i].x - point.x) ^ 2 + (cells[i].y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
@@ -259,7 +260,8 @@ function is_overlap_divide(cells::Array, point::Point, radius::Real)
 	return false
 end
 ##########################################################################################################
-function check_any_cell_between(startloc,m,x_size, y_size, border_settings,alive_cells)
+function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1},
+                                alive_cells::Array{Cell,1})
 
 	j=m
 	index=[]
@@ -342,7 +344,8 @@ function check_any_cell_between(startloc,m,x_size, y_size, border_settings,alive
 
 end
 ##########################################################################################################
-function put_at_the_border(m,startloc, dying_indices::Array{Int},x_size, y_size, border_settings,alive_cells::Array{Cell,1})
+function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int,1},x_size::Real, y_size::Real, 
+                           border_settings::Array{ASCIIString,1},alive_cells::Array{Cell,1})
 	xm=alive_cells[m].x
 	ym=alive_cells[m].y
 	x0=startloc.x
@@ -438,7 +441,7 @@ function put_at_the_border(m,startloc, dying_indices::Array{Int},x_size, y_size,
       elseif border_settings[i] == "absorbing"
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
-      elseif border_settings[i] == "killing"
+      elseif border_settings[i] == "removing"
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(-alive_cells[m].angle,2*pi)
         push!(dying_indices, m)
@@ -454,7 +457,7 @@ function put_at_the_border(m,startloc, dying_indices::Array{Int},x_size, y_size,
         println("absorbed")
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)
-      elseif border_settings[i] == "killing"
+      elseif border_settings[i] == "removing"
         println("killed")
         alive_cells[m].speed /= 10
         alive_cells[m].angle=mod(pi-alive_cells[m].angle,2*pi)

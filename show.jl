@@ -4,6 +4,7 @@ function show_sim(X::Array{Cell,1}, x_size::Real, y_size::Real)
   hold(false)
 end
 
+#=
 function show_agents(X::Array, colour::String = "ro")
   locations = zeros(length(X),3)
   for i in 1:length(X)
@@ -22,6 +23,7 @@ function display_circles(locations::Array, colour::String = "ro")
   ylim(0,y_size)
   display(canvas,p)
 end
+=#
 
 # Displays four types of cells, using each cells radius and the colour specified by its type
 function display_two(cells::Array{Cell,1}, x_size::Real, y_size::Real)
@@ -32,7 +34,7 @@ function display_two(cells::Array{Cell,1}, x_size::Real, y_size::Real)
     end
   end
   p1 = scatter(locations1[:, 1], locations1[:, 2], locations1[:, 3].*70/sqrt(y_size*x_size)
-               *max(x_size/y_size,y_size/x_size)^.10, categories[1].colour)
+               * max(x_size/y_size,y_size/x_size)^.10, categories[1].colour)
   xlim(0, x_size)
   ylim(0, y_size)
   hold(true) 
