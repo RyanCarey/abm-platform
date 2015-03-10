@@ -88,5 +88,6 @@ function check_cat_entries(v8::Array{Float64,2},v9::Array{Any,2},cat_entries::Ar
     v9[i,1] = colour_to_co[get_value(colour_entries[i])]
     v9[i,2] = get_value(cat_entries_bool[i,1])
     v9[i,3] = get_value(cat_entries_bool[i,2])
+    v9[i,4] = get_value(cat_entries_bool[i,3])
   end
 end

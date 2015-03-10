@@ -57,7 +57,7 @@ function init(n::Real, categories::Array, x_size::Real, y_size::Real)
       end
     end
   end
-  println("initialised")
+  println("Initialised")
   return cells::Array
 end
 
