@@ -29,8 +29,8 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   if(type_source=="Point")	
     for i in 1:nb_source
-      source_abscisse_ligand[i]=v3[2*i-1]
-      source_ordinate_ligand[i]=v3[2*i]
+      source_abscisse_ligand[i]=v3p[2*i-1]
+      source_ordinate_ligand[i]=v3p[2*i]
       if(type_diffusion == "Integrative")
         Diffusion_coefficient[i] =v4[3*i-2]
         A_coefficient[i] = v4[3*i-1]
@@ -42,7 +42,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
     end
   else
     for i in 1:nb_source
-      source_abscisse_ligand[i]=v3[i]
+      source_abscisse_ligand[i]=v3l[i]
       if(type_diffusion == "Integrative")
         Diffusion_coefficient[i] =v4[3*i-2]
         A_coefficient[i] = v4[3*i-1]
@@ -112,15 +112,16 @@ function init_window()
 
   # set defaults        
   v = [10, 300, 30, 30]
-  v2=[0.5, 8, 1, 10, 100, 150, 1,10,1]
+  v2=[0.5, 8, 1, 10, 100, 150, 1,100.0,1.0]
   global rb_value=["Line"]
-  global check_location = false
-  global v3=Array(Float64,2*int(v2[7]))
+  global v3p=Array(Float64,2*int(v2[7]))
+  global v3l=Array(Float64,int(v2[7]))
   global v4=Array(Float64,3*int(v2[7]))
   global v5=Array(Float64,3*int(v2[7]))
   for i in 1:v2[7]
-    v3[2*i-1]=0
-    v3[2*i]=(i-1)/(v2[7]-1)*v[4]
+    v3p[2*i-1]=0
+    v3p[2*i]=0
+    v3l[i]=0
     v4[3*i-2]=10
     v4[3*i-1]=100
     v4[3*i]=150	
