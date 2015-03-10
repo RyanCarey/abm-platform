@@ -64,7 +64,7 @@ function angle_from_ligand(cell::Cell,k::Int, x_size::Real, y_size::Real)
 
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
-	return choosen_angle * cell.cell_type.conc_response
+	return choosen_angle * categories[cell.cell_type].conc_response
 	
 end
 
