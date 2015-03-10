@@ -11,7 +11,13 @@ function move_any!(dying_indices,index,x_size, y_size, border_settings,alive_cel
  	m = index
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 
-	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
+	if categories[alive_cells[m].cell_type].sticking
+		sum_ligand = mean(list_ligand[:, 4])
+		threshold = alive_cells[m].stem_threshold
+		alive_cells[m].speed *= (stem_threshold / (sum_ligand ^ 4))
+	else
+		alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
+	end
 	alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness,x_size, y_size), 2*pi)
 	alive_cells[m].x += alive_cells[m].speed * cos(alive_cells[m].angle)
 	alive_cells[m].y += alive_cells[m].speed * sin(alive_cells[m].angle)
