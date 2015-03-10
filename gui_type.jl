@@ -22,10 +22,10 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
   colour_entries = Tk.Tk_Combobox[Combobox(f3,colours),Combobox(f3,colours),Combobox(f3,colours),Combobox(f3,colours)]
 
   # initialise checkboxes
-  cat_entries_bool = Tk.Tk_Checkbutton[Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell");
-                                       Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell");
-                                       Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell");
-                                       Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell")]
+  cat_entries_bool = Tk.Tk_Checkbutton[Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell") Checkbutton(f3, "Stick to Source");
+                                       Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell") Checkbutton(f3, "Stick to Source");
+                                       Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell") Checkbutton(f3, "Stick to Source");
+                                       Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell") Checkbutton(f3, "Stick to Source")]
   # initialise forms
   cat_entries = Tk.Tk_Entry[Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
                             Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 

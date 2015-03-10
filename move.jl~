@@ -9,18 +9,12 @@ function move_any!(dying_indices,index,x_size, y_size, border_settings,alive_cel
 	end
 
  	m = index
-	startloc = Point(alive_cells[m].x, alive_cells[m].y)	
+	startloc = Point(alive_cells[m].x, alive_cells[m].y)
+
+	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness,x_size, y_size), 2*pi)
-	sum_ligand = mean(list_ligand[:, 4])
-	threshold = alive_cells[m].stem_threshold
-	if categories[alive_cells[m].cell_type].sticking && sum_ligand > threshold
-		alive_cells[m].speed /= 100
-	else
-		alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
-	end
 	alive_cells[m].x += alive_cells[m].speed * cos(alive_cells[m].angle)
 	alive_cells[m].y += alive_cells[m].speed * sin(alive_cells[m].angle)
-
 
 	overlap=false
 	global list_overlap=[m]
@@ -394,6 +388,7 @@ function put_at_the_border(m,startloc, dying_indices::Array{Int},x_size, y_size,
 	end
 	
 	for i in 1:4
+	  d2[i]=sqrt((x2[i]-x0)^2+(y2[i]-y0)^2)
 	  d[i]=sqrt((x[i]-x0)^2+(y[i]-y0)^2)		
 	end
 

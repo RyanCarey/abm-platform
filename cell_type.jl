@@ -37,4 +37,5 @@ type Cell_type
 	colour::String
 	left_placed::Bool
 	stem_cell::Bool
+	sticking::Bool
 end

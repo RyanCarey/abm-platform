@@ -29,6 +29,11 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
   global entries3=[]
   global entries4=[]
 
+println("v3p: ",v3p)
+println("v3l: ",v3l)
+println("v4: ",v4)
+println("v5: ",v5)
+println("v2[choice_source]: ",v2[choice_source])
 
   for i in 1:v2[choice_source]   # for each source 
 
@@ -157,6 +162,9 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
     end
 
   end
-
+println("v3p: ",v3p)
+println("v3l: ",v3l)
+println("v4: ",v4)
+println("v5: ",v5)
   destroy(w3)
 end

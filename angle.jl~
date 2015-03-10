@@ -64,8 +64,18 @@ function angle_from_ligand(cell::Cell,k::Int, x_size::Real, y_size::Real)
 
 	# If it's a normal type, return the normal angle
 	# If it's any other type, do the exact opposite.
-	return choosen_angle * categories[cell.cell_type].conc_response
-	
+	if cat == 1
+  		return choosen_angle
+  	end
+  	if cat == 2
+  		return choosen_angle - pi
+  	end
+  	if cat == 3
+  		return choosen_angle - (pi / 2)
+  	end
+  	if cat == 4
+  		return choosen_angle + (pi / 2)
+  	end
 end
 
 #Combination of the two methods
@@ -74,7 +84,11 @@ function angle_from_both(cell::Cell, randomness::Real, x_size::Real, y_size::Rea
 	if(rand() < probability_persistent && iter > 1)
 		angle = mod(cell.angle,2*pi)
 	else
+<<<<<<< HEAD
+		angle = mod(angle_from_ligand(cell)+randomness*randn()*pi,2*pi)
+=======
 		angle = mod(angle_from_ligand(cell, 1, x_size, y_size)+randomness*randn()*pi,2*pi)
+>>>>>>> a9cc778b9e5a24c6a1c98551c34d88344b1baf3f
 	end
 	return angle
 end

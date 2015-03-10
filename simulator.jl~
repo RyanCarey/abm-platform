@@ -25,7 +25,7 @@ function simulator(alive_cells::Array{Cell,1},
     if !cell_died
       dying_indices = Int[]
 
-    	dying_indices = move_any!(dying_indices,index, x_size, y_size, border_settings,alive_cells)
+    	dying_indices = move_any!(dying_indices,index, x_size, y_size, border_settings)
 
       dying_indices = sort([j for j in Set(dying_indices)])
       while length(dying_indices) > 0
