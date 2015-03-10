@@ -34,7 +34,7 @@ function pickle_out(filename::String,i::Int, alive_cells::Array{Cell}, dead_cell
 end
 
 function pickle_start(filename::String, t::String, n_cell::Real, steps::Int, x_size::Real, y_size::Real, 
-                      probability_persistent::Real, nb_ligands::Int, nb_source::Int, source_abscisse_ligand::Array,
+                      nb_ligands::Int, nb_source::Int, source_abscisse_ligand::Array,
                       source_ordinate_ligand::Array,
                       v3::Array, v4::Array, v8::Array, v9::Array,
                       border_settings::Array, alive_cells::Array)
