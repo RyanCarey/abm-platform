@@ -36,13 +36,13 @@ end
 function pickle_start(filename::String, t::String, n_cell::Real, steps::Int, x_size::Real, y_size::Real, 
                       nb_ligands::Int, nb_source::Int, source_abscisse_ligand::Array,
                       source_ordinate_ligand::Array,
-                      v3::Array, v4::Array, v8::Array, v9::Array,
+                      v3p::Array, v3l::Array, v4::Array, v8::Array, v9::Array,
                       border_settings::Array, alive_cells::Array)
   alive_cell_matrix = cells_to_matrix(alive_cells)
   output = Dict("simulation_start_time"=>t, "n_cell"=>n_cell, "steps"=>steps, "x_size"=>x_size,"y_size"=>y_size, 
                 "probability_persistent"=>probability_persistent, "nb_ligands"=>nb_ligands, "nb_source"=>nb_source,
                 "source_abscisse_ligand"=>source_abscisse_ligand, "source_ordinate_ligand"=>source_ordinate_ligand,
-                "v3"=>v3, "v4"=>v4,"v8"=>v8,"v9"=>v9, "border_settings"=>border_settings, "alive_cells"=>alive_cells,
+                "v3p"=>v3p, "v3l"=>v3l, "v4"=>v4,"v8"=>v8,"v9"=>v9, "border_settings"=>border_settings, "alive_cells"=>alive_cells,
                 "alive_cells"=>alive_cell_matrix)
   pickle_dict(filename,output)
 end
