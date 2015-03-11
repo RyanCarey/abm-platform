@@ -81,8 +81,6 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
     global list_overlap=[list_overlap,k]
 	end
 
-
-
 	if(k!=m)
 	  alive_cells[m].x,alive_cells[m].y,d_move=find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
 	elseif(alive_cells[m].x>x_size-alive_cells[m].r || alive_cells[m].y>y_size-alive_cells[m].r || alive_cells[m].x<0+alive_cells[m].r || alive_cells[m].y<0+alive_cells[m].r)	

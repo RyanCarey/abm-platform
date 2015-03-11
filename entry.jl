@@ -69,7 +69,11 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   t = strftime(time())[5:27] #store date and time as string
   filename = "out_$t.pickle"
   if pickle_output
-    pickle_start(filename, t, v, v2, v3, v4, v8, v9, border_settings, alive_cells)
+    pickle_start(filename, t, n_cell, steps, x_size, y_size, 
+                      nb_ligands, nb_source, source_abscisse_ligand,
+                      source_ordinate_ligand,
+                      v3p, v3l, v4, v8, v9,
+                      border_settings, alive_cells)
   end
 
   simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename, x_size, y_size, border_settings)

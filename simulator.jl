@@ -15,7 +15,8 @@ function simulator(alive_cells::Array{Cell,1},
       println("All cells have died after $i iterations")
       break
     end
-    iter = i/length(alive_cells)+1
+    iter = 100
+    #iter = i/length(alive_cells)+1
 
     index = rand(1 : length(alive_cells))
     # Does all cell functions
