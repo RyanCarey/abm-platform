@@ -49,7 +49,7 @@ function gui_diffusion(v::Vector{Real}, v2::Vector{Real}, prompts::Array, entrie
 
   #Time Slider
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 2, 1,sticky="e")
-  global sc = Slider(f2, 1:int(v[2]))
+  global sc = Slider(f2, 1:int(v[2]/v[1]))
   l = Label(f2)
   l[:textvariable] = sc[:variable]
   grid(sc, 2, 2, sticky="ew")
@@ -90,7 +90,7 @@ end
 function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,diff_type)
   check_entries2(v2, prompts2, entries2,diff_type)
   result = Array(Float64,int(sqrt(v[3]^2+v[4]^2))+1,1)
-  timediff=int(get_value(sc)/v[1]+1)
+  timediff=int(get_value(sc))
   try
   for x in 0:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)

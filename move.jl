@@ -60,22 +60,22 @@ function solve_overlap(categories::Vector{Cell_type},m::Int, startloc::Point,
 	global counter_overlap = 0
 
 	k=check_any_cell_between(startloc,m,x_size, y_size, border_settings,alive_cells)
-	im=true
-	ik=true
+	indexm=true
+	indexk=true
 	for i in 1:length(list_overlap)
-		if list_overlap[i]==m
-      im=false
-		end
-		if list_overlap[i]==k
-      ik=false
+	  if list_overlap[i]==m
+      		indexm=false
+	  end
+	  if list_overlap[i]==k
+      		indexk=false
 		end
 	end
 
-	if im
-    global list_overlap=[list_overlap,m]
+	if indexm
+    	  global list_overlap=[list_overlap,m]
 	end
-	if ik
-    global list_overlap=[list_overlap,k]
+	if indexk
+    	  global list_overlap=[list_overlap,k]
 	end
 
 	if k!=m

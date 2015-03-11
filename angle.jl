@@ -20,9 +20,14 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
 	ratio = maximum(concentrations) / mean(concentrations)
 	concentration_threshold = categories[cell.cell_type].stem_threshold
 
+  # If the largest concentration of ligand is less than the threshold or the ratio of max / mean is less that 1.1, choose a random angle.
+  # Else move towards the source perfectly.
+  println("Maximum ligand is: ", maximum(concentrations))
+  println("Mean ligand is: ", mean(concentrations))
+  println("Ratio is: ", ratio)
 	if maximum(concentrations) < concentration_threshold || ratio < 1.0005
 	  chosen_angle = randn() * pi
-	  #println("Random Angle: ", chosen_angle)
+	  println("Random Angle: ", chosen_angle)
 	else
 	  chosen_angle = receptors[indmax(concentrations), 1]
 	  #println("Deterministic Angle: ", chosen_angle)

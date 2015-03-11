@@ -9,7 +9,8 @@ function simulator(canvas::Tk.Canvas,
                    x_size::Real,
                    y_size::Real,
                    border_settings::Vector{ASCIIString})
-
+                  r
+  global negative_distance = 0
   for i = 1:steps
     if length(alive_cells) == 0
       println("All cells have died after $i iterations")
@@ -43,6 +44,9 @@ function simulator(canvas::Tk.Canvas,
     # for speed, it will be necessary to batch these outputs in groups of 100+
     if i % 100 == 0
       println("$i Iterations Completed")
+      if display_output
+        show_sim(alive_cells, x_size, y_size)
+      end
       if pickle_output
         pickle_out(filename, i, alive_cells, dead_cells)
       end
