@@ -37,7 +37,15 @@ def load_all(filenames):
         data[i][j] = vstack(data[i][j])
   return data
 
-def boxplot(data):
+def boxplot(data, title, labels):
+  fig = plt.figure()
+  ax = fig.add_subplot(111)
+  bp = ax.boxplot([i[:,0] for i in data])
+  ax.set_title(title)
+  ax.set_xlabel('Iterations')
+  ax.set_ylabel('Horizontal distance from source') 
+  ax.set_xticklabels(labels)
+  plt.show()
   return
 
 def stacking(data):
@@ -74,6 +82,9 @@ def histogram(stems, progs):
   plt.show()
 
 '''
+
+
+
 ['out_09 Mar 2015 03:13:37 PM.pickle','out_09 Mar 2015 03:23:19 PM.pickle','out_09 Mar 2015 03:31:09 PM.pickle','out_09 Mar 2015 03:39:53 PM.pickle',
 'out_09 Mar 2015 03:15:23 PM.pickle','out_09 Mar 2015 03:24:02 PM.pickle','out_09 Mar 2015 03:31:58 PM.pickle','out_09 Mar 2015 03:41:15 PM.pickle',
 'out_09 Mar 2015 03:16:40 PM.pickle','out_09 Mar 2015 03:25:04 PM.pickle','out_09 Mar 2015 03:32:57 PM.pickle','out_09 Mar 2015 12:03:12 PM.pickle',
