@@ -1,6 +1,6 @@
 # Module containing functions pertaining to cell movement.
 
-function move_any!(dying_indices::Array{Int,1},index::Int,x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1},
+function move_any!(dying_indices::Vector{Int},index::Int,x_size::Real, y_size::Real, border_settings::Vector{ASCIIString},
                    alive_cells::Array{Cell,1})
 	x=Array(Float64,length(alive_cells))
 	y=Array(Float64,length(alive_cells))
@@ -81,14 +81,14 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
     global list_overlap=[list_overlap,k]
 	end
 
-	if(k!=m)
+	if k!=m
 	  alive_cells[m].x,alive_cells[m].y,d_move=find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
 	elseif(alive_cells[m].x>x_size-alive_cells[m].r || alive_cells[m].y>y_size-alive_cells[m].r || alive_cells[m].x<0+alive_cells[m].r || alive_cells[m].y<0+alive_cells[m].r)	
 	  startloc, dying_indices=put_at_the_border(m,startloc,dying_indices,x_size, y_size, border_settings,alive_cells)
 	  dying_indices=solve_overlap(m,startloc,dying_indices,x_size, y_size, border_settings,alive_cells)
 	end
 
-	if(k!=m)
+	if k!=m
 	  d=sqrt((startloc.x - alive_cells[m].x)^2 + (startloc.y - alive_cells[m].y)^2)
 	  remaining_distance = alive_cells[m].speed - d
 
@@ -249,7 +249,7 @@ function is_overlap(k::Int,startloc::Point,alive_cells::Array{Cell,1})
 	return k
 end
 ##########################################################################################################
-function is_overlap_divide(cells::Array{Cell,1}, point::Point, radius::Real)
+function is_overlap_divide(cells::Vector{Cell}, point::Point, radius::Real)
 	n = length(cells)
 		for i in 1:n
 			if (cells[i].x - point.x) ^ 2 + (cells[i].y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
@@ -259,8 +259,8 @@ function is_overlap_divide(cells::Array{Cell,1}, point::Point, radius::Real)
 	return false
 end
 ##########################################################################################################
-function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Real, border_settings::Array{ASCIIString,1},
-                                alive_cells::Array{Cell,1})
+function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Real, border_settings::Vector{ASCIIString},
+                                alive_cells::Vector{Cell})
 
 	j=m
 	index=[]
@@ -341,8 +341,8 @@ function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Rea
 	return j
 end
 ##########################################################################################################
-function put_at_the_border(m::Int,startloc::Point, dying_indices::Array{Int,1},x_size::Real, y_size::Real, 
-                           border_settings::Array{ASCIIString,1},alive_cells::Array{Cell,1})
+function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_size::Real, y_size::Real, 
+                           border_settings::Vector{ASCIIString},alive_cells::Vector{Cell})
 	xm=alive_cells[m].x
 	ym=alive_cells[m].y
 	x0=startloc.x

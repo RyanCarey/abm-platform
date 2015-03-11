@@ -39,7 +39,7 @@ function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
     end
 
     # set and place dropdown boxes
-    co_to_colour = Dict("ro"=>"Red", "bo"=>"Blue", "mo"=>"Magenta", "go"=>"Green", "yo"=>"Yellow",)
+    co_to_colour = Dict([("ro"=>"Red"), ("bo"=>"Blue"), ("mo"=>"Magenta"), ("go"=>"Green"), ("yo"=>"Yellow")])
     set_value(colour_entries[i], co_to_colour[v9[i,1]])
     grid(colour_entries[i], length(cat_prompts) + 1, i+1)
 
@@ -63,14 +63,14 @@ end
 
 # Function to get values and destroy window upon clicking OK
 function destroy_cat_window(w3::Tk.Tk_Toplevel, v8::Array{Float64,2},v9::Array{Any,2}, cat_entries::Array{Tk.Tk_Entry,2},
-                           colour_entries::Array{Tk.Tk_Combobox,1}, cat_entries_bool::Array{Tk.Tk_Checkbutton, 2})
+                           colour_entries::Vector{Tk.Tk_Combobox}, cat_entries_bool::Array{Tk.Tk_Checkbutton, 2})
   check_cat_entries(v8,v9,cat_entries, colour_entries, cat_entries_bool)
   destroy(w3)
 end
 
 # Function to collect values.
-function check_cat_entries(v8::Array{Float64,2},v9::Array{Any,2},cat_entries::Array{Tk.Tk_Entry,2},
-                           colour_entries::Array{Tk.Tk_Combobox,1}, cat_entries_bool::Array{Tk.Tk_Checkbutton, 2})
+function check_cat_entries(v8::Matrix{Float64},v9::Matrix{Any},cat_entries::Matrix{Tk.Tk_Entry},
+                           colour_entries::Vector{Tk.Tk_Combobox}, cat_entries_bool::Matrix{Tk.Tk_Checkbutton})
   for i in 1:4
     # check that population ratios are positive
     if float(get_value(cat_entries[i,1])) < 0.0
@@ -83,7 +83,7 @@ function check_cat_entries(v8::Array{Float64,2},v9::Array{Any,2},cat_entries::Ar
     end
   end
 
-  colour_to_co = Dict("Red"=>"ro", "Blue"=>"bo", "Magenta"=>"yo", "Green"=>"go", "Yellow"=>"yo",)
+  colour_to_co = Dict([("Red"=>"ro"), ("Blue"=>"bo"), ("Magenta"=>"yo"), ("Green"=>"go"), ("Yellow"=>"yo")])
   for i in 1:4
     v9[i,1] = colour_to_co[get_value(colour_entries[i])]
     v9[i,2] = get_value(cat_entries_bool[i,1])
