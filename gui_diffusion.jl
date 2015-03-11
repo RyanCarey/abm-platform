@@ -1,5 +1,5 @@
-function gui_diffusion(v::Array, v2::Array, prompts::Array, entries::Array,rb_value,diff_type)
-  check_entries1(v, prompts, entries)
+function gui_diffusion(v::Vector{Real}, v2::Vector{Real}, prompts::Array, entries::Array,rb_value,diff_type)
+  check_entries(v, prompts, entries)
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
   pack(f2, expand=true, fill="both")

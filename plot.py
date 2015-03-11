@@ -2,40 +2,52 @@ from numpy import *
 import matplotlib.pyplot as plt
 exec(open('unpickle.py').read())
 
-def load_turn(filenames,turn):
+def load_turn(filenames,turn, length):
   filenames = list(copy(filenames))
   positions = []
   while filenames:
     data = load(filenames.pop())
-    if len(data)==10:     # check that data has reached full length without error
+    if len(data)==length:     # check that data has reached full length without error
       cells = array(data[turn]['alive_cells'])
       positions.append(cells[:,[1,2,-1]])
   return positions
 
-def load_all_turns(filenames):
+def load_all_turns(filenames, length):
   # prevent mutation of filenames list
   filenames = list(copy(filenames))
   b = []
-  for i in range(10):
-    b.append(load_turn(filenames,i))
+  for i in range(length):
+    b.append(load_turn(filenames,i, length))
   return b
 
 def load_all(filenames):
   data = []
   for name in filenames:
     data.append(load(name))
+  out = [i[1:] for i in data]
 
   #extract cell information
-  for i in range(len(data)):
-    for j in range(len(data[i])):
-      data[i][j] = data[i][j]['alive_cells']
+  for i in range(len(out)):
+    for j in range(len(out[i])):
+      out[i][j] = out[i][j]['alive_cells']
+    for i in range(len(out)):
+      for j in range(len(out[i])):
+        for k in range(len(out[i][j])):
+          # extract positions
+          out[i][j][k] = array(out[i][j][k][1:3])
+          out[i][j] = vstack(out[i][j])
+  return out
+
+def remove_duds(data):
   for i in range(len(data)):
     for j in range(len(data[i])):
       for k in range(len(data[i][j])):
-        # extract positions
-        data[i][j][k] = array(data[i][j][k][1:3])
-        data[i][j] = vstack(data[i][j])
-  return data
+        try:
+          out = data[i][j][k][1:3]
+        except:
+          print(i,j,k)
+          break
+  return out
 
 def boxplot(data, title, labels):
   fig = plt.figure()
@@ -105,4 +117,31 @@ def histogram(stems, progs):
     'out_09 Mar 2015 12:03:53 PM.pickle','out_09 Mar 2015 12:41:54 PM.pickle',
     'out_09 Mar 2015 12:14:55 PM.pickle','out_09 Mar 2015 12:46:42 PM.pickle']
  '''
+'''bias laceration
+['out_04 Mar 2015 10:53:29 AM.pickle','out_11 Mar 2015 10:21:53 AM.pickle',
+'out_11 Mar 2015 10:28:43 AM.pickle','out_11 Mar 2015 10:37:30 AM.pickle',
+'out_04 Mar 2015 10:55:05 AM.pickle','out_11 Mar 2015 10:22:55 AM.pickle',
+'out_11 Mar 2015 10:30:00 AM.pickle','out_11 Mar 2015 10:39:40 AM.pickle',
+'out_11 Mar 2015 10:10:23 AM.pickle','out_11 Mar 2015 10:24:10 AM.pickle',
+'out_11 Mar 2015 10:32:47 AM.pickle','out_11 Mar 2015 10:40:48 AM.pickle',
+'out_11 Mar 2015 10:18:16 AM.pickle','out_11 Mar 2015 10:25:48 AM.pickle',
+'out_11 Mar 2015 10:34:01 AM.pickle','out_11 Mar 2015 10:42:07 AM.pickle',
+'out_11 Mar 2015 10:20:53 AM.pickle','out_11 Mar 2015 10:27:35 AM.pickle',
+'out_11 Mar 2015 10:35:38 AM.pickle','out_11 Mar 2015 10:43:46 AM.pickle']
+'''
+'''bias laceration
+['out_11 Mar 2015 12:23:09 PM.pickle',
+'out_11 Mar 2015 12:24:13 PM.pickle',
+'out_11 Mar 2015 12:25:15 PM.pickle']
+'''
 
+filenames = ['out_11 Mar 2015 12:28:06 PM.pickle',
+'out_11 Mar 2015 12:23:09 PM.pickle','out_11 Mar 2015 12:32:18 PM.pickle',
+'out_11 Mar 2015 12:24:13 PM.pickle','out_11 Mar 2015 12:34:16 PM.pickle',
+'out_11 Mar 2015 12:25:15 PM.pickle','out_11 Mar 2015 12:35:46 PM.pickle',
+'out_11 Mar 2015 12:26:42 PM.pickle',
+'out_11 Mar 2015 12:28:06 PM.pickle',
+'out_11 Mar 2015 12:32:18 PM.pickle',
+'out_11 Mar 2015 12:34:16 PM.pickle',
+'out_11 Mar 2015 12:35:46 PM.pickle',
+'out_11 Mar 2015 12:38:21 PM.pickle']

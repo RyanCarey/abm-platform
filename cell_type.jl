@@ -1,5 +1,3 @@
-# Added a name and state component to the Cell type.
-# Name is initialised as the index number of the cell whilst state is either "Alive" or "Dead"
 
 type Point
 	x::Real
@@ -19,7 +17,7 @@ type Cell
 	angle::Real
 	speed::Real
 	offspring::Int
-	cell_type::Int
+	cell_type::Int  # this is an index in the range 1 to 4, which indexes the 'categories' array of cell types
 end
 
 

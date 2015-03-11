@@ -1,16 +1,16 @@
-function gui_border(v::Array, v10::Array, prompts::Array, entries::Array)
+function gui_border(v::Vector{Real}, v10::Vector{Real}, prompts::Vector{String}, entries::Vector)
   check_entries1(v, prompts, entries)
   # Create a top level window and frames
-	global w4 = Toplevel("Border Parameters", 250, 300) ## title, width, height
-  global f4 = Frame(w4)
+	w4 = Toplevel("Border Parameters", 250, 300) ## title, width, height
+  f4 = Frame(w4)
   pack(f4, expand = true, fill = "both")
   grid(canvas, 1, 2, sticky="nsew")
   behaviours = ["Reflecting","Absorbing","Removing"]
 
-  global border_entries1 = Combobox(f4, behaviours)
-  global border_entries2 = Combobox(f4, behaviours)
-  global border_entries3 = Combobox(f4, behaviours)
-  global border_entries4 = Combobox(f4, behaviours)
+  border_entries1 = Combobox(f4, behaviours)
+  border_entries2 = Combobox(f4, behaviours)
+  border_entries3 = Combobox(f4, behaviours)
+  border_entries4 = Combobox(f4, behaviours)
 
   border_entries = [border_entries1, border_entries2, border_entries3, border_entries4]
   for i in 1:4

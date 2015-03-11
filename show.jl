@@ -1,11 +1,7 @@
-function show_sim(X::Vector{Cell}, x_size::Real, y_size::Real)
-  display_two(X, x_size, y_size)
-  hold(true)
-  hold(false)
-end
 
-# Displays four types of cells, using each cells radius and the colour specified by its type
-function display_two(cells::Vector{Cell}, x_size::Real, y_size::Real)
+function show_sim(canvas::Tk.Canvas, cells::Vector{Cell}, 
+                     categories::Vector{Cell_type}, x_size::Real, y_size::Real)
+  # Displays four types of cells, using each cells radius and the colour specified by its type
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 1
@@ -49,5 +45,7 @@ function display_two(cells::Vector{Cell}, x_size::Real, y_size::Real)
   display(canvas, p3)
   display(canvas, p4)  
   hold(true)
+  #hold(true)
+  hold(false)
 end
 

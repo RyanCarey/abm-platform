@@ -1,4 +1,4 @@
-function gui_type(v8::Array{Float64,2},v9::Array{Any,2})
+function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
   # Create a top level window and the assorted stuff with it
 	w3 = Toplevel("Cell Types", 300, 300) ## title, width, height
   f3 = Frame(w3)

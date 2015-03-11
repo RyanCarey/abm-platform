@@ -1,15 +1,17 @@
 include("import.jl")
 
-function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,
-                  pickle_output::Bool, entries::Vector, prompts::Vector,rb_value,diff_type)
-  check_entries1(v, prompts, entries)
+function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame, v::Vector, v2::Vector,v8::Matrix,
+                  v9::Matrix{Any},v10::Vector{AbstractString},display_output::Bool,
+                  pickle_output::Bool, entries::Vector{Tk.Tk_Entry}, prompts::Vector,
+                  rb_value::Vector{ASCIIString},diff_type::ASCIIString)
+  check_entries(v, prompts, entries)
 
   # set variables
   n_cell = int(v[1])
   const steps = int(v[2])
   x_size = float(v[3])
   y_size = float(v[4])
-  global categories = Cell_type[
+  categories = Cell_type[
           Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], 
                     v9[1,1], v9[1,2], v9[1,3], v9[1, 4]),
           Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], 
@@ -61,28 +63,29 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   println("Building Environment")
   alive_cells = Cell[] 
   alive_cells = initial_placement(n_cell, categories, x_size, y_size)
-  global dead_cells = Cell[]
+  dead_cells = Cell[]
 
   if display_output
     canvas[:height] = 400
     canvas[:width] = 400 * x_size/y_size
-    w[:width] = 400 + int(canvas[:width])
+    window[:width] = 400 + int(canvas[:width])
     pack(frame, expand=true, fill="both")
-    show_sim(alive_cells, x_size, y_size)
+    show_sim(canvas, alive_cells, categories, x_size, y_size)
   end
 
   t = strftime(time())[5:27] #store date and time as string
   filename = "out_$t.pickle"
   if pickle_output
     pickle_start(filename, t, n_cell, steps, x_size, y_size, nb_ligands, nb_source, source_abscisse_ligand,
-    source_ordinate_ligand, v3p, v3l, v4, v8, v9, border_settings, alive_cells)
+                 source_ordinate_ligand, v3p, v4, v8, v9, alive_cells)
   end
 
-  simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename, x_size, y_size, border_settings)
+  simulator(canvas, alive_cells, dead_cells, categories, steps, display_output, pickle_output, 
+            filename, x_size, y_size, border_settings)
 end
 
-function check_entries1(v::Vector, prompts::Vector, entries::Vector)
-  # sanitises inputted data and stores it as a float in the relevant array
+function check_entries(v::Vector, prompts::Vector, entries::Vector)
+  # sanitises input data and stores in an array of floats
   for i in 1:length(prompts)
     if prompts[i][1:10]=="Probability" || prompts[i][end-4:end]=="(0-1)"
       if !(0 <= float(get_value(entries[i])) <= 1)
@@ -90,7 +93,7 @@ function check_entries1(v::Vector, prompts::Vector, entries::Vector)
         return
       end
     end
-    println(get_value(entries[i]))
+
     if !(0 <= float(get_value(entries[i])))
       Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
       return
@@ -107,11 +110,11 @@ end
 function init_window()
   println("Starting up window...")
   # window parameters
-  global w = Toplevel("Agent-based modeller",350,385)
-  global frame = Frame(w); pack(frame, expand=true, fill="both")
-  global canvas = Canvas(frame, 0, 0)
+  window = Toplevel("Agent-based modeller",350,385)
+  frame = Frame(window); pack(frame, expand=true, fill="both")
+  canvas = Canvas(frame, 0, 0)
   grid(canvas, 1, 2, sticky="nsew")
-  global ctrls = Frame(frame)
+  ctrls = Frame(frame)
   grid(ctrls, 1, 1, sticky="sw", pady=5, padx=5)
   grid_columnconfigure(frame, 1, weight=1)
   grid_rowconfigure(frame, 1, weight=1)
@@ -143,12 +146,11 @@ function init_window()
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
 
   # make and activate controls
-  prompts = ["Number of cells", "Number of timesteps ", "Width of environment",
+  prompts = String["Number of cells", "Number of timesteps ", "Width of environment",
              "Height of environment "]
 
   # make the input fields 
   entries1 = Entry(ctrls, "$(int(v[1]))") 
-  #set_value(entries1,int(v[1]))
   entries2 = Entry(ctrls, "$(int(v[2]))")
   entries3 = Entry(ctrls, "$(v[3])")
   entries4 = Entry(ctrls, "$(v[4])")
@@ -190,15 +192,15 @@ function init_window()
   formlayout(b, nothing)
 
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), 
-                              entries, prompts,rb_value,get_value(rb2)))
+    bind(b,i,path -> ok_press(window, canvas, frame, v, v2, v8, v9, v10, get_value(display_status), 
+    get_value(pickle_status), entries, prompts,rb_value,get_value(rb2)))
   end
 
   #=
   bq = Button (ctrls, "Quit")
   formlayout(bq, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(bq,i,path -> destroy(w))
+    bind(bq,i,path -> destroy(window))
   end
   =#
 
@@ -213,5 +215,16 @@ function init_window()
   end
 end
 
+function pause(pause_time::Real,message::String = "anykey to advance timestep")
+  #pauses for pause_time milliseconds
+  if time==0
+    println(message)
+    junk = readline(STDIN)
+  else
+    sleep(time)
+  end
+end
+
 #run program
+
 init_window()
