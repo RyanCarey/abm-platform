@@ -10,7 +10,7 @@ function move_any!(dying_indices::Vector{Int},index::Int,x_size::Real, y_size::R
 	end
 
  	m = index
-	startloc = Point(alive_cells[m].x, alive_cells[m].y)	
+	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 	alive_cells[m].angle = mod(angle_from_both(alive_cells[m], categories[alive_cells[m].cell_type].randomness,x_size, y_size), 2*pi)
 
   if(type_source=="Point")
@@ -21,14 +21,8 @@ function move_any!(dying_indices::Vector{Int},index::Int,x_size::Real, y_size::R
 
 	threshold = categories[alive_cells[m].cell_type].stem_threshold
 
-	println("Conc: ", sum_ligand)
-	println("Threshold: ", threshold)
-	println("Cell is sticking type?: ", categories[alive_cells[m].cell_type].sticking)
-	println("Conc > Threshold?: ", sum_ligand > threshold)
-
-  alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
+	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	if categories[alive_cells[m].cell_type].sticking && sum_ligand > threshold
-		println("Cell Stuck!")
 		alive_cells[m].speed /= 10
 	end
 
@@ -38,8 +32,8 @@ function move_any!(dying_indices::Vector{Int},index::Int,x_size::Real, y_size::R
 	overlap=false
 	global list_overlap=[m]
 
-	dying_indices = solve_overlap(m,startloc, dying_indices,x_size, y_size, border_settings,alive_cells) 	
-	
+	dying_indices = solve_overlap(m,startloc, dying_indices,x_size, y_size, border_settings,alive_cells)
+
 	for i in list_overlap
 	  if(is_overlap(i,startloc,alive_cells)!=i)
       overlap = true
@@ -64,7 +58,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
 
 	k=check_any_cell_between(startloc,m,x_size, y_size, border_settings,alive_cells)
 	im=true
-	ik=true	
+	ik=true
 	for i in 1:length(list_overlap)
 		if(list_overlap[i]==m)
       im=false
@@ -83,7 +77,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
 
 	if k!=m
 	  alive_cells[m].x,alive_cells[m].y,d_move=find_center_where_they_touch(alive_cells[m],alive_cells[k],startloc)
-	elseif(alive_cells[m].x>x_size-alive_cells[m].r || alive_cells[m].y>y_size-alive_cells[m].r || alive_cells[m].x<0+alive_cells[m].r || alive_cells[m].y<0+alive_cells[m].r)	
+	elseif(alive_cells[m].x>x_size-alive_cells[m].r || alive_cells[m].y>y_size-alive_cells[m].r || alive_cells[m].x<0+alive_cells[m].r || alive_cells[m].y<0+alive_cells[m].r)
 	  startloc, dying_indices=put_at_the_border(m,startloc,dying_indices,x_size, y_size, border_settings,alive_cells)
 	  dying_indices=solve_overlap(m,startloc,dying_indices,x_size, y_size, border_settings,alive_cells)
 	end
@@ -124,7 +118,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
 			end
 
 
-		
+
 		alphak=alive_cells[k].angle
 		if(abs(alphak - alpha)  <= pi/2)
         	  if alphak>alpha
@@ -151,17 +145,17 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
 			alive_cells[m].angle=mod(alive_cells[k].angle-pi/2,2*pi)
 		  end
    		end
-			
-		
+
+
 		#beta distributes the energy thanks to angle of collision
       		#g*mm*v0 = mm*vm + mk*vk
       		cosm = cos(min(abs(alpha - alive_cells[m].angle),
                  abs(alpha - alive_cells[m].angle +2*pi),abs(alpha - alive_cells[m].angle-2*pi)))
       		cosk = cos(min(abs(alpha - alive_cells[k].angle),
                  abs(alpha - alive_cells[k].angle +2*pi),abs(alpha - alive_cells[k].angle-2*pi)))
-      
+
       		alive_cells[k].speed=cosk*g*alive_cells[k].speed*(alive_cells[m].r/alive_cells[k].r)^2
-      		alive_cells[m].speed=cosm*g*alive_cells[m].speed 
+      		alive_cells[m].speed=cosm*g*alive_cells[m].speed
 		startlock=Point(xk,yk)
 		startlocm=Point(xm,ym)
 
@@ -197,7 +191,7 @@ function solve_overlap(m::Int, startloc::Point, dying_indices::Array{Int},x_size
 		alive_cells[m].speed=0
 		alive_cells[k].speed=0
 		end
-	  end	  
+	  end
 	end
 	return dying_indices
 end
@@ -224,7 +218,7 @@ function find_center_where_they_touch(cellm::Cell,cellk::Cell,startloc::Point)
 	#Solving of an equation to know where the moving cell touch the overlapped cell first
 	a = 1
 	b = 2*(cos(theta1)*(x1-x2) + sin(theta1)*(y1-y2))
-	c = (x1-x2)^2 + (y1-y2)^2 - (r1+r2)^2 
+	c = (x1-x2)^2 + (y1-y2)^2 - (r1+r2)^2
 	delta = b^2 - 4*a*c
 	d=0
 	try
@@ -275,7 +269,7 @@ function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Rea
 
 	if(x0!=x1)
 		n=(y1-y0)/(x1-x0)
-		p=(x1*y0-y1*x0)/(x1-x0)	
+		p=(x1*y0-y1*x0)/(x1-x0)
 
 		for i in 1:length(alive_cells)
 			x2=alive_cells[i].x
@@ -322,11 +316,11 @@ function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Rea
 				if(!(0>d-r1-r2>-0.000001) && d04>-0.000001)
 				index=[index,i]
 				distance04=[distance04,d04]
-				end				
+				end
 			end
 		end
 	end
-	
+
 	if(length(index)>0)
 		j=index[indmin(distance04)]
 
@@ -337,16 +331,16 @@ function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Rea
 			j=m
 		end
 	end
-	
+
 	return j
 end
 ##########################################################################################################
-function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_size::Real, y_size::Real, 
+function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_size::Real, y_size::Real,
                            border_settings::Vector{ASCIIString},alive_cells::Vector{Cell})
 	xm=alive_cells[m].x
 	ym=alive_cells[m].y
 	x0=startloc.x
-	y0=startloc.y	
+	y0=startloc.y
 	r=alive_cells[m].r
 
   #######
@@ -355,13 +349,13 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_
 	  if(x0>x_size-r)
 		alive_cells[m].x=x_size-r
 	  end
-	  if(x0<r)	
+	  if(x0<r)
 		alive_cells[m].x=r
 	  end
 	  if(y0>y_size-r)
 		alive_cells[m].y=y_size-r
 	  end
-	  if(y0<r)	
+	  if(y0<r)
 		alive_cells[m].y=r
 	  end
 	  alive_cells[m].speed=0
@@ -383,18 +377,18 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_
 		x[1]=r
 		y[1]=n*r+p
 		x[2]=x_size-r
-		y[2]=n*x[2]+p	
+		y[2]=n*x[2]+p
 	  end
 	  if(ym!=y0)
 		x[3]=(r*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
 		y[3]=r
 		x[4]=((y_size-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-		y[4]=y_size-r	
+		y[4]=y_size-r
 	  end
 	end
-	
+
 	for i in 1:4
-	  d[i]=sqrt((x[i]-x0)^2+(y[i]-y0)^2)		
+	  d[i]=sqrt((x[i]-x0)^2+(y[i]-y0)^2)
 	end
 
 	if(xm>x0)#going east
@@ -404,7 +398,7 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_
       else
         j=2
       end
-	  else#going south and east	
+	  else#going south and east
       if(d[2]>d[3])
         j=3
       else
@@ -418,7 +412,7 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_
       else
         j=1
       end
-	  else#going south and west	
+	  else#going south and west
       if(d[1]>d[3])
         j=3
       else
