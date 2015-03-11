@@ -23,7 +23,7 @@ using Distributions
 # cell : data from the cell we want to assess the next angle
 
 
-function angle_from_ligand(cell::Cell,k::Int, x_size::Real, y_size::Real)
+function angle_from_ligand(cell::Cell, k::Int, x_size::Real, y_size::Real)
 
    	x = cell.x
   	y = cell.y
@@ -46,34 +46,36 @@ function angle_from_ligand(cell::Cell,k::Int, x_size::Real, y_size::Real)
 
 	end
 
-	ratio = maximum(list_ligand[:,4])/mean(list_ligand[:,4])
-	concentration_threshold=categories[cell.cell_type].stem_threshold
-
-	if (maximum(list_ligand[:,4])<concentration_threshold || ratio<1.1)
-	  choosen_angle=randn()*pi
-	  println("random: ",choosen_angle)
+	ratio = maximum(list_ligand[:, 4]) / mean(list_ligand[:, 4])
+	concentration_threshold = categories[cell.cell_type].stem_threshold
+  # If the largest concentration of ligand is less than the threshold or the ratio of max / mean is less that 1.1, choose a random angle.
+  # Else move towards the source perfectly.
+  println("Maximum ligand is: ", maximum(list_ligand[:, 4]))
+  println("Mean ligand is: ", mean(list_ligand[:, 4]))
+  println("Ratio is: ", ratio)
+	if (maximum(list_ligand[:, 4]) < concentration_threshold || ratio < 1.001)
+	  choosen_angle = randn() * pi
+	  println("Random Angle: ", choosen_angle)
 	else
-	  choosen_angle=list_ligand[indmax(list_ligand[:,4]),1]
-	  println("deterministic: ",choosen_angle)
+	  choosen_angle = list_ligand[indmax(list_ligand[:,4]), 1]
+	  println("Deterministic Angle: ", choosen_angle)
 	end
-	
 
 
 
 
-	# If it's a normal type, return the normal angle
-	# If it's any other type, do the exact opposite.
+	# Multiple the chosen angle by the cell type defined concentration response.
 	return choosen_angle * categories[cell.cell_type].conc_response
-	
+
 end
 
 #Combination of the two methods
 #probability is the probability of choosing the angle from the persistent random walk over the direction from the ligand
 function angle_from_both(cell::Cell, randomness::Real, x_size::Real, y_size::Real)
 	if(rand() < categories[cell.cell_type].persistence && iter > 1)
-		angle = mod(cell.angle,2*pi)
+		angle = mod2pi(cell.angle)
 	else
-		angle = mod(angle_from_ligand(cell, 1, x_size, y_size)+randomness*randn()*pi,2*pi)
+		angle = mod2pi((1-randomness)*angle_from_ligand(cell, 1, x_size, y_size) + randomness * rand() * 2pi)
 	end
 	return angle
 end
