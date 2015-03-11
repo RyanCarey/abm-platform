@@ -1,6 +1,7 @@
 include("import.jl")
 
-function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,pickle_output::Bool, entries, prompts,rb_value,diff_type)
+function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_output::Bool,
+                  pickle_output::Bool, entries::Vector, prompts::Vector,rb_value,diff_type)
   check_entries1(v, prompts, entries)
 
   # set variables
@@ -9,10 +10,14 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   x_size = float(v[3])
   y_size = float(v[4])
   global categories = Cell_type[
-          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], v9[1,1], v9[1,2], v9[1,3], v9[1, 4]),
-          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], v9[2,1], v9[2,2], v9[2,3], v9[2, 4]),
-          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], v9[3,1], v9[3,2], v9[3,3], v9[3, 4]),
-          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v9[4,1], v9[4,2], false, v9[4, 4])]
+          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], 
+                    v9[1,1], v9[1,2], v9[1,3], v9[1, 4]),
+          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], 
+                    v9[2,1], v9[2,2], v9[2,3], v9[2, 4]),
+          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], 
+                    v9[3,1], v9[3,2], v9[3,3], v9[3, 4]),
+          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], 
+                    v9[4,1], v9[4,2], false, v9[4, 4])]
   border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const nb_ligands= int(v2[2])
   global const nb_source= int(v2[7])
@@ -55,7 +60,7 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
 
   println("Building Environment")
   alive_cells = Cell[] 
-  alive_cells = init(n_cell, categories, x_size, y_size)
+  alive_cells = initial_placement(n_cell, categories, x_size, y_size)
   global dead_cells = Cell[]
 
   if display_output
@@ -69,13 +74,14 @@ function ok_press(v::Array, v2::Array,v8::Array,v9::Array,v10::Array,display_out
   t = strftime(time())[5:27] #store date and time as string
   filename = "out_$t.pickle"
   if pickle_output
-    pickle_start(filename, t, v, v2, v3, v4, v8, v9, border_settings, alive_cells)
+    pickle_start(filename, t, n_cell, steps, x_size, y_size, nb_ligands, nb_source, source_abscisse_ligand,
+    source_ordinate_ligand, v3p, v3l, v4, v8, v9, border_settings, alive_cells)
   end
 
   simulator(alive_cells, dead_cells, steps, display_output, pickle_output, filename, x_size, y_size, border_settings)
 end
 
-function check_entries1(v::Array, prompts::Array, entries::Array)
+function check_entries1(v::Vector, prompts::Vector, entries::Vector)
   # sanitises inputted data and stores it as a float in the relevant array
   for i in 1:length(prompts)
     if prompts[i][1:10]=="Probability" || prompts[i][end-4:end]=="(0-1)"
@@ -84,6 +90,7 @@ function check_entries1(v::Array, prompts::Array, entries::Array)
         return
       end
     end
+    println(get_value(entries[i]))
     if !(0 <= float(get_value(entries[i])))
       Messagebox(title="Warning", message=string(string(prompts[i])," must be positive"))
       return
@@ -104,7 +111,7 @@ function init_window()
   global frame = Frame(w); pack(frame, expand=true, fill="both")
   global canvas = Canvas(frame, 0, 0)
   grid(canvas, 1, 2, sticky="nsew")
-  ctrls = Frame(frame)
+  global ctrls = Frame(frame)
   grid(ctrls, 1, 1, sticky="sw", pady=5, padx=5)
   grid_columnconfigure(frame, 1, weight=1)
   grid_rowconfigure(frame, 1, weight=1)
@@ -140,10 +147,12 @@ function init_window()
              "Height of environment "]
 
   # make the input fields 
-  entries1 = Entry(ctrls, "$(Int(v[1]))")
-  entries2 = Entry(ctrls, "$(Int(v[2]))")
+  entries1 = Entry(ctrls, "$(int(v[1]))") 
+  #set_value(entries1,int(v[1]))
+  entries2 = Entry(ctrls, "$(int(v[2]))")
   entries3 = Entry(ctrls, "$(v[3])")
   entries4 = Entry(ctrls, "$(v[4])")
+
   entries = [entries1,entries2,entries3,entries4]
 
   for i in 1:length(prompts)
@@ -181,7 +190,8 @@ function init_window()
   formlayout(b, nothing)
 
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), entries, prompts,rb_value,get_value(rb2)))
+    bind(b,i,path -> ok_press(v, v2, v8, v9, v10, get_value(display_status), get_value(pickle_status), 
+                              entries, prompts,rb_value,get_value(rb2)))
   end
 
   #=

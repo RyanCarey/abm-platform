@@ -1,11 +1,11 @@
-function show_sim(X::Array{Cell,1}, x_size::Real, y_size::Real)
+function show_sim(X::Vector{Cell}, x_size::Real, y_size::Real)
   display_two(X, x_size, y_size)
   hold(true)
   hold(false)
 end
 
 # Displays four types of cells, using each cells radius and the colour specified by its type
-function display_two(cells::Array{Cell,1}, x_size::Real, y_size::Real)
+function display_two(cells::Vector{Cell}, x_size::Real, y_size::Real)
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)
     if cells[i].cell_type == 1

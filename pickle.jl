@@ -28,8 +28,10 @@ function unpickle(filename::String)
   return output
 end
 
-function pickle_out(filename::String,i::Int, alive_cells::Array{Cell}, dead_cells::Array{Cell})
-  output = Dict("iteration"=>i,"alive_cells"=>cells_to_matrix(alive_cells), "dead_cells"=> cells_to_matrix(dead_cells))
+function pickle_out(filename::String,i::Int, alive_cells::Vector{Cell}, dead_cells::Vector{Cell})
+  output = Dict([("iteration"=>i),
+                 ("alive_cells"=>cells_to_matrix(alive_cells)), 
+                 ("dead_cells"=> cells_to_matrix(dead_cells))])
   pickle_dict(filename,output)
 end
 
@@ -39,11 +41,13 @@ function pickle_start(filename::String, t::String, n_cell::Real, steps::Int, x_s
                       v3p::Array, v3l::Array, v4::Array, v8::Array, v9::Array,
                       border_settings::Array, alive_cells::Array)
   alive_cell_matrix = cells_to_matrix(alive_cells)
-  output = Dict("simulation_start_time"=>t, "n_cell"=>n_cell, "steps"=>steps, "x_size"=>x_size,"y_size"=>y_size, 
-                "probability_persistent"=>probability_persistent, "nb_ligands"=>nb_ligands, "nb_source"=>nb_source,
-                "source_abscisse_ligand"=>source_abscisse_ligand, "source_ordinate_ligand"=>source_ordinate_ligand,
-                "v3p"=>v3p, "v3l"=>v3l, "v4"=>v4,"v8"=>v8,"v9"=>v9, "border_settings"=>border_settings, "alive_cells"=>alive_cells,
-                "alive_cells"=>alive_cell_matrix)
+
+  output = Dict([("simulation_start_time"=>t), ("n_cell"=>n_cell), ("steps"=>steps), ("x_size"=>x_size),("y_size"=>y_size), 
+                ("nb_ligands"=>nb_ligands), ("nb_source"=>nb_source),
+                ("source_abscisse_ligand"=>source_abscisse_ligand), ("source_ordinate_ligand"=>source_ordinate_ligand),
+                ("v3p"=>v3p),
+                ("v3l"=>v3l), ("v4"=>v4),("v8"=>v8),("v9"=>v9), ("border_settings"=>border_settings),
+                ("alive_cells"=>alive_cell_matrix)])
   pickle_dict(filename,output)
 end
 
@@ -62,12 +66,17 @@ end
   global type_diffusion=diff_type
   =#
 
-function cells_to_matrix(cells::Array{Cell})
+function cells_to_matrix(cells::Vector{Cell})
   # turns array of cell objects into matrix of strings and floats, facilitating pickling
   cell_matrix = Array(Any,length(cells),8)
   for (i,j) in enumerate(cells)
     cell_matrix[i,1:end] =  [j.name j.x j.y j.r j.angle j.speed j.offspring j.cell_type]
   end
   return cell_matrix::Array{Any}
+end
+
+function cell_type_to_matrix(cell_types::Vector{Cell_type})
+  # turns array of cell types into matrix of strings and floats, facilitating pickling
+  return
 end
 

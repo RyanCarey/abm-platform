@@ -1,5 +1,4 @@
 from numpy import *
-import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
 exec(open('unpickle.py').read())
 
@@ -36,9 +35,10 @@ def load_all(filenames):
         # extract positions
         data[i][j][k] = array(data[i][j][k][1:3])
         data[i][j] = vstack(data[i][j])
-
-
   return data
+
+def boxplot(data):
+  return
 
 def stacking(data):
   for i in range(len(data)):
