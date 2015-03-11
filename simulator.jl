@@ -1,5 +1,5 @@
-function simulator(alive_cells::Vector{Cell}, 
-                  dead_cells::Vector{Cell}, 
+function simulator(alive_cells::Vector{Cell},
+                  dead_cells::Vector{Cell},
                   steps::Int,
                   display_output::Bool,
                   pickle_output::Bool,
@@ -36,12 +36,13 @@ function simulator(alive_cells::Vector{Cell},
     	alive_cells = division_decision!(alive_cells, index, x_size, y_size)
     end
 
-    if display_output
-      show_sim(alive_cells, x_size, y_size)
-    end
+
     # for speed, it will be necessary to batch these outputs in groups of 100+
-    if i % 1000 == 0
+    if i % 50 == 0
       println("$i Iterations Completed")
+      if display_output
+        show_sim(alive_cells, x_size, y_size)
+      end
       if pickle_output
         pickle_out(filename, i, alive_cells, dead_cells)
       end

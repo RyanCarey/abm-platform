@@ -53,7 +53,7 @@ function angle_from_ligand(cell::Cell, k::Int, x_size::Real, y_size::Real)
   println("Maximum ligand is: ", maximum(list_ligand[:, 4]))
   println("Mean ligand is: ", mean(list_ligand[:, 4]))
   println("Ratio is: ", ratio)
-	if (maximum(list_ligand[:, 4]) < concentration_threshold || ratio < 1.001)
+	if (maximum(list_ligand[:, 4]) < concentration_threshold || ratio < 1.0005)
 	  choosen_angle = randn() * pi
 	  println("Random Angle: ", choosen_angle)
 	else
