@@ -45,7 +45,7 @@ function simulator(canvas::Tk.Canvas,
     if i % 100 == 0
       println("$i Iterations Completed")
       if display_output
-        show_sim(alive_cells, x_size, y_size)
+        show_sim(canvas, alive_cells, categories, x_size, y_size)
       end
       if pickle_output
         pickle_out(filename, i, alive_cells, dead_cells)
