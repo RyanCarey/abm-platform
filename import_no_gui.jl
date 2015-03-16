@@ -1,6 +1,5 @@
 println("Loading...")
 
-using Winston
 using Tk
 #using PyCall
 #@pyimport pickle
@@ -11,15 +10,9 @@ include("move.jl")
 include("angle.jl")
 #include("borders.jl")
 include("initial_placement.jl")
-include("show.jl")
-include("pause.jl")
 include("diffusion.jl")
 #include("cell_growth.jl")
 #include("pickle.jl")
 include("simulator.jl")
-include("gui_diffusion.jl")
-include("gui_type.jl")
-include("gui_border.jl")
-include("gui_ligand.jl")
 
 println("Loaded")
