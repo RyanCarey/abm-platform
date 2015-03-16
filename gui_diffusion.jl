@@ -13,14 +13,14 @@ function gui_diffusion(v::Vector{Real}, v2::Vector{Real}, prompts::Array, entrie
   println(v2)
 
   if(diff_type=="Integrative")
-    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coeffient","Upper time integrative limit","Number of sources"]
+    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
                        Entry(ctrls2,"$(int(v2[4]))"),
                        Entry(ctrls2,"$(float(v2[5]))")]
   else
-    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coeffient","Number of sources"]
+    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coefficient","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(float(v2[6]))"),
                        Entry(ctrls2,"$(float(v2[7]))"),
@@ -29,7 +29,7 @@ function gui_diffusion(v::Vector{Real}, v2::Vector{Real}, prompts::Array, entrie
 
   #Display
   n2=length(prompts2)
-  b2 = Button(ctrls2, "See diffusion")
+  b2 = Button(ctrls2, "See Diffusion")
   for i in 1:n2
     if(i==2)
       l  = Label(ctrls2, "")
