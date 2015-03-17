@@ -46,7 +46,7 @@ function initial_placement(n::Real, categories::Array, x_size::Real, y_size::Rea
       end
     end
   end
-  println("initialised")
+  println("Initialised")
   return cells::Array
 end
 

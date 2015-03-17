@@ -122,12 +122,14 @@ global diffusion_coefficient = normal_gradient_coefficient
                     v9[4,1], v9[4,2], false, v9[4, 4])]
 
 
-alive_cells = initial_placement(number_of_cell, categories, environment_width, environment_height)
-dead_cells = Cell[]
+
 
 for i in 1 : nb_iteration
+  println("Simulation: ", i)
   t = strftime(time())[5:27] # Store date and time as string
   filename = "out_$t.pickle"
+  alive_cells = initial_placement(number_of_cell, categories, environment_width, environment_height)
+  dead_cells = Cell[]
   simulator(alive_cells, dead_cells, categories, number_of_steps, pickle_output, filename, environment_width, environment_height, border_settings, bouncing_energy_loss_coefficient)
 end
 
