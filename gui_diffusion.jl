@@ -16,14 +16,14 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
 
   #Choice of the default parameters
   if(diff_type=="Integrative")
-    prompts2 =["Numbers of ligand receptors","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
+    prompts2 =["Number of ligand receptors","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
                        Entry(ctrls2,"$(int(v2[4]))"),
                        Entry(ctrls2,"$(float(v2[5]))")]
   else
-    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coefficient","Number of sources"]
+    prompts2 =["Number of directions for a cell","Initial Concentration","Gradient Coefficient","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(float(v2[6]))"),
                        Entry(ctrls2,"$(float(v2[7]))"),
