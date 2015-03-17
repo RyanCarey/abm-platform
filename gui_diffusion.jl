@@ -1,5 +1,8 @@
 function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, entries::Array,rb_value::Array{ASCIIString,1},diff_type::ASCIIString)
+  #actualization of the parameters of the first window
   check_entries(v, prompts, entries)
+
+  #Initialization of the window
   global w2 = Toplevel("Diffusion Parameters",350,385) ## title, width, height
   global f2 = Frame(w2) 
   pack(f2, expand=true, fill="both")
@@ -10,10 +13,10 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   grid_columnconfigure(f2, 1, weight=1)
   grid_rowconfigure(f2, 1, weight=1)
 
-  println(v2)
 
+  #Choice of the default parameters
   if(diff_type=="Integrative")
-    prompts2 =["Numbers of direction for a cell","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
+    prompts2 =["Numbers of ligand receptors","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(ctrls2,"$(float(v2[1]))"),
                        Entry(ctrls2,"$(int(v2[2]))"),
                        Entry(ctrls2,"$(float(v2[3]))"), 
@@ -35,7 +38,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
       l  = Label(ctrls2, "")
       formlayout(l,nothing) 
     end 
-    if(i==5 && diff_type=="Integrative" || i==4 && diff_type=="Normal")  
+    if(i==5 && diff_type=="Integrative" || i==4 && diff_type=="Normal")  #Not the same nuimber of parameter depending on the diffusion
       formlayout(b2, nothing)
       l  = Label(ctrls2, "")
       formlayout(l,nothing)
@@ -88,11 +91,14 @@ end
 
 ##########################################################################################################
 function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,diff_type)
+  #Actualization of v2 thanks to the parameters input in entries2
   check_entries2(v2, prompts2, entries2,diff_type)
+  #Initialization
   result = Array(Float64,int(sqrt(v[3]^2+v[4]^2))+1,1)
   timediff=int(get_value(sc))
+  #some parameters may prevent the software from displaying
   try
-#choice of the upper limit for y
+  #choice of the upper limit for y
   if(diff_type=="Integrative")
 	tau0 = int(get_value(entries2[4]))
 	ymaxi,tmp=quadgk(integrand_max,0,tau0)
@@ -102,13 +108,14 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
       D=float(get_value(entries2[3]))
       ymaxi=ceil(amplitude/sqrt(4*pi*D))
   end
-
+  
+  #Display
   for x in 0:int(sqrt(v[3]^2+v[4]^2))
     global distance_source_squared = int(x)
     if(diff_type=="Integrative")
       tau0 = int(get_value(entries2[4]))
       (result[x+1],tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
-    else
+    elseif(diff_type=="Normal")
       amplitude=float(get_value(entries2[2]))
       D=float(get_value(entries2[3]))
       result[x+1]=float(amplitude/sqrt(4*pi*D*timediff)*exp(-x^2/(4*D*timediff)))
@@ -120,15 +127,15 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   ylim(0,ymaxi)
   display(canvas2,p)
   catch
-	Messagebox(title="Warning", message="Cannot display with those parameters. Please choose others.")
-        return
+    Messagebox(title="Warning", message="Cannot display with those parameters. Please choose others.")
+    return
   end
 end
 
 
 ##########################################################################################################
 function integrand_entry(tau::Float64)
-
+#this is the function we need to integrate when we are in the integrative case
   timediff = int(get_value(sc))
   A=float(get_value(entries2[2]))
   D=float(get_value(entries2[3]))
@@ -137,7 +144,7 @@ function integrand_entry(tau::Float64)
 end
 ##########################################################################################################
 function integrand_max(tau::Float64)
-
+#we use this function to calculate the maximum value in order ot to keep the same length axis
   timediff = int(get_value(entries2[4]))
   A=float(get_value(entries2[2]))
   D=float(get_value(entries2[3]))
@@ -148,9 +155,18 @@ end
 
 ############################################################################################################
 function check_entries2(v2::Array, prompts2::Array, entries2::Array,diff_type)
-
+#We actualize the value of v2 depending on the kind of diffusion
+#v2 is made of
+#	 the number of ligand receptors for a cell 
+#	 the 3 diffusion coefficients for the integrative case
+#	 the number of sources
+#	 the 2 diffusion coefficients for the normal case
+#But we display in entrie whatever the integration is
+#	 the number of ligand receptors for a cell 
+#	 the 2/3 diffusion coefficients for the normal/integrative case
+#	 the number of sources
+#Therefore we need to adapt v2 to entries as follow
 if(diff_type=="Integrative")
-
   for i in 1:length(prompts2)
     try
       v2[i] = float(get_value(entries2[i]))
@@ -160,9 +176,7 @@ if(diff_type=="Integrative")
     end
   end
 
-else
-
-
+elseif(diff_type=="Normal")
     try
       v2[1] = float(get_value(entries2[1]))
     catch

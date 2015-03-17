@@ -11,14 +11,15 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   const steps = int(v[2])
   x_size = float(v[3])
   y_size = float(v[4])
+  g=float(v[5])
   categories = Cell_type[
-          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], 
+          Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], v8[1,11],v8[1,12],
                     v9[1,1], v9[1,2], v9[1,3], v9[1, 4]),
-          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], 
+          Cell_type(v8[2,1], v8[2,2], v8[2,3], v8[2,4], v8[2,5], v8[2,6], v8[2,7], v8[2,8], v8[2,9], v8[2,10], v8[2,11],v8[2,12],
                     v9[2,1], v9[2,2], v9[2,3], v9[2, 4]),
-          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], 
+          Cell_type(v8[3,1], v8[3,2], v8[3,3], v8[3,4], v8[3,5], v8[3,6], v8[3,7], v8[3,8], v8[3,9], v8[3,10], v8[3,11],v8[3,12],
                     v9[3,1], v9[3,2], v9[3,3], v9[3, 4]),
-          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], 
+          Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v8[4,11],v8[4,12],
                     v9[4,1], v9[4,2], false, v9[4, 4])]
   border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const nb_ligands= int(v2[2])
@@ -81,9 +82,10 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   end
 
   simulator(canvas, alive_cells, dead_cells, categories, steps, display_output, pickle_output, 
-            filename, x_size, y_size, border_settings)
+            filename, x_size, y_size, border_settings,g)
 end
 
+##########################################################################################################
 function check_entries(v::Vector, prompts::Vector, entries::Vector)
   # sanitises input data and stores in an array of floats
   for i in 1:length(prompts)
@@ -107,6 +109,7 @@ function check_entries(v::Vector, prompts::Vector, entries::Vector)
   end
 end
 
+##########################################################################################################
 function init_window()
   println("Starting up window...")
   # window parameters
@@ -119,9 +122,9 @@ function init_window()
   grid_columnconfigure(frame, 1, weight=1)
   grid_rowconfigure(frame, 1, weight=1)
 
-  # set defaults        
-  v = [10, 300, 30, 30]
-  v2=[8, 100, 1, 150, 1,100,1]
+  # set defaults    
+  v = Float64[10, 300, 30, 30,0.9]
+  v2=Float64[8, 100, 1, 10, 1,100,1]
   global rb_value=["Line"]
   global v3p=Array(Float64,2*int(v2[5]))
   global v3l=Array(Float64,int(v2[5]))
@@ -131,31 +134,32 @@ function init_window()
     v3p[2*i-1]=0
     v3p[2*i]=0
     v3l[i]=0
-    v4[3*i-2]=10
-    v4[3*i-1]=100
-    v4[3*i]=150	
+    v4[3*i-2]=100
+    v4[3*i-1]=1
+    v4[3*i]=10
     v5[2*i-1]=100
     v5[2*i]=1
   end
-  v8 = Float64[1.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5;
-               0.0 0.05 2.0 1.0 1.0 -1.0 1.5 .0001 .5 .5;
-               0.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5;
-               0.0 0.05 2.0 1.0 1.0 1.0 1.5 .0001 .5 .5]
+  v8 = Float64[1.0  0.05  2.0  1.0  1.0  1.0  1.5  .0001  .5  .5  .1  1.05;
+               0.0  0.05  2.0  1.0  1.0 -1.0  1.5  .0001  .5  .5  .1  1.05;
+               0.0  0.05  2.0  1.0  1.0  1.0  1.5  .0001  .5  .5  .1  1.05;
+               0.0  0.05  2.0  1.0  1.0  1.0  1.5  .0001  .5  .5  .1  1.05]
 
   v9 = ["ro" false true false;"bo" false false false;"mo" false false false;"go" false false false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
 
   # make and activate controls
   prompts = String["Number of cells", "Number of timesteps ", "Width of environment",
-             "Height of environment "]
+             "Height of environment ","Loss energy coefficient when cells bounce"]
 
   # make the input fields 
   entries1 = Entry(ctrls, "$(int(v[1]))") 
   entries2 = Entry(ctrls, "$(int(v[2]))")
   entries3 = Entry(ctrls, "$(v[3])")
   entries4 = Entry(ctrls, "$(v[4])")
+  entries5 = Entry(ctrls, "$(v[5])")
 
-  entries = [entries1,entries2,entries3,entries4]
+  entries = [entries1,entries2,entries3,entries4,entries5]
 
   for i in 1:length(prompts)
     formlayout(entries[i],string(prompts[i],": "))

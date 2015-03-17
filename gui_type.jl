@@ -12,7 +12,7 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
   # row labels
   cat_prompts = String["Ratio: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ", 
                        "Average Radius: ", "Response to ligand: ", "Stem Threshold: ",
-                       "Death Rate: ", "Persistence (0-1): ", "Randomness: ", "Colour: "]
+                       "Death Rate: ", "Persistence (0-1): ", "Randomness: ","Speed Threshold triggering bouncing: ","Concentration Threshold Ratio triggering movement (1-2): ", "Colour: "]
   for i in 1:length(cat_prompts)
     grid(Label(f3, cat_prompts[i]), i+1, 1, sticky = "se")
   end
@@ -27,10 +27,10 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
                                        Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell") Checkbutton(f3, "Stick to Source");
                                        Checkbutton(f3, "Left Placed")  Checkbutton(f3, "Stem Cell") Checkbutton(f3, "Stick to Source")]
   # initialise forms
-  cat_entries = Tk.Tk_Entry[Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
-                            Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
-                            Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
-                            Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3)]
+  cat_entries = Tk.Tk_Entry[Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
+                            Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
+                            Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
+                            Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3)]
   for i in 1:4
     # set and place forms
     for j in 1 : size(cat_entries,2)

@@ -32,6 +32,8 @@ type Cell_type
  	death_rate::Real
  	persistence::Real
  	randomness::Real
+	threshold_movement::Real
+	threshold_ratio_concentration::Real
 	colour::String
 	left_placed::Bool
 	stem_cell::Bool

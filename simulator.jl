@@ -8,7 +8,8 @@ function simulator(canvas::Tk.Canvas,
                    filename::ASCIIString,
                    x_size::Real,
                    y_size::Real,
-                   border_settings::Vector{ASCIIString})
+                   border_settings::Vector{ASCIIString},
+		   g::Real)
 
   global negative_distance = 0
   for i = 1:steps
@@ -16,8 +17,7 @@ function simulator(canvas::Tk.Canvas,
       println("All cells have died after $i iterations")
       break
     end
-    time = 100
-    #time = i/length(alive_cells)+1
+    time = i/length(alive_cells)+1 # We divide the step number by the number of cell in order to put the diffusion and the cell movement on the same basis
 
     index = rand(1 : length(alive_cells))
 
@@ -26,7 +26,7 @@ function simulator(canvas::Tk.Canvas,
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, categories, index)
     if !cell_died
       dying_indices = Int[]
-      dying_indices, concentrations = move!(alive_cells, categories, dying_indices, index, x_size, y_size, border_settings, time)
+      dying_indices, concentrations = move!(alive_cells, categories, dying_indices, index, x_size, y_size, border_settings, time,g)
       dying_indices = sort([j for j in Set(dying_indices)])
       while length(dying_indices) > 0
         cell_death(alive_cells, dead_cells, pop!(dying_indices))
@@ -59,7 +59,7 @@ function simulator(canvas::Tk.Canvas,
   println("Simulation Finished")
 end
 
-
+##########################################################################################################
 function simulator(alive_cells::Vector{Cell}, 
                    dead_cells::Vector{Cell}, 
                    categories::Vector{Cell_type},
@@ -68,7 +68,8 @@ function simulator(alive_cells::Vector{Cell},
                    filename::ASCIIString,
                    x_size::Real,
                    y_size::Real,
-                   border_settings::Vector{ASCIIString})
+                   border_settings::Vector{ASCIIString},
+		   g::Real)
 
   global negative_distance = 0
   for i = 1:steps
@@ -76,8 +77,8 @@ function simulator(alive_cells::Vector{Cell},
       println("All cells have died after $i iterations")
       break
     end
-    time = 100
-    #time = i/length(alive_cells)+1
+
+    time = i/length(alive_cells)+1 # We divide the step number by the number of cell in order to put the diffusion and the cell movement on the same basis
 
     index = rand(1 : length(alive_cells))
 
@@ -86,7 +87,7 @@ function simulator(alive_cells::Vector{Cell},
     alive_cells, dead_cells, cell_died = chance_to_die(alive_cells, dead_cells, categories, index)
     if !cell_died
       dying_indices = Int[]
-      dying_indices, concentrations = move!(alive_cells, categories, dying_indices, index, x_size, y_size, border_settings, time)
+      dying_indices, concentrations = move!(alive_cells, categories, dying_indices, index, x_size, y_size, border_settings, time,g)
       dying_indices = sort([j for j in Set(dying_indices)])
       while length(dying_indices) > 0
         cell_death(alive_cells, dead_cells, pop!(dying_indices))

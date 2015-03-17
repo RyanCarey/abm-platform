@@ -1,5 +1,6 @@
 function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Array, prompts2::Array, entries2::Array,value_rb,diff_type)
 
+  #Window initialization
   check_entries2(v2, prompts2, entries2,diff_type)
   global w3 = Toplevel("Ligand's source location") ## title, width, height
   global f3 = Frame(w3) 
@@ -12,7 +13,6 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
   grid_rowconfigure(f3, 1, weight=1)
  
   global prompts3=[]
-
   if(value_rb=="Point")
     prompts3=["X ordinate of the injury","Y ordinate of the injury"]
   else
@@ -20,22 +20,19 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
   end
   if(diff_type=="Integrative")
     global prompts4 = ["Initial Concentration","Gradient Coeffient","Upper time integrative limit"]
-    choice_source=5
+    choice_source=5 #v2 is not the same depending on the type of diffusion
   else
     global prompts4 = ["Initial Concentration","Gradient Coeffient"]
     choice_source=4
   end
-
   global entries3=[]
   global entries4=[]
 
-
+  #choice of the default parameters
   for i in 1:v2[choice_source]   # for each source 
-
     l = Label(ctrls3, "Source $(int(i)):") 
     formlayout(l,nothing) 
-    #if (i <= length(v4)/3 && value_rb=="Point") ||  (i <=length(v5)/2 && value_rb=="Line")  # fill in any values that have previously been entered
-    try
+    try #this try allows to put the previous value for the source location and the source parameters
 	if(value_rb=="Point")
       	  entries3=[entries3,Entry(ctrls3,"$(v3p[2*i-1])")]
       	  entries3=[entries3,Entry(ctrls3,"$(v3p[2*i])")] 
@@ -50,8 +47,7 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
         entries4=[entries4,Entry(ctrls4,"$(v5[2*i-1])")] 
         entries4=[entries4,Entry(ctrls4,"$(v5[2*i])")] 
       end
-    catch
-    #if (i > length(v4)/3 && value_rb=="Point") ||  (i > length(v5)/2 && value_rb=="Line")
+    catch #otherwise we put the default values
 	if(value_rb=="Point")
 	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
       	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
@@ -61,13 +57,14 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
       if(diff_type=="Integrative")
         entries4=[entries4,Entry(ctrls4,"$(100.0)")]
         entries4=[entries4,Entry(ctrls4,"$(1.0)")]
-        entries4=[entries4,Entry(ctrls4,"$(150.0)")]
+        entries4=[entries4,Entry(ctrls4,"$(10.0)")]
       else
         entries4=[entries4,Entry(ctrls4,"$(100.0)")]
         entries4=[entries4,Entry(ctrls4,"$(1.0)")]
       end
-    #end
     end
+
+  #display  
     if(value_rb=="Point")
       formlayout(entries3[2*i-1],string(prompts3[1],": ")) 
       formlayout(entries3[2*i],string(prompts3[2],": ")) 
@@ -94,8 +91,8 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
     formlayout(l4,nothing) 
   end
 
+  #End button
   b = Button(ctrls3, "Ok")
-  # displays the button
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
      bind(b,i,path -> check_entries3(v2[choice_source],value_rb,diff_type))
@@ -103,9 +100,11 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
 end
 ##########################################################################################################
 function check_entries3(n_sources::Real,value_rb,diff_type)
+#We store in the global variable v3, v4 and v5 the sources location and parameters
 
+
+  #Source location
   if(value_rb=="Point")
-
     global v3p = zeros(2*int(n_sources),1)
     for i in 1:2*int(n_sources)
       try
@@ -115,9 +114,7 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
         return
       end
     end
-
   else
-
     global v3l = zeros(int(n_sources),1)
     for i in 1:int(n_sources)
       try
@@ -131,9 +128,8 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
   end
 
 
-
+  #source parameters
   if(diff_type=="Integrative")
-
     global v4 = zeros(3*int(n_sources),1)
     for i in 1:3*n_sources
       try
@@ -143,9 +139,7 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
         return
       end
     end
-
   else
-
     global v5 = zeros(2*int(n_sources),1)
     for i in 1:2*n_sources
       try
