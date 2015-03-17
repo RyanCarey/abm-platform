@@ -69,7 +69,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
 
   # display
   b1 = Button(ctrls2, "Location and Coefficients")
-  formlayout(b1, "Choose source ligand location and coefficients")
+  #formlayout(b1, "Choose source ligand location and coefficients")
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b1,i,path -> gui_ligand(v, v2, v3p,v3l, v4,v5, prompts2, entries2,get_value(rb),diff_type))
   end

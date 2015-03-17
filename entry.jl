@@ -150,7 +150,7 @@ function init_window()
 
   # make and activate controls
   prompts = String["Number of cells", "Number of timesteps ", "Width of environment",
-             "Height of environment ","Loss energy coefficient when cells bounce"]
+             "Height of environment ","Cell Contact Energy Loss Coefficient"]
 
   # make the input fields 
   entries1 = Entry(ctrls, "$(int(v[1]))") 
