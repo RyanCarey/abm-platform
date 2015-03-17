@@ -349,16 +349,18 @@ function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Rea
 	return j
 end
 ##########################################################################################################
-
 function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_size::Real, y_size::Real,
                            border_settings::Vector{ASCIIString},alive_cells::Vector{Cell},g::Real)
+#This functions put the moving cell m at the border (its new startlocation), changes its direction and its speed.
+
+	#Notation simplification
 	xm=alive_cells[m].x
 	ym=alive_cells[m].y
 	x0=startloc.x
 	y0=startloc.y
 	r=alive_cells[m].r
-
-  #If we have any troubles at the very begginning
+  	#If we have any troubles at the very begginning
+	#we cancel the move
 	if x0>x_size-r || x0<r || y0>y_size-r || y0<r
 	  if x0>x_size-r
 		alive_cells[m].x=x_size-r
@@ -374,105 +376,113 @@ function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_
 	  end
 	  alive_cells[m].speed=0
 	  startloc=Point(alive_cells[m].x,alive_cells[m].y)
-
-  #Otherwise
+  	#Otherwise, we areg oing top search first where the cell can touch the wall. Four positions are possible. 
+	#Then we are going to choose the one the cell is going to touch first.
+	#finally we are going to modify cell movement according to the behaviour of the it is touching
 	else
-
-	x=(3*x_size).*ones(4)#w,e,s,n
-	y=(3*y_size).*ones(4)
+	#Array initialization
+	#We are going to store the west, east, south and north behaviour
+	#We put a original high value for x and y as we are going to calculate distance afterwards in order to know which wall is touched first
+	x=(3*x_size).*ones(4)#x coordinates of the possible locations when touching the wall
+	y=(3*y_size).*ones(4)#y coordinates of the possible locations when touching the wall
 	d2=Array(Float64,4)
 	d=Array(Float64,4)
-
+	#First, we store the four possible locations of the cell while touching each wall
+	#Please refer to report to have a display
 	if xm>x_size-r || xm<r || ym>y_size-r || ym<r
-	  if xm!=x0
-      n=(ym-y0)/(xm-x0)
-      p=(-ym*x0 + xm*y0)/(xm-x0)
-
-      x[1]=r
-      y[1]=n*r+p
-      x[2]=x_size-r
-      y[2]=n*x[2]+p
+	  #We are going to use the line linking the startlocation of the cell m and its proposed location
+	  #D: y=nx+p, n and p only exists if the line is not vertical and we 
+	  if xm!=x0#The line needs to be not vertical in order to touch the west and the east borders
+      	    n=(ym-y0)/(xm-x0)
+            p=(-ym*x0 + xm*y0)/(xm-x0)
+	    #West and East behaviour. We use the line equation to find ywest and yeast. 
+      	    x[1]=r
+      	    y[1]=n*r+p
+      	    x[2]=x_size-r
+      	    y[2]=n*x[2]+p
 	  end
-	  if ym!=y0
-      x[3]=(r*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-      y[3]=r
-      x[4]=((y_size-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
-      y[4]=y_size-r
+	  if ym!=y0#The line needs to be not horizontal in order to touch the north and the south borders
+	    #South and North behaviour. We use the line equation to find xsouth and xnorth	     
+      	    x[3]=(r*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+      	    y[3]=r
+      	    x[4]=((y_size-r)*(xm-x0)-xm*y0+x0*ym)/(ym-y0)
+      	    y[4]=y_size-r
 	  end
 	end
-
+	#we store here the distance between the startlocation and the proposed location
 	for i in 1:4
 	  d[i]=sqrt((x[i]-x0)^2+(y[i]-y0)^2)
 	end
-
+	#According to the direction of the moving cell, we are going to choose whcich wall is touched first
+	#j=1:west
+	#j=2:east
+	#j=3:south
+	#j=4:north
 	if xm>x0  #going east
 	  if ym>y0 #going north and east
-      if d[2]>d[4] #nort border is hit first
-        j=4
-      else
-        j=2
-      end
+      	    if d[2]>d[4] #nort border is hit first
+              j=4
+      	    else
+              j=2
+            end
 	  else  #going south and east
-      if d[2]>d[3]
-        j=3
-      else
-        j=2
-      end
+            if d[2]>d[3]
+              j=3
+            else
+              j=2
+            end
 	  end
 	else  #going west
 	  if ym>y0 #going north and west
-      if d[1]>d[4]
-        j=4
-      else
-        j=1
-      end
+            if d[1]>d[4]
+              j=4
+            else
+              j=1
+            end
 	  else  #going south and west
-      if d[1]>d[3]
-        j=3
-      else
-        j=1
-      end
+            if d[1]>d[3]
+              j=3
+            else
+              j=1
+            end
 	  end
 	end
-
+	#We can then modify without any knowledge about the wall behaviour change the speed (ie the remaining distance, as we are working in a defined time step)
+	#And the startlocation
 	alive_cells[m].speed=g*(alive_cells[m].speed-d[j])
 	startloc=Point(x[j],y[j])
-
-  for i in [3,4] # check south / north hits
-    if j == i
-      if border_settings[i] == "reflecting"
-        alive_cells[m].angle=mod2pi(-alive_cells[m].angle)
-      elseif border_settings[i] == "absorbing"
-        alive_cells[m].speed /= 10
-        alive_cells[m].angle=mod2pi(-alive_cells[m].angle)
-      elseif border_settings[i] == "removing"
-        alive_cells[m].speed /= 10
-        alive_cells[m].angle=mod2pi(-alive_cells[m].angle)
-        push!(dying_indices, m)
+	#The angle in case of north/south reflection is not the same as in the case of east/west reflection 	
+	for i in [3,4] # check south / north hits
+	  if j == i
+	    if border_settings[i] == "reflecting"
+	      alive_cells[m].angle=mod2pi(-alive_cells[m].angle)
+	    elseif border_settings[i] == "absorbing"
+	      alive_cells[m].speed /= 10
+	      alive_cells[m].angle=mod2pi(-alive_cells[m].angle)
+	    elseif border_settings[i] == "removing"
+	      alive_cells[m].speed /= 10
+	      alive_cells[m].angle=mod2pi(-alive_cells[m].angle)
+	      push!(dying_indices, m)
+	    end
+	  end
+	end
+        for i in [1,2] # check west / east hits
+          if j == i
+            if border_settings[i] == "reflecting"
+              alive_cells[m].angle=mod2pi(pi-alive_cells[m].angle)
+            elseif border_settings[i] == "absorbing"
+              alive_cells[m].speed /= 10
+              alive_cells[m].angle=mod2pi(pi-alive_cells[m].angle)
+            elseif border_settings[i] == "removing"
+              alive_cells[m].speed /= 10
+              alive_cells[m].angle=mod2pi(pi-alive_cells[m].angle)
+              push!(dying_indices, m)
+            end
+          end
+        end
+        # complete move with new direction and speed
+        alive_cells[m].x=startloc.x + alive_cells[m].speed*cos(alive_cells[m].angle)
+        alive_cells[m].y=startloc.y + alive_cells[m].speed*sin(alive_cells[m].angle)
       end
-    end
-  end
-
-  for i in [1,2] # check west / east hits
-    if j == i
-      if border_settings[i] == "reflecting"
-        alive_cells[m].angle=mod2pi(pi-alive_cells[m].angle)
-      elseif border_settings[i] == "absorbing"
-        println("absorbed")
-        alive_cells[m].speed /= 10
-        alive_cells[m].angle=mod2pi(pi-alive_cells[m].angle)
-      elseif border_settings[i] == "removing"
-        println("killed")
-        alive_cells[m].speed /= 10
-        alive_cells[m].angle=mod2pi(pi-alive_cells[m].angle)
-        push!(dying_indices, m)
-      end
-    end
-  end
-
-  # complete move with new direction and speed
-  alive_cells[m].x=startloc.x + alive_cells[m].speed*cos(alive_cells[m].angle)
-  alive_cells[m].y=startloc.y + alive_cells[m].speed*sin(alive_cells[m].angle)
-  end
-  return startloc, dying_indices
+      return startloc, dying_indices
 end
