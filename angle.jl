@@ -3,8 +3,10 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
 	# this is the biased contribution to the angle
 	#We are going to calculate dependiong on some threshold the angle the cell has to choose
 	#Array initialization
+
         receptors=Array(Float64,int(nb_ligands),3)#angle,x and y ordinate of the cell receptors
-	concentrations=Array(Array(Float64,int(nb_ligands)))#concnetration of ligand at the ordinate defined by receptors
+	concentrations=Array(Array(Float64,int(nb_ligands)))#concentration of ligand at the ordinate defined by receptors
+
 	for i in 1:nb_ligands    # number of receptors on cell
 	  angle=(i-1)*2*pi/nb_ligands
 	  receptors[i,1] = angle
