@@ -39,7 +39,7 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
     end
 
     # set and place dropdown boxes
-    co_to_colour = Dict([("ro"=>"Red"), ("bo"=>"Blue"), ("mo"=>"Magenta"), ("go"=>"Green"), ("yo"=>"Yellow")])
+    co_to_colour = Dict(("ro"=>"Red"), ("bo"=>"Blue"), ("mo"=>"Magenta"), ("go"=>"Green"), ("yo"=>"Yellow"))
     set_value(colour_entries[i], co_to_colour[v9[i,1]])
     grid(colour_entries[i], length(cat_prompts) + 1, i+1)
 
@@ -83,7 +83,7 @@ function check_cat_entries(v8::Matrix{Float64},v9::Matrix{Any},cat_entries::Matr
     end
   end
 
-  colour_to_co = Dict([("Red"=>"ro"), ("Blue"=>"bo"), ("Magenta"=>"yo"), ("Green"=>"go"), ("Yellow"=>"yo")])
+  colour_to_co = Dict(("Red"=>"ro"), ("Blue"=>"bo"), ("Magenta"=>"yo"), ("Green"=>"go"), ("Yellow"=>"yo"))
   for i in 1:4
     v9[i,1] = colour_to_co[get_value(colour_entries[i])]
     v9[i,2] = get_value(cat_entries_bool[i,1])
