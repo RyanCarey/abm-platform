@@ -76,7 +76,7 @@ function simulator(alive_cells::Vector{Cell},
   for i = 1:steps
     iteration(alive_cells, dead_cells, categories,
              x_size, y_size, border_settings, momentum_coefficient, i)
-    if i % 100 == 0 || i==steps  # display every hundredth step, and the last step
+    if i % 500 == 0 || i==steps  # display every hundredth step, and the last step
       println("$i Iterations Completed")
       if pickle_output
         pickle_out(filename, steps, alive_cells, dead_cells)

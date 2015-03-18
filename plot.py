@@ -2,6 +2,36 @@ from numpy import *
 import matplotlib.pyplot as plt
 exec(open('unpickle.py').read())
 
+def get_coords(arr):
+  out = list(arr)
+  for i in range(len(arr)):
+    out[i] = arr[i][1:3]
+  return out
+
+def get_alive_coords(arr):
+  return array(get_coords(arr['alive_cells']))
+
+def get_alive_coords_turns(arr):
+  out = list(arr)
+  for i in range(len(arr)):
+    out[i] = get_alive_coords(arr[i])
+  return out
+
+def get_alive_coords_iters(filenames):
+  out = list(filenames)
+  for i in range(len(filenames)):
+    out[i] = get_alive_coords_turns(load(filenames[i]))
+  return out
+
+def stack_iters(arr):
+  # takes array of lots of simulations and organizes them by turn
+  lengths = [len(i) for i in arr]
+  arr = [i for i in arr if len(i)==max(lengths)]  #remove truncated simulations
+  out = [vstack([i[j] for i in arr]) for j in range(max(lengths))] # stack first timestep from each simulation
+  print('lengths of initial arrays: ',lengths)
+  return out
+
+### old ### 
 def load_turn(filenames,turn, length):
   filenames = list(copy(filenames))
   positions = []

@@ -66,7 +66,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   grid(bhelp[4],5+plusintegrative,3,sticky="w")
   bind(bhelp[4], "command", path -> Messagebox(title="Help", message="Click to plot ligand concentration against the distance from one source with the above parameters.\nNB: The curve only allows the user a better understanding of the diffusion and do not affect any real sources."))
   for i in ["command","<Return>","<KP_Enter>"] 
-    bind(b1,i,path -> plot_diffusion(v, v2, prompts2, entries2,diff_type))
+    bind(b1,i,path -> plot_diffusion(v, v2, prompts2, entries2,diff_type, plusintegrative))
   end
 
   l2  = Label(f2, "")
