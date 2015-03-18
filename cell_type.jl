@@ -9,6 +9,7 @@ function getindex(a::Point,b::Int64)
   b==1 ? a.x : (b==2 ? a.y : BoundsError)
 end
 
+# Properties of each individual cell.
 type Cell
 	name::String
   	x::Real
@@ -20,7 +21,7 @@ type Cell
 	cell_type::Int  # this is an index in the range 1 to 4, which indexes the 'categories' array of cell types
 end
 
-
+# Properties that define each cell category.
 type Cell_type
 	amount::Real
 	growth_rate::Real

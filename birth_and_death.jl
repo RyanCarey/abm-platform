@@ -20,9 +20,11 @@ end
 function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int, x_size::Real, y_size::Real, concentrations::Vector{Float64})
 	radius = cells[i].r
 	area = pi * radius ^ 2
+	# Calculate radius if area was half, and a random angle.
 	new_r = sqrt( (area / 2) / pi)
 	angle = 2 * pi * rand()		
 
+	# Calculate a new location based on the new radius and random angle. Use this to check the environment for overlaps.
 	new_x = cells[i].x - cos(angle) * 2 * new_r
 	new_y = cells[i].y - sin(angle) * 2 * new_r
 	new_point = Point(new_x, new_y)
@@ -30,6 +32,7 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 
  	attempt = 0
 	give_up = false
+	# While this new cell overlaps or is placed outside the environment, calculate a new random location.
 	while !in_empty_space || !(radius < new_x < x_size - radius) || !(radius < new_y < y_size - radius)
 		angle = 2 * pi * rand()
 		new_x = cells[i].x - cos(angle) * 2 * new_r
@@ -46,12 +49,15 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 			break
 		end
 	end
-		
+	
+	# If the cell is able to be successfully placed, create a new cell of the same type and reduce parent cell area accordingly.
 		if !give_up
 			offspring_name = "$(cells[i].name).$(cells[i].offspring + 1)"
 			new_cell = Cell(offspring_name, new_x, new_y, new_r, 1, 1, 0, cells[i].cell_type)
 			cells[i].r = new_r
 			cells[i].offspring += 1
+
+			# If the cell type is a stem cell, use the stem threshold for the type to calculate the type of the offspring cell.
 			if categories[cells[i].cell_type].stem_cell
 				# Sum ligands
 				sum_ligand = mean(concentrations)
@@ -83,12 +89,13 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 	return cells
 end
 
+# Function to randomly kill 1 cell in the simulation.
 function kill_any(alive_cells::Vector{Cell}, dead_cells::Vector{Cell})
   i = rand(1:length(alive_cells))
   return cell_death(alive_cells, dead_cells, i)
 end
 
-
+# Function to remove specified cell from the simulation.
 function cell_death(alive_cells::Vector{Cell}, dead_cells::Vector{Cell}, i::Int)
 	# Dead Cell!
 	#println("Dead Cell!")
@@ -97,11 +104,11 @@ function cell_death(alive_cells::Vector{Cell}, dead_cells::Vector{Cell}, i::Int)
 	push!(dead_cells, dead_cell)
 	return alive_cells, dead_cells
 end
-		
+
+# Function to determine whether a cell has grown enough to divide.
 function division_decision!(alive_cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int, 
                             x_size::Real, y_size::Real, concentrations::Vector{Float64})
-  # gets a cell to divide if it is sufficiently large and has space
-	cell = alive_cells[i]
+  	cell = alive_cells[i]
 	original_area = pi * categories[cell.cell_type].avg_r ^ 2
 	current_area = pi * cell.r ^ 2
 
@@ -131,6 +138,7 @@ function cell_growth!(alive_cells::Vector{Cell}, categories::Vector{Cell_type}, 
 	return alive_cells
 end
 
+# Function to check whether a growing cell is able to grow without overlapping other cells in the simulation.
 function space_to_grow(cells::Vector{Cell}, index::Int, radius::Real)
   n = length(cells)
     for i in 1:n
