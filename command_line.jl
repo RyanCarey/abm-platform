@@ -12,7 +12,7 @@ environment_width = 30
 environment_height = 30
 bouncing_energy_loss_coefficient = 0.9 #(0-1)
 type_of_diffusion = "Integrative" #"Integrative" or "Normal"
-pickle_output = false
+pickle_output = true
 border_settings = ["Reflecting", "Relfecting", "Reflecting", "Reflecting"] # Border Settings can be: "Reflecting", "Absorbing", "Removing".
 
 

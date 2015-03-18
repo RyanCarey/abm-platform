@@ -1,7 +1,7 @@
 include("import.jl")
 
 function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame, v::Vector, v2::Vector,v8::Matrix,
-                  v9::Matrix{Any},v10::Vector{AbstractString},display_output::Bool,
+                  v9::Matrix{Any},v10::Vector{String},display_output::Bool,
                   pickle_output::Bool, entries::Vector{Tk.Tk_Entry}, prompts::Vector,
                   rb_value::Vector{ASCIIString},diff_type::ASCIIString)
   check_entries(v, prompts, entries)
