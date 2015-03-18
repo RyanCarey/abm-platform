@@ -5,6 +5,7 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
 	#Array initialization
         receptors=Array(Float64,int(nb_ligands),3) #angle,x and y ordinate of the cell receptors
 	concentrations=Array(Float64,int(nb_ligands)) #concentration of ligand at the ordinate defined by receptors
+
 	for i in 1:nb_ligands    # number of receptors on cell
 	  angle=(i-1)*2*pi/nb_ligands
 	  receptors[i,1] = angle

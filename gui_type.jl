@@ -6,15 +6,20 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
 
   # column labels
   for i in 1:4
-    grid(Label(f3, "Type $i"), 1, i+1)
+    grid(Label(f3, "Type $i"), 1, i+2)
   end
 
   # row labels
   cat_prompts = String["Ratio: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ", 
                        "Average Radius: ", "Response to ligand: ", "Stem Threshold: ",
                        "Death Rate: ", "Persistence (0-1): ", "Randomness: ","Speed Threshold triggering bouncing: ","Concentration Threshold Ratio triggering movement (1-2): ", "Colour: "]
+  bhelp=[]
+
   for i in 1:length(cat_prompts)
+    bhelp=[bhelp,Button(f3,"?")]
+    bhelp[i][:width]=1
     grid(Label(f3, cat_prompts[i]), i+1, 1, sticky = "se")
+    grid(bhelp[i],i+1,2,sticky = "e")
   end
 
   # initialise dropdown boxes
@@ -35,13 +40,13 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
     # set and place forms
     for j in 1 : size(cat_entries,2)
         set_value(cat_entries[i,j], "$(v8[i,j])")
-        grid(cat_entries[i,j], j + 1, i+1)
+        grid(cat_entries[i,j], j + 1, i+2)
     end
 
     # set and place dropdown boxes
     co_to_colour = Dict(("ro"=>"Red"), ("bo"=>"Blue"), ("mo"=>"Magenta"), ("go"=>"Green"), ("yo"=>"Yellow"))
     set_value(colour_entries[i], co_to_colour[v9[i,1]])
-    grid(colour_entries[i], length(cat_prompts) + 1, i+1)
+    grid(colour_entries[i], length(cat_prompts) + 1, i+2)
 
     # set and place checkboxes
     for j in 1:size(cat_entries_bool,2)
@@ -49,16 +54,44 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
         continue
       end
       set_value(cat_entries_bool[i,j], v9[i,j+1])
-      grid(cat_entries_bool[i,j], length(cat_prompts)+1+j, i+1)
+      grid(cat_entries_bool[i,j], length(cat_prompts)+1+j, i+2)
     end
   end
 
   # Place Ok button in bottom right
   b = Button(f3, "Ok")
-  grid(b, 10, 11)
+  grid(b, 17, 12)
   for i in ["command","<Return>","<KP_Enter>"]
      bind(b, i, path -> destroy_cat_window(w3, v8,v9, cat_entries, colour_entries, cat_entries_bool))
   end
+
+  bhelp=[bhelp, Button(f3,"?"),Button(f3,"?"),Button(f3,"?")]
+  bhelp[14][:width]=1
+  bhelp[15][:width]=1
+  bhelp[16][:width]=1
+  grid(bhelp[14],15,2,sticky = "e")
+  grid(bhelp[15],16,2,sticky = "e")
+  grid(bhelp[16],17,2,sticky = "e")
+
+  bind(bhelp[1], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[2], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[3], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[4], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[5], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[6], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[7], "command", path -> Messagebox(title="Help", message="This is the concentration threshold that will define whether the cell is in the niche and should choose its angle thanks to the ligand concentration or whether this cell is out of the niche and should move randomly. To choose accurately this parameter please look at the diffusion curve within the 'diffusion' window.\n Do not forget in the case of the use of more than one source, that the concentration from each source are added."))
+  bind(bhelp[8], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[9], "command", path -> Messagebox(title="Help", message="This parameter defines how persistent the movement of this kind of cell will be. To decide if the cell should keep its previous location, we choose a number between 0 and 1 from a uniform distribution and if this number is below the persistence, the cell keeps its direction. The higher the persistence is, the more the cell is persistent."))
+  bind(bhelp[10], "command", path -> Messagebox(title="Help", message="This parameter modify the choice of the angle. If it equals 0, the cell will choose its angle only according to the concentration (cf. the manual for more information). Otherwise, the chosen angle is the angle calculated by the concentration to which we add this randomness parameter multiplied by a random number chosen among a normal distribution of mean 0 and variance pi."))
+  bind(bhelp[11], "command", path -> Messagebox(title="Help", message="This is the minimum speed the cell needs to have in order to trigger a boucing. Putting it to a high value will decrease the impact of the ballistic and therefore accelerate the calculation of movement. Please refer to the manual for more information."))
+  bind(bhelp[12], "command", path -> Messagebox(title="Help", message="This is the threshold above which, the maximum concentration at a specific ligand receptor divided by the mean concentration of all ligand receptors, need to be in order to trigger a movement. Therefore it cannot be below one. Usually 1.1 is a good threshold. If the previous ration is below the threshold, the cell will have a random angle. Please refer to the manual for more information."))
+  bind(bhelp[13], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[14], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[15], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[16], "command", path -> Messagebox(title="Help", message=""))
+
+
+  
 end
 
 # Function to get values and destroy window upon clicking OK
@@ -90,4 +123,5 @@ function check_cat_entries(v8::Matrix{Float64},v9::Matrix{Any},cat_entries::Matr
     v9[i,3] = get_value(cat_entries_bool[i,2])
     v9[i,4] = get_value(cat_entries_bool[i,3])
   end
+
 end

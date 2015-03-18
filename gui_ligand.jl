@@ -2,6 +2,7 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
 
   #Window initialization
   check_entries2(v2, prompts2, entries2,diff_type)
+
   global w3 = Toplevel("Ligand's source location") ## title, width, height
   global f3 = Frame(w3) 
   pack(f3, expand=true, fill="both")
@@ -20,16 +21,14 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
   end
   if(diff_type=="Integrative")
     global prompts4 = ["Initial Concentration","Gradient Coeffient","Upper time integrative limit"]
-    choice_source=5 #v2 is not the same depending on the type of diffusion
   else
     global prompts4 = ["Initial Concentration","Gradient Coeffient"]
-    choice_source=4
   end
   global entries3=[]
   global entries4=[]
 
   #choice of the default parameters
-  for i in 1:v2[choice_source]   # for each source 
+  for i in 1:v2[5]   # for each source 
     l = Label(ctrls3, "Source $(int(i)):") 
     formlayout(l,nothing) 
     try #this try allows to put the previous value for the source location and the source parameters
@@ -87,16 +86,23 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
       formlayout(entries4[2*i-1],string(prompts4[1],": ")) 
       formlayout(entries4[2*i],string(prompts4[2],": "))
     end
+    if(i!=5)
     l4 = Label(ctrls4, " ") 
     formlayout(l4,nothing) 
+    end
   end
 
   #End button
   b = Button(ctrls3, "Ok")
   formlayout(b, nothing)
   for i in ["command","<Return>","<KP_Enter>"] 
-     bind(b,i,path -> check_entries3(v2[choice_source],value_rb,diff_type))
+     bind(b,i,path -> check_entries3(v2[5],value_rb,diff_type))
   end
+
+  #Help button
+  bhelp = Button(ctrls4, "Need Help ?")
+  formlayout(bhelp, nothing)
+  bind(bhelp, "command", path -> Messagebox(title="Help", message="Here you choose for each source its location and its coefficient. Use the previous window to choose the diffusion coefficient with care. NB: the diffusion coefficients of the previous window are only useful to plot the curve."))
 end
 ##########################################################################################################
 function check_entries3(n_sources::Real,value_rb,diff_type)
