@@ -12,10 +12,9 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
 	  receptors[i,2] = cell.x+cos(angle)*cell.r
 	  receptors[i,3] = cell.y+sin(angle)*cell.r
 	  if type_source=="Point" 
-      	    concentrations[i] = ligand_concentration_multiplesource_2D(receptors[i,2],receptors[i,3], time)
-	    concentration_threshold=ligand_concentration_multiplesource_2D(x_size/2,y_size/2,0, time)
+      concentrations[i] = ligand_concentration_multiplesource_2D(receptors[i,2],receptors[i,3], time)
 	  elseif type_source=="Line"
-      	    concentrations[i] = ligand_concentration_multiplesource_1D(receptors[i,2], time)
+      concentrations[i] = ligand_concentration_multiplesource_1D(receptors[i,2], time)
 	  end
 	end
 	#concentration ratio we use to know whether the cell are moving according 
@@ -30,7 +29,7 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
 	  chosen_angle = receptors[indmax(concentrations), 1]
 	end
 	# Multiple the chosen angle by the cell type defined concentration response.
-  	ligand_angle = chosen_angle * categories[cell.cell_type].conc_response
+  	ligand_angle = chosen_angle + pi * (categories[cell.cell_type].conc_response < 0)
 	return ligand_angle, concentrations
 end
 
@@ -46,10 +45,4 @@ function angle_from_both(cell::Cell, categories::Vector{Cell_type}, randomness::
 	end
 	return angle, concentrations
 end
-
-##########################################################################################################
-function get_concentrations(type_source, nb_ligands, x_size, y_size, time)
-  return concentrations
-end
-
 

@@ -40,7 +40,7 @@ function initial_placement(n::Real, categories::Array, x_size::Real, y_size::Rea
           return cells
         end
       else
-        cell = Cell(string(i), xi, yi, ri, 0, 0, 0, cell_cat)
+        cell = Cell(string(i), xi, yi, ri, 2pi*rand(), 0, 0, cell_cat)
         push!(cells, cell)
         placed = true
       end

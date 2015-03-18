@@ -17,18 +17,18 @@ def get_alive_coords_turns(arr):
     out[i] = get_alive_coords(arr[i])
   return out
 
-def get_alive_coords_iters(filenames):
+def get_all(filenames):
   out = list(filenames)
   for i in range(len(filenames)):
     out[i] = get_alive_coords_turns(load(filenames[i]))
   return out
 
-def stack_iters(arr):
+def stack(arr):
   # takes array of lots of simulations and organizes them by turn
   lengths = [len(i) for i in arr]
   arr = [i for i in arr if len(i)==max(lengths)]  #remove truncated simulations
   out = [vstack([i[j] for i in arr]) for j in range(max(lengths))] # stack first timestep from each simulation
-  print('lengths of initial arrays: ',lengths)
+  print 'lengths of initial arrays: ',lengths
   return out
 
 ### old ### 
@@ -85,7 +85,7 @@ def boxplot(data, title, labels):
   bp = ax.boxplot([i[:,0] for i in data])
   ax.set_title(title)
   ax.set_xlabel('Iterations')
-  ax.set_ylabel('Horizontal distance from source') 
+  ax.set_ylabel('Horizontal location') 
   ax.set_xticklabels(labels)
   plt.show()
   return
@@ -123,55 +123,26 @@ def histogram(stems, progs):
   plt.grid(True)
   plt.show()
 
-'''
+def autolabel(rects, ax):
+    # attach some text labels
+    for rect in rects:
+        height = rect.get_height()
+        ax.text(rect.get_x()+rect.get_width()/2., 1.05*height, '%d'%int(height),
+                ha='center', va='bottom')
 
+def barchart(data):
+  ind = np.arange(len(data))  # the x locations for the groups
+  width = 0.35       # the width of the bars
 
+  fig, ax = plt.subplots()
+  rects1 = ax.bar(ind, menMeans, width, color='r', yerr=menStd)
 
-['out_09 Mar 2015 03:13:37 PM.pickle','out_09 Mar 2015 03:23:19 PM.pickle','out_09 Mar 2015 03:31:09 PM.pickle','out_09 Mar 2015 03:39:53 PM.pickle',
-'out_09 Mar 2015 03:15:23 PM.pickle','out_09 Mar 2015 03:24:02 PM.pickle','out_09 Mar 2015 03:31:58 PM.pickle','out_09 Mar 2015 03:41:15 PM.pickle',
-'out_09 Mar 2015 03:16:40 PM.pickle','out_09 Mar 2015 03:25:04 PM.pickle','out_09 Mar 2015 03:32:57 PM.pickle','out_09 Mar 2015 12:03:12 PM.pickle',
-'out_09 Mar 2015 03:16:44 PM.pickle','out_09 Mar 2015 03:25:45 PM.pickle','out_09 Mar 2015 03:35:10 PM.pickle','out_09 Mar 2015 12:03:53 PM.pickle',
-'out_09 Mar 2015 03:17:23 PM.pickle','out_09 Mar 2015 03:29:29 PM.pickle','out_09 Mar 2015 03:35:37 PM.pickle',
-'out_09 Mar 2015 03:22:38 PM.pickle','out_09 Mar 2015 03:30:13 PM.pickle','out_09 Mar 2015 03:37:07 PM.pickle']
+  # add some text for labels, title and axes ticks
+  ax.set_ylabel('Scores')
+  ax.set_title('Scores by group and gender')
+  ax.set_xticks(ind+width)
+  ax.set_xticklabels( ('0', '500', '1000', '1500', '2000','2500') )
 
+  autolabel(rects1,ax)
+  plt.show()
 
-  filenames = ['out_09 Mar 2015 12:18:09 PM.pickle',
-    'out_09 Mar 2015 12:21:55 PM.pickle','out_09 Mar 2015 12:21:57 PM.pickle',
-    'out_09 Mar 2015 12:24:13 PM.pickle','out_09 Mar 2015 12:25:45 PM.pickle',
-    'out_04 Mar 2015 10:53:29 AM.pickle','out_09 Mar 2015 12:28:18 PM.pickle',
-    'out_04 Mar 2015 10:55:05 AM.pickle','out_09 Mar 2015 12:29:29 PM.pickle',
-    'out_04 Mar 2015 11:22:18 AM.pickle','out_09 Mar 2015 12:32:04 PM.pickle',
-    'out_04 Mar 2015 11:25:32 AM.pickle','out_09 Mar 2015 12:34:08 PM.pickle',
-    'out_09 Mar 2015 12:02:40 PM.pickle','out_09 Mar 2015 12:36:11 PM.pickle',
-    'out_09 Mar 2015 12:03:12 PM.pickle','out_09 Mar 2015 12:38:41 PM.pickle',
-    'out_09 Mar 2015 12:03:53 PM.pickle','out_09 Mar 2015 12:41:54 PM.pickle',
-    'out_09 Mar 2015 12:14:55 PM.pickle','out_09 Mar 2015 12:46:42 PM.pickle']
- '''
-'''bias laceration
-['out_04 Mar 2015 10:53:29 AM.pickle','out_11 Mar 2015 10:21:53 AM.pickle',
-'out_11 Mar 2015 10:28:43 AM.pickle','out_11 Mar 2015 10:37:30 AM.pickle',
-'out_04 Mar 2015 10:55:05 AM.pickle','out_11 Mar 2015 10:22:55 AM.pickle',
-'out_11 Mar 2015 10:30:00 AM.pickle','out_11 Mar 2015 10:39:40 AM.pickle',
-'out_11 Mar 2015 10:10:23 AM.pickle','out_11 Mar 2015 10:24:10 AM.pickle',
-'out_11 Mar 2015 10:32:47 AM.pickle','out_11 Mar 2015 10:40:48 AM.pickle',
-'out_11 Mar 2015 10:18:16 AM.pickle','out_11 Mar 2015 10:25:48 AM.pickle',
-'out_11 Mar 2015 10:34:01 AM.pickle','out_11 Mar 2015 10:42:07 AM.pickle',
-'out_11 Mar 2015 10:20:53 AM.pickle','out_11 Mar 2015 10:27:35 AM.pickle',
-'out_11 Mar 2015 10:35:38 AM.pickle','out_11 Mar 2015 10:43:46 AM.pickle']
-'''
-'''bias laceration
-['out_11 Mar 2015 12:23:09 PM.pickle',
-'out_11 Mar 2015 12:24:13 PM.pickle',
-'out_11 Mar 2015 12:25:15 PM.pickle']
-'''
-
-filenames = ['out_11 Mar 2015 12:28:06 PM.pickle',
-'out_11 Mar 2015 12:23:09 PM.pickle','out_11 Mar 2015 12:32:18 PM.pickle',
-'out_11 Mar 2015 12:24:13 PM.pickle','out_11 Mar 2015 12:34:16 PM.pickle',
-'out_11 Mar 2015 12:25:15 PM.pickle','out_11 Mar 2015 12:35:46 PM.pickle',
-'out_11 Mar 2015 12:26:42 PM.pickle',
-'out_11 Mar 2015 12:28:06 PM.pickle',
-'out_11 Mar 2015 12:32:18 PM.pickle',
-'out_11 Mar 2015 12:34:16 PM.pickle',
-'out_11 Mar 2015 12:35:46 PM.pickle',
-'out_11 Mar 2015 12:38:21 PM.pickle']

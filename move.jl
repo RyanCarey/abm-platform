@@ -15,21 +15,17 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	#Orignial location of the m cell
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 	#Thanks to the concnetration we calculate the angle of the m cell
-        proposed_angle, concentrations = angle_from_both(alive_cells[m], categories, 
-                                          categories[alive_cells[m].cell_type].randomness,x_size, y_size, time)
+  proposed_angle, concentrations = angle_from_both(alive_cells[m], categories, 
+                                   categories[alive_cells[m].cell_type].randomness,x_size, y_size, time)
 	alive_cells[m].angle = mod2pi(proposed_angle)
-	#We need to have the number of ligand in order to know if the cell can be stuck to ligands
-        if type_source=="Point"
-    	  sum_ligand = ligand_concentration_multiplesource_2D(alive_cells[m].x,alive_cells[m].y, time)
-  	else
-    	  sum_ligand = ligand_concentration_multiplesource_1D(alive_cells[m].x, time)
-  	end
+
 	#Is the cell in the niche?
 	threshold = categories[alive_cells[m].cell_type].stem_threshold
 	#Proposed speed
 	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	#The speed is reduced if the cell is sticking to ligand
-	if categories[alive_cells[m].cell_type].sticking && sum_ligand > threshold
+  println("mean concentration: ",mean(concentrations))
+	if categories[alive_cells[m].cell_type].sticking && mean(concentrations) > threshold
 		alive_cells[m].speed /= 10
 	end
 	#Propose move for the m cell

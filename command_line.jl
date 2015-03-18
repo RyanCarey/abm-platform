@@ -4,7 +4,7 @@ function run_simulation(nb_iteration::Int64)
   #The user can manually change the parameters below
   ################################################################################################################################
   #Parameters from the first window:
-  number_of_cell = 50
+  number_of_cell = 20
   number_of_steps = 3000
   environment_width = 30
   environment_height = 30
@@ -34,11 +34,11 @@ function run_simulation(nb_iteration::Int64)
   #First case : type_of_source="Line"
   if type_of_diffusion == "Integrative"
     for i in 1 : number_of_sources
-      x_ordinate_sources[i] = 15
+      x_ordinate_sources[i] = 0
       y_ordinate_sources[i] = 0
       integrative_gradient_coefficient[i] = 100
-      integrative_initial_concentration_coefficient[i] = 1
-      intgerative_upper_time_limit[i] = 10
+      integrative_initial_concentration_coefficient[i] = 10000
+      intgerative_upper_time_limit[i] = 3000
     end
   elseif type_of_diffusion == "Normal"
     for i in 1 : number_of_sources
@@ -58,24 +58,24 @@ function run_simulation(nb_iteration::Int64)
   # 3: How much larger cells get before they divide (compared to starting size)
   # 4: Average speed for this kind of cell
   # 5: Average radius for this kind of cell
-  # 6: The cell's response to ligand. This is a multiplicative factor between -1 and 1, where 1 is attraction, -1 is repulsion
-  # 7: Threshold for which any concentration higher will form a functional stem cell niche.
+  # 6: The cell's response to ligand. If 1, the ligand will attract. If -1, the ligand will repel.
+  # 7: Minimum level of ligand that can be detected by cells of this type. (For movement and stem cell behaviour)
   # 8: Death rate for this kind of cell
   # 9: Persistence parameter for this kind of cell
   # 10: Randomness parameter in the choice of the angle
   # 11: Speed threshold that the cell needs to exceed to trigger a bouncing with another cell
-  # 12: Minimum ratio between max and mean concentration that a cell can detect
+  # 12: Minimum ratio between max and mean concentration that a cell can detect (for movement)
   #               1      2     3     4     5     6     7      8      9   10   11    12
-    v8 = Float64[1.0   0.00   2.0   0.5   1.0   1.0   1.5   .0000   .5   .5   .1   1.05;
-                 0.0   0.05   2.0   1.0   1.0  -1.0   1.5   .0001   .5   .5   .1   1.05;
-                 0.0   0.05   2.0   1.0   1.0   1.0   1.5   .0001   .5   .5   .1   1.05;
-                 0.0   0.05   2.0   1.0   1.0   1.0   1.5   .0001   .5   .5   .1   1.05]
+    v8 = Float64[1.0   0.00   2.0   1.5   0.5   1.0   7.5   .0000   .5    1   .1   1.00;
+                 0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
+                 0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                 0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
 
   # 1st column: Color of this cell ("ro" red,"bo" blue,"mo" magenta,"go" green) Not used in command line version due to lack of display.
   # 2st column: Are this type of cell located at the left at the beginning?
   # 3st column: Are this type of cell stem cells? (each row produces cells of the line below so the last line *must* not be set to false)
   # 4st column: Does this type of cell slow down when it reaches a high concentration of ligand?
-    v9 = ["ro"    false    true     false;
+    v9 = ["ro"    false    false     true;
           "bo"    false    false    false;
           "mo"    false    false    false;
           "go"    false    false    false]

@@ -11,8 +11,9 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
 
   # Row labels
   cat_prompts = String["Ratio: ", "Growth Rate: ", "Division Threshold: ", "Average Speed: ", 
-                       "Average Radius: ", "Response to ligand: ", "Stem Threshold: ",
-                       "Death Rate: ", "Persistence (0-1): ", "Randomness: ","Inertia Threshold: ","Signal Noise Ratio (1-2): ", "Colour: "]
+                       "Average Radius: ", "Response to ligand: ", "Min detectable ligand: ",
+                       "Death Rate: ", "Persistence (0-1): ", "Randomness: ","Inertia Threshold: ",
+                       "Min Detectable Ligand Ratio (1-2): ", "Colour: "]
   bhelp=[]
 
   for i in 1:length(cat_prompts)

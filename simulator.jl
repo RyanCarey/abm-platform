@@ -10,11 +10,14 @@ function simulator(canvas::Tk.Canvas,
                    y_size::Real,
                    border_settings::Vector{ASCIIString},
                    momentum_coefficient::Real)
+  if pickle_output
+    pickle_out(filename, steps, alive_cells, dead_cells)
+  end
   for i = 1:steps
     iteration(alive_cells, dead_cells, categories,
              x_size, y_size, border_settings, momentum_coefficient, i)
-    if i % 10 == 0 || i==steps  # display every hundredth step, and the last step
-      println("$i Iterations Completed")
+    if i % 50 == 0 || i==steps  # display every hundredth step, and the last step
+      println("$i Iteration(s) Completed")
       if display_output
         show_sim(canvas, alive_cells, categories, x_size, y_size)
       end
@@ -25,6 +28,8 @@ function simulator(canvas::Tk.Canvas,
   #pause(0) #this can be used to input a break of some milliseconds between each timestep
   end
   println("Simulation Finished")
+  println(Diffusion_coefficient, A_coefficient, tau0)
+  println(source_abscisse_ligand, diffusion_maximum, diffusion_coefficient, type_source, type_diffusion)
 end
 
 function iteration(alive_cells::Vector{Cell}, 
@@ -73,11 +78,14 @@ function simulator(alive_cells::Vector{Cell},
                    y_size::Real,
                    border_settings::Vector{ASCIIString},
                    momentum_coefficient::Real)
+  if pickle_output
+    pickle_out(filename, steps, alive_cells, dead_cells)
+  end
   for i = 1:steps
     iteration(alive_cells, dead_cells, categories,
              x_size, y_size, border_settings, momentum_coefficient, i)
     if i % 500 == 0 || i==steps  # display every hundredth step, and the last step
-      println("$i Iterations Completed")
+      println("$i Iteration(s) Completed")
       if pickle_output
         pickle_out(filename, steps, alive_cells, dead_cells)
       end
@@ -85,4 +93,6 @@ function simulator(alive_cells::Vector{Cell},
   #pause(0) #this can be used to input a break of some milliseconds between each timestep
   end
   println("Simulation Finished")
+  println(Diffusion_coefficient, A_coefficient, tau0)
+  println(source_abscisse_ligand, diffusion_maximum, diffusion_coefficient, type_source, type_diffusion)
 end
