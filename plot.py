@@ -147,13 +147,13 @@ def barchart(data):
   autolabel(rects1,ax)
   plt.show()
 
-def linegraph(stems,progs):
+def linegraph(stems,progs, title):
   xaxis = arange(0,3500,500)
   fig = plt.figure()
   ax = fig.add_subplot(111)
   ax.plot(xaxis,stems,linewidth=2.0)
   ax.plot(xaxis,progs,linewidth=2)
-  ax.set_title('Simulation Starting with Stem Cells in a Niche')
+  ax.set_title(title)
   ax.set_xlabel('Iterations')
   ax.set_ylabel('Population Size') 
   plt.legend(loc='upper right')

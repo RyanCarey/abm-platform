@@ -39,10 +39,10 @@ function run_simulation(nb_iteration::Int64, load = "")
       x_ordinate_sources[1] = 0
       y_ordinate_sources[1] = 0
       integrative_gradient_coefficient[1] = 100
-      integrative_initial_concentration_coefficient[1] = 10
-      intgerative_upper_time_limit[1] = 1000
+      integrative_initial_concentration_coefficient[1] = 9
+      intgerative_upper_time_limit[1] = 1500
     
-  # If instantaneous ligand deposit (dirac) is desired, comment out the above lines and uncomment the following 4.
+  # If instantaneous ligand deposit (Dirac) is desired, comment out the above lines and uncomment the following 4.
   # For more than one source, copy and paste the following 4 lines and replace [1] with [2] etc.
     
   #    x_ordinate_sources[1] = 0
@@ -50,8 +50,6 @@ function run_simulation(nb_iteration::Int64, load = "")
   #    normal_gradient_coefficient[1] = 1
   #    normal_initial_concentration_coefficient[1] = 100
     
-  
-
   # Choice of the cell characteristics
 
   # The user can manually change paramaters in the table below, in each of the following twelve columns:
@@ -68,7 +66,7 @@ function run_simulation(nb_iteration::Int64, load = "")
   # 11: Speed threshold that the cell needs to exceed to trigger a bouncing with another cell
   # 12: Minimum ratio between max and mean concentration that a cell can detect (for movement)
   #               1      2     3     4     5     6     7      8      9   10   11    12
-    v8 = Float64[1.0   0.10   2.0   1.5   0.5   1.0    1    .0000   .25  .25  .1   1.00;
+    v8 = Float64[1.0   0.10   2.0   0.5   0.5   1.0    1    .0001   .50  .25  .1   1.00;
                  0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
@@ -82,6 +80,32 @@ function run_simulation(nb_iteration::Int64, load = "")
           "mo"    false    false    false;
           "go"    false    false    false]
     
+    if load == "stem_growth_rates"
+      number_of_cells = 20
+      steps = 3000
+      environment_width = 30
+      environment_height = 30
+      bouncing_energy_loss_coefficient = 0.9 # (0-1)
+      type_of_diffusion = "Integrative" # "Integrative" or "Normal"
+      pickle_output = true
+      border_settings = ["Removing", "Removing", "Removing", "Removing"]
+      number_of_ligand_receptors = 8
+      number_of_sources = 1
+      type_of_source = "Line" # "Line" or "Point"
+      x_ordinate_sources[1] = 15
+      y_ordinate_sources[1] = 0
+      integrative_gradient_coefficient[1] = 100
+      integrative_initial_concentration_coefficient[1] = 1
+      intgerative_upper_time_limit[1] = 3000
+      v8 = Float64[1.0   0.00   2.0   1.0   0.5   1.0   0.0   .0000   .0   .0   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+      v9 = ["ro"    false    false    false;
+            "bo"    false    false    false;
+            "mo"    false    false    false;
+            "go"    false    false    false]
+    end
 
     if load == "migrate_non_random"
       number_of_cells = 50
@@ -136,7 +160,7 @@ function run_simulation(nb_iteration::Int64, load = "")
             "go"    false    false    false]
     end
     if load == "stem"
-      number_of_cells = 22
+      number_of_cells = 20
       steps = 3000
       environment_width = 30
       environment_height = 30
@@ -152,8 +176,8 @@ function run_simulation(nb_iteration::Int64, load = "")
       integrative_gradient_coefficient[1] = 100
       integrative_initial_concentration_coefficient[1] = 1
       intgerative_upper_time_limit[1] = 3000
-      v8 = Float64[1.0   0.10   2.0   1.0   0.5   1.0    1    .0000   .25  .25  .1   1.00;
-                   0.0   0.25   2.0   1.0   0.5  -1.0   0.0   .0000   .5   1.0  .1   1.00;
+      v8 = Float64[1.0   0.10   2.0   1.0   0.5   1.0    1    .0001   .5   .33  .1   1.00;
+                   0.0   0.25   2.0   1.0   0.5  -1.0   0.0   .0001   .5   1.0  .1   1.00;
                    0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
                    0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
       v9 = ["ro"    true     true     false;

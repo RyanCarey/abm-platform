@@ -17,7 +17,7 @@ function chance_to_die(alive_cells::Vector{Cell}, dead_cells::Vector{Cell}, cate
 end
 
 # Function to divide a cell. Will assign new radii and locations to both cells (original and new) and check that they don't overlap.
-function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int, x_size::Real, y_size::Real, concentrations::Vector{Float64})
+function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int, x_size::Float64, y_size::Float64, concentrations::Vector{Float64})
 	radius = cells[i].r
 	area = pi * radius ^ 2
 	# Calculate radius if area was half, and a random angle.
