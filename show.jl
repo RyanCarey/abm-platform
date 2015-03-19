@@ -1,6 +1,6 @@
 
 function show_sim(canvas::Tk.Canvas, cells::Vector{Cell}, 
-                     categories::Vector{Cell_type}, x_size::Real, y_size::Real)
+                     categories::Vector{Cell_type}, x_size::Float64, y_size::Float64)
   # Displays four types of cells, using each cells radius and the colour specified by its type
   locations1 = zeros(length(cells), 3)
   for i in 1 : length(cells)

@@ -1,3 +1,4 @@
+
 include("import_no_gui.jl")
 function run_simulation(nb_iteration::Int64, load = "")
 
@@ -174,8 +175,8 @@ function run_simulation(nb_iteration::Int64, load = "")
   global source_ordinate_ligand = Array(Float64, nb_source)
   global source_ordinate_ligand = y_ordinate_sources
   # Integrative
-  global Diffusion_coefficient = Array(Float64, nb_source)
-  global Diffusion_coefficient = integrative_gradient_coefficient
+  global integration_diffusion_coefficient = Array(Float64, nb_source)
+  global integration_diffusion_coefficient = integrative_gradient_coefficient
   global A_coefficients = Array(Float64, nb_source)
   global A_coefficients = integrative_initial_concentration_coefficient
   global tau0 = Array(Float64, nb_source)
@@ -202,6 +203,8 @@ function run_simulation(nb_iteration::Int64, load = "")
     t = strftime(time())[5:27] # Store date and time as string
     filename = "out_$t.pickle"
     filenames = [filenames;filename]
+    environment_height = Float64(environment_height)
+    environment_width = Float64(environment_width)
     alive_cells = initial_placement(number_of_cells, categories, environment_width, environment_height)
     dead_cells = Cell[]
     simulator(alive_cells, dead_cells, categories, steps, pickle_output, filename, 

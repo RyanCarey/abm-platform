@@ -16,11 +16,8 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	# Orignial location of moving cell
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 
-  # get the concentration at the receptors
-  concentrations, receptor_angles = get_concentrations(alive_cells[m], time, diffusion_coefficients, A_coefficients)
-
   # move cell m to a new tentative location
-  tentative_move!(alive_cells[m], concentrations, receptor_angles, diffusion_coefficients, 
+  concentrations = tentative_move!(alive_cells[m], diffusion_coefficients, 
                   A_coefficients, categories, x_size, y_size, time)
 
 	overlap=false
@@ -45,9 +42,13 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 end
 
 #######################################################################################################
-function tentative_move!(moving_cell::Cell, concentrations::Vector{Float64}, receptor_angles::Vector{Float64}, 
+function tentative_move!(moving_cell::Cell, 
                          diffusion_coefficients::Vector{Float64}, A_coefficients::Vector{Float64}, 
-                        categories::Vector{Cell_type}, x_size::Float64, y_size::Float64, time::Float64)
+                         categories::Vector{Cell_type}, x_size::Float64, y_size::Float64, time::Float64)
+  # moves a cell to a suggested location without considering ballistics. Also returns concentrations.
+  # get the concentration at the receptors
+  concentrations, receptor_angles = get_concentrations(moving_cell, time, diffusion_coefficients, A_coefficients)
+
   # propose an angle of movement
   proposed_angle = angle_from_both(moving_cell, categories, categories[moving_cell.cell_type].randomness,
                                    x_size, y_size, time, concentrations, receptor_angles)
@@ -65,6 +66,8 @@ function tentative_move!(moving_cell::Cell, concentrations::Vector{Float64}, rec
 	# Move cell m (this can be reversed later)
 	moving_cell.x += moving_cell.speed * cos(moving_cell.angle)
 	moving_cell.y += moving_cell.speed * sin(moving_cell.angle)
+
+  return concentrations
 end
 
 ##########################################################################################################
