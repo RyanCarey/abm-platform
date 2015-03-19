@@ -1,49 +1,38 @@
 # Module containing functions pertaining to cell movement.
 
 function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_indices::Vector{Int},index::Int,
-               x_size::Real, y_size::Real, border_settings::Vector{ASCIIString}, time::Real,g, diffusion_coefficient::Array,
-               A_coefficients::Array)
+               x_size::Float64, y_size::Float64, border_settings::Vector{ASCIIString}, time::Float64,
+               g::Float64, diffusion_coefficients::Vector{Float64}, A_coefficients::Vector{Float64})
 
-	#Storage of teh location in the case of a wriong computation
+	#Store the initial location in case of a wrong computation
 	x=Array(Float64,length(alive_cells))
 	y=Array(Float64,length(alive_cells))
 	for i in 1:length(alive_cells)
 		x[i]=alive_cells[i].x
 		y[i]=alive_cells[i].y
 	end
-	#index of the cell we are going to move
- 	m = index
-	#Orignial location of the m cell
-	startloc = Point(alive_cells[m].x, alive_cells[m].y)
-	#Thanks to the concnetration we calculate the angle of the m cell
-  concentrations, receptor_angles = get_concentrations(alive_cells[m], time, diffusion_coefficient, A_coefficients)
-  proposed_angle = angle_from_both(alive_cells[m], categories, categories[alive_cells[m].cell_type].randomness,
-                                   x_size, y_size, time, concentrations, receptor_angles)
-	alive_cells[m].angle = mod2pi(proposed_angle)
 
-	#Is the cell in the niche?
-	threshold = categories[alive_cells[m].cell_type].stem_threshold
-	#Proposed speed
-	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
-	#The speed is reduced if the cell is sticking to ligand
-  #println("mean concentration: ",mean(concentrations))
-	if categories[alive_cells[m].cell_type].sticking && mean(concentrations) > threshold
-		alive_cells[m].speed /= 10
-	end
-	#Propose move for the m cell
-	alive_cells[m].x += alive_cells[m].speed * cos(alive_cells[m].angle)
-	alive_cells[m].y += alive_cells[m].speed * sin(alive_cells[m].angle)
+ 	m = index   # m is the index of the moving cell
+	# Orignial location of moving cell
+	startloc = Point(alive_cells[m].x, alive_cells[m].y)
+
+  # get the concentration at the receptors
+  concentrations, receptor_angles = get_concentrations(alive_cells[m], time, diffusion_coefficients, A_coefficients)
+
+  # move cell m to a new tentative location
+  tentative_move!(alive_cells[m], concentrations, receptor_angles, diffusion_coefficients, 
+                  A_coefficients, categories, x_size, y_size, time)
 
 	overlap=false
 	#This is the list where we are going to test for evidence for overlap (ie the move is not correct)
 	global list_overlap=[m]
 
-	#the propose move ios tested within this function. It can actualize the movements
+	#the tentative move is tested within this function. It can actualize the movements
 	dying_indices = solve_overlap(categories,m,startloc, dying_indices,x_size, y_size, border_settings,alive_cells,g)
 
 	for i in list_overlap
 	  if is_overlap(i,startloc,alive_cells)!=i
-      	    overlap = true
+      overlap = true
 	  end
 	end
 	if overlap
@@ -55,10 +44,33 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	return dying_indices, concentrations
 end
 
+#######################################################################################################
+function tentative_move!(moving_cell::Cell, concentrations::Vector{Float64}, receptor_angles::Vector{Float64}, 
+                         diffusion_coefficients::Vector{Float64}, A_coefficients::Vector{Float64}, 
+                        categories::Vector{Cell_type}, x_size::Float64, y_size::Float64, time::Float64)
+  # propose an angle of movement
+  proposed_angle = angle_from_both(moving_cell, categories, categories[moving_cell.cell_type].randomness,
+                                   x_size, y_size, time, concentrations, receptor_angles)
+	moving_cell.angle = mod2pi(proposed_angle)
+
+  # Propose speed
+	moving_cell.speed = -2*log(rand()) * categories[moving_cell.cell_type].avg_speed / 5
+
+	# For sticky cells, high ligand concentration reduces speed
+	detectable_conc = categories[moving_cell.cell_type].conc_threshold
+	if categories[moving_cell.cell_type].sticking && mean(concentrations) > detectable_conc
+		moving_cell.speed /= 10
+	end
+
+	# Move cell m (this can be reversed later)
+	moving_cell.x += moving_cell.speed * cos(moving_cell.angle)
+	moving_cell.y += moving_cell.speed * sin(moving_cell.angle)
+end
+
 ##########################################################################################################
 function solve_overlap(categories::Vector{Cell_type},m::Int, startloc::Point, 
-                       dying_indices::Array{Int},x_size::Real, y_size::Real, border_settings::Vector{ASCIIString},
-                       alive_cells::Vector{Cell},g::Real)
+                       dying_indices::Array{Int},x_size::Float64, y_size::Float64, border_settings::Vector{ASCIIString},
+                       alive_cells::Vector{Cell},g::Float64)
 	#We first check for cells between the original location and the propose location of the cell m
 	#k is the index of the touching cell. The function returns m if the cell m does not touch any cell.
 	#If the cell touches iots first cell beyond the wall this function returns the index m. It does not count. 
@@ -236,7 +248,7 @@ function is_overlap(k::Int,startloc::Point,alive_cells::Array{Cell,1})
 end
 
 ##########################################################################################################
-function is_overlap_divide(cells::Vector{Cell}, point::Point, radius::Real)
+function is_overlap_divide(cells::Vector{Cell}, point::Point, radius::Float64)
 	n = length(cells)
 		for i in 1:n
 			if (cells[i].x - point.x) ^ 2 + (cells[i].y - point.y) ^ 2 < (cells[i].r + radius) ^ 2
@@ -246,7 +258,7 @@ function is_overlap_divide(cells::Vector{Cell}, point::Point, radius::Real)
 	return false
 end
 ##########################################################################################################
-function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Real, border_settings::Vector{ASCIIString},
+function check_any_cell_between(startloc::Point,m::Int,x_size::Float64, y_size::Float64, border_settings::Vector{ASCIIString},
                                 alive_cells::Vector{Cell})
 	#This function returns the index of the ceel on the journey of the cell m
 	#therefore if there are no cell we initialize the j to m
@@ -347,8 +359,8 @@ function check_any_cell_between(startloc::Point,m::Int,x_size::Real, y_size::Rea
 	return j
 end
 ##########################################################################################################
-function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_size::Real, y_size::Real,
-                           border_settings::Vector{ASCIIString},alive_cells::Vector{Cell},g::Real)
+function put_at_the_border(m::Int,startloc::Point, dying_indices::Vector{Int},x_size::Float64, y_size::Float64,
+                           border_settings::Vector{ASCIIString},alive_cells::Vector{Cell},g::Float64)
 #This functions put the moving cell m at the border (its new startlocation), changes its direction and its speed.
 
 	#Notation simplification

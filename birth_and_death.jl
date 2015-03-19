@@ -68,7 +68,7 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 				# If the cell has a surrounding concentration above the threshold:
 				# 30% of the time it will spawn a stem cell and a progenitor cell.
 				# 70% of the time it will spawn 2 stem cells.
-				if sum_ligand < categories[cells[i].cell_type].stem_threshold
+				if sum_ligand < categories[cells[i].cell_type].conc_threshold
 					if rand() > 0.85
 						new_cell.cell_type = cells[i].cell_type + 1
 					else
@@ -76,7 +76,7 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 						cells[i].cell_type = cells[i].cell_type + 1
 					end
 				end
-				if sum_ligand >= categories[cells[i].cell_type].stem_threshold
+				if sum_ligand >= categories[cells[i].cell_type].conc_threshold
 					if rand() > 0.85
 						new_cell.cell_type = cells[i].cell_type + 1
 					end

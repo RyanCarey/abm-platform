@@ -6,12 +6,12 @@ function simulator(canvas::Tk.Canvas,
                    display_output::Bool,
                    pickle_output::Bool,
                    filename::ASCIIString,
-                   x_size::Real,
-                   y_size::Real,
+                   x_size::Float64,
+                   y_size::Float64,
                    border_settings::Vector{ASCIIString},
-                   momentum_coefficient::Real,
-                   diffusion_coefficients::Array,
-                   A_coefficients::Array)
+                   momentum_coefficient::Float64,
+                   diffusion_coefficients::Vector{Float64},
+                   A_coefficients::Vector{Float64})
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
@@ -38,13 +38,13 @@ end
 function iteration(alive_cells::Vector{Cell}, 
                    dead_cells::Vector{Cell}, 
                    categories::Vector{Cell_type},
-                   x_size::Real,
-                   y_size::Real,
+                   x_size::Float64,
+                   y_size::Float64,
                    border_settings::Vector{ASCIIString},
-                   momentum_coefficient::Real,
+                   momentum_coefficient::Float64,
                    i::Int,
-                   diffusion_coefficients::Array,
-                   A_coefficients::Array)
+                   diffusion_coefficients::Vector{Float64},
+                   A_coefficients::Vector{Float64})
   time = i/length(alive_cells)+1 # to make diffusion and cell movement happen on the same timescale
   finished = false
   if length(alive_cells) == 0
@@ -72,7 +72,6 @@ function iteration(alive_cells::Vector{Cell},
   end
 end
 
-
 ##########################################################################################################
 function simulator(alive_cells::Vector{Cell}, 
                    dead_cells::Vector{Cell}, 
@@ -80,12 +79,12 @@ function simulator(alive_cells::Vector{Cell},
                    steps::Int,
                    pickle_output::Bool,
                    filename::ASCIIString,
-                   x_size::Real,
-                   y_size::Real,
+                   x_size::Float64,
+                   y_size::Float64,
                    border_settings::Vector{ASCIIString},
-                   momentum_coefficient::Real,
-                   diffusion_coefficients::Array,
-                   A_coefficients::Array)
+                   momentum_coefficient::Float64,
+                   diffusion_coefficients::Vector{Float64},
+                   A_coefficients::Vector{Float64})
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
