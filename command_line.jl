@@ -81,7 +81,8 @@ function run_simulation(nb_iteration::Int64, load = "")
           "mo"    false    false    false;
           "go"    false    false    false]
     
-
+    # Optional Presets
+    # To create your own, copy and paste everything within the if statement below, and edit.
     if load == "migrate_non_random"
       number_of_cells = 50
       steps = 3000
