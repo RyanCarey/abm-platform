@@ -2,8 +2,8 @@ println("Loading...")
 
 using Winston
 using Tk
-#using PyCall
-#@pyimport pickle
+using PyCall
+@pyimport pickle
 include("cell_type.jl")
 include("birth_and_death.jl")
 include("move.jl")

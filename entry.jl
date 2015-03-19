@@ -22,7 +22,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
           Cell_type(v8[4,1], v8[4,2], v8[4,3], v8[4,4], v8[4,5], v8[4,6], v8[4,7], v8[4,8], v8[4,9], v8[4,10], v8[4,11],v8[4,12],
                     v9[4,1], v9[4,2], false, v9[4, 4])]
   border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
-  global const nb_ligands= int(v2[2])
+  global const n_receptors= int(v2[2])
   global const nb_source= int(v2[7])
   global source_abscisse_ligand =Array(Float64,nb_source)
   global source_ordinate_ligand =Array(Float64,nb_source)

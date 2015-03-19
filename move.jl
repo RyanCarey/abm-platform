@@ -15,8 +15,9 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	#Orignial location of the m cell
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 	#Thanks to the concnetration we calculate the angle of the m cell
-  proposed_angle, concentrations = angle_from_both(alive_cells[m], categories, 
-                                   categories[alive_cells[m].cell_type].randomness,x_size, y_size, time)
+  concentrations, receptor_angles = get_concentrations(alive_cells[m], time)
+  proposed_angle = angle_from_both(alive_cells[m], categories, categories[alive_cells[m].cell_type].randomness,
+                                   x_size, y_size, time, concentrations, receptor_angles)
 	alive_cells[m].angle = mod2pi(proposed_angle)
 
 	#Is the cell in the niche?
@@ -24,7 +25,7 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	#Proposed speed
 	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	#The speed is reduced if the cell is sticking to ligand
-  println("mean concentration: ",mean(concentrations))
+  println("cell loc:",(alive_cells[m].x,alive_cells[m].y),"mean concentration: ",mean(concentrations))
 	if categories[alive_cells[m].cell_type].sticking && mean(concentrations) > threshold
 		alive_cells[m].speed /= 10
 	end

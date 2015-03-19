@@ -4,15 +4,15 @@ function run_simulation(nb_iteration::Int64)
   #The user can manually change the parameters below
   ################################################################################################################################
   #Parameters from the first window:
-  number_of_cell = 20
-  number_of_steps = 3000
+  number_of_cells = 20
+  steps = 3000
   environment_width = 30
   environment_height = 30
   bouncing_energy_loss_coefficient = 0.9 #(0-1)
   type_of_diffusion = "Integrative" #"Integrative" or "Normal"
   pickle_output = true
-  border_settings = ["Removing", "Removing", "Removing", "Removing"] # Border Settings can be: "Reflecting", "Absorbing", "Removing".
-
+  border_settings = ["Reflecting", "Removing", "Removing", "Removing"]   # W, E, S, N borders
+                                                                         # can be: "Reflecting", "Absorbing" or "Removing"
 
   #Parameters from the diffusion window:
   number_of_ligand_receptors = 8
@@ -38,7 +38,7 @@ function run_simulation(nb_iteration::Int64)
       y_ordinate_sources[i] = 0
       integrative_gradient_coefficient[i] = 100
       integrative_initial_concentration_coefficient[i] = 10000
-      intgerative_upper_time_limit[i] = 3000
+      intgerative_upper_time_limit[i] = 1000
     end
   elseif type_of_diffusion == "Normal"
     for i in 1 : number_of_sources
@@ -48,7 +48,6 @@ function run_simulation(nb_iteration::Int64)
       normal_initial_concentration_coefficient[i] = 100
     end
   end
-
 
   # Choice of the cell characteristics
 
@@ -66,7 +65,7 @@ function run_simulation(nb_iteration::Int64)
   # 11: Speed threshold that the cell needs to exceed to trigger a bouncing with another cell
   # 12: Minimum ratio between max and mean concentration that a cell can detect (for movement)
   #               1      2     3     4     5     6     7      8      9   10   11    12
-    v8 = Float64[1.0   0.00   2.0   1.5   0.5   1.0   7.5   .0000   .5    1   .1   1.00;
+    v8 = Float64[1.0   0.10   2.0   1.5   0.5   1.0   7.7   .0000   .25  .25  .1   1.00;
                  0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
@@ -75,7 +74,7 @@ function run_simulation(nb_iteration::Int64)
   # 2st column: Are this type of cell located at the left at the beginning?
   # 3st column: Are this type of cell stem cells? (each row produces cells of the line below so the last line *must* not be set to false)
   # 4st column: Does this type of cell slow down when it reaches a high concentration of ligand?
-    v9 = ["ro"    false    false     true;
+    v9 = ["ro"    false    true       false;
           "bo"    false    false    false;
           "mo"    false    false    false;
           "go"    false    false    false]
@@ -84,7 +83,7 @@ function run_simulation(nb_iteration::Int64)
   # Don't change below unless you know what you're doing
 
   # First window parameter
-  global nb_ligands = 8
+  global n_receptors = 8
   global nb_source = number_of_sources  
   global type_source =type_of_source
   global type_diffusion = type_of_diffusion
@@ -122,9 +121,9 @@ function run_simulation(nb_iteration::Int64)
     t = strftime(time())[5:27] # Store date and time as string
     filename = "out_$t.pickle"
     filenames = [filenames;filename]
-    alive_cells = initial_placement(number_of_cell, categories, environment_width, environment_height)
+    alive_cells = initial_placement(number_of_cells, categories, environment_width, environment_height)
     dead_cells = Cell[]
-    simulator(alive_cells, dead_cells, categories, number_of_steps, pickle_output, filename, 
+    simulator(alive_cells, dead_cells, categories, steps, pickle_output, filename, 
               environment_width, environment_height, border_settings, bouncing_energy_loss_coefficient)
   end
     print("filenames: ",filenames)

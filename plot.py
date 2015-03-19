@@ -1,3 +1,4 @@
+#from __future__ import print_function
 from numpy import *
 import matplotlib.pyplot as plt
 exec(open('unpickle.py').read())
@@ -5,7 +6,7 @@ exec(open('unpickle.py').read())
 def get_coords(arr):
   out = list(arr)
   for i in range(len(arr)):
-    out[i] = arr[i][1:3]
+    out[i] = [arr[i][2],arr[i][3],arr[i][-1]]
   return out
 
 def get_alive_coords(arr):
@@ -28,7 +29,7 @@ def stack(arr):
   lengths = [len(i) for i in arr]
   arr = [i for i in arr if len(i)==max(lengths)]  #remove truncated simulations
   out = [vstack([i[j] for i in arr]) for j in range(max(lengths))] # stack first timestep from each simulation
-  print 'lengths of initial arrays: ',lengths
+  print('lengths of initial arrays: ',lengths)
   return out
 
 ### old ### 
@@ -145,4 +146,18 @@ def barchart(data):
 
   autolabel(rects1,ax)
   plt.show()
+
+def linegraph(stems,progs):
+  xaxis = arange(0,3500,500)
+  fig = plt.figure()
+  ax = fig.add_subplot(111)
+  ax.plot(xaxis,stems,linewidth=2.0)
+  ax.plot(xaxis,progs,linewidth=2)
+  ax.set_title('Simulation Starting with Stem Cells in a Niche')
+  ax.set_xlabel('Iterations')
+  ax.set_ylabel('Population Size') 
+  plt.legend(loc='upper right')
+  plt.show()
+
+
 

@@ -43,14 +43,18 @@ function pickle_start(filename::String, t::String, n_cell::Real, steps::Int, x_s
                       v3p::Array, v4::Array, v8::Array, v9::Array, alive_cells::Vector)
   alive_cell_matrix = cells_to_matrix(alive_cells)
   output = Dict()
-
-  labels = ["simulation_start_time","n_cell","steps","x_size","y_size","nb_ligands","nb_source","source_abscisse_ligand",
-            "source_ordinate_ligand","v4","v8","v9","alive_cells"]
-  values = [t,n_cell, steps, x_size, y_size, nb_ligands, nb_source, source_abscisse_ligand, source_ordinate_ligand, v4, v8, v9, 
-            alive_cell_matrix]
-  for i in length(labels)
-    output[labels[i]] = value[i]
-  end
+  output["simulation_start_time"] = t
+  output["n_cell"] = n_cell
+  output["steps"] = steps
+  output["x_size"] = x_size
+  output["y_size"] = y_size
+  output["nb_ligands"] = nb_ligands
+  output["nb_source"] = nb_source
+  output["source_abscisse_ligand"] = source_abscisse_ligand
+  output["v4"] = v4
+  output["v8"] = v8
+  output["v9"] = v9
+  output["alive_cells"] = alive_cell_matrix
   
   pickle_dict(filename,output)
 end
