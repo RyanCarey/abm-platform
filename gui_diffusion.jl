@@ -10,7 +10,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   grid_rowconfigure(f2, 1, weight=1)
 
 
-  #Choice of the default parameters
+  #Choice of the default parameters depending of the diffusion type
   if(diff_type=="Integrative")
     prompts2 =["Number of ligand receptors","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(f2,"$(float(v2[1]))"),
@@ -18,7 +18,8 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
                        Entry(f2,"$(float(v2[3]))"), 
                        Entry(f2,"$(int(v2[4]))"),
                        Entry(f2,"$(int(v2[5]))")]
-    plusintegrative=1
+    #In the case of the integrative diffusion, there is one more parmeter. So in order to locate properly the elements on the grid, we add a parameter.                   
+    plusintegrative=1 
   else
     prompts2 =["Number of directions for a cell","Initial Concentration","Gradient Coefficient","Number of sources"]
     global entries2 = [Entry(f2,"$(float(v2[1]))"),
@@ -27,24 +28,26 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
                        Entry(f2,"$(int(v2[5]))")]
     plusintegrative=0
   end
+  #Help button creation
   bhelp = [Button(f2,"?") Button(f2,"?") Button(f2,"?") Button(f2,"?") Button(f2,"?") Button(f2,"?") Button(f2,"?")]
+  #We adjuste the size of the buttons
   for i in bhelp
     i[:width]=1
   end
-
+  #Creation of the labels to give information to the user. 
   l=[]
   for i in 1:length(prompts2)
     l=[l,Label(f2,string(prompts2[i],": "))]
   end
-
+  #Display of the first input: Number of ligand receptors
   grid(l[1],1,1,sticky="e")
   grid(entries2[1],1,2,sticky="ew")
   grid(bhelp[1],1,3,sticky="w")
   bind(bhelp[1], "command", path -> Messagebox(title="Help", message="Input the number of receptors of ligand for the cell. This is also the number of directions the cell can go. Besides, the smaller this coefficient is the fatser the software will work."))
-
+  #Gap
   l1  = Label(f2, "")
   grid(l1,2,1:3) 
-
+  #Display of the input of the diffusion parameters
   grid(l[2],3,1,sticky="e")
   grid(entries2[2],3,2,sticky="ew")
   grid(bhelp[2],3,3,sticky="w")
@@ -59,8 +62,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
     grid(bhelp[7],5,3,sticky="w")
     bind(bhelp[7], "command", path -> Messagebox(title="Help", message="This is the tau coefficient within the diffusion equation. It defines the time during which sources emit ligands. See manual for more information.\nNB: This coefficient only modifies the plot and not the sources parameters."))
   end
-  focus(entries2[1])
-
+  #See diffusion button
   b1=Button(f2,"See Diffusion")
   grid(b1,5+plusintegrative,2,sticky="ew")
   grid(bhelp[4],5+plusintegrative,3,sticky="w")
@@ -68,10 +70,10 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b1,i,path -> plot_diffusion(v, v2, prompts2, entries2,diff_type, plusintegrative))
   end
-
+  #Gap
   l2  = Label(f2, "")
   grid(l2,6+plusintegrative,1:3)
-
+  #Radio button to choose the kind of sources
   global rb = Radio(f2, ["Point", "Line"])
   set_value(rb,rb_value[1])
   grid(rb,7+plusintegrative,2,sticky="w")
@@ -79,36 +81,35 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   grid(ltype,7+plusintegrative,1,sticky="e")
   grid(bhelp[5],7+plusintegrative,3,sticky="e")
   bind(bhelp[5], "command", path -> Messagebox(title="Help", message="Choose the kind of source you want. The diffusion parameters are modifiable by clicking on the 'Location(s) and Coefficients' button."))
-
+  #Gap
   grid(l[4+plusintegrative],8+plusintegrative,1,sticky="e")
   grid(entries2[4+plusintegrative],8+plusintegrative,2,sticky="ew")
-
+  #Button to access the parameters of the sources
   b2 = Button(f2, "Location(s) and Coefficients")
   grid(b2,9+plusintegrative,2,sticky="ew")
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b2,i,path -> gui_ligand(v, v2, v3p,v3l, v4,v5, prompts2, entries2,get_value(rb),diff_type))
   end
-
+  #Ok button
   b3 = Button(f2, "Ok")
   grid(b3,10+plusintegrative,2,sticky="ew")
   for i in ["command","<Return>","<KP_Enter>"] 
     bind(b3,i, path -> destroy_diffusion_window(w2, v2, prompts2, entries2,get_value(rb),diff_type))
   end
-
+  #Gap
   l3  = Label(f2, "")
   grid(l3,11+plusintegrative,1:3)
-
+  #Information and help button to undertsand how to change the diffusion plot over time.
   grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 12+plusintegrative, 1:2,sticky="e")
   grid(bhelp[6],12+plusintegrative,3,sticky="e")
   bind(bhelp[6], "command", path -> Messagebox(title="Help", message="Move the slider to change the diffusion time. This will change the plot."))
-
+  #Display of the canvas
   global canvas2 = Canvas(f2, 300, 300)
   grid(canvas2, 1:11+plusintegrative, 4, sticky="news")
-
+  #Time slider
   global sc = Slider(f2, 1:int(v[2]/v[1]))
   grid(sc,12+plusintegrative, 4, sticky="ew")
   bind(sc, "command", path -> plot_diffusion(v, v2, prompts2, entries2,diff_type,plusintegrative))
-
 
   #First plot of the concentration
   plot_diffusion(v, v2, prompts2, entries2,diff_type,plusintegrative)

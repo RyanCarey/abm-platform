@@ -29,7 +29,7 @@ type Cell_type
 	avg_speed::Real
 	avg_r::Real
 	conc_response::Real  	
- 	stem_threshold::Real
+ 	conc_threshold::Real
  	death_rate::Real
  	persistence::Real
  	randomness::Real

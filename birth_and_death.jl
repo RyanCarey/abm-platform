@@ -17,7 +17,7 @@ function chance_to_die(alive_cells::Vector{Cell}, dead_cells::Vector{Cell}, cate
 end
 
 # Function to divide a cell. Will assign new radii and locations to both cells (original and new) and check that they don't overlap.
-function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int, x_size::Real, y_size::Real, concentrations::Vector{Float64})
+function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int, x_size::Float64, y_size::Float64, concentrations::Vector{Float64})
 	radius = cells[i].r
 	area = pi * radius ^ 2
 	# Calculate radius if area was half, and a random angle.
@@ -68,7 +68,7 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 				# If the cell has a surrounding concentration above the threshold:
 				# 30% of the time it will spawn a stem cell and a progenitor cell.
 				# 70% of the time it will spawn 2 stem cells.
-				if sum_ligand < categories[cells[i].cell_type].stem_threshold
+				if sum_ligand < categories[cells[i].cell_type].conc_threshold
 					if rand() > 0.85
 						new_cell.cell_type = cells[i].cell_type + 1
 					else
@@ -76,7 +76,7 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
 						cells[i].cell_type = cells[i].cell_type + 1
 					end
 				end
-				if sum_ligand >= categories[cells[i].cell_type].stem_threshold
+				if sum_ligand >= categories[cells[i].cell_type].conc_threshold
 					if rand() > 0.85
 						new_cell.cell_type = cells[i].cell_type + 1
 					end

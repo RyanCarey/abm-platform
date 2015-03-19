@@ -1,4 +1,4 @@
-function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Array, A_coefficient::Array)
+function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Vector{Float64}, A_coefficient::Vector{Float64})
 	#Array initialization
   receptors=Array(Float64,int(n_receptors),3) #angle,x and y ordinate of the cell receptors
 	receptor_angles=Array(Float64,int(n_receptors)) #angles of the receptors from the cell centre
@@ -23,9 +23,9 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
   # whether the concentration has an impact depends on the ratio and the absolute amount
 	ratio = maximum(concentrations) / mean(concentrations)
   ratio_threshold = categories[cell.cell_type].threshold_ratio_concentration
-	concentration_threshold = categories[cell.cell_type].stem_threshold
+	conc_threshold = categories[cell.cell_type].conc_threshold
 
-	if maximum(concentrations) < concentration_threshold || ratio < ratio_threshold
+	if maximum(concentrations) < conc_threshold || ratio < ratio_threshold
 	  chosen_angle = randn() * pi
 	else
 	  chosen_angle = receptor_angles[indmax(concentrations), 1]
