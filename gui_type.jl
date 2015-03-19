@@ -1,6 +1,6 @@
 function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
   # Create a top level window and the assorted stuff with it
-	w3 = Toplevel("Cell Types", 300, 300) ## title, width, height
+  w3 = Toplevel("Cell Types", 300, 300) ## title, width, height
   f3 = Frame(w3)
   pack(f3, expand = true, fill = "both")
 
@@ -39,7 +39,7 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
                             Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3)]
   # make color dictionary
 
-  for i in 1:4
+  for i in 1 : 4
     # Set and place forms
     for j in 1 : size(cat_entries,2)
         set_value(cat_entries[i,j], "$(v8[i,j])")
@@ -56,12 +56,12 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
     grid(colour_entries[i], length(cat_prompts) + 1, i+2)
 
     # Set and place checkboxes
-    for j in 1:size(cat_entries_bool,2)
+    for j in 1 : size(cat_entries_bool, 2)
       if i == 4 && j == 2
         continue
       end
-      set_value(cat_entries_bool[i,j], v9[i,j+1])
-      grid(cat_entries_bool[i,j], length(cat_prompts)+1+j, i+2)
+      set_value(cat_entries_bool[i, j], v9[i, j + 1])
+      grid(cat_entries_bool[i, j], length(cat_prompts) + 1 + j, i + 2)
     end
   end
 
@@ -80,38 +80,55 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
   grid(bhelp[15],16,2,sticky = "e")
   grid(bhelp[16],17,2,sticky = "e")
 
-  bind(bhelp[1], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[2], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[3], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[4], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[5], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[6], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[7], "command", path -> Messagebox(title="Help", message="This is the concentration threshold that 
-  will define whether the cell is in the niche and should choose its angle thanks to the ligand concentration 
-  or whether this cell is out of the niche and should move randomly. To choose accurately this parameter please 
-  look at the diffusion curve within the 'diffusion' window.\n Do not forget in the case of the use of more than 
-  one source, that the concentration from each source are added."))
-  bind(bhelp[8], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[9], "command", path -> Messagebox(title="Help", message="This parameter defines how persistent the 
-  movement of this kind of cell will be. To decide if the cell should keep its previous location, we choose a 
-  number between 0 and 1 from a uniform distribution and if this number is below the persistence, the cell keeps 
-  its direction. The higher the persistence is, the more the cell is persistent."))
-  bind(bhelp[10], "command", path -> Messagebox(title="Help", message="This parameter modify the choice of the 
-  angle. If it equals 0, the cell will choose its angle only according to the concentration (cf. the manual for 
-  more information). Otherwise, the chosen angle is the angle calculated by the concentration to which we add 
-  this randomness parameter multiplied by a random number chosen among a normal distribution of mean 0 and variance pi."))
-  bind(bhelp[11], "command", path -> Messagebox(title="Help", message="This is the minimum speed the cell needs 
-  to have in order to trigger a boucing. Putting it to a high value will decrease the impact of the ballistic 
-  and therefore accelerate the calculation of movement. Please refer to the manual for more information."))
-  bind(bhelp[12], "command", path -> Messagebox(title="Help", message="This is the threshold above which, the 
-  maximum concentration at a specific ligand receptor divided by the mean concentration of all ligand receptors, 
-  need to be in order to trigger a movement. Therefore it cannot be below one. Usually 1.1 is a good threshold. 
-  If the previous ration is below the threshold, the cell will have a random angle. Please refer to the manual 
-  for more information."))
-  bind(bhelp[13], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[14], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[15], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[16], "command", path -> Messagebox(title="Help", message=""))
+  bind(bhelp[1], "command", path -> Messagebox(title="Help", message="The ratio of the total number 
+  of cells given over to that type upon the start of the simulation. Ratios are normalised and as such 
+  do not have to sum to one."))
+  bind(bhelp[2], "command", path -> Messagebox(title="Help", message="The rate at which a cells area will 
+  increase per timestep."))
+  bind(bhelp[3], "command", path -> Messagebox(title="Help", message="The ratio of current area to initial 
+  area at which a cell division event will occur."))
+  bind(bhelp[4], "command", path -> Messagebox(title="Help", message="The average distance a cell can 
+  travel in one step. Uses the same arbitrary units as other distance variables."))
+  bind(bhelp[5], "command", path -> Messagebox(title="Help", message="The average radius of cells at the 
+  start of a simulation. This is also used in calculating cell division."))
+  bind(bhelp[6], "command", path -> Messagebox(title="Help", message="This specifies a value which multiplies 
+  a cells proposed move direction in response to its detected ligand concentration. A value of 1 indicates 
+  that a cell will travel towards a source, whilst -1 will repel the cell. Note that specified randomness 
+  will dilute this effect."))
+  bind(bhelp[7], "command", path -> Messagebox(title="Help", message="This is the concentration threshold 
+  that will define whether the cell is in the niche and should choose its angle thanks to the ligand 
+  concentration or whether this cell is out of the niche and should move randomly. To choose accurately 
+  this parameter please look at the diffusion curve within the 'diffusion' window.\n Do not forget in the 
+  case of the use of more than one source, that the concentration from each source are added."))
+  bind(bhelp[8], "command", path -> Messagebox(title="Help", message="The chance that at any time step, 
+  the cell in question will die."))
+  bind(bhelp[9], "command", path -> Messagebox(title="Help", message="This parameter defines how persistent 
+  the movement of this kind of cell will be. To decide if the cell should keep its previous location, we 
+  choose a number between 0 and 1 from a uniform distribution and if this number is below the persistence, 
+  the cell keeps its direction. The higher the persistence is, the more the cell is persistent."))
+  bind(bhelp[10], "command", path -> Messagebox(title="Help", message="This parameter modify the choice of 
+  the angle. If it equals 0, the cell will choose its angle only according to the concentration (cf. the 
+  manual for more information). Otherwise, the chosen angle is the angle calculated by the concentration to 
+  which we add this randomness parameter multiplied by a random number chosen among a normal distribution of 
+  mean 0 and variance pi."))
+  bind(bhelp[11], "command", path -> Messagebox(title="Help", message="This is the minimum speed the cell 
+  needs to have in order to trigger a boucing. Putting it to a high value will decrease the impact of the 
+  ballistic and therefore accelerate the calculation of movement. Please refer to the manual for more information."))
+  bind(bhelp[12], "command", path -> Messagebox(title="Help", message="This is the threshold above which, 
+  the maximum concentration at a specific ligand receptor divided by the mean concentration of all ligand 
+  receptors, need to be in order to trigger a movement. Therefore it cannot be below one. Usually 1.1 is 
+  a good threshold. If the previous ration is below the threshold, the cell will have a random angle. Please 
+  refer to the manual for more information."))
+  bind(bhelp[13], "command", path -> Messagebox(title="Help", message="Used to distinguish cell types in simulation display."))
+  bind(bhelp[14], "command", path -> Messagebox(title="Help", message="Selecting this option will initialise 
+  all cells of the particular time close to the left wall of the environment."))
+  bind(bhelp[15], "command", path -> Messagebox(title="Help", message="Selecting this option will allow this 
+  type of cell to have stem cell behaviour. A stem cell will change the type of its progeny depending upon 
+  its local ligand concentration and the stem threshold specified in the main menu. Progeny will be either 
+  of the same type (stem cell replication), or the type below (1 -> 2 -> 3 -> 4). Note that type 4 cells 
+  cannot be stem cells. Deselecting this option means that all types will only produce the same type."))
+  bind(bhelp[16], "command", path -> Messagebox(title="Help", message="If the detected mean ligand concentration 
+  is above the stem threshold, the cells speed will be divided by 10, effectively sticking it in place."))
 
 end
 
