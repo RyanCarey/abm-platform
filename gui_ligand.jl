@@ -108,7 +108,6 @@ end
 function check_entries3(n_sources::Real,value_rb,diff_type)
 #We store in the global variable v3, v4 and v5 the sources location and parameters
 
-
   #Source location
   if(value_rb=="Point")
     global v3p = zeros(2*int(n_sources),1)
@@ -130,9 +129,7 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
         return
       end
     end
-
   end
-
 
   #source parameters
   if(diff_type=="Integrative")

@@ -37,7 +37,7 @@ function run_simulation(nb_iteration::Int64)
       x_ordinate_sources[i] = 0
       y_ordinate_sources[i] = 0
       integrative_gradient_coefficient[i] = 100
-      integrative_initial_concentration_coefficient[i] = 10000
+      integrative_initial_concentration_coefficient[i] = 10
       intgerative_upper_time_limit[i] = 1000
     end
   elseif type_of_diffusion == "Normal"
@@ -65,7 +65,7 @@ function run_simulation(nb_iteration::Int64)
   # 11: Speed threshold that the cell needs to exceed to trigger a bouncing with another cell
   # 12: Minimum ratio between max and mean concentration that a cell can detect (for movement)
   #               1      2     3     4     5     6     7      8      9   10   11    12
-    v8 = Float64[1.0   0.10   2.0   1.5   0.5   1.0   7.7   .0000   .25  .25  .1   1.00;
+    v8 = Float64[1.0   0.10   2.0   1.5   0.5   1.0    1    .0000   .25  .25  .1   1.00;
                  0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
@@ -74,12 +74,12 @@ function run_simulation(nb_iteration::Int64)
   # 2st column: Are this type of cell located at the left at the beginning?
   # 3st column: Are this type of cell stem cells? (each row produces cells of the line below so the last line *must* not be set to false)
   # 4st column: Does this type of cell slow down when it reaches a high concentration of ligand?
-    v9 = ["ro"    false    true       false;
+    v9 = ["ro"    true    true       false;
           "bo"    false    false    false;
           "mo"    false    false    false;
           "go"    false    false    false]
     
-  #############################################################################################################################################
+  #####################################################################################################################
   # Don't change below unless you know what you're doing
 
   # First window parameter
@@ -95,15 +95,15 @@ function run_simulation(nb_iteration::Int64)
   # Integrative
   global Diffusion_coefficient = Array(Float64, nb_source)
   global Diffusion_coefficient = integrative_gradient_coefficient
-  global A_coefficient = Array(Float64, nb_source)
-  global A_coefficient = integrative_initial_concentration_coefficient
+  global A_coefficients = Array(Float64, nb_source)
+  global A_coefficients = integrative_initial_concentration_coefficient
   global tau0 = Array(Float64, nb_source)
   global tau0 = intgerative_upper_time_limit
   # Normal
   global diffusion_maximum = Array(Float64, nb_source)
   global diffusion_maximum = normal_initial_concentration_coefficient
-  global diffusion_coefficient = Array(Float64, nb_source)
-  global diffusion_coefficient = normal_gradient_coefficient
+  global diffusion_coefficients = Array(Float64, nb_source)
+  global diffusion_coefficients = normal_gradient_coefficient
   # Cell type
     global categories = Cell_type[
             Cell_type(v8[1,1], v8[1,2], v8[1,3], v8[1,4], v8[1,5], v8[1,6], v8[1,7], v8[1,8], v8[1,9], v8[1,10], v8[1,11], v8[1,12],
@@ -124,7 +124,8 @@ function run_simulation(nb_iteration::Int64)
     alive_cells = initial_placement(number_of_cells, categories, environment_width, environment_height)
     dead_cells = Cell[]
     simulator(alive_cells, dead_cells, categories, steps, pickle_output, filename, 
-              environment_width, environment_height, border_settings, bouncing_energy_loss_coefficient)
+              environment_width, environment_height, border_settings, bouncing_energy_loss_coefficient,
+              diffusion_coefficients, A_coefficients)
   end
     print("filenames: ",filenames)
 

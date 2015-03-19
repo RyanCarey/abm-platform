@@ -1,7 +1,8 @@
 # Module containing functions pertaining to cell movement.
 
 function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_indices::Vector{Int},index::Int,
-               x_size::Real, y_size::Real, border_settings::Vector{ASCIIString}, time::Real,g)
+               x_size::Real, y_size::Real, border_settings::Vector{ASCIIString}, time::Real,g, diffusion_coefficient::Array,
+               A_coefficients::Array)
 
 	#Storage of teh location in the case of a wriong computation
 	x=Array(Float64,length(alive_cells))
@@ -15,7 +16,7 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	#Orignial location of the m cell
 	startloc = Point(alive_cells[m].x, alive_cells[m].y)
 	#Thanks to the concnetration we calculate the angle of the m cell
-  concentrations, receptor_angles = get_concentrations(alive_cells[m], time)
+  concentrations, receptor_angles = get_concentrations(alive_cells[m], time, diffusion_coefficient, A_coefficients)
   proposed_angle = angle_from_both(alive_cells[m], categories, categories[alive_cells[m].cell_type].randomness,
                                    x_size, y_size, time, concentrations, receptor_angles)
 	alive_cells[m].angle = mod2pi(proposed_angle)
@@ -25,7 +26,7 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	#Proposed speed
 	alive_cells[m].speed = -2*log(rand()) * categories[alive_cells[m].cell_type].avg_speed / 5
 	#The speed is reduced if the cell is sticking to ligand
-  println("cell loc:",(alive_cells[m].x,alive_cells[m].y),"mean concentration: ",mean(concentrations))
+  #println("mean concentration: ",mean(concentrations))
 	if categories[alive_cells[m].cell_type].sticking && mean(concentrations) > threshold
 		alive_cells[m].speed /= 10
 	end

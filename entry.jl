@@ -26,11 +26,11 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   global const nb_source= int(v2[7])
   global source_abscisse_ligand =Array(Float64,nb_source)
   global source_ordinate_ligand =Array(Float64,nb_source)
-  global Diffusion_coefficient = Array(Float64,nb_source)
-  global A_coefficient= Array(Float64,nb_source)
+  global integration_diffusion_coefficient = Array(Float64,nb_source)
+  A_coefficients = Array(Float64,nb_source)
   global tau0 = Array(Float64,nb_source)
   global diffusion_maximum = Array(Float64,nb_source)
-  global diffusion_coefficient = Array(Float64,nb_source)
+  diffusion_coefficients = Array(Float64,nb_source)
   global type_source=rb_value[1]
   global type_diffusion=diff_type
 
@@ -39,24 +39,24 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
       source_abscisse_ligand[i]=v3p[2*i-1]
       source_ordinate_ligand[i]=v3p[2*i]
       if(type_diffusion == "Integrative")
-        Diffusion_coefficient[i] =v4[3*i-2]
-        A_coefficient[i] = v4[3*i-1]
+        integration_diffusion_coefficient[i] =v4[3*i-2]
+        A_coefficients[i] = v4[3*i-1]
         tau0[i] = v4[3*i]
       else
         diffusion_maximum[i] =v5[2*i-1]
-        diffusion_coefficient[i] = v5[2*i]
+        diffusion_coefficients[i] = v5[2*i]
       end
     end
   else
     for i in 1:nb_source
       source_abscisse_ligand[i]=v3l[i]
       if(type_diffusion == "Integrative")
-        Diffusion_coefficient[i] =v4[3*i-2]
-        A_coefficient[i] = v4[3*i-1]
+        integration_diffusion_coefficient[i] =v4[3*i-2]
+        A_coefficients[i] = v4[3*i-1]
         tau0[i] = v4[3*i]
       else
         diffusion_maximum[i] =v5[2*i-1]
-        diffusion_coefficient[i] = v5[2*i]
+        diffusion_coefficients[i] = v5[2*i]
       end
     end
   end
@@ -82,7 +82,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   end
 
   simulator(canvas, alive_cells, dead_cells, categories, steps, display_output, pickle_output, 
-            filename, x_size, y_size, border_settings,g)
+            filename, x_size, y_size, border_settings,g, diffusion_coefficients, A_coefficients)
 end
 
 ##########################################################################################################

@@ -9,13 +9,16 @@ function simulator(canvas::Tk.Canvas,
                    x_size::Real,
                    y_size::Real,
                    border_settings::Vector{ASCIIString},
-                   momentum_coefficient::Real)
+                   momentum_coefficient::Real,
+                   diffusion_coefficients::Array,
+                   A_coefficients::Array)
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
   for i = 1:steps
     iteration(alive_cells, dead_cells, categories,
-             x_size, y_size, border_settings, momentum_coefficient, i)
+             x_size, y_size, border_settings, momentum_coefficient, i,
+             diffusion_coefficients, A_coefficients)
     if i % 50 == 0 || i==steps  # display every hundredth step, and the last step
       println("$i Iteration(s) Completed")
       if display_output
@@ -28,8 +31,8 @@ function simulator(canvas::Tk.Canvas,
   #pause(0) #this can be used to input a break of some milliseconds between each timestep
   end
   println("Simulation Finished")
-  println(Diffusion_coefficient, A_coefficient, tau0)
-  println(source_abscisse_ligand, diffusion_maximum, diffusion_coefficient, type_source, type_diffusion)
+  #println(integration_diffusion_coefficients, A_coefficients, tau0)
+  #println(source_abscisse_ligand, diffusion_maximum, diffusion_coefficient, type_source, type_diffusion)
 end
 
 function iteration(alive_cells::Vector{Cell}, 
@@ -39,7 +42,9 @@ function iteration(alive_cells::Vector{Cell},
                    y_size::Real,
                    border_settings::Vector{ASCIIString},
                    momentum_coefficient::Real,
-                   i::Int)
+                   i::Int,
+                   diffusion_coefficients::Array,
+                   A_coefficients::Array)
   time = i/length(alive_cells)+1 # to make diffusion and cell movement happen on the same timescale
   finished = false
   if length(alive_cells) == 0
@@ -53,7 +58,8 @@ function iteration(alive_cells::Vector{Cell},
   if !finished
     dying_indices = Int[]
     dying_indices, concentrations = move!(alive_cells, categories, dying_indices, index, x_size, y_size, 
-                                          border_settings, time,momentum_coefficient)
+                                          border_settings, time,momentum_coefficient, diffusion_coefficients,
+                                          A_coefficients)
     dying_indices = sort([j for j in Set(dying_indices)])
     while length(dying_indices) > 0
       cell_death(alive_cells, dead_cells, pop!(dying_indices))
@@ -77,13 +83,16 @@ function simulator(alive_cells::Vector{Cell},
                    x_size::Real,
                    y_size::Real,
                    border_settings::Vector{ASCIIString},
-                   momentum_coefficient::Real)
+                   momentum_coefficient::Real,
+                   diffusion_coefficients::Array,
+                   A_coefficients::Array)
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
   for i = 1:steps
     iteration(alive_cells, dead_cells, categories,
-             x_size, y_size, border_settings, momentum_coefficient, i)
+             x_size, y_size, border_settings, momentum_coefficient, i,
+             diffusion_coefficients, A_coefficients)
     if i % 500 == 0 || i==steps  # display every hundredth step, and the last step
       println("$i Iteration(s) Completed")
       if pickle_output
@@ -93,6 +102,6 @@ function simulator(alive_cells::Vector{Cell},
   #pause(0) #this can be used to input a break of some milliseconds between each timestep
   end
   println("Simulation Finished")
-  println(Diffusion_coefficient, A_coefficient, tau0)
-  println(source_abscisse_ligand, diffusion_maximum, diffusion_coefficient, type_source, type_diffusion)
+  #println(integration_diffusion_coefficients, A_coefficients, tau0)
+  #println(source_abscisse_ligand, diffusion_maximum, diffusion_coefficient, type_source, type_diffusion)
 end

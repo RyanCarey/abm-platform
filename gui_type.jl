@@ -37,6 +37,8 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
                             Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
                             Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3); 
                             Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3) Entry(f3)]
+  # make color dictionary
+
   for i in 1:4
     # Set and place forms
     for j in 1 : size(cat_entries,2)
@@ -45,15 +47,12 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
     end
 
     # Set and place dropdown boxes
-  # make a dictionary for colors
-  co_to_color = Dict()
-  colors = ["Red","Blue","Magenta","Green","Yellow"]
-  cos = ["ro","bo","mo","go","yo"]
-  for i in 1:length(cos)
-    co_to_color[cos[i]] = colors[i]
-  end
-    co_to_colour = Dict(("ro"=>"Red"), ("bo"=>"Blue"), ("mo"=>"Magenta"), ("go"=>"Green"), ("yo"=>"Yellow"))
-    set_value(colour_entries[i], co_to_colour[v9[i,1]])
+
+    # using matrix instead of a dictionary here because Dicts behave funny in julia 3.6
+    colour_mat = String["ro" "Red"; "bo" "Blue"; "mo" "Magenta"; "go" "Green"; "yo" "Yellow"]
+    colour = colour_mat[1:end,2][colour_mat[1:end,1].==v9[i,1]][1]
+    println("Colour", colour, "Colour type: ", typeof("colour"))
+    set_value(colour_entries[i], colour)
     grid(colour_entries[i], length(cat_prompts) + 1, i+2)
 
     # Set and place checkboxes
@@ -87,19 +86,33 @@ function gui_type(v8::Matrix{Float64},v9::Matrix{Any})
   bind(bhelp[4], "command", path -> Messagebox(title="Help", message=""))
   bind(bhelp[5], "command", path -> Messagebox(title="Help", message=""))
   bind(bhelp[6], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[7], "command", path -> Messagebox(title="Help", message="This is the concentration threshold that will define whether the cell is in the niche and should choose its angle thanks to the ligand concentration or whether this cell is out of the niche and should move randomly. To choose accurately this parameter please look at the diffusion curve within the 'diffusion' window.\n Do not forget in the case of the use of more than one source, that the concentration from each source are added."))
+  bind(bhelp[7], "command", path -> Messagebox(title="Help", message="This is the concentration threshold that 
+  will define whether the cell is in the niche and should choose its angle thanks to the ligand concentration 
+  or whether this cell is out of the niche and should move randomly. To choose accurately this parameter please 
+  look at the diffusion curve within the 'diffusion' window.\n Do not forget in the case of the use of more than 
+  one source, that the concentration from each source are added."))
   bind(bhelp[8], "command", path -> Messagebox(title="Help", message=""))
-  bind(bhelp[9], "command", path -> Messagebox(title="Help", message="This parameter defines how persistent the movement of this kind of cell will be. To decide if the cell should keep its previous location, we choose a number between 0 and 1 from a uniform distribution and if this number is below the persistence, the cell keeps its direction. The higher the persistence is, the more the cell is persistent."))
-  bind(bhelp[10], "command", path -> Messagebox(title="Help", message="This parameter modify the choice of the angle. If it equals 0, the cell will choose its angle only according to the concentration (cf. the manual for more information). Otherwise, the chosen angle is the angle calculated by the concentration to which we add this randomness parameter multiplied by a random number chosen among a normal distribution of mean 0 and variance pi."))
-  bind(bhelp[11], "command", path -> Messagebox(title="Help", message="This is the minimum speed the cell needs to have in order to trigger a boucing. Putting it to a high value will decrease the impact of the ballistic and therefore accelerate the calculation of movement. Please refer to the manual for more information."))
-  bind(bhelp[12], "command", path -> Messagebox(title="Help", message="This is the threshold above which, the maximum concentration at a specific ligand receptor divided by the mean concentration of all ligand receptors, need to be in order to trigger a movement. Therefore it cannot be below one. Usually 1.1 is a good threshold. If the previous ration is below the threshold, the cell will have a random angle. Please refer to the manual for more information."))
+  bind(bhelp[9], "command", path -> Messagebox(title="Help", message="This parameter defines how persistent the 
+  movement of this kind of cell will be. To decide if the cell should keep its previous location, we choose a 
+  number between 0 and 1 from a uniform distribution and if this number is below the persistence, the cell keeps 
+  its direction. The higher the persistence is, the more the cell is persistent."))
+  bind(bhelp[10], "command", path -> Messagebox(title="Help", message="This parameter modify the choice of the 
+  angle. If it equals 0, the cell will choose its angle only according to the concentration (cf. the manual for 
+  more information). Otherwise, the chosen angle is the angle calculated by the concentration to which we add 
+  this randomness parameter multiplied by a random number chosen among a normal distribution of mean 0 and variance pi."))
+  bind(bhelp[11], "command", path -> Messagebox(title="Help", message="This is the minimum speed the cell needs 
+  to have in order to trigger a boucing. Putting it to a high value will decrease the impact of the ballistic 
+  and therefore accelerate the calculation of movement. Please refer to the manual for more information."))
+  bind(bhelp[12], "command", path -> Messagebox(title="Help", message="This is the threshold above which, the 
+  maximum concentration at a specific ligand receptor divided by the mean concentration of all ligand receptors, 
+  need to be in order to trigger a movement. Therefore it cannot be below one. Usually 1.1 is a good threshold. 
+  If the previous ration is below the threshold, the cell will have a random angle. Please refer to the manual 
+  for more information."))
   bind(bhelp[13], "command", path -> Messagebox(title="Help", message=""))
   bind(bhelp[14], "command", path -> Messagebox(title="Help", message=""))
   bind(bhelp[15], "command", path -> Messagebox(title="Help", message=""))
   bind(bhelp[16], "command", path -> Messagebox(title="Help", message=""))
 
-
-  
 end
 
 # Function to get values and destroy window upon clicking OK
@@ -112,6 +125,7 @@ end
 # Function to collect values.
 function check_cat_entries(v8::Matrix{Float64},v9::Matrix{Any},cat_entries::Matrix{Tk.Tk_Entry},
                            colour_entries::Vector{Tk.Tk_Combobox}, cat_entries_bool::Matrix{Tk.Tk_Checkbutton})
+  
   for i in 1:4
     # Check that population ratios are positive
     if float(get_value(cat_entries[i,1])) < 0.0
@@ -124,16 +138,11 @@ function check_cat_entries(v8::Matrix{Float64},v9::Matrix{Any},cat_entries::Matr
     end
   end
 
-  # make a dictionary for colors
-  colour_to_co = Dict()
-  colors = ["Red","Blue","Magenta","Green","Yellow"]
-  cos = ["ro","bo","mo","go","yo"]
-  for i in 1:length(colors)
-    color_to_co[colors[i]] = cos[i]
-  end
-  
+  # using matrix instead of a dictionary here because Dicts behave funny in julia 3.6
+  colour_mat = String["ro" "Red"; "bo" "Blue"; "mo" "Magenta"; "go" "Green"; "yo" "Yellow"]
   for i in 1:4
-    v9[i,1] = colour_to_co[get_value(colour_entries[i])]
+    abbrev = colour_mat[1:end,1][colour_mat[1:end,2].==get_value(colour_entries[i])][1]
+    v9[i,1] = abbrev
     v9[i,2] = get_value(cat_entries_bool[i,1])
     v9[i,3] = get_value(cat_entries_bool[i,2])
     v9[i,4] = get_value(cat_entries_bool[i,3])
