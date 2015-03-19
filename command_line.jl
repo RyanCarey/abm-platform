@@ -1,27 +1,27 @@
 include("import_no_gui.jl")
-function run_simulation(nb_iteration::Int64)
+function run_simulation(nb_iteration::Int64, load = "")
 
-  #The user can manually change the parameters below
+  # The user can manually change the parameters below
   ################################################################################################################################
-  #Parameters from the first window:
+  # Parameters from the main menu:
   number_of_cells = 20
   steps = 3000
   environment_width = 30
   environment_height = 30
-  bouncing_energy_loss_coefficient = 0.9 #(0-1)
-  type_of_diffusion = "Integrative" #"Integrative" or "Normal"
+  bouncing_energy_loss_coefficient = 0.9 # (0-1)
+  type_of_diffusion = "Integrative" # "Integrative" or "Normal"
   pickle_output = true
   border_settings = ["Reflecting", "Removing", "Removing", "Removing"]   # W, E, S, N borders
                                                                          # can be: "Reflecting", "Absorbing" or "Removing"
 
-  #Parameters from the diffusion window:
+  # Parameters from the diffusion window:
   number_of_ligand_receptors = 8
   number_of_sources = 1
-  type_of_source = "Line" #"Line" or "Point"
+  type_of_source = "Line" # "Line" or "Point"
 
-  #Choice of source parameters (coefficients and locations)
+  # Choice of source parameters (coefficients and locations)
 
-  #Array initialization: each row (of the table made by the following parameters) corresponds to a particular source
+  # Array initialization: each row (of the table made by the following parameters) corresponds to a particular source
   x_ordinate_sources = Array(Float64, number_of_sources)
   y_ordinate_sources = Array(Float64, number_of_sources)
   normal_gradient_coefficient = Array(Float64, number_of_sources)
@@ -30,24 +30,26 @@ function run_simulation(nb_iteration::Int64)
   integrative_initial_concentration_coefficient = Array(Float64, number_of_sources)
   intgerative_upper_time_limit = Array(Float64, number_of_sources)
 
-  #the number of sources and the type of diffusion.
-  #First case : type_of_source="Line"
-  if type_of_diffusion == "Integrative"
-    for i in 1 : number_of_sources
-      x_ordinate_sources[i] = 0
-      y_ordinate_sources[i] = 0
-      integrative_gradient_coefficient[i] = 100
-      integrative_initial_concentration_coefficient[i] = 10
-      intgerative_upper_time_limit[i] = 1000
-    end
-  elseif type_of_diffusion == "Normal"
-    for i in 1 : number_of_sources
-      x_ordinate_sources[i] = 0
-      y_ordinate_sources[i] = 0
-      normal_gradient_coefficient[i] = 1
-      normal_initial_concentration_coefficient[i] = 100
-    end
-  end
+  # The number of sources and the type of diffusion.
+  # First case : type_of_source = "Line"
+  # If sustained ligand production is desired, enter the desired characteristics for each source here.
+  # For more than one source, copy and paste the following 5 lines and replace [1] with [2] etc.
+    
+      x_ordinate_sources[1] = 0
+      y_ordinate_sources[1] = 0
+      integrative_gradient_coefficient[1] = 100
+      integrative_initial_concentration_coefficient[1] = 10
+      intgerative_upper_time_limit[1] = 1000
+    
+  # If instantaneous ligand deposit (dirac) is desired, comment out the above lines and uncomment the following 4.
+  # For more than one source, copy and paste the following 4 lines and replace [1] with [2] etc.
+    
+  #    x_ordinate_sources[1] = 0
+  #    y_ordinate_sources[1] = 0
+  #    normal_gradient_coefficient[1] = 1
+  #    normal_initial_concentration_coefficient[1] = 100
+    
+  
 
   # Choice of the cell characteristics
 
@@ -74,18 +76,97 @@ function run_simulation(nb_iteration::Int64)
   # 2st column: Are this type of cell located at the left at the beginning?
   # 3st column: Are this type of cell stem cells? (each row produces cells of the line below so the last line *must* not be set to false)
   # 4st column: Does this type of cell slow down when it reaches a high concentration of ligand?
-    v9 = ["ro"    true    true       false;
+    v9 = ["ro"    true     true     false;
           "bo"    false    false    false;
           "mo"    false    false    false;
           "go"    false    false    false]
     
+
+    if load == "migrate_non_random"
+      number_of_cells = 50
+      steps = 3000
+      environment_width = 30
+      environment_height = 30
+      bouncing_energy_loss_coefficient = 0.9 # (0-1)
+      type_of_diffusion = "Integrative" # "Integrative" or "Normal"
+      pickle_output = true
+      border_settings = ["Removing", "Removing", "Removing", "Removing"]
+      number_of_ligand_receptors = 8
+      number_of_sources = 1
+      type_of_source = "Line" # "Line" or "Point"
+      x_ordinate_sources[1] = 15
+      y_ordinate_sources[1] = 0
+      integrative_gradient_coefficient[1] = 100
+      integrative_initial_concentration_coefficient[1] = 1
+      intgerative_upper_time_limit[1] = 3000
+      v8 = Float64[1.0   0.00   2.0   1.0   0.5   1.0   0.0   .0000   .0   .0   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+      v9 = ["ro"    false    false    false;
+            "bo"    false    false    false;
+            "mo"    false    false    false;
+            "go"    false    false    false]
+    end
+    if load == "migrate_random"
+      number_of_cells = 50
+      steps = 3000
+      environment_width = 30
+      environment_height = 30
+      bouncing_energy_loss_coefficient = 0.9 # (0-1)
+      type_of_diffusion = "Integrative" # "Integrative" or "Normal"
+      pickle_output = true
+      border_settings = ["Removing", "Removing", "Removing", "Removing"]
+      number_of_ligand_receptors = 8
+      number_of_sources = 1
+      type_of_source = "Line" # "Line" or "Point"
+      x_ordinate_sources[1] = 15
+      y_ordinate_sources[1] = 0
+      integrative_gradient_coefficient[1] = 100
+      integrative_initial_concentration_coefficient[1] = 1
+      intgerative_upper_time_limit[1] = 3000
+      v8 = Float64[1.0   0.00   2.0   1.0   0.5   1.0   0.0   .0000   .5   1.0  .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+      v9 = ["ro"    false    false    true;
+            "bo"    false    false    false;
+            "mo"    false    false    false;
+            "go"    false    false    false]
+    end
+    if load == "stem"
+      number_of_cells = 22
+      steps = 3000
+      environment_width = 30
+      environment_height = 30
+      bouncing_energy_loss_coefficient = 0.9 # (0-1)
+      type_of_diffusion = "Integrative" # "Integrative" or "Normal"
+      pickle_output = true
+      border_settings = ["Reflecting", "Removing", "Removing", "Removing"]
+      number_of_ligand_receptors = 8
+      number_of_sources = 1
+      type_of_source = "Line" # "Line" or "Point"
+      x_ordinate_sources[1] = 0
+      y_ordinate_sources[1] = 0
+      integrative_gradient_coefficient[1] = 100
+      integrative_initial_concentration_coefficient[1] = 1
+      intgerative_upper_time_limit[1] = 3000
+      v8 = Float64[1.0   0.10   2.0   1.0   0.5   1.0    1    .0000   .25  .25  .1   1.00;
+                   0.0   0.25   2.0   1.0   0.5  -1.0   0.0   .0000   .5   1.0  .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+      v9 = ["ro"    true     true     false;
+            "bo"    false    false    false;
+            "mo"    false    false    false;
+            "go"    false    false    false]
+    end
   #####################################################################################################################
   # Don't change below unless you know what you're doing
 
   # First window parameter
   global n_receptors = 8
   global nb_source = number_of_sources  
-  global type_source =type_of_source
+  global type_source = type_of_source
   global type_diffusion = type_of_diffusion
   # Source type
   global source_abscisse_ligand = Array(Float64, nb_source)
