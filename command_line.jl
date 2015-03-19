@@ -80,6 +80,8 @@ function run_simulation(nb_iteration::Int64, load = "")
           "mo"    false    false    false;
           "go"    false    false    false]
     
+    # Optional Presets
+    # To create your own, copy and paste everything within the if statement below, and edit.
     if load == "stem_growth_rates"
       number_of_cells = 20
       steps = 3000
