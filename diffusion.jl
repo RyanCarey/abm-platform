@@ -50,7 +50,7 @@ function conc_multisource_1D(abscisse_ligand::Float64,time::Float64, diffusion_c
     elseif type_diffusion=="Normal"
       D = diffusion_coefficient[source_index]
       contribution=diffusion_maximum[source_index]/sqrt(D*time*4*pi) * 
-          exp(-(source_abscisse_ligand[source_index]-abscisse_ligand)^2/sqrt(D*time*4))
+          exp(-(source_abscisse_ligand[source_index]-abscisse_ligand)^2/D*time*4)
     end
 		res += contribution
 	end

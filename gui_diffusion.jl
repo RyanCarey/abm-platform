@@ -147,10 +147,14 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   
   #Display
   for x in 0:int(sqrt(v[3]^2+v[4]^2))
-    global distance_source_squared = int(x)
+    distance_source_squared = float(int(x))
     if(diff_type=="Integrative")
       tau0 = int(get_value(entries2[4]))
-      (result[x+1],tmp)=quadgk(integrand_entry,0,min(timediff,tau0))
+      A=float(get_value(entries2[2]))
+      timediff = float(int(get_value(sc)))
+      D=float(get_value(entries2[3]))
+      (result[x+1],tmp)=quadgk(tau->integrand(tau, timediff, distance_source_squared, D),0,min(timediff,tau0))
+      result[x+1] *= A/sqrt(4*D*timediff*pi)
     elseif(diff_type=="Normal")
       amplitude=float(get_value(entries2[2]))
       D=float(get_value(entries2[3]))
@@ -168,8 +172,6 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   end
 end
 
-
-##########################################################################################################
 function integrand_entry(tau::Float64)
 #this is the function we need to integrate when we are in the integrative case
   timediff = int(get_value(sc))
@@ -178,6 +180,7 @@ function integrand_entry(tau::Float64)
   result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/sqrt(4*D*timediff*pi)
   return result
 end
+
 ##########################################################################################################
 function integrand_max(tau::Float64)
 #we use this function to calculate the maximum value in order ot to keep the same length axis
