@@ -40,7 +40,7 @@ function run_simulation(nb_iteration::Int64, load = "")
       y_ordinate_sources[1] = 0
       integrative_gradient_coefficient[1] = 100
       integrative_initial_concentration_coefficient[1] = 9
-      intgerative_upper_time_limit[1] = 1500
+      intgerative_upper_time_limit[1] = 3000
     
   # If instantaneous ligand deposit (Dirac) is desired, comment out the above lines and uncomment the following 4.
   # For more than one source, copy and paste the following 4 lines and replace [1] with [2] etc.
@@ -61,13 +61,13 @@ function run_simulation(nb_iteration::Int64, load = "")
   # 6: The cell's response to ligand. If 1, the ligand will attract. If -1, the ligand will repel.
   # 7: Minimum level of ligand that can be detected by cells of this type. (For movement and stem cell behaviour)
   # 8: Death rate for this kind of cell
-  # 9: Persistence parameter for this kind of cell
-  # 10: Randomness parameter in the choice of the angle
+  # 9: The proportion of the time that the cell moves in the same direction as previously, if it is not moving randomly
+  # 10: The proportion of the time that the cell moves in a random direction
   # 11: Speed threshold that the cell needs to exceed to trigger a bouncing with another cell
   # 12: Minimum ratio between max and mean concentration that a cell can detect (for movement)
   #               1      2     3     4     5     6     7      8      9   10   11    12
-    v8 = Float64[1.0   0.10   2.0   0.5   0.5   1.0    1    .0001   .50  .25  .1   1.00;
-                 0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .5   .5   .1   1.00;
+    v8 = Float64[1.0   0.05   2.0   0.5   0.5   1.0    1    .0001   .50  .25  .1   1.00;
+                 0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .0   1.0   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
                  0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
 
@@ -229,8 +229,8 @@ function run_simulation(nb_iteration::Int64, load = "")
     t = strftime(time())[5:27] # Store date and time as string
     filename = "out_$t.pickle"
     filenames = [filenames;filename]
-    environment_height = Float64(environment_height)
-    environment_width = Float64(environment_width)
+    environment_height = convert(FloatingPoint,environment_height)
+    environment_width = convert(FloatingPoint,environment_width)
     alive_cells = initial_placement(number_of_cells, categories, environment_width, environment_height)
     dead_cells = Cell[]
     simulator(alive_cells, dead_cells, categories, steps, pickle_output, filename, 

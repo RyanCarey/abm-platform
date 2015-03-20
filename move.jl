@@ -20,6 +20,7 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
   concentrations = tentative_move!(alive_cells[m], diffusion_coefficients, 
                   A_coefficients, categories, x_size, y_size, time)
 
+  println("mean conc: ",mean(concentrations))
 	overlap=false
 	#This is the list where we are going to test for evidence for overlap (ie the move is not correct)
 	global list_overlap=[m]

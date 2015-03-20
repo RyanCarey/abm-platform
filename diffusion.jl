@@ -44,8 +44,9 @@ function conc_multisource_1D(abscisse_ligand::Float64,time::Float64, diffusion_c
       D = integration_diffusion_coefficient[source_index]
       A = A_coefficients[source_index]
       distance_source_squared = (source_abscisse_ligand[source_index] - abscisse_ligand)^2
-      (contribution,tmp)=quadgk(tau -> integrand(tau, time, distance_source_squared, source_index, D, A),
+      (contribution,tmp)=quadgk(tau -> integrand(tau, time, distance_source_squared, D),
                      0,min(time,tau0[source_index]))
+      contribution *= A / sqrt(4*D*time*pi)
     elseif type_diffusion=="Normal"
       D = diffusion_coefficient[source_index]
       contribution=diffusion_maximum[source_index]/sqrt(D*time*4*pi) * 
@@ -57,12 +58,9 @@ function conc_multisource_1D(abscisse_ligand::Float64,time::Float64, diffusion_c
 end
 
 ##########################################################################################################
-function integrand(tau::Float64, time::Float64, distance_source_squared::Float64, source_index::Int,D::Float64,A::Float64)
-   
-#function to integrate when running the diffusion
-#As we are using quadgk, the function can have only one parameter as an argument, 
-#this is why we have put all the diffusion coefficient as global
-	result = (A*exp(-distance_source_squared/(4*D*(time-tau)))/sqrt((4*D*time*pi)))
+function integrand(tau::Float64, time::Float64, distance_source_squared::Float64, D::Float64)
+  #function to integrate when running the diffusion
+  result = exp(-distance_source_squared/(4*D*(time-tau)))
 	return result
 end
 
