@@ -85,6 +85,7 @@ function simulator(alive_cells::Vector{Cell},
                    momentum_coefficient::Float64,
                    diffusion_coefficients::Vector{Float64},
                    A_coefficients::Vector{Float64})
+                   pickle_interval::Int)
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)
   end
@@ -92,7 +93,7 @@ function simulator(alive_cells::Vector{Cell},
     iteration(alive_cells, dead_cells, categories,
              x_size, y_size, border_settings, momentum_coefficient, i,
              diffusion_coefficients, A_coefficients)
-    if i % 500 == 0 || i==steps  # display every hundredth step, and the last step
+    if i % pickle_interval == 0 || i==steps  # display every hundredth step, and the last step
       println("$i Iteration(s) Completed")
       if pickle_output
         pickle_out(filename, steps, alive_cells, dead_cells)

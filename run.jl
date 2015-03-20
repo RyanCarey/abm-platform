@@ -1,6 +1,5 @@
-
-include("import_no_gui.jl")
-function run_simulation(nb_iteration::Int64, load = "")
+include("import_run.jl")
+function run(nb_iteration::Int64, load = "")
 
   # The user can manually change the parameters below
   ################################################################################################################################
@@ -12,6 +11,7 @@ function run_simulation(nb_iteration::Int64, load = "")
   bouncing_energy_loss_coefficient = 0.9 # (0-1)
   type_of_diffusion = "Integrative" # "Integrative" or "Normal"
   pickle_output = true
+  pickle_interval = 250      # the interval at which pickle outputs are stored (must be an integer)
   border_settings = ["Reflecting", "Removing", "Removing", "Removing"]   # W, E, S, N borders
                                                                          # can be: "Reflecting", "Absorbing" or "Removing"
 
@@ -42,7 +42,7 @@ function run_simulation(nb_iteration::Int64, load = "")
       integrative_initial_concentration_coefficient[1] = 9
       intgerative_upper_time_limit[1] = 3000
     
-  # If instantaneous ligand deposit (Dirac) is desired, comment out the above lines and uncomment the following 4.
+  # If instantaneous pulse of ligand (Dirac) is desired, comment out the above lines and uncomment the following 4.
   # For more than one source, copy and paste the following 4 lines and replace [1] with [2] etc.
     
   #    x_ordinate_sources[1] = 0
@@ -50,26 +50,26 @@ function run_simulation(nb_iteration::Int64, load = "")
   #    normal_gradient_coefficient[1] = 1
   #    normal_initial_concentration_coefficient[1] = 100
     
-  # Choice of the cell characteristics
+  # Choice of cell type characteristics
 
-  # The user can manually change paramaters in the table below, in each of the following twelve columns:
-  # 1: Percentage of presence of this particular kind of cell at the beginning
-  # 2: Growth rate at each step
-  # 3: How much larger cells get before they divide (compared to starting size)
-  # 4: Average speed for this kind of cell
-  # 5: Average radius for this kind of cell
-  # 6: The cell's response to ligand. If 1, the ligand will attract. If -1, the ligand will repel.
-  # 7: Minimum level of ligand that can be detected by cells of this type. (For movement and stem cell behaviour)
-  # 8: Death rate for this kind of cell
-  # 9: The proportion of the time that the cell moves in the same direction as previously, if it is not moving randomly
-  # 10: The proportion of the time that the cell moves in a random direction
-  # 11: Speed threshold that the cell needs to exceed to trigger a bouncing with another cell
-  # 12: Minimum ratio between max and mean concentration that a cell can detect (for movement)
+  # The user can manually change parameters in the table below. Each row describes one cell type.
+  # 1: The proportion of cells that are initialised to each type
+  # 2: Growth rate
+  # 3: The size at which cells divide
+  # 4: Average speed for the given cell type
+  # 5: Average radius for the given cell type
+  # 6: Response to ligand. If 1, the cell is attracted to ligand. If -1, it is repelled
+  # 7: Minimum detectable level of ligand
+  # 8: Death rate
+  # 9: Persistence. The proportion of the time that the cell moves in the same direction as previously.
+  # 10: Randomness. The proportion of the time that the cell moves in a random direction
+  # 11: Speed threshold that the cell needs to exceed to push another cell
+  # 12: Minimum ratio between max and mean concentration that a cell can detect (for deciding its movement)
   #               1      2     3     4     5     6     7      8      9   10   11    12
-    v8 = Float64[1.0   0.05   2.0   0.5   0.5   1.0    1    .0001   .50  .25  .1   1.00;
-                 0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .0   1.0   .1   1.00;
-                 0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
-                 0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+    v8 = Float64[1.0   0.05   2.0   0.5   0.5   1.0    1    .0001   .50  .25  .1   1.00;    #Cell type 1
+                 0.0   0.05   2.0   1.0   1.0  -1.0   0.0   .0001   .0   1.0  .1   1.00;    #Cell type 2
+                 0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;    #Cell type 3
+                 0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]    #Cell type 4
 
   # 1st column: Color of this cell ("ro" red,"bo" blue,"mo" magenta,"go" green) Not used in command line version due to lack of display.
   # 2st column: Are this type of cell located at the left at the beginning?
@@ -235,7 +235,7 @@ function run_simulation(nb_iteration::Int64, load = "")
     dead_cells = Cell[]
     simulator(alive_cells, dead_cells, categories, steps, pickle_output, filename, 
               environment_width, environment_height, border_settings, bouncing_energy_loss_coefficient,
-              diffusion_coefficients, A_coefficients)
+              diffusion_coefficients, A_coefficients, pickle_interval)
   end
     print("filenames: ",filenames)
 

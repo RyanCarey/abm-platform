@@ -1,5 +1,34 @@
 # Module containing functions pertaining to cell movement.
 
+function tentative_move!(moving_cell::Cell, 
+                         diffusion_coefficients::Vector{Float64}, A_coefficients::Vector{Float64}, 
+                         categories::Vector{Cell_type}, x_size::Float64, y_size::Float64, time::Float64)
+  # moves a cell to a suggested location without considering ballistics. Also returns concentrations.
+  # get the concentration at the receptors
+  concentrations, receptor_angles = get_concentrations(moving_cell, time, diffusion_coefficients, A_coefficients)
+
+  # propose an angle of movement
+  proposed_angle = angle_from_both(moving_cell, categories, categories[moving_cell.cell_type].randomness,
+                                   x_size, y_size, time, concentrations, receptor_angles)
+	moving_cell.angle = mod2pi(proposed_angle)
+
+  # Propose speed
+	moving_cell.speed = -2*log(rand()) * categories[moving_cell.cell_type].avg_speed / 5
+
+	# For sticky cells, high ligand concentration reduces speed
+	detectable_conc = categories[moving_cell.cell_type].conc_threshold
+	if categories[moving_cell.cell_type].sticking && mean(concentrations) > detectable_conc
+		moving_cell.speed /= 10
+	end
+
+	# Move cell m (this can be reversed later)
+	moving_cell.x += moving_cell.speed * cos(moving_cell.angle)
+	moving_cell.y += moving_cell.speed * sin(moving_cell.angle)
+
+  return concentrations
+end
+
+#######################################################################################################
 function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_indices::Vector{Int},index::Int,
                x_size::Float64, y_size::Float64, border_settings::Vector{ASCIIString}, time::Float64,
                g::Float64, diffusion_coefficients::Vector{Float64}, A_coefficients::Vector{Float64})
@@ -40,35 +69,6 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
 	  end
 	end
 	return dying_indices, concentrations
-end
-
-#######################################################################################################
-function tentative_move!(moving_cell::Cell, 
-                         diffusion_coefficients::Vector{Float64}, A_coefficients::Vector{Float64}, 
-                         categories::Vector{Cell_type}, x_size::Float64, y_size::Float64, time::Float64)
-  # moves a cell to a suggested location without considering ballistics. Also returns concentrations.
-  # get the concentration at the receptors
-  concentrations, receptor_angles = get_concentrations(moving_cell, time, diffusion_coefficients, A_coefficients)
-
-  # propose an angle of movement
-  proposed_angle = angle_from_both(moving_cell, categories, categories[moving_cell.cell_type].randomness,
-                                   x_size, y_size, time, concentrations, receptor_angles)
-	moving_cell.angle = mod2pi(proposed_angle)
-
-  # Propose speed
-	moving_cell.speed = -2*log(rand()) * categories[moving_cell.cell_type].avg_speed / 5
-
-	# For sticky cells, high ligand concentration reduces speed
-	detectable_conc = categories[moving_cell.cell_type].conc_threshold
-	if categories[moving_cell.cell_type].sticking && mean(concentrations) > detectable_conc
-		moving_cell.speed /= 10
-	end
-
-	# Move cell m (this can be reversed later)
-	moving_cell.x += moving_cell.speed * cos(moving_cell.angle)
-	moving_cell.y += moving_cell.speed * sin(moving_cell.angle)
-
-  return concentrations
 end
 
 ##########################################################################################################
