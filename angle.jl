@@ -17,7 +17,7 @@ function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Vecto
       concentrations[i] = conc_multisource_1D(receptors[i,1], time, diffusion_coefficient, A_coefficient)
 	  end
 	end
-  println("conc,receptor: ",[(concentrations[i],receptor_angles[i], receptors[i,1], receptors[i,2]) for i in 1:length(concentrations)])
+  #println("conc,receptor: ",[(concentrations[i],receptor_angles[i], receptors[i,1], receptors[i,2]) for i in 1:length(concentrations)])
   return concentrations, receptor_angles
 end
 
@@ -50,11 +50,11 @@ function angle_from_both(cell::Cell, categories::Vector{Cell_type}, randomness::
 		angle = mod2pi(cell.angle)
 	else
     ligand_angle = angle_from_ligand(cell, categories, 1, x_size, y_size, time, concentrations, receptor_angles)
-    println("ligand angle: ", ligand_angle)
+    #println("ligand angle: ", ligand_angle)
     angle = mod2pi(wt_sum_angles(2pi*rand(), ligand_angle, randomness))
 		#angle = mod2pi((1-randomness)* ligand_angle + randomness * rand() * 2pi)
 	end
-  println("angle: ",angle)
+  #println("angle: ",angle)
 	return angle
 end
 

@@ -25,8 +25,9 @@ function tentative_move!(moving_cell::Cell,
 	moving_cell.x += moving_cell.speed * cos(moving_cell.angle)
 	moving_cell.y += moving_cell.speed * sin(moving_cell.angle)
 
-  println("conc,receptor: ",[(concentrations[i],receptor_angles[i]) for i in 1:length(concentrations)])
-  println("angle: ",moving_cell.angle)
+  #println("mean conc: ",mean(concentrations))
+  #println("conc,receptor: ",[(concentrations[i],receptor_angles[i]) for i in 1:length(concentrations)])
+  #println("angle: ",moving_cell.angle)
 
   return concentrations
 end

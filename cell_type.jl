@@ -12,8 +12,8 @@ end
 # Properties of each individual cell.
 type Cell
 	name::String
-  	x::Real
-  	y::Real
+ 	x::Real
+ 	y::Real
 	r::Real
 	angle::Real
 	speed::Real

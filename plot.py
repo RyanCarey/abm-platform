@@ -76,7 +76,7 @@ def combine(data):
   data = vstack((i for i in data)).astype(float)
   return data
 
-def histogram(stems, progs):
+def histogram(stems, progs, title):
   #plots histogram of cell locations
 
   bins = linspace(0,30,30)
@@ -87,11 +87,11 @@ def histogram(stems, progs):
   plt.legend(loc='upper right')
 
   plt.xlabel('X-ordinate')
-  plt.ylabel('Probability')
-  plt.title('Location after 5000 turns, from 15 iterations')
+  plt.ylabel('Cell count')
+  plt.title(title)
 
 
-  plt.axis([0, 30, 0, 150])
+  plt.axis([0, 30, 0, 60])
   plt.grid(True)
   plt.show()
 
@@ -119,16 +119,14 @@ def barchart(data):
   plt.show()
 
 def linegraph(stems,progs, title):
-  xaxis = arange(0,3500,500)
+  xaxis = arange(0,5250,250)
   fig = plt.figure()
   ax = fig.add_subplot(111)
-  ax.plot(xaxis,stems,linewidth=2.0)
-  ax.plot(xaxis,progs,linewidth=2)
+  plt.plot(xaxis,progs,linewidth=2)
+  plt.plot(xaxis,stems,linewidth=2.0)
   ax.set_title(title)
   ax.set_xlabel('Iterations')
   ax.set_ylabel('Population Size') 
-  plt.legend(loc='upper right')
+  plt.legend(["Stem cells","Progenitor cells"],loc='upper left')
   plt.show()
-
-
 

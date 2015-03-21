@@ -1,6 +1,7 @@
 println("Loading...")
 
 using PyCall
+using Tk
 @pyimport pickle
 include("cell_type.jl")
 include("birth_and_death.jl")

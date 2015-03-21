@@ -43,7 +43,7 @@ function cell_divide(cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,
     
     	attempt += 1
 		if attempt > 100
-			println("Tried 100 times to place new cell, giving up!")
+			#println("Tried 100 times to place new cell, giving up!")
 			cells[i].r = temp_r
 			give_up = true
 			break
@@ -123,12 +123,18 @@ end
 function cell_growth!(alive_cells::Vector{Cell}, categories::Vector{Cell_type}, i::Int,x_size::Real, y_size::Real)
   # Increases cell area by a random percentage of the growth rate for that type.
   # Will only grow if it will not overlap another cell, nor violate a boundary
+    #println("size: ",alive_cells[i].r)
     cell = alive_cells[i]    
     area = pi * cell.r ^ 2
     area *= (1 + (categories[cell.cell_type].growth_rate * rand()))
     p_new_r = sqrt(area / pi)
 
-    if (space_to_grow(alive_cells, i, p_new_r)) && (p_new_r < cell.x < x_size - p_new_r) && (p_new_r < cell.y < y_size - p_new_r)
+    criterion1 = space_to_grow(alive_cells, i, p_new_r)
+    #println(p_new_r,", ", cell.x,", ", x_size - p_new_r)
+    criterion2 = p_new_r < cell.x < x_size - p_new_r
+    criterion3 = p_new_r < cell.y < y_size - p_new_r
+    #println(criterion1, criterion2, criterion3)
+    if criterion1 && criterion2 && criterion3 
     	# Cell has space to grow
     	#println("Growing Cell")
     	cell.r = sqrt(area / pi)
@@ -137,8 +143,8 @@ function cell_growth!(alive_cells::Vector{Cell}, categories::Vector{Cell_type}, 
 	return alive_cells
 end
 
-# Function to check whether a growing cell is able to grow without overlapping other cells in the simulation.
 function space_to_grow(cells::Vector{Cell}, index::Int, radius::Real)
+  # Checks whether a growing cell is able to grow without overlapping other cells in the simulation.
   n = length(cells)
     for i in 1:n
       if (cells[i].x - cells[index].x) ^ 2 + (cells[i].y - cells[index].y) ^ 2 < (cells[i].r + radius) ^ 2 && i != index
