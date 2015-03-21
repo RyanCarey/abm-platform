@@ -133,7 +133,7 @@ function init_window()
    #set defaults    
   v = Float64[1, 100, 30, 30,0.9]
   v2=Float64[8, 8, 1, 10, 1,8,1]
-  global rb_value=["Line"]
+  global rb_value=["Point"]
   global v3p=Array(Float64,2*int(v2[5]))
   global v3l=Array(Float64,int(v2[5]))
   global v4=Array(Float64,3*int(v2[5]))

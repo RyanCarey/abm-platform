@@ -10,15 +10,19 @@ function conc_multisource_2D(x_ord::Float64,y_ord::Float64,time::Float64,
 #Here we need both the x and the y ordinate of the ligand receptor
 	res=0
 	for source_index in 1:nb_source
+    println("res before: ", res)
     if type_diffusion=="Integrative"
+      D = integration_diffusion_coefficient[source_index]
+      distance_source_squared = (abs(source_x_ord[source_index]-x_ord)+abs(source_y_ord[source_index]-y_ord))^2
+      max = diffusion_maximum[source_index]
+      (contribution,tmp)=quadgk(tau -> integrand(tau, time, distance_source_squared, D),
+                     0,min(time,tau0[source_index]))
+    elseif type_diffusion=="Normal"
       D = diffusion_coefficient[source_index]
       max = diffusion_maximum[source_index]
-    elseif type_diffusion=="Normal"
-      D = integration_diffusion_coefficient[source_index]
-      max = diffusion_maximum[source_index]
+      contribution = conc_onesource_2D(x_ord, y_ord, time, source_index, D, max)
     end
-    println("res before: ", res)
-		res += conc_onesource_2D(x_ord, y_ord, time, source_index, D, max)
+    res += contribution
     println("res after: ", res)
 	end
 	return res
