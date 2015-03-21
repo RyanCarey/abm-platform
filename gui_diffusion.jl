@@ -100,7 +100,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   l3  = Label(f2, "")
   grid(l3,11+plusintegrative,1:3)
   #Information and help button to undertsand how to change the diffusion plot over time.
-  grid(Label(f2, "Move the cursor to plot the diffusion over time: "), 12+plusintegrative, 1:2,sticky="e")
+  grid(Label(f2, "Move the slider to plot the diffusion over time: "), 12+plusintegrative, 1:2,sticky="e")
   grid(bhelp[6],12+plusintegrative,3,sticky="e")
   bind(bhelp[6], "command", path -> Messagebox(title="Help", message="Move the slider to change the diffusion time. This will change the plot."))
   #Display of the canvas
@@ -172,6 +172,7 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   end
 end
 
+#=
 function integrand_entry(tau::Float64)
 #this is the function we need to integrate when we are in the integrative case
   timediff = int(get_value(sc))
@@ -180,6 +181,7 @@ function integrand_entry(tau::Float64)
   result = A*exp(-distance_source_squared/(4*D*(timediff-tau)))/sqrt(4*D*timediff*pi)
   return result
 end
+=#
 
 ##########################################################################################################
 function integrand_max(tau::Float64)

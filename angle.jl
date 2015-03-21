@@ -10,12 +10,16 @@ function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Vecto
 	  receptors[i,2] = cell.y+sin(angle)*cell.r
 	  if type_source=="Point" 
       concentrations[i] = conc_multisource_2D(receptors[i,1],receptors[i,2], time, diffusion_coefficient, A_coefficient)
+	  elseif type_source=="Triangle"
+      concentrations[i] = receptors[i,1]
 	  elseif type_source=="Line"
       concentrations[i] = conc_multisource_1D(receptors[i,1], time, diffusion_coefficient, A_coefficient)
 	  end
 	end
+  println("conc,receptor: ",[(concentrations[i],receptor_angles[i], receptors[i,1], receptors[i,2]) for i in 1:length(concentrations)])
   return concentrations, receptor_angles
 end
+
 
 function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_size::Real, 
                            y_size::Real, time::Real, concentrations::Vector{Float64}, receptor_angles::Vector{Float64})
@@ -28,23 +32,59 @@ function angle_from_ligand(cell::Cell, categories::Vector{Cell_type}, k::Int, x_
 	if maximum(concentrations) < conc_threshold || ratio < ratio_threshold
 	  chosen_angle = randn() * pi
 	else
-	  chosen_angle = receptor_angles[indmax(concentrations), 1]
+    indices = 
+	  chosen_angle = receptor_angles[any_indmax(concentrations), 1]
 	end
 	# Multiple the chosen angle by the cell type defined concentration response.
   	ligand_angle = chosen_angle + pi * (categories[cell.cell_type].conc_response < 0)
 	return ligand_angle
 end
 
-##########################################################################################################
+
 function angle_from_both(cell::Cell, categories::Vector{Cell_type}, randomness::Real, x_size::Real, y_size::Real, 
                          time::Real, concentrations::Vector{Float64}, receptor_angles::Vector{Float64})
   # proposes a direction for the cell to travel, taking the ligand, previous motion and random chance into account
+  # we should put this in as weighted rather than sampled
 	if rand() < categories[cell.cell_type].persistence && time > 1
 		angle = mod2pi(cell.angle)
 	else
     ligand_angle = angle_from_ligand(cell, categories, 1, x_size, y_size, time, concentrations, receptor_angles)
-		angle = mod2pi((1-randomness)* ligand_angle + randomness * rand() * 2pi)
+    println("ligand angle: ", ligand_angle)
+    angle = mod2pi(wt_sum_angles(2pi*rand(), ligand_angle, randomness))
+		#angle = mod2pi((1-randomness)* ligand_angle + randomness * rand() * 2pi)
 	end
+  println("angle: ",angle)
 	return angle
 end
+
+
+function wt_sum_angles(alpha::Float64,beta::Float64, w::Float64)
+  vec_sum = wt_sum_vecs(angle_to_vec(alpha),angle_to_vec(beta),w)
+  return vec_to_angle(vec_sum)
+end
+
+function angle_to_vec(theta::Float64)
+  return [cos(theta);sin(theta)]
+end
+
+function vec_to_angle(A::Vector{Float64})
+  if A[1] > 0
+    return atan(A[2]/A[1])
+  else
+    return pi + atan(A[2]/A[1])
+  end
+end
+
+function wt_sum_vecs(A::Vector{Float64},B::Vector{Float64},w::Float64)
+  return w.*A .+ (1-w).*B
+end
+
+
+function any_indmax(list)
+  # gets the index of a maximal element, selecting randomly between all maxima
+  maximal_indices = [1:length(list)][list.==maximum(list)]
+  random_indmax = maximal_indices[rand(1:length(maximal_indices))]
+  return random_indmax
+end
+
 

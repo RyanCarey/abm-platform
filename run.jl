@@ -191,15 +191,15 @@ function run(nb_iteration::Int64, load = "")
   # Don't change below unless you know what you're doing
 
   # First window parameter
-  global n_receptors = 8
+  global n_receptors = number_of_ligand_receptors
   global nb_source = number_of_sources  
   global type_source = type_of_source
   global type_diffusion = type_of_diffusion
   # Source type
-  global source_abscisse_ligand = Array(Float64, nb_source)
-  global source_abscisse_ligand = x_ordinate_sources
-  global source_ordinate_ligand = Array(Float64, nb_source)
-  global source_ordinate_ligand = y_ordinate_sources
+  global source_x_ord = Array(Float64, nb_source)
+  global source_x_ord = x_ordinate_sources
+  global source_y_ord = Array(Float64, nb_source)
+  global source_y_ord = y_ordinate_sources
   # Integrative
   global integration_diffusion_coefficient = Array(Float64, nb_source)
   global integration_diffusion_coefficient = integrative_gradient_coefficient

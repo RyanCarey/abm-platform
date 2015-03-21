@@ -25,6 +25,9 @@ function tentative_move!(moving_cell::Cell,
 	moving_cell.x += moving_cell.speed * cos(moving_cell.angle)
 	moving_cell.y += moving_cell.speed * sin(moving_cell.angle)
 
+  println("conc,receptor: ",[(concentrations[i],receptor_angles[i]) for i in 1:length(concentrations)])
+  println("angle: ",moving_cell.angle)
+
   return concentrations
 end
 
@@ -49,7 +52,6 @@ function move!(alive_cells::Vector{Cell},categories::Vector{Cell_type},dying_ind
   concentrations = tentative_move!(alive_cells[m], diffusion_coefficients, 
                   A_coefficients, categories, x_size, y_size, time)
 
-  println("mean conc: ",mean(concentrations))
 	overlap=false
 	#This is the list where we are going to test for evidence for overlap (ie the move is not correct)
 	global list_overlap=[m]

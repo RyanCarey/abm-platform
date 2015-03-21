@@ -19,7 +19,7 @@ function simulator(canvas::Tk.Canvas,
     iteration(alive_cells, dead_cells, categories,
              x_size, y_size, border_settings, momentum_coefficient, i,
              diffusion_coefficients, A_coefficients)
-    if i % 50 == 0 || i==steps  # display every hundredth step, and the last step
+    if i % 1 == 0 || i==steps  # display every hundredth step, and the last step
       println("$i Iteration(s) Completed")
       if display_output
         show_sim(canvas, alive_cells, categories, x_size, y_size)
@@ -28,7 +28,7 @@ function simulator(canvas::Tk.Canvas,
         pickle_out(filename, steps, alive_cells, dead_cells)
       end
     end
-  #pause(0) #this can be used to input a break of some milliseconds between each timestep
+  pause(0.001) #this can be used to input a break of some milliseconds between each timestep
   end
   println("Simulation Finished")
   #println(integration_diffusion_coefficients, A_coefficients, tau0)
@@ -84,7 +84,7 @@ function simulator(alive_cells::Vector{Cell},
                    border_settings::Vector{ASCIIString},
                    momentum_coefficient::Float64,
                    diffusion_coefficients::Vector{Float64},
-                   A_coefficients::Vector{Float64})
+                   A_coefficients::Vector{Float64},
                    pickle_interval::Int)
   if pickle_output
     pickle_out(filename, steps, alive_cells, dead_cells)

@@ -24,8 +24,8 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   border_settings = [lowercase(v10[1]),lowercase(v10[2]),lowercase(v10[3]),lowercase(v10[4])]
   global const n_receptors= int(v2[2])
   global const nb_source= int(v2[7])
-  global source_abscisse_ligand =Array(Float64,nb_source)
-  global source_ordinate_ligand =Array(Float64,nb_source)
+  global source_x_ord =Array(Float64,nb_source)
+  global source_y_ord =Array(Float64,nb_source)
   global integration_diffusion_coefficient = Array(Float64,nb_source)
   A_coefficients = Array(Float64,nb_source)
   global tau0 = Array(Float64,nb_source)
@@ -36,8 +36,8 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
 
   if(type_source=="Point")	
     for i in 1:nb_source
-      source_abscisse_ligand[i]=v3p[2*i-1]
-      source_ordinate_ligand[i]=v3p[2*i]
+      source_x_ord[i]=v3p[2*i-1]
+      source_y_ord[i]=v3p[2*i]
       if(type_diffusion == "Integrative")
         integration_diffusion_coefficient[i] =v4[3*i-2]
         A_coefficients[i] = v4[3*i-1]
@@ -49,7 +49,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
     end
   else
     for i in 1:nb_source
-      source_abscisse_ligand[i]=v3l[i]
+      source_x_ord[i]=v3l[i]
       if(type_diffusion == "Integrative")
         integration_diffusion_coefficient[i] =v4[3*i-2]
         A_coefficients[i] = v4[3*i-1]
@@ -77,8 +77,8 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   t = strftime(time())[5:27] #store date and time as string
   filename = "out_$t.pickle"
   if pickle_output
-    pickle_start(filename, t, n_cell, steps, x_size, y_size, nb_ligands, nb_source, source_abscisse_ligand,
-                 source_ordinate_ligand, v3p, v4, v8, v9, alive_cells)
+    pickle_start(filename, t, n_cell, steps, x_size, y_size, nb_ligands, nb_source, source_x_ord,
+                 source_y_ord, v3p, v4, v8, v9, alive_cells)
   end
 
   simulator(canvas, alive_cells, dead_cells, categories, steps, display_output, pickle_output, 
@@ -112,11 +112,11 @@ end
 ##########################################################################################################
 function pause(pause_time::Real,message::String = "anykey to advance timestep")
   #pauses for pause_time milliseconds
-  if time==0
+  if pause_time==0
     println(message)
     junk = readline(STDIN)
   else
-    sleep(time)
+    sleep(pause_time)
   end
 end
 
@@ -130,11 +130,9 @@ function init_window()
   grid_columnconfigure(frame, 100, weight=1)
   grid_rowconfigure(frame, 1, weight=1)
 
-
-
-  # set defaults    
-  v = Float64[10, 300, 30, 30,0.9]
-  v2=Float64[8, 100, 1, 10, 1,100,1]
+   #set defaults    
+  v = Float64[1, 100, 30, 30,0.9]
+  v2=Float64[8, 8, 1, 10, 1,8,1]
   global rb_value=["Line"]
   global v3p=Array(Float64,2*int(v2[5]))
   global v3l=Array(Float64,int(v2[5]))
@@ -150,10 +148,25 @@ function init_window()
     v5[2*i-1]=100
     v5[2*i]=1
   end
-  v8 = Float64[1.0  0.00  2.0  1.0  1.0  1.0  10   .0000  .5  1  .1  1.00;
-               0.0  0.05  2.0  1.0  1.0 -1.0  1.5  .0001  .5  .5  .1  1.00;
-               0.0  0.05  2.0  1.0  1.0  1.0  1.5  .0001  .5  .5  .1  1.00;
-               0.0  0.05  2.0  1.0  1.0  1.0  1.5  .0001  .5  .5  .1  1.00]
+
+  # The user can manually change parameters in the table below. Each row describes one cell type.
+  # 1: The proportion of cells that are initialised to each type
+  # 2: Growth rate
+  # 3: The size at which cells divide
+  # 4: Average speed for the given cell type
+  # 5: Average radius for the given cell type
+  # 6: Response to ligand. If 1, the cell is attracted to ligand. If -1, it is repelled
+  # 7: Minimum detectable level of ligand
+  # 8: Death rate
+  # 9: Persistence. The proportion of the time that the cell moves in the same direction as previously.
+  # 10: Randomness. The proportion of the time that the cell moves in a random direction
+  # 11: Speed threshold that the cell needs to exceed to push another cell
+  # 12: Minimum ratio between max and mean concentration that a cell can detect (for deciding its movement)
+  #             1       2     3     4     5     6     7      8      9    10   11    12
+  v8 = Float64[1.0    0.00   2.0   1.0  0.5    1.0   00    .0000   .0    .2  .1   1.00;
+               0.0    0.05   2.0   1.0  1.0   -1.0   1.5   .0001   .5    .5  .1   1.00;
+               0.0    0.05   2.0   1.0  1.0    1.0   1.5   .0001   .5    .5  .1   1.00;
+               0.0    0.05   2.0   1.0  1.0    1.0   1.5   .0001   .5    .5  .1   1.00]
 
   v9 = ["ro" false true false;"bo" false false false;"mo" false false false;"go" false false false]
   v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
@@ -247,14 +260,24 @@ function init_window()
   canvas = Canvas(frame, 0, 0)
   grid(canvas, 1:17, 4, sticky="nsew")
 
-  bind(bhs[1], "command", path -> Messagebox(title="Help", message="Input the number of cell you want to use"))
-  bind(bhs[2], "command", path -> Messagebox(title="Help", message="Input the number of steps. The program will make cells move this number of steps."))
-  bind(bhs[3], "command", path -> Messagebox(title="Help", message="This is the width of the environment, you will also choose the size of each cells. Choose it properly to make all the cells fit within the environment."))
-  bind(bhs[4], "command", path -> Messagebox(title="Help", message="This is the heigth of the environment, you will also choose the size of each cells. Choose it properly to make all the cells fit within the environment."))
-  bind(bhs[5], "command", path -> Messagebox(title="Help", message="This coefficient is used to decrease the speed of the cell every time it touches another cell or a wall. Its speed is multiplied by this coefficient."))
-  bind(bhs[6], "command", path -> Messagebox(title="Help", message="The normal diffusion makes sources emit ligand only at time 0 (Dirac) whereas the integrative diffusion one make sources emit ligand during a time you can choose in the location(s) and parameters window. This parameter is called the time upper integrative limit. The normal diffusion is faster than the integrative one because no integration is required, but it is less accurate biologicaly."))
-  bind(bhs[7], "command", path -> Messagebox(title="Help", message="Unclick to remove the display. The simulation will be faster."))
-  bind(bhs[8], "command", path -> Messagebox(title="Help", message="Click to store cells positions at every step within a pickle file."))
+  helps = ["Input the number of cell you want to use";
+           "Input the number of steps. The program will make cells move this number of steps.";
+           "This is the width of the environment, you will also choose the size of each cells. Choose it 
+                    properly to make all the cells fit within the environment";
+           "This is the heigth of the environment, you will also choose the size of each cells. Choose 
+                    it properly to make all the cells fit within the environment";
+           "This coefficient is used to decrease the speed of the cell every time it touches another cell 
+                    or a wall. Its speed is multiplied by this coefficient.";
+           "The normal diffusion makes sources emit ligand only at time 0 (Dirac) whereas the integrative 
+                    diffusion one make sources emit ligand during a time you can choose in the location(s) 
+                    and parameters window. This parameter is called the time upper integrative limit. The 
+                    normal diffusion is faster than the integrative one because no integration is required, 
+                    but it is less biologicaly accurate.";
+           "Unclick to remove the display. The simulation will be faster.";
+           "Click to store cells positions at every step within a pickle file."]
+  for i in 1:8
+    bind(bhs[i], "command", path -> Messagebox(title="Help", message=helps[i]))
+  end
 
   # keeps program open
   if !isinteractive()
@@ -266,11 +289,6 @@ function init_window()
     end
   end
 end
-
-
-
-
-
 
 
 
