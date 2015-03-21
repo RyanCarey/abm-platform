@@ -5,7 +5,7 @@ function tentative_move!(moving_cell::Cell,
                          categories::Vector{Cell_type}, x_size::Float64, y_size::Float64, time::Float64)
   # moves a cell to a suggested location without considering ballistics. Also returns concentrations.
   # get the concentration at the receptors
-  concentrations, receptor_angles = get_concentrations(moving_cell, time, diffusion_coefficients, A_coefficients)
+  concentrations, receptor_angles = get_concentrations(moving_cell, time, diffusion_coefficients, A_coefficients, x_size)
 
   # propose an angle of movement
   proposed_angle = angle_from_both(moving_cell, categories, categories[moving_cell.cell_type].randomness,

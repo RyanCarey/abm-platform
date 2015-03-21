@@ -1,6 +1,5 @@
 println("Loading...")
 
-using Tk
 using PyCall
 @pyimport pickle
 include("cell_type.jl")
@@ -9,7 +8,7 @@ include("move.jl")
 include("angle.jl")
 include("initial_placement.jl")
 include("diffusion.jl")
-include("pickle.jl")
+include("unpickle.jl")
 include("simulator.jl")
 
 println("Loaded")

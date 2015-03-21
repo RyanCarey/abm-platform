@@ -1,4 +1,5 @@
-function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Vector{Float64}, A_coefficient::Vector{Float64})
+function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Vector{Float64}, A_coefficient::Vector{Float64},
+                            x_size::Float64)
 	#Array initialization
   receptors=Array(Float64,int(n_receptors),3) #angle,x and y ordinate of the cell receptors
 	receptor_angles=Array(Float64,int(n_receptors)) #angles of the receptors from the cell centre
@@ -11,7 +12,7 @@ function get_concentrations(cell::Cell, time::Real, diffusion_coefficient::Vecto
 	  if type_source=="Point" 
       concentrations[i] = conc_multisource_2D(receptors[i,1],receptors[i,2], time, diffusion_coefficient, A_coefficient)
 	  elseif type_source=="Triangle"
-      concentrations[i] = receptors[i,1]
+      concentrations[i] = x_size - receptors[i,1]
 	  elseif type_source=="Line"
       concentrations[i] = conc_multisource_1D(receptors[i,1], time, diffusion_coefficient, A_coefficient)
 	  end
