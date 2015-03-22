@@ -1,15 +1,24 @@
-\documentclass[12pt,a4paper]{report}
-\usepackage[ascii]{inputenc}
+\documentclass[11.5pt]{article}
+
+\usepackage[toc,page]{appendix}
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[T1]{fontenc}
 \usepackage{ulem}
 \usepackage{amsmath}
+\usepackage{caption}
+\captionsetup{singlelinecheck=off}
 
-\title{Personal Report for Computing Assignment}
+\title{Group Report for Computing Assignment: An Agent-Based Modelling Platform}
 \author{Ryan Carey, Lewis Kindeleit, Antoine Messager}
 
 \begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
 
 \section{Introduction}
 The Cell Behaviour Modeling Platform (CBMP) is a simulation environment 
@@ -76,12 +85,12 @@ The Julia packages Winston, Tk and PyCall are most easily installed
 using the interactive Julia prompt. The Julia prompt is opened by entering
 into the command line:
 
-{\fontsize{09pt}{09pt} \ttfamily 
+{\fontsize{11pt}{11pt} \ttfamily 
 $>$ julia}
 
 To install the required packages, enter the following into Julia's interactive prompt:
 
-{\fontsize{09pt}{09pt} \ttfamily 
+{\fontsize{11pt}{11pt} \ttfamily 
 $>$ Pkg.add("\,Winston")
 
 $>$ Pkg.add("\,Tk")
@@ -89,12 +98,12 @@ $>$ Pkg.add("\,Tk")
 $>$ Pkg.add("\,PyCall")}
 
 To return to the command linter, enter
-{\fontsize{09pt}{09pt} \ttfamily 
+{\fontsize{11pt}{11pt} \ttfamily 
 $>$ exit()}
 You can install the python package {\itshape Pickle} by typing into the 
 command line:
 
-{\fontsize{09pt}{09pt} \ttfamily 
+{\fontsize{11pt}{11pt} \ttfamily 
 $>$ pip install pickle}
 
 If all of the dependencies are already installed, then all you need to 
@@ -102,7 +111,7 @@ do is download the repository and run CBMP.jl.
 
 
 
-{\bfseries Dependencies}
+\subsection{Dependencies}
 
 The installation depends on:
 
@@ -125,8 +134,8 @@ Once you have installed the dependencies, all you need to do is download
 the repository and run CBMP.jl. If you have git installed, you do this 
 by entering into your command line:
 
-{\fontsize{09pt}{09pt} \ttfamily
-$>$git clone \underline{https://github.com/RyanCarey/abm-platform.git}
+{\fontsize{11pt}{11pt} \ttfamily
+$>$git clone https://github.com/RyanCarey/abm-platform.git
 
 $>$julia CBMP.jl}
 
@@ -161,7 +170,7 @@ detailed instruction on the function of each parameter.
 
 
 
-{\bfseries Main Menu}
+\subsubsection{Main Menu}
 
 The main menu allows the user to alter environment-wide parameters such 
 as starting number of cells and the size of the environment (Figure X). 
@@ -171,12 +180,12 @@ as starting number of cells and the size of the environment (Figure X).
 \begin{figure}[H]
 \centering
 %\includegraphics[width=8.99cm,height=10.42cm]{media/image1.eps}
+\caption{The program's main screen, which contains settings 
+for some of the major features of the model, and has buttons which open 
+detailed settings. The settings are as follows:}
 \end{figure}
 
 
-{\bfseries Figure X: }The program's main screen, which contains settings 
-for some of the major features of the model, and has buttons which open 
-detailed settings. The settings are as follows:
 
 \newcounter{numberedCntG}
 \begin{enumerate}
@@ -209,7 +218,7 @@ turned off for long simulations.
 \end{enumerate}
 
 
-{\bfseries Diffusion}
+\subsubsection{Diffusion}
 
 The diffusion menu (shown in Figure X) has the settings that control how 
 ligands will spread through the cell's environment. The results of 
@@ -219,18 +228,22 @@ interactively using a slider.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=9.08cm]{media/image2.eps}
-\end{figure}
-
-
-{\bfseries Figure X. }The program's diffusion menu, which contains 
+\caption{The program's diffusion menu, which contains 
 settings for controlling the how ligands diffuse through the cell's 
 environment. On the screen's right is a graph that shows how the 
 concentration gradient will change over time, where time is 
 interactively changed using the slider in the lower right. The diffusion 
-menu settings are as follows:
+menu settings are as follows:}
+\end{figure}
+\if false
+\begin{itemize}
+ \item Met with Stumpf, Juliana, Andrew and agreed to do project.
+ \item Set up our computers
+\end{itemize}
+\fi
 
 \newcounter{numberedCntC}
-\begin{enumerate}
+\begin{itemize}
 \item {\bfseries Ligand Receptors:} The number of points on the cell 
 surface where ligand concentration is sampled. These are evenly spaced 
 out along the cell surface.
@@ -261,7 +274,7 @@ For more information see below.
 \item {\bfseries Diffusion Over Time:} Allows visualisation of the 
 diffusion over time as per the coefficients given in 2-4.
 \setcounter{numberedCntC}{\theenumi}
-\end{enumerate}
+\end{itemize}
 
 
 {\bfseries Source Location}
@@ -373,14 +386,10 @@ removing them.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=7.43cm,height=4.02cm]{media/image5.eps}
-\end{figure}
-
-
-{\bfseries Figure X: }The border menu{\bfseries : }Each of the four 
+\caption{The border menu}Each of the four 
 borders can independently be set to perform reflecting or absorbing 
 collisions, or to remove cells.
-
-
+\end{figure}
 
 \subsection{The Interactive Prompt 
 Interface}
@@ -391,15 +400,11 @@ option to visualise simulations is disabled, and the option to save data
 to file is enabled by default. In order to run the CBMP in the command 
 line, the user should simply type in the terminal:
 
-
-
 $>$julia (to enter the REPL)
 
 $>$include("\,run\_sim.jl")
 
 $>$run(Number of Simulations, {\itshape Optional Preset Parameters})
-
-
 
 The command-line argument specifies the number of simulations. Any 
 simulation specific parameter changes can be made in the file 
@@ -414,8 +419,6 @@ and "\,migrate\_non\_random". These presets already have the parameters
 that our simulations ran saved within them. The user can copy this code 
 and substitute parameters to store their own simulations.
 
-
-
 Comments are provided in {\itshape run\_sum.jl} so that users can see 
 what different parameters do. These parameters are laid out similarly to 
 the graphical menus (For instance, the cell type characteristics are 
@@ -424,10 +427,8 @@ shown in run\_sim.jl), and are written as Julia variables.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=11.66cm,height=4.55cm]{media/image6.eps}
+\caption{Figure X: run.jl: choosing cell type parameters}
 \end{figure}
-
-
-{\bfseries Figure X: run.jl: choosing cell type parameters}
 
 \subsection{Accessing Binary Outputs}
 Instead of viewing simulations on the graphical display, they can be 
@@ -437,8 +438,6 @@ using Julia's PyCall). Since it would be highly redundant to store the
 locations of all cells at every timestep, the locations of every cell 
 are by default stored every 250 timesteps. Each pickle file documents 
 the time that the simulation took place and the all parameters used.
-
-
 
 This pickle file can easily be unpacked into an array in Julia or 
 Python. In each language, this is done using an "\,unpickle" function 
@@ -451,10 +450,8 @@ in an array. "\,stack" can be further used to combine the simulations
 together into one time series. All of these are provided for 
 conveniently analysing the output from the CBMP.
 
-
-
 \section{The Model}
-{\bfseries The Modelling Framework}
+\subsection{The Modelling Framework}
 
 The framework of the model can be seen briefly outlined in Figure 1. To 
 begin with, cells are allocated to non-overlapping locations using 
@@ -466,23 +463,15 @@ then iterate over five steps for the amount of user specified time
 steps, shown in Figure 1. These events take place in two-dimensional 
 continuous space. 
 
-
-
-
-
 \begin{figure}[H]
 \centering
 %\includegraphics[width=7.71cm,height=8.93cm]{media/image7.eps}
+\caption{Global overview of the model. The five main stages 
+of the simulation are cell death, environment dynamic, movement, cell 
+growth and mitosis.}
 \end{figure}
 
-
-{\bfseries Figure 1:} Global overview of the model. The five main stages 
-of the simulation are cell death, environment dynamic, movement, cell 
-growth and mitosis.
-
-
-
-\subsubsection{Initialisation}
+\subsection{Initialisation}
 The agents are placed in a rectangular environment, in which space is 
 continuous and time advances in discrete timesteps. The cells are 
 positioned randomly, either on one edge of the environment (as with 
@@ -494,17 +483,13 @@ fit a cell in the given field, but the cells are simply too numerous and
 too large, then the simulation stops placing new cells and carries out 
 the simulation with the amount of cells it had so far placed correctly.
 
-
-
 The cells are modelled as agents with rigid, circular edges of varying 
 radius. Each cell has a type, which determines its behaviours. Cells of 
 the same type grow, move and divide at similar rates with a slight 
 individual randomness. However, they differ in their physical 
 characteristics - their radius, location and direction of travel.
 
-
-
-\subsubsection{Iteration}
+\subsection{Iteration}
 Once the cells are placed, one cell is selected for action each turn. 
 This cell proceeds through the four major cellular functions: death, 
 movement, growth and division. The cellular functions performed by the 
@@ -512,9 +497,7 @@ platform try to encapsulate most of the basic behaviours of cells. There
 is scope within the platform for the way these behaviours are 
 implemented to be changed or removed, or new behaviours added.
 
-
-
-{\bfseries Death}
+\subsubsection{Death}
 
 Cell death is modelled as random, and uniform for a given type of cell. 
 This assumes that cell death is independent of the cell's environment, 
@@ -523,9 +506,7 @@ that cell's vicinity. In reality, apoptosis is mediated by environmental
 factors, and this could be included with the development of a more 
 sophisticated environmental model.
 
-
-
-{\bfseries Movement}
+\subsubsection{Movement}
 
 When a cell moves, it is stochastically assigned a vector that 
 determines its change in position from timestep n to timestep n+1. If 
@@ -535,15 +516,11 @@ tentatively suggests a new movement vector for that cell and any other
 cells that it collides with. The alternative movement vectors are then 
 checked recursively for collisions.
 
-
-
 The magnitude of the initial movement vector is drawn from a Chi-squared 
 distribution with two degrees of freedom. The angle is drawn from a 
 combination of i) a distribution that is proportional to the amount of a 
 ligand present at the cell membrane and ii) a uniform random 
 distribution iii) the current direction of motion of the cell.
-
-
 
 When a movement is proposed for a cell, there are two ways that its 
 movement can be interrupted: by collision with the wall, or by collision 
@@ -555,9 +532,7 @@ vectors are assessed for overlap. These new movements are checked
 recursively until all cells are placed in non-overlapping locations and 
 the movement phase concludes.
 
-
-
-{\bfseries Growth and Division}
+\subsubsection{Growth and Division}
 
 Cells grow according to a user specified growth rate that depends on the 
 cell's area. Because only one cell grows per timestep, the growth rate 
@@ -570,8 +545,6 @@ daughter cells, then the cell will refrain from dividing. When cells
 divide, each of the daughter cells have half of the area of the parent 
 cell. 
 
-
-
 To model stem cells, rules have been specified to determine which 
 daughter cells they will give rise to. For stem cells, if the local 
 ligand concentration is above the user-specified threshold, then 
@@ -579,20 +552,13 @@ division is likely to produce two stem cells. If the concentration is
 below the threshold, the division will result in one or both of the 
 daughter cells becoming progenitor cells instead.
 
-
-
 The CBMP allows generation of ligand as an instantaneous pulse, or 
 continuously over finite time. There can be multiple sources, so long as 
 they are all of the same variety. Modelling how cells are affected by 
 these ligands depends on modelling its diffusion. These environmental 
 models are best understood by beginning with the instantaneous case.
 
-
-
-
-
-\subsubsection{Instantaneous release of 
-ligand}
+\subsubsection{Instantaneous release of ligand}
 The equations governing the diffusion of ligand from an instantaneous 
 source can be derived from the example of a single particle P that can 
 move along an axis, as in Figure 2.
@@ -600,43 +566,29 @@ move along an axis, as in Figure 2.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=9.28cm,height=1.90cm]{media/image8.eps}
-\end{figure}
-
-
-{\bfseries Figure 2: a particle moving stochastically through 
+\caption{A particle moving stochastically through 
 one-dimensional space}
-
-
+\end{figure}
 
 Consider a particle P, that, as in Figure X, has an equal probability of 
-moving left or right. Let the length of each jump be {\itshape a}, and 
-the time elapsed during each jump be {\itshape tau}, and assume that 
+moving left or right. Let the length of each jump be \(a\), and 
+the time elapsed during each jump be \(\tau\), and assume that 
 the particle takes another step immediately as soon as each previous 
-step has concluded. Assume, without loss of generality, that at time 
-t=0, the particle is located at x=0. After N jumps of which n are in a 
-leftwards direction, the particle will be located at x$_{n}$ = 
-{\itshape (N-2n)}. After N jumps, there are $^{N}$C$_{n }$ways 
-for the cell to end up at x$_{n}$ of 2$^{N}$ possible moves in 
-total, therefore the probability of being located at x$_{n}$ is:
+step has concluded. Assume that at time 
+\(t=0\), the particle is located at \(x=0\). After \(N\) jumps of which n are in a 
+leftwards direction, the particle will be located at \(x_n = N-2n\). 
+After N jumps, there are \(\binom{N}{n}\) ways 
+for the cell to end up at \(x_n\) of \(2^N\) possible moves in 
+total, therefore the probability of being located at \(x_n\) is:
+\begin{equation} p(x_n,t_N) = \frac{\binom{N}{n}}{2^N} = \frac{N!}{2^N(\frac{N-n}{2})!(\frac{N+n}{2})!}
+\end{equation}
 
-
-
-\begin{figure}[H]
-\centering
-%\includegraphics[width=9.61cm,height=2.06cm]{media/image9.eps}
-\end{figure}
-
-
-If each timestep {\itshape tau} is much less than 1 and the number of 
-timesteps N is much greater than 1, then our model increasingly 
+If each timestep \(\tau\) is much less than 1 and the number of 
+timesteps \(N\) is much greater than 1, then our model increasingly 
 resembles continuous time. In the limit, using Sterling's approximation 
 and some algebra, this gives a continuous model that is continuous in 
 time:
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=10.94cm,height=1.63cm]{media/image9.eps}
-\end{figure}
 
 
 
@@ -1493,13 +1445,13 @@ $^{5}$
 
 If user-developers are able to contribute to these facets of the program 
 or any others that are useful for their own applications, then they are 
-encouraged to submit a pull request to {\itshape \underline{
-https://github.com/RyanCarey/abm-platform}, }and these will be
-{\itshape  }promptly actioned. We hope that you enjoy using the software 
+encouraged to submit a pull request to {\itshape 
+https://github.com/RyanCarey/abm-platform}, and these will be
+promptly actioned. We hope that you enjoy using the software 
 and are available to be contacted regarding it using GitHub or via 
-email, at \underline{ryan.carey14@imperial.ac.uk}, \underline{
-lewis.kindeleit14@imperial.ac.uk}, \underline{
-antoine.messager14@imperial.ac.uk}.
+email, at ryan.carey14@imperial.ac.uk, 
+lewis.kindeleit14@imperial.ac.uk, 
+antoine.messager14@imperial.ac.uk.
 
 \newpage
 
