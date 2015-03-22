@@ -50,10 +50,10 @@ differential equations to model their environment. An agent-based
 approach is ideal for modelling the cells as they are heterogeneous 
 entities with complex interactions. For the cytokines, a continuum 
 approach is essential because they are heterogenous and are too numerous 
-to be modelled individually.
+to be modelled individually.\cite{kaul15}
 
 In the absence of an environmental stimulus, the cells carry out a walk 
-that includes elements of persistence and randomness. When environmental 
+that includes elements of persistence and randomness.\cite{codling08} When environmental 
 stimuli are present, cells decide where to move based on several 
 factors: the evaluation of chemical stimuli, the cell's current 
 direction of motion and a random component. The growth of cells depends 
@@ -385,14 +385,14 @@ line, the user should simply type in the terminal: \\
 
 The command-line argument specifies the number of simulations. Any 
 simulation specific parameter changes can be made in the file 
-"\,run\_sim.jl". This approach to parameter customisation was made in 
+``run\_sim.jl''. This approach to parameter customisation was made in 
 light of the amount of parameters that can be altered, as it would be 
 unfeasible to include all parameters as function arguments. Any 
 parameter that can be changed within the GUI is available for alteration 
 within the command line version. If the user desires to replicate the 
 simulations we discuss later, the command line version can be run with 
-an additional function argument. These are "\,stem", "\,migrate\_random" 
-and "\,migrate\_non\_random". These presets already have the parameters 
+an additional function argument. These are ``stem'', ``migrate\_random'' 
+and ``migrate\_non\_random''. These presets already have the parameters 
 that our simulations ran saved within them. The user can copy this code 
 and substitute parameters to store their own simulations.
 
@@ -410,20 +410,20 @@ shown in run\_sim.jl), and are written as Julia variables.
 \subsection{Accessing Binary Outputs}
 Instead of viewing simulations on the graphical display, they can be 
 stored to be used later. To reduce storage space, these are stored as 
-binary files using Python's "\,Pickle" module (Pickle is in turn called 
+binary files using Python's ``Pickle'' module (Pickle is in turn called 
 using Julia's PyCall). Since it would be highly redundant to store the 
 locations of all cells at every timestep, the locations of every cell 
 are by default stored every 250 timesteps. Each pickle file documents 
 the time that the simulation took place and the all parameters used.
 
 This pickle file can easily be unpacked into an array in Julia or 
-Python. In each language, this is done using an "\,unpickle" function 
-that is provided in the repository in the "\,unpickle.jl" and 
-"\,unpickle.py" files respectively. In Python, further utilities are 
-provided in "\,unpickle.py" for conveniently processing a series of 
-simulations. "\,get all" can take the list of filenames printed out by 
+Python. In each language, this is done using an ``unpickle'' function 
+that is provided in the repository in the ``unpickle.jl'' and 
+``unpickle.py'' files respectively. In Python, further utilities are 
+provided in ``unpickle.py'' for conveniently processing a series of 
+simulations. ``get all'' can take the list of filenames printed out by 
 the command line utility and store the cell positions in each simulation 
-in an array. "\,stack" can be further used to combine the simulations 
+in an array. ``stack'' can be further used to combine the simulations 
 together into one time series. All of these are provided for 
 conveniently analysing the output from the CBMP.
 
@@ -804,31 +804,34 @@ cell.
 As noted previously, once cell \(m\) is moved to \(m_0'\), if 
 cells \(m\) and \(k\) have sufficient speed, they will both be assigned new movement vectors.
 
-In each collision, 0.9 of the momentum is conserved, and the remaining 0.1 is lost to the inelasticity of the collision.
-That is, the final momentum of the system 
+In a cell-cell collision, 0.9 of cell \(m\)'s momentum (\(\mathbf{p_m}\)) is conserved and the 
+remaining 0.1 is lost to the inelasticity of the collision. This means that the final momentum 
+of the system (\(\mathbf{p_{system_f}}\)) is equal to \(p_{system_f}\) = \(0.9) \times p_m\). 
+This gives:
 
+\begin{equation}
+  0.9m_m\mathbf{v_0} = m_k\mathbf{v_k}+m_m\mathbf{v_m}
+\end{equation}
 
-After the collision, 0.9 of the moomentum is conserved, is distributed to the cells as an
-idealized pool-ball collision. This is a coarse approximation of biological
-reality but is better than the alternative of omitting to model collisions at all. 
-The other 0.1 is lost to the inelasticity of the collision.
+where \(\mathbf{v_0}\) is the initial velocity of cell \(m\);
+\(\mathbf{v_k}\) and \(\mathbf{v_m}\) are the final movement vectors of cells \(m\) and \(k\); and \(m_k\) and
+\(m_m\) are the masses of the respective cells.
 
-Cell \(k\), which was previously stationary, will 
-set out in a direction parallel to \(m_0k\) with a movement vector \(\mathbf{v
-_k}\). Cell \(m\) will have a new movement vector \(v_1\) 
+Moreover, the momentum of the system is split between cells \(m\) and \(k\) as an idealized 
+pool-ball collision, as shown in Figure X. This is a coarse approximation of biological 
+reality but is better than the alternative of neglecting to model collisions at all. 
+
+In this model, cell \(k\), which was previously stationary, will 
+set out with a movement vector \(\mathbf{v_k}\) in a direction parallel to \(\overrightarrow{m_{0'}k}\).
+Cell \(m\) will have a new movement vector \(v_m\) 
 that is perpendicular to \(\mathbf{v_k}\), and whose scalar product with \(\mathbf{v_0}\) 
 is positive.
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=12.25cm,height=7.94cm]{media/image18.eps}
-\caption{Illustration of the choice of angles when 
-cell \(m\) bounces with cell k}
+\includegraphics[width=12.25cm,height=7.94cm]{media/cellcollide.png}
+\caption{Illustration how an angle is selected when cell \(m\) bounces with cell \(k\)}
 \end{figure}
-
-These movements do not add to \(v_0\) and instead the momentum of 
-each cell is scaled down by a factor of \(g = 0.9\) so that the following 
-equality holds:
 
 \begin{figure}[H]
 \centering
@@ -898,7 +901,7 @@ Three examples that demonstrate some of the features of the model are:
 
 These examples are far from exhaustive. For one more example, similar 
 applications could arise in modelling the mesenchymal cells present in 
-embryogenesis, where it has been shown that cells are highly influenced 
+embryogenesis,\cite{caplan91} where it has been shown that cells are highly influenced 
 by attractive and repulsive chemokines in their local environment.
 
 \subsubsection{Macrophage migration}
@@ -919,8 +922,8 @@ at the location x=15 and secretes ligands (cytokines) at a constant rate
 for finite duration. The immune cells start in randomly assigned 
 locations. The growth rate and death rate are set to zero, and the cells 
 are 0.5 units in size. The borders were set to remove stray cells. The 
-rest of parameters are available as the preset "\,migrate\_random" and 
-"\,migrate\_non\_random" models. For each model, ten simulations were 
+rest of parameters are available as the preset ``migrate\_random'' and 
+``migrate\_non\_random'' models. For each model, ten simulations were 
 performed, and their results were analysed as a batch.
 
 In the first model, in which the the cells to be attracted to the wound 
@@ -982,12 +985,12 @@ experiments.
 It is of interest to assess how effectively the CBMP can model the 
 dynamics of a stem cell niche because the niche hypothesis has been used 
 to describe the dynamics of a wide range of environments, ranging from 
-gonadal stem cells in the drosphila ovary to endothelial stem cells in 
-mammals. One example that presents a potential expertimental 
-collaboration for the authors is the case of haematopoetic stem cells in 
+gonadal stem cells in the drosophila ovary to endothelial stem cells in 
+mammals.\cite{linheng05} One example that presents a potential experimental 
+collaboration for the authors is the case of haematopoeitic stem cells in 
 mouse models. Experimental evidence suggests that the Notch1 ligand is 
 involved in the expansion of stem cells in a region that is referred to 
-as the stem cell niche. In the CBMP model, we defined the stem cell 
+as the stem cell niche.\cite{calvi03} In the CBMP model, we defined the stem cell 
 niche as the region where stem cells are differentially likely to remain 
 as stem cells when they replicate. The stem cell niche is defined in the 
 simulation as any area in the environment where the local ligand 
@@ -1101,7 +1104,7 @@ Process Flow & entry.jl, simulator.jl \\
 functions.}
 \end{table}
 
-In "\,move.jl", the function "\,tentative\_move" would plausibly be 
+In ``move.jl'', the function ``tentative\_move'' would plausibly be 
 useful to edit, and is an instructive example. Its role is to suggest a 
 movement for the cell, that is later modified by any cell-wall or 
 cell-cell collisions. However this function may be edited, cells will 
@@ -1148,7 +1151,7 @@ signals.
 This would allow the platform to perform simulations of necrosis and 
 potentially preliminary models of migrating mesenchymal cells in 
 embryogenesis, where it has been shown the presence of survival signals 
-are crucial to the migrational pattern of embryonic cells. Implementing 
+are crucial to the migrational pattern of embryonic cells.\cite{raz09} Implementing 
 a distinction between epithelial and mesenchymal cells would work well 
 with the aforementioned development, and could all be involved in 
 modelling tumour growth and the role of angiogenesis and epithelial to 
@@ -1199,7 +1202,7 @@ Currently, the platform uses discrete time steps to iterate through the
 cells in the simulation whilst randomly choosing one cell at a time to 
 update. Although this solution works, a more elegant solution would be 
 to implement a Poisson distribution to describe the time at which each 
-cell moves, with a ? drawn from the number of cells in the simulation at 
+cell moves, with a \(\lambda\) drawn from the number of cells in the simulation at 
 the time. This would allow the diffusion equation to update in a more 
 natural manner and improve the overall realism of the simulation.
 
@@ -1216,9 +1219,9 @@ encouraged to submit a pull request to {\itshape
 https://github.com/RyanCarey/abm-platform}, and these will be
 promptly actioned. We hope that you enjoy using the software 
 and are available to be contacted regarding it using GitHub or via 
-email, at ryan.carey14@imperial.ac.uk, 
-lewis.kindeleit14@imperial.ac.uk, 
-antoine.messager14@imperial.ac.uk.
+email, at ryan.carey14i\makeatletter mperial.ac.uk, 
+lewis.kindeleit14\makeatletter imperial.ac.uk, 
+antoine.messager14\makeatletter imperial.ac.uk.
 
 \newpage
 
@@ -1255,11 +1258,23 @@ simulations to run.
 \newpage
 
 \begin{thebibliography}{9}
+\bibitem{kaul15}
+  Kaul, Himanshu, and Yiannis Ventikos. ``Investigating biocomplexity through the agent-based paradigm.'' {\itshape Briefings in bioinformatics} 16.1 (2015): 137-152. http://bib.oxfordjournals.org/content/16/1/137.full\#ref-2
+\bibitem{codling08}
+  Codling, Edward A., Michael J. Plank, and Simon Benhamou. ``Random walk models in biology.'' Journal of the Royal Society Interface 5.25 (2008): 813-834.
+\bibitem{caplan91}
+  Caplan, Arnold I. ``Mesenchymal stem cells.'' {\itshape Journal of orthopaedic research} (1991): 641-650.
+\bibitem{linheng05}
+  Li, Linheng, and Ting Xie. ``Stem cell niche: structure and function.'' Annu. Rev. Cell Dev. Biol. 21 (2005): 605-631.
+\bibitem{calvi03}
+  Calvi, L. M., et al. ``Osteoblastic cells regulate the haematopoietic stem cell niche.'' Nature 425.6960 (2003): 841-846.
+\bibitem{raz09}
+  Raz, Erez, and Harsha Mahabaleshwar. ``Chemokine signaling in embryonic cell migration: a fisheye view.'' Development 136.8 (2009): 1223-1229.
 \bibitem{roeder06}
   Roeder, Ingo, et al. ``Dynamic modeling of imatinib-treated chronic myeloid leukemia: functional insights and clinical implications.'' {\itshape Nature medicine} 12.10 (2006): 1181-1184.
 \end{thebibliography}
-\newpage
 
+%\newpage
 %\begin{appendices}
 %\end{appendices}
 
