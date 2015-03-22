@@ -82,6 +82,33 @@ function run_sim(nb_iteration::Int64; load = "")
     
     # Optional Presets
     # To create your own, copy and paste everything within the if statement below, and edit.
+    if load == "random_niche_sim"
+      number_of_cells = 10
+      steps = 5000
+      environment_width = 30
+      environment_height = 30
+      bouncing_energy_loss_coefficient = 0.9 # (0-1)
+      #type_of_diffusion = "Integrative" # "Integrative" or "Normal"
+      pickle_output = true
+      border_settings = ["Absorbing", "Absorbing", "Absorbing", "Removing"]
+      number_of_ligand_receptors = 8
+      number_of_sources = 1
+      type_of_source = "Triangle" # "Line" or "Point"
+      x_ordinate_sources[1] = 0
+      y_ordinate_sources[1] = 0
+      integrative_gradient_coefficient[1] = 100
+      integrative_initial_concentration_coefficient[1] = 1
+      intgerative_upper_time_limit[1] = 5000
+      v8 = Float64[1.0   0.10   2.0   1.0   1.0   1.0   25.0  .0001   .2   1.   .1   1.00;
+                   0.0   0.20   2.0   2.0   1.0  -1.0   0.0   .0001   .5   1.0   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+      v9 = ["ro"    true    true    false;
+            "bo"    false    false    false;
+            "mo"    false    false    false;
+            "go"    false    false    false]
+    end
+
     if load == "niche_sim"
       number_of_cells = 10
       steps = 5000

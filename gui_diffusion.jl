@@ -243,5 +243,4 @@ elseif(diff_type=="Normal")
       return
     end
   end
-
 end
