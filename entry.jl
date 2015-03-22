@@ -38,7 +38,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
     for i in 1:nb_source
       source_x_ord[i]=v3p[2*i-1]
       source_y_ord[i]=v3p[2*i]
-      if(type_diffusion == "Integrative")
+      if(type_diffusion == "Sustained")
         integration_diffusion_coefficient[i] =v4[3*i-2]
         A_coefficients[i] = v4[3*i-1]
         tau0[i] = v4[3*i]
@@ -50,7 +50,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   else
     for i in 1:nb_source
       source_x_ord[i]=v3l[i]
-      if(type_diffusion == "Integrative")
+      if(type_diffusion == "Sustained")
         integration_diffusion_coefficient[i] =v4[3*i-2]
         A_coefficients[i] = v4[3*i-1]
         tau0[i] = v4[3*i]
@@ -210,9 +210,9 @@ function init_window()
   grid(lvoid1,6,1:3)
 
 
-  rb2 = Radio(frame, ["Integrative", "Normal"])
+  rb2 = Radio(frame, ["Sustained", "Instantaneous"])
   grid(rb2,7,2,sticky="ew")
-  lrb=Label(frame,"Type of diffusion: ")
+  lrb=Label(frame,"Type of source: ")
   grid(lrb,7,1,sticky="e")
   grid(bhs[6],7,3,sticky="w")
 

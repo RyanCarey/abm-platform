@@ -19,7 +19,7 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
   else
     prompts3=["X ordinate of the injury"]
   end
-  if(diff_type=="Integrative")
+  if(diff_type=="Sustained")
     global prompts4 = ["Initial Concentration","Gradient Coeffient","Upper time integrative limit"]
   else
     global prompts4 = ["Initial Concentration","Gradient Coeffient"]
@@ -38,7 +38,7 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
 	else
 	  entries3=[entries3,Entry(ctrls3,"$(v3l[i])")]
 	end
-      if(diff_type=="Integrative")
+      if(diff_type=="Sustained")
         entries4=[entries4,Entry(ctrls4,"$(v4[3*i-2])")] 
         entries4=[entries4,Entry(ctrls4,"$(v4[3*i-1])")] 
         entries4=[entries4,Entry(ctrls4,"$(v4[3*i])")] 
@@ -53,7 +53,7 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
 	else
 	  entries3=[entries3,Entry(ctrls3,"$(0.0)")]
 	end
-      if(diff_type=="Integrative")
+      if(diff_type=="Sustained")
         entries4=[entries4,Entry(ctrls4,"$(100.0)")]
         entries4=[entries4,Entry(ctrls4,"$(1.0)")]
         entries4=[entries4,Entry(ctrls4,"$(10.0)")]
@@ -76,7 +76,7 @@ function gui_ligand(v::Array, v2::Array,v3p::Array,v3l::Array, v4::Array,v5::Arr
       l3 = Label(ctrls3, " ") 
       formlayout(l3,nothing) 
     end
-    if(diff_type=="Integrative")
+    if(diff_type=="Sustained")
       formlayout(entries4[3*i-2],string(prompts4[1],": ")) 
       formlayout(entries4[3*i-1],string(prompts4[2],": ")) 
       formlayout(entries4[3*i],string(prompts4[3],": "))
@@ -132,7 +132,7 @@ function check_entries3(n_sources::Real,value_rb,diff_type)
   end
 
   #source parameters
-  if(diff_type=="Integrative")
+  if(diff_type=="Sustained")
     global v4 = zeros(3*int(n_sources),1)
     for i in 1:3*n_sources
       try

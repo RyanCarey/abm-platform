@@ -11,7 +11,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
 
 
   #Choice of the default parameters depending of the diffusion type
-  if(diff_type=="Integrative")
+  if(diff_type=="Sustained")
     prompts2 =["Number of ligand receptors","Initial Concentration","Gradient Coefficient","Upper time integrative limit","Number of sources"]
     global entries2 = [Entry(f2,"$(float(v2[1]))"),
                        Entry(f2,"$(float(v2[2]))"),
@@ -56,7 +56,7 @@ function gui_diffusion(v::Vector{Float64}, v2::Vector{Float64}, prompts::Array, 
   grid(entries2[3],4,2,sticky="ew")
   grid(bhelp[3],4,3,sticky="w")
   bind(bhelp[3], "command", path -> Messagebox(title="Help", message="This is the D coefficient within the diffusion equation. It is usually called the diffusion coefficient. Decreasing this number make the increases the slopes. It is equivalent to reducing the time diffusion. See manual for more information.\nNB: This coefficient only modifies the plot and not the sources parameters."))
-  if(diff_type=="Integrative")
+  if(diff_type=="Sustained")
     grid(l[4],5,1,sticky="e")
     grid(entries2[4],5,2,sticky="ew")
     grid(bhelp[7],5,3,sticky="w")
@@ -135,7 +135,7 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   #some parameters may prevent the software from displaying
   try
   #choice of the upper limit for y
-  if(diff_type=="Integrative")
+  if(diff_type=="Sustained")
 	tau0 = int(get_value(entries2[4]))
 	ymaxi,tmp=quadgk(integrand_max,0,tau0)
 	ymaxi=ceil(ymaxi)
@@ -148,14 +148,14 @@ function plot_diffusion(v::Array, v2::Array, prompts2::Array, entries2::Array,di
   #Display
   for x in 0:int(sqrt(v[3]^2+v[4]^2))
     distance_source_squared = float(int(x))
-    if(diff_type=="Integrative")
+    if(diff_type=="Sustained")
       tau0 = int(get_value(entries2[4]))
       A=float(get_value(entries2[2]))
       timediff = float(int(get_value(sc)))
       D=float(get_value(entries2[3]))
       (result[x+1],tmp)=quadgk(tau->integrand(tau, timediff, distance_source_squared, D),0,min(timediff,tau0))
       result[x+1] *= A/sqrt(4*D*timediff*pi)
-    elseif(diff_type=="Normal")
+    elseif(diff_type=="Instantaneous")
       amplitude=float(get_value(entries2[2]))
       D=float(get_value(entries2[3]))
       result[x+1]=float(amplitude/sqrt(4*pi*D*timediff)*exp(-x^2/(4*D*timediff)))
@@ -207,7 +207,7 @@ function check_entries2(v2::Array, prompts2::Array, entries2::Array,diff_type)
 #	 the 2/3 diffusion coefficients for the normal/integrative case
 #	 the number of sources
 #Therefore we need to adapt v2 to entries as follow
-if(diff_type=="Integrative")
+if(diff_type=="Sustained")
   for i in 1:length(prompts2)
     try
       v2[i] = float(get_value(entries2[i]))
@@ -217,7 +217,7 @@ if(diff_type=="Integrative")
     end
   end
 
-elseif(diff_type=="Normal")
+elseif(diff_type=="Instantaneous")
     try
       v2[1] = float(get_value(entries2[1]))
     catch
