@@ -1,4 +1,4 @@
-\documentclass[11.5pt]{article}
+\documentclass[12pt]{article}
 
 \usepackage[toc,page]{appendix}
 \usepackage{graphicx}
@@ -10,7 +10,7 @@
 \usepackage{caption}
 \captionsetup{singlelinecheck=off}
 
-\title{Group Report for Computing Assignment: An Agent-Based Modelling Platform}
+\title{Group Report for Computing Assignment: An Agent-based Modelling Platform}
 \author{Ryan Carey, Lewis Kindeleit, Antoine Messager}
 
 \begin{document}
@@ -84,40 +84,39 @@ http://julialang.org/downloads/. Similarly,
 install Python at www.python.org/downloads if you do not have it already. 
 The Julia packages Winston, Tk and PyCall are most easily installed 
 using the interactive Julia prompt. The Julia prompt is opened by entering
-into the command line:
+into the command line: \\
 
 {\fontsize{11pt}{11pt} \ttfamily 
-$>$ julia}
+> julia} \\
 
-To install the required packages, enter the following into Julia's interactive prompt:
-
-{\fontsize{11pt}{11pt} \ttfamily 
-$>$ Pkg.add("\,Winston")
-
-$>$ Pkg.add("\,Tk")
-
-$>$ Pkg.add("\,PyCall")}
-
-To return to the command linter, enter
-{\fontsize{11pt}{11pt} \ttfamily 
-$>$ exit()}
-You can install the python package {\itshape Pickle} by typing into the 
-command line:
+To install the required packages, enter the following into Julia's interactive prompt: \\
 
 {\fontsize{11pt}{11pt} \ttfamily 
-$>$ pip install pickle}
+> Pkg.add("\,Winston")
+
+> Pkg.add("\,Tk")
+
+> Pkg.add("\,PyCall")} \\ 
+
+To return to the command line, enter: \\
+
+{\fontsize{11pt}{11pt} \ttfamily 
+> exit()} \\
+
+You can install the python package {\itshape Pickle} by typing into the command line: \\
+
+{\fontsize{11pt}{11pt} \ttfamily 
+> pip install pickle} \\
 
 If all of the dependencies are already installed, then all you need to 
 do is download the repository and run CBMP.jl.
-
-
 
 \subsection{Dependencies}
 
 The installation depends on:
 
 \begin{itemize}
-\item Julia 0.3 - 0.4 with:
+\item Julia 0.3 -- 0.4 with:
 \begin{itemize}
 \item Winston
 \item Tk
@@ -133,15 +132,12 @@ versions) with:
 
 Once you have installed the dependencies, all you need to do is download 
 the repository and run CBMP.jl. If you have git installed, you do this 
-by entering into your command line:
+by entering into your command line: \\
 
-{\fontsize{11pt}{11pt} \ttfamily
-$>$git clone https://github.com/RyanCarey/abm-platform.git
+{\fontsize{10pt}{11pt} \ttfamily 
+> git clone https://github.com/RyanCarey/abm-platform.git
 
-$>$julia CBMP.jl}
-
-
-
+> julia CBMP.jl} \\
 
 The software comes with 2 different methods of inputting parameters and 
 starting simulations: an easy to use GUI and a command line version. The 
@@ -150,17 +146,13 @@ fine-grained control of all parameters that describe the behaviour of
 cells and the way in which environmental stimuli diffuse through the 
 environment, whilst providing immediate feedback.
 
-
-
 The command line version, whilst being more complicated to operate, is 
 much faster at performing simulations due to the lack of simulation 
 display and increased parameter input speed. Parameters are input 
 directly into the code and as such requires slightly more expertise to 
-use. This option is intended to be used when experimental set-up is 
+use. This option is intended to be used when experimental setup is 
 already decided and multiple simulations are required to be run to 
 collect data.
-
-
 
 \subsection{The Graphical User Interface}
 The overall structure of the graphical user interface is that of a main 
@@ -169,14 +161,10 @@ that are used to control the details pertaining to diffusion, cell types
 and borders. In all menus, help buttons are available to provide 
 detailed instruction on the function of each parameter.
 
-
-
 \subsubsection{Main Menu}
 
 The main menu allows the user to alter environment-wide parameters such 
 as starting number of cells and the size of the environment (Figure X). 
-
-
 
 \begin{figure}[H]
 \centering
@@ -185,8 +173,6 @@ as starting number of cells and the size of the environment (Figure X).
 for some of the major features of the model, and has buttons which open 
 detailed settings. The settings are as follows:}
 \end{figure}
-
-
 
 \newcounter{numberedCntG}
 \begin{itemize}
@@ -234,7 +220,7 @@ environment. On the screen's right is a graph that shows how the
 concentration gradient will change over time, where time is 
 interactively changed using the slider in the lower right. The diffusion 
 menu settings are as follows:
-\begin{itemize}
+\begin{enumerate}
   \item {\itshape Ligand Receptors:} The number of points on the cell 
   surface where ligand concentration is sampled. These are evenly spaced 
   out along the cell surface.
@@ -247,7 +233,7 @@ menu settings are as follows:
   Decreasing this number will increase the slope of the diffusion. It is 
   equivalent to reducing the time of diffusion. Note that this coefficient 
   only modifies the visualisation plot and does not affect the simulation.
-  \item {\itshape Time Limit:} This is the tau coefficient within the 
+\item {\itshape Time Limit:} This is the \(\tau\) coefficient within the 
   diffusion equation. It defines the time during which sources will emit 
   ligand. In normal diffusion, this coefficient is absent. Note that this 
   coefficient only modifies the visualisation plot and does not affect the 
@@ -264,7 +250,7 @@ menu settings are as follows:
   For more information see below.
   \item {\itshape Diffusion Over Time:} Allows visualisation of the 
   diffusion over time as per the coefficients given in 2-4.
-  \end{itemize}
+\end{enumerate}
 }
   \end{figure}
 
@@ -328,7 +314,7 @@ start of a simulation. This is also used in calculating cell division.
 \item {\itshape Ligand Response: }This specifies a value which 
 multiplies a cells proposed move direction in response to its detected 
 ligand concentration. A value of 1 indicates that a cell will travel 
-towards a source, whilst -1 will repel the cell. Note that specified 
+towards a source, whilst \(-1\) will repel the cell. Note that specified 
 randomness will dilute this effect.
 \item {\itshape Stem Threshold: }The ligand concentration boundary that 
 defines what is considered stem cell niche, and what is not.
@@ -357,8 +343,8 @@ cells of the particular time close to the left wall of the environment.
 of cell to have stem cell behaviour. A stem cell will change the type of 
 its progeny depending upon its local ligand concentration and the stem 
 threshold specified in the main menu. Progeny will be either of the same 
-type (stem cell replication), or the type below (1 -$>$ 2 -$>$ 3 -$>$ 
-4). Note that type 4 cells cannot be stem cells. Deselecting this option 
+type (stem cell replication), or the subsequent type  
+(\(1 \rightarrow 2 \rightarrow 3 \rightarrow 4\)). Note that type 4 cells cannot be stem cells. Deselecting this option 
 means that all types will only produce the same type.
 \item {\itshape Stick to Source: }If the detected mean ligand 
 concentration is above the stem threshold, the cells speed will be 
@@ -387,13 +373,14 @@ The command line option is intended to be used as a way of performing
 multiple identical simulations in order to collect data. As such the 
 option to visualise simulations is disabled, and the option to save data 
 to file is enabled by default. In order to run the CBMP in the command 
-line, the user should simply type in the terminal:
+line, the user should simply type in the terminal: \\
 
-$>$julia (to enter the REPL)
+{\fontsize{11pt}{11pt} \ttfamily 
+> julia (to enter the REPL)
 
-$>$include("\,run\_sim.jl")
+> include("\,run\_sim.jl")
 
-$>$run(Number of Simulations, {\itshape Optional Preset Parameters})
+> run(Number of Simulations; {\itshape[type="Optional\_Preset\_Parameter"]})}\\
 
 The command-line argument specifies the number of simulations. Any 
 simulation specific parameter changes can be made in the file 
@@ -440,9 +427,7 @@ together into one time series. All of these are provided for
 conveniently analysing the output from the CBMP.
 
 \section{The Model}
-\subsection{The Modelling Framework}
-
-The framework of the model can be seen briefly outlined in Figure 1. To 
+The framework of the model can be seen briefly outlined in Figure X. To 
 begin with, cells are allocated to non-overlapping locations using 
 sequential random placement. If not all cells can be placed in the size 
 of environment specified, the model will stop trying to place cells and 
@@ -476,7 +461,7 @@ The cells are modelled as agents with rigid, circular edges of varying
 radius. Each cell has a type, which determines its behaviours. Cells of 
 the same type grow, move and divide at similar rates with a slight 
 individual randomness. However, they differ in their physical 
-characteristics - their radius, location and direction of travel.
+characteristics --- their radius, location and direction of travel.
 
 \subsection{Iteration}
 Once the cells are placed, one cell is selected for action each turn. 
@@ -486,8 +471,7 @@ platform try to encapsulate most of the basic behaviours of cells. There
 is scope within the platform for the way these behaviours are 
 implemented to be changed or removed, or new behaviours added.
 
-\subsubsection{Death}
-
+\subsubsection{Cell Death}
 Cell death is modelled as random, and uniform for a given type of cell. 
 This assumes that cell death is independent of the cell's environment, 
 and in particular, independent of prior deaths that have occurred in 
@@ -496,7 +480,6 @@ factors, and this could be included with the development of a more
 sophisticated environmental model.
 
 \subsubsection{Movement}
-
 When a cell moves, it is stochastically assigned a vector that 
 determines its change in position from timestep n to timestep n+1. If 
 the cell's proposed position at time n+1 overlaps with another cell, or 
@@ -506,10 +489,29 @@ cells that it collides with. The alternative movement vectors are then
 checked recursively for collisions.
 
 The magnitude of the initial movement vector is drawn from a Chi-squared 
-distribution with two degrees of freedom. The angle is drawn from a 
-combination of i) a distribution that is proportional to the amount of a 
-ligand present at the cell membrane and ii) a uniform random 
-distribution iii) the current direction of motion of the cell.
+distribution with two degrees of freedom. 
+
+A cell's movement is determined by three aspects: the ligand, the 
+randomness and the persistence. These are explained in turn.
+
+In order to decide where to move, cells detect the amount of ligand at 
+receptor locations on their cell membrane. In the model, the number of 
+receptors is parameterised by the user, and these receptors are spaced 
+equally around the circumference of the cell. 
+
+The cell is then most likely to go in the direction that - according to 
+its receptors - has maximal concentration. Since it would not be 
+biologically realistic for a cell to reliably detect infinitesimal 
+differences in concentration around its surface, the user is allowed to 
+decide the minimum ratio (and also a minimum absolute amount) of ligand 
+that cells are able to detect. In the case of a stem cell, this 
+threshold is also used to indicate whether the stem cell is in the 
+niche, and this will determines its mitotic behaviour.
+
+If the cell cannot detect the surrounding ligand, it's motion is 
+determined by a combination of its last movement vector and random 
+chance. this combination is weighted by user-specified persistence and 
+randomness parameters.
 
 When a movement is proposed for a cell, there are two ways that its 
 movement can be interrupted: by collision with the wall, or by collision 
@@ -522,7 +524,6 @@ recursively until all cells are placed in non-overlapping locations and
 the movement phase concludes.
 
 \subsubsection{Growth and Division}
-
 Cells grow according to a user specified growth rate that depends on the 
 cell's area. Because only one cell grows per timestep, the growth rate 
 is adjusted to account for the number of cells in the simulation. 
@@ -549,8 +550,8 @@ models are best understood by beginning with the instantaneous case.
 
 \subsubsection{Instantaneous release of ligand}
 The equations governing the diffusion of ligand from an instantaneous 
-source can be derived from the example of a single particle P that can 
-move along an axis, as in Figure 2.
+source can be derived from the example of a single particle \(P\) that can 
+move along an axis, as in Figure X.
 
 \begin{figure}[H]
 \centering
@@ -559,94 +560,71 @@ move along an axis, as in Figure 2.
 one-dimensional space}
 \end{figure}
 
-Consider a particle P, that, as in Figure X, has an equal probability of 
+Consider a particle \(P\) that, as in Figure X, has an equal probability of 
 moving left or right. Let the length of each jump be \(a\), and 
 the time elapsed during each jump be \(\tau\), and assume that 
 the particle takes another step immediately as soon as each previous 
 step has concluded. Assume that at time 
-\(t=0\), the particle is located at \(x=0\). After \(N\) jumps of which n are in a 
+\(t=0\), the particle is located at \(x=0\). After \(N\) jumps of which \(n\) are in a 
 leftwards direction, the particle will be located at \(x_n = N-2n\). 
-After N jumps, there are \(\binom{N}{n}\) ways 
+After \(N\) jumps, there are \(\binom{N}{n}\) ways 
 for the cell to end up at \(x_n\) of \(2^N\) possible moves in 
 total, therefore the probability of being located at \(x_n\) is:
-\begin{equation} p(x_n,t_N) = \frac{\binom{N}{n}}{2^N} = \frac{N!}{2^N(\frac{N-n}{2})!(\frac{N+n}{2})!}
+\begin{equation} 
+  p(x_n,t_N) = \frac{\binom{N}{n}}{2^N} = \frac{N!}{2^N(\frac{N-n}{2})!(\frac{N+n}{2})!}
 \end{equation}
 
-If each timestep \(\tau\) is much less than 1 and the number of 
-timesteps \(N\) is much greater than 1, then our model increasingly 
-resembles continuous time. In the limit, using Sterling's approximation 
+If the timestep size is small, (\(\tau \ll 1\)) and the number of timesteps is large, 
+(\(N \ll 1\)), then our model increasingly resembles continuous time. 
+In the limit, using Sterling's approximation 
 and some algebra, this gives a continuous model that is continuous in 
-time:
+time.
 
-
-
-
+\begin{equation}
+  p(x_n,t_N) = \sqrt{\frac{1}{2\pi N}}\exp(-\frac{n^2}{2N}) = \sqrt{\frac{\tau}{2\pi t}}\exp(-\frac{\tau x^2_n}{2a^2t})
+\end{equation}
 
 The last expression still includes a spatial parameter, which was 
 previously taken to be discrete: 
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=2.90cm,height=1.97cm]{media/image10.eps}
-\end{figure}
+\begin{equation}
+  \delta = \sqrt{\frac{a^2t}{\tau}}
+\end{equation}
 
-
-
-
-However, we can assume that ? is much greater than a, and therefore the 
+However, we can assume that \(\delta \gg a\), and therefore the 
 model will be correct in continuous space. The probability of being at 
-time t between x and x+dx with ? $>$$>$ dx $>$$>$ a is:
+time \(t\) between \(x\) and \(x+dx\) with \(\delta \gg dx \gg a\) is:
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=10.66cm,height=1.22cm]{media/image10.eps}
-\end{figure}
+\begin{equation}
+  dp = \frac{dx}{a}p(x,t)
+\end{equation}
 
+If we let \(D = \frac{a^2}{2\tau}\), then \(dp\) can be expressed as a 
+function of \(x\), \(t\), and \(D\):
 
-
-
-If we let
-
-\begin{figure}[H]
-\centering
-%\includegraphics[width=1.67cm,height=0.85cm]{media/image10.eps}
-\end{figure}
-
-
-then {\itshape dp}can be expressed as a function of {\itshape x}, 
-{\itshape t}, and {\itshape D}:
-
-\begin{figure}[H]
-\centering
-%\includegraphics[width=6.89cm,height=1.02cm]{media/image10.eps}
-\end{figure}
-
+\begin{equation}
+  dp = f(x,t,D) = \sqrt{\frac{1}{4\pi Dt}} \exp(-\frac{x^2}{4Dt}) \qquad \qquad \text{where} D = \frac{a^2}{2\tau}
+\end{equation}
 
 These particles are assumed to be sufficiently numerous that their mass 
 behaviour is guided by this probability distribution. Thus the 
-concentration is proportional to this probability density function:
+concentration, \(C\) is proportional to this probability density function:
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=5.33cm,height=1.06cm]{media/image10.eps}
-\end{figure}
+\begin{equation}
+  C(x,t,A,D) = Af(x,t,D) \qquad \qquad \text{where} A \in \mathbb{R}^+
+\end{equation}
 
-
-\subsubsection{Sustained release of 
-ligand}
+\subsubsection{Sustained release of ligand}
 In general, it is more realistic to model biological signals as 
 occurring over a finite time, rather than instantaneously - a Dirac 
 pulse cannot occur in nature. Thus the CBMP allows a more complex model 
 with constant output of ligand from a source. This model has one 
-parameter, a duration over which the ligand is secreted, \(\tau
-_0\).
+parameter, a duration over which the ligand is secreted, \(\tau_0\).
 
-We have used the following equation to model the concentration: 
-
-\begin{figure}[H]
-\centering
-%\includegraphics[width=11.14cm,height=1.86cm]{media/image11.eps}
-\end{figure}
+The concentration is then modelled as follows:
+\begin{equation}
+  C(x,t,A,D,\tau_0) = A\int\limits_0^{min(\tau_0,t)}\sqrt{\frac{1}{4Dt\pi}}\exp{\frac{-x^2}{4D(t-\tau)}}\mathrm{d}\tau
+\end{equation}
 
 In this model, \(\tau_0\) is the duration over which the 
 source emits ligands. Contrary to the previous model where the input is 
@@ -657,34 +635,24 @@ highlights the differences of the two models.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=14.92cm,height=7.80cm]{media/image12.eps}
-\caption{On the left, a plot of the 
-concentration of ligands over time at a distance 1 from the source with 
-the normal model. On the right, the same plot with the integrative 
-model. The parameter equals 100 steps on the left. }
+\caption{In each image, the concentration of ligand over time is shown,
+  at a distance of one unit from the source. On the left, the instantaneous
+  pulse model is used. On the right, the concentration is shown at the
+  equivalent location where the emission lasts for 100 steps.}
 \end{figure}
 
-If the user wants to have a faster display, it is faster to use the 
-normal model as it doesn't use any integration. 
+The instantaneous pulse model is significantly quicker to compute than the
+sustained model because it doesn't require integration.
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=7.94cm,height=5.50cm]{media/image13.eps}
-\end{figure}
 \begin{figure}[H]
 \centering
 %\includegraphics[width=7.62cm,height=5.48cm]{media/image14.eps}
+\caption{The concentration is plotted against the distance from the source
+  at time \(t=1\) (red), \(t=3\) 
+  (orange), \(t=5\) (yellow), \(t=7\) (green), \(t=10\) (blue) and \(t=15\) (black).
+  The left-hand image uses the instantaneous pulse model whereas the right-hand 
+  image uses the sustained emission model.} 
 \end{figure}
-
-
-
-
-{\bfseries Figure 4:} {\itshape The figures display the plot concentration 
-against the distance from the source for the time t=1 (red), t=3 
-(orange), t=5 (yellow), t=7 (green), t=10 (blue) and t=15 (black). The 
-left figures works with the normal model while the right one works with 
-the integrative model. } 
-
-
 
 \subsubsection{From one dimension to two}
 So that the environmental model has a closer resemblance to real 
@@ -692,8 +660,6 @@ biological systems, the CBMP can model sources as a point or as a line.
 To model point-sources, we have made a simplification using the 
 separation of the variable technique. This consists of replacing the x2 
 by the square distance of the ligand receptor from the source.
-
-
 
 \subsubsection{Multiple sources}
 The user can choose the number of sources and the kind of sources he 
@@ -708,11 +674,7 @@ source at the centre of another source should be equals to zero but in
 our model the concentration of ligand only depends on the distance from 
 the source and is thus non-zero. 
 
-
-
 \subsubsection{The diffusion timescale}
-
-
 In writing the CBMP simulator, we have had to take some care to keep the 
 diffusion and cell movement on the same timescale. Since one step moves 
 with each time increment, if no adjustments were made, then if there are 
@@ -722,71 +684,18 @@ to have passed is determined not just be the number of cell steps taken,
 but also on the number of cells. Thus the diffusion and cell movement 
 occur on the same timescale.
 
-
-
-\subsubsection{The proposed move}
-A cell's movement is determined by three aspects: the ligand, the 
-randomness and the persistence. These are explained in turn.
-
-
-
-In order to decide where to move, cells detect the amount of ligand at 
-receptor locations on their cell membrane. In the model, the number of 
-receptors is parameterised by the user, and these receptors are spaced 
-equally around the circumference of the cell. 
-
-
-
-The cell is then most likely to go in the direction that - according to 
-its receptors - has maximal concentration. Since it would not be 
-biologically realistic for a cell to reliably detect infinitesimal 
-differences in concentration around its surface, the user is allowed to 
-decide the minimum ratio (and also a minimum absolute amount) of ligand 
-that cells are able to detect. In the case of a stem cell, this 
-threshold is also used to indicate whether the stem cell is in the 
-niche, and this will determines its mitotic behaviour.
-
-
-
-If the cell cannot detect the surrounding ligand, it's motion is 
-determined by a combination of its last movement vector and random 
-chance. this combination is weighted by user-specified persistence and 
-randomness parameters.
-
-
-
-\subsubsection{Summary of cell movement}
-If the cell can detect concentration that is of a sufficient level, and 
-of a sufficient ratio, then 
-
-
-
-Otherwise the cell is moving randomly. We have also added a randomness 
-parameter that is specific to each type of cell, so the user can decide 
-that for instance stem cells are purely deterministic while other cells 
-have a purely random movement.
-
-\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 
-
-\subsection{Ballistics: how cells bounce in the 
-environment}
-\subsubsection{{\bfseries Once a cell has a proposed movement, the CBMP 
+\section{Collisions}
+  Once a cell has a proposed movement, the CBMP 
 detects whether the cell with collide with the walls, or any of the 
-other cells, and resolves these collisions recursively.}
-}
+other cells, and resolves these collisions recursively.
 
-
-
+\subsection{Cell-wall Collisions}
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=15.98cm,height=11.16cm]{media/image15.eps}
+\caption{The algorithm for moving cells}
 \end{figure}
-
-
-{\bfseries Figure X}: The algorithm for moving cells
-
-
 
 The algorithm for detecting collisions begins by storing all of the 
 cells' initial location, in case the simulation needs to be restored to 
@@ -796,8 +705,6 @@ border. If the cell has more than one collision in its path, then the
 cell is made to collide with whichever object it would hit first, and 
 then the consequences of that collision are played out. 
 
-
-
 The first consequence of a collision is that the moving cell is placed 
 adjacent to whatever it has collided with. If the cell has momentum to 
 bounce off in a new direction, it does so, and it undergoes a new 
@@ -806,8 +713,6 @@ Alternatively, in the case of a collision between two cells, then both
 cells undergo further movement if they have sufficient momentum, and 
 this occurs by restarting the algorithm with both cells.
 
-
-
 Once all of the cells have settled on new locations and do not have 
 sufficient speed to move, one final check is made for any overlaps. If 
 there are overlaps, this can suggest that there was an error, such as in 
@@ -815,16 +720,11 @@ floating point arithmetic. In the case of an overlap (this occurs less
 than once per 10,000 iterations), the cells are restored to their 
 original positions
 
-
-
 It is instructive to describe in some more detail how it is detected 
 that a cell is colliding with another cell, or that it is colliding with 
 the wall.
 
-
-
-\subsubsection{Detecting cell-cell 
-collisions}
+\subsection{Detecting cell-cell collisions}
 To understand how cell-cell collisions are identified, we can consider 
 the most challenging case, where two cells lie on the path of a moving 
 cell to its destination. As shown in Figure X, the moving cell, 
@@ -1137,7 +1037,7 @@ within 5000 timesteps.}
 
 \caption{Frequency of cells by distance 
 to X = 0. The simulation was performed five times, of which all cell 
-counts are a total of these runs. The region 0 $<$= x $<$= 5 is 
+counts are a total of these runs. The region \(0 \leq x \leq 5\) is 
 designated the stem cell niche. The border between the niche and 
 non-niche area is indicated by the black vertical line. The stem cells, 
 which are initialised to the leftmost wall, predominate within the stem 
@@ -1187,21 +1087,16 @@ ascertain which file or files are needed for any desired alterations
 {\bfseries Function} & {\bfseries File(s)} \\
 \hline
 Cell Properties & cell\_type.jl, gui\_type.jl \\
-\hline
 Diffusion & diffusion.jl, gui\_diffusion.jl \\
-\hline
 Growth, Death and Division & birth\_and\_death.jl \\
-\hline
 Movement & angle.jl, move.jl \\
-\hline
 Command Line & command\_line.jl \\
-\hline
 Process Flow & entry.jl, simulator.jl \\
 \hline
 \end{tabular}
-\end{table}
-{\itshape Table 1. Platform files and their relevant real world 
+\caption{Table 1. Platform files and their relevant real world 
 functions.}
+\end{table}
 
 In "\,move.jl", the function "\,tentative\_move" would plausibly be 
 useful to edit, and is an instructive example. Its role is to suggest a 
@@ -1215,32 +1110,30 @@ another expression like {\itshape rand()*2pi}, which samples the angle
 from a uniform random distribution. The cell's speed is sampled from a 
 Chi-squared distribution (the inverse of this cumulative distribution 
 function is given at the start of line 16) but it can easily be changed 
-to a constant speed by shortening this line of code to {\itshape 
-moving\_cell.speed = categories$[$moving\_cell.cell\_type$]$.avg\_speed
-}, which will deterministically assign the same speed to all cells of 
+to a constant speed by shortening this line of code to:
+
+{\fontsize{10pt}{10pt} \ttfamily
+moving\_cell.speed = categories{[}moving\_cell.cell\_type{]}.avg\_speed} 
+
+This will deterministically assign the same speed to all cells of 
 each type. Or to a speed that is proportional to the maximum 
-concentration e.g. {\itshape 
-max(concentrations)categories$[$moving\_cell.cell\_type$]$.avg\_speed}
-. These are some simple suggestions but much more complex functions are 
+concentration e.g. 
+
+{\fontsize{10pt}{10pt}\ttfamily 
+max(concentrations)categories{[}moving\_cell.cell\_type{]}.avg\_speed} 
+
+These are some simple suggestions but much more complex functions are 
 feasible.
-
-
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=13.23cm,height=6.37cm]{media/image32.eps}
+\caption{Figure X: The tentative\_move function}
 \end{figure}
-
-
-{\bfseries Figure X: The tentative\_move function}
-
-
 
 While it has been attempted to make the platform as comprehensive as 
 possible, a few powerful developments could not be included in the 
 platform, some of which are discussed below. 
-
-
 
 First, extensions to the simple implementations of the growth and death 
 cellular functions to bring their sophistication in line with movement 
@@ -1248,8 +1141,6 @@ and division would increase the scope of the simulations the platform is
 able to perform. At their most basic, both these functions should be 
 linked to local ligand concentration providing growth and survival 
 signals. 
-
-
 
 This would allow the platform to perform simulations of necrosis and 
 potentially preliminary models of migrating mesenchymal cells in 
@@ -1259,8 +1150,6 @@ a distinction between epithelial and mesenchymal cells would work well
 with the aforementioned development, and could all be involved in 
 modelling tumour growth and the role of angiogenesis and epithelial to 
 mesenchymal transition (EMT) in the progression of the disease state.
-
-
 
 Second, a logical extension of the platform would be to enable it to 
 distinguish and keep track of different ligand types throughout the 
@@ -1275,8 +1164,6 @@ the simulation already allows users to specify when each source should
 cease to produce ligand, it would be a small extension to make the 
 diffusion start at a time that is also specified by the user, rather 
 than at the beginning of the simulation. 
-
-
 
 Third, the current method of all cells growing at a type defined rate, 
 whilst acceptable, is a huge abstraction from the reality of cellular 
