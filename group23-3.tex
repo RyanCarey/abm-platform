@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{caption}
+
 \captionsetup{singlelinecheck=off}
 
 \title{Group Report for Computing Assignment: An Agent-based Modelling Platform}
@@ -724,7 +725,7 @@ It is instructive to describe in some more detail how it is detected
 that a cell is colliding with another cell, or that it is colliding with 
 the wall.
 
-\subsection{Detecting cell-cell collisions}
+\subsection{Cell-cell collisions}
 To understand how cell-cell collisions are identified, we can consider 
 the most challenging case, where two cells lie on the path of a moving 
 cell to its destination. As shown in Figure X, the moving cell, 
@@ -738,7 +739,7 @@ Let the cells be denoted as per Figure X.
 \centering
 %\includegraphics[width=15.98cm,height=6.22cm]{media/image16.eps}
 \caption{Cell \(m\) would intersect with two other 
-  cells - \(k_1\) and \(k_2\) - on the way to its destination. 
+  cells, \(k_1\) and \(k_2\), on the way to its destination. 
   \(m_0\) is its initial position, \(m_1\) is the proposed position and 
 \(m_0'\) is its final position.}
 \end{figure}
@@ -756,33 +757,28 @@ through?
 starting location?
 \end{enumerate}
 
-The first question is answered by computing the orthogonal projection of 
-each stationary cell \(k\) onto \(m_0,m_1\), denoted 
-\(h\). If the distance \(hk\) is less than the sum of the radii of both cells 
+The first question is answered by computing the orthogonal projection \(h_i\) of 
+each stationary cell \(k_i\) onto \(\overleftrightarrow{m_0m_1}\), denoted 
+\(h_i\). If the distance \(\overline{h_ik_i}\) is less than the sum of the 
+radii of both cells (\(\overline{h_ik_i} < r_m + r_{k_i}\)), then the 
+stationary cell lies sufficiently close to the path of cell \(m\) to collide 
+with it. The length of \(\lvert h_ik_i \rvert\) is given by:
 
-\newpage
+\begin{equation}
+\lvert\overline{h_ik_i}\rvert = \frac{\lvert {mx_{k_i} - y_{k_i} + p}\rvert }{\sqrt{1+m^2}}
+\end{equation}
 
-(\(h_1)k_1 < r_m + r_k\)), then the 
-stationary cell lies sufficiently close to the path of cell m to collide 
-with it. The length of \(h_1k_1\) is given by:
+where \(y = mx + p\) is the equation of the line passing through \(m_0\)
+and \(m_1\), with coefficients:
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=5.93cm,height=1.43cm]{media/image17.eps}
-\end{figure}
+\begin{equation}
+  m = \frac{x_{m_1}-x_{m_0}}{y_{m_1}-y_{m_0}}\text; \qquad p = \frac{-y_{m_1}x_{m_1}+y_{m_0}x_{m_1}}{x_{m_1}-x_{m_0}}
+\end{equation}
 
-where \(y = mx + p\) is the equation of the line linking \(m_0
- to m_1\), with coefficients:
-
-\begin{figure}[H]
-\centering
-%\includegraphics[width=6.90cm,height=1.03cm]{media/image17.eps}
-\end{figure}
-
-The second question is answered by ascertaining that the angles \(\angle m_0
-)m_1k\) and \(\angle m_1m_0k\) are both acute, or that 
+The second question is answered by ascertaining that the angles \(\angle m_0m_1k_i\) 
+and \(\angle m_1m_0k_i\) are both acute, or that 
 cell \(k\) is overlapping with \(m\). Both of these angles 
-must be acute if \(cos\measuredangle m_0m_1k\) and \(cos(\measuredangle m_1m_0k\) are 
+must be acute if \(cos(\measuredangle m_0m_ik\)) and \(cos(\measuredangle m_im_0k)\) are 
 both positive, and these cosines can be easily computed 
 using the cosine rule.
 
@@ -791,26 +787,33 @@ So far, cells that meet these criteria lie on the the path of cell
 that remain, will be hit by cell \(m\) first. This is done by 
 calculating where each of these cells would intersect with the moving 
 circumference of cell \(m\), and selecting the collision that is closest to 
-\(m\)'s starting point. These possible positions \(m_0'\), 
+\(m\)'s starting point. These possible positions \(m_{0'}\), 
 are computed by solving the system:
 
-\begin{figure}[H]
-\centering
-%\includegraphics[width=8.08cm,height=2.00cm]{media/image17.eps}
-\end{figure}
+\begin{equation}
+  \begin{cases} 
+    y_{m_{0'}} = mx_{m_{0'}} + p \\
+    (x_{m_{0'}} - x_{k_i})^2 + (y_{m_{0'}}-y_{k_i})^2 =  (r_m+r_{k_i})^2
+  \end{cases}
+\end{equation}
 
 Of these solutions for \(m_0\), the one that minimizes \(m_0m_0'\) 
 is the true location at which \(m\) must collide with another 
 cell. 
 
-As noted previously, once the moving cell is moved to \(m_0'\), if 
-cells m and k have sufficient speed, they will both continue to move. It 
-is assumed that when a cell bounces, 0.9 percent of its momentum is 
-conserved, and the other 0.1 contributes to energy loss of the 
-collision. 
+As noted previously, once cell \(m\) is moved to \(m_0'\), if 
+cells \(m\) and \(k\) have sufficient speed, they will both be assigned new movement vectors.
 
-The motion of cells after a collision is modelled like the collision of 
-pool balls. Cell \(k\), which was previously stationary, will 
+In each collision, 0.9 of the momentum is conserved, and the remaining 0.1 is lost to the inelasticity of the collision.
+That is, the final momentum of the system 
+
+
+After the collision, 0.9 of the moomentum is conserved, is distributed to the cells as an
+idealized pool-ball collision. This is a coarse approximation of biological
+reality but is better than the alternative of omitting to model collisions at all. 
+The other 0.1 is lost to the inelasticity of the collision.
+
+Cell \(k\), which was previously stationary, will 
 set out in a direction parallel to \(m_0k\) with a movement vector \(\mathbf{v
 _k}\). Cell \(m\) will have a new movement vector \(v_1\) 
 that is perpendicular to \(\mathbf{v_k}\), and whose scalar product with \(\mathbf{v_0}\) 
@@ -820,7 +823,7 @@ is positive.
 \centering
 %\includegraphics[width=12.25cm,height=7.94cm]{media/image18.eps}
 \caption{Illustration of the choice of angles when 
-cell m bounces with cell k}
+cell \(m\) bounces with cell k}
 \end{figure}
 
 These movements do not add to \(v_0\) and instead the momentum of 
