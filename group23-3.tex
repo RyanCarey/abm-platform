@@ -130,7 +130,6 @@ versions) with:
 \end{itemize}
 \end{itemize}
 
-
 Once you have installed the dependencies, all you need to do is download 
 the repository and run CBMP.jl. If you have git installed, you do this 
 by entering into your command line: \\
@@ -170,13 +169,11 @@ as starting number of cells and the size of the environment (Figure X).
 \begin{figure}[H]
 \centering
 %\includegraphics[width=8.99cm,height=10.42cm]{media/image1.eps}
-\caption{The program's main screen, which contains settings 
+\caption[]{The program's main screen, which contains settings 
 for some of the major features of the model, and has buttons which open 
-detailed settings. The settings are as follows:}
-\end{figure}
+detailed settings. The settings are as follows:
 
-\newcounter{numberedCntG}
-\begin{itemize}
+\begin{enumerate}
 \item {\itshape Number of cells:} The total number of cells at the start 
 of the simulation.
 \item {\itshape Number of timesteps:} The number of iterations made by 
@@ -202,11 +199,11 @@ the simulation if desired and allow an output of the results of the
 simulation to be saved to file as a binary 'pickle' file. Note that 
 displaying the simulation slows the process considerably, and should be 
 turned off for long simulations.
-\setcounter{numberedCntG}{\theenumi}
-\end{itemize}
+\end{enumerate}}
 
+\end{figure}
 
-\subsubsection{Diffusion}
+\subsubsection{Diffusion Menu}
 The diffusion menu (shown in Figure X) has the settings that control how 
 ligands will spread through the cell's environment. The results of 
 tuning the diffusion parameters can be visualised and controlled 
@@ -258,34 +255,25 @@ menu settings are as follows:
 \newcounter{numberedCntC}
 
 
-\subsection{Source Location}
+\subsubsection{Source Location Menu}
 The source menu (in Figure X) controls for where the ligand is emitted 
 from, for how long, and with what gradient.
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=5.93cm]{media/image3.eps}
-\caption{The source menu, which allows the user to specify 
+\caption[]{The source menu, which allows the user to specify 
 where ligand comes from, and how it is produced.}
-\end{figure}
-
-
-
-\newcounter{numberedCntB}
 \begin{itemize}
 \item {\itshape Location: }the source location is specified here. In the 
 case of a line source, this is a single x-ordinate. In the case of a 
 point source, x- and y-ordinates would be shown..
 \item {\itshape Parameters: }Allows each individual ligand source to be 
 customised, following the rules described above.
-\setcounter{numberedCntB}{\theenumi}
 \end{itemize}
+\end{figure}
 
-
-
-
-\section{Cell types}
-
+\subsubsection{Cell Type Menu}
 The cell type menu controls most of the complexity of the CBMP's models 
 by allowing a wide range of parameters for up to four cell types (Figure 
 X). 
@@ -299,8 +287,7 @@ X).
 {\itshape Figure X}. The cell type window, which allows the user to 
 specify parameters for each cell type. The parameters are:
 
-\newcounter{numberedCntE}
-\begin{itemize}
+\begin{enumerate}
 \item {\itshape Ratio: }The ratio of the total number of cells given 
 over to that type upon the start of the simulation. Ratios are 
 normalised and as such do not have to sum to one.
@@ -337,7 +324,6 @@ display. Possible cell type colours are: Red, Blue, Magenta, Green and
 Yellow.
 \item {\itshape Special Options: }These represent specific special 
 functions cell types can have.
-\begin{itemize}
 \item {\itshape Left Placed: }Selecting this option will initialise all 
 cells of the particular time close to the left wall of the environment.
 \item {\itshape Stem Cell: }Selecting this option will allow this type 
@@ -350,11 +336,9 @@ means that all types will only produce the same type.
 \item {\itshape Stick to Source: }If the detected mean ligand 
 concentration is above the stem threshold, the cells speed will be 
 divided by 10, effectively sticking it in place. 
-\setcounter{numberedCntE}{\theenumi}
-\end{itemize}
-\end{itemize}
+\end{enumerate}
 
-\subsection{Borders}
+\subsubsection{Border Menu}
 
 The last menu is the borders menu, which allows the user to decide which 
 individual borders will respond to cells by reflecting, absorbing or 
@@ -363,7 +347,7 @@ removing them.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=7.43cm,height=4.02cm]{media/image5.eps}
-\caption{The border menu}Each of the four 
+\caption[]{The border menu}Each of the four 
 borders can independently be set to perform reflecting or absorbing 
 collisions, or to remove cells.
 \end{figure}
@@ -404,7 +388,7 @@ shown in run\_sim.jl), and are written as Julia variables.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=11.66cm,height=4.55cm]{media/image6.eps}
-\caption{Figure X: run.jl: choosing cell type parameters}
+\caption[]{Figure X: run.jl: choosing cell type parameters}
 \end{figure}
 
 \subsection{Accessing Binary Outputs}
@@ -441,7 +425,7 @@ continuous space.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=7.71cm,height=8.93cm]{media/image7.eps}
-\caption{Global overview of the model. The five main stages 
+\caption[]{Global overview of the model. The five main stages 
 of the simulation are cell death, environment dynamic, movement, cell 
 growth and mitosis.}
 \end{figure}
@@ -549,7 +533,8 @@ they are all of the same variety. Modelling how cells are affected by
 these ligands depends on modelling its diffusion. These environmental 
 models are best understood by beginning with the instantaneous case.
 
-\subsubsection{Instantaneous release of ligand}
+\subsubsection{Diffusion}
+{\bfseries Instantaneous Pulse of Ligand.}
 The equations governing the diffusion of ligand from an instantaneous 
 source can be derived from the example of a single particle \(P\) that can 
 move along an axis, as in Figure X.
@@ -557,7 +542,7 @@ move along an axis, as in Figure X.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=9.28cm,height=1.90cm]{media/image8.eps}
-\caption{A particle moving stochastically through 
+\caption[]{A particle moving stochastically through 
 one-dimensional space}
 \end{figure}
 
@@ -615,7 +600,7 @@ concentration, \(C\) is proportional to this probability density function:
   C(x,t,A,D) = Af(x,t,D) \qquad \qquad \text{where} A \in \mathbb{R}^+
 \end{equation}
 
-\subsubsection{Sustained release of ligand}
+{\bfseries Sustained Release of Ligand.}
 In general, it is more realistic to model biological signals as 
 occurring over a finite time, rather than instantaneously - a Dirac 
 pulse cannot occur in nature. Thus the CBMP allows a more complex model 
@@ -655,14 +640,14 @@ sustained model because it doesn't require integration.
   image uses the sustained emission model.} 
 \end{figure}
 
-\subsubsection{From one dimension to two}
+{\bfseries From One Dimension to Two.}
 So that the environmental model has a closer resemblance to real 
 biological systems, the CBMP can model sources as a point or as a line. 
 To model point-sources, we have made a simplification using the 
 separation of the variable technique. This consists of replacing the x2 
 by the square distance of the ligand receptor from the source.
 
-\subsubsection{Multiple sources}
+{\bfseries Multiple Sources.}
 The user can choose the number of sources and the kind of sources he 
 wants as the image of the display of the diffusion window illustrate. 
 Each source has its specific parameter input. The parameters are chosen 
@@ -675,7 +660,7 @@ source at the centre of another source should be equals to zero but in
 our model the concentration of ligand only depends on the distance from 
 the source and is thus non-zero. 
 
-\subsubsection{The diffusion timescale}
+{\bfseries The Diffusion Timescale.}
 In writing the CBMP simulator, we have had to take some care to keep the 
 diffusion and cell movement on the same timescale. Since one step moves 
 with each time increment, if no adjustments were made, then if there are 
@@ -685,12 +670,10 @@ to have passed is determined not just be the number of cell steps taken,
 but also on the number of cells. Thus the diffusion and cell movement 
 occur on the same timescale.
 
-\section{Collisions}
+\subsection{Collisions}
   Once a cell has a proposed movement, the CBMP 
 detects whether the cell with collide with the walls, or any of the 
 other cells, and resolves these collisions recursively.
-
-\subsection{Cell-wall Collisions}
 
 \begin{figure}[H]
 \centering
@@ -725,7 +708,7 @@ It is instructive to describe in some more detail how it is detected
 that a cell is colliding with another cell, or that it is colliding with 
 the wall.
 
-\subsection{Cell-cell collisions}
+\subsubsection{Cell-cell Collisions}
 To understand how cell-cell collisions are identified, we can consider 
 the most challenging case, where two cells lie on the path of a moving 
 cell to its destination. As shown in Figure X, the moving cell, 
@@ -823,7 +806,7 @@ reality but is better than the alternative of neglecting to model collisions at 
 
 In this model, cell \(k\), which was previously stationary, will 
 set out with a movement vector \(\mathbf{v_k}\) in a direction parallel to \(\overrightarrow{m_{0'}k}\).
-Cell \(m\) will have a new movement vector \(v_m\) 
+Cell \(m\) will have a new movement vector \(\mathbf{v_m}\) 
 that is perpendicular to \(\mathbf{v_k}\), and whose scalar product with \(\mathbf{v_0}\) 
 is positive.
 
@@ -843,7 +826,7 @@ as the simulation takes place in a two-dimensional environment, although
 this code can easily be changed if it is desirable to make the mass 
 proportional to the cubed radius instead.
 
-\subsubsection{Cell-border collisions}
+\subsubsection{Cell-border Collisions}
 The other important kind of collision is between a cell and the border 
 of the environment. To put the cell at a border, one needs to know which 
 border the cell will touch first. To do this, the first step is to 
@@ -877,7 +860,7 @@ The cell can respond to the border in three different ways:
 \begin{enumerate}
   \item If the border is {\itshape reflecting}, then the cell reflects as in optics, 
 with a new movement vector that has an outgoing angle the same as the 
-incoming angle. The new movement vector has length equal to 0.95 * \(m_1m_2\), 
+incoming angle. The new speed is equal to \(0.95\) multiplied by the original speed
 to account for inelasticity.
 \item If the border is {\itshape absorbing}, then the cell stays at the location \(m_1\), 
   and its speed reduces to zero.
@@ -904,7 +887,7 @@ applications could arise in modelling the mesenchymal cells present in
 embryogenesis,\cite{caplan91} where it has been shown that cells are highly influenced 
 by attractive and repulsive chemokines in their local environment.
 
-\subsubsection{Macrophage migration}
+\subsubsection{Macrophage Migration}
 The first model was designed to investigate how macrophages migrate to a 
 laceration. This model was designed to copy an experimental setup in 
 which lacerations are performed on a fruit fly, and the migration of 
@@ -1225,7 +1208,7 @@ antoine.messager14\makeatletter imperial.ac.uk.
 
 \newpage
 
-\section{An alternative agent-based model}
+\section{An Alternative Agent-based Model}
 
 We also attempted to implement a semi-spatial model based on the model 
 described by Roeder to simulate the development of leukaemia and the 
