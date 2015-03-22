@@ -6,6 +6,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{ulem}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{caption}
 \captionsetup{singlelinecheck=off}
 
@@ -188,38 +189,37 @@ detailed settings. The settings are as follows:}
 
 
 \newcounter{numberedCntG}
-\begin{enumerate}
-\item {\bfseries Number of cells:} The total number of cells at the start 
+\begin{itemize}
+\item {\itshape Number of cells:} The total number of cells at the start 
 of the simulation.
-\item {\bfseries Number of timesteps:} The number of iterations made by 
+\item {\itshape Number of timesteps:} The number of iterations made by 
 the simulation before the simulation is terminated. At each iteration, 
 one randomly chosen cell is updated.
-\item {\bfseries Width of Environment:} This denotes the width of the 
+\item {\itshape Width of Environment:} This denotes the width of the 
 simulation environment in some arbitrary units.
-\item {\bfseries Height of Environment:} This denotes the height of the 
+\item {\itshape Height of Environment:} This denotes the height of the 
 simulation environment in some arbitrary units.
-\item {\bfseries Energy Loss Coefficient: }This specifies the factor by 
+\item {\itshape Energy Loss Coefficient: }This specifies the factor by 
 which cellular momentum is multiplied upon each contact event.
-\item {\bfseries Type of Diffusion:} Allows the user to choose between 
+\item {\itshape Type of Diffusion:} Allows the user to choose between 
 integrative (constant) and normal (dirac) diffusion. These options can 
 be further tweaked in the diffusion settings.
-\item {\bfseries Diffusion Settings:} Opens the menu for altering 
+\item {\itshape Diffusion Settings:} Opens the menu for altering 
 diffusion settings. See Diffusion Settings below.
-\item {\bfseries Cell Type Settings: }Opens the menu for altering cell 
+\item {\itshape Cell Type Settings: }Opens the menu for altering cell 
 type settings. See Cell Types below.
-\item {\bfseries Border Settings: }Opens the menu for altering individual 
+\item {\itshape Border Settings: }Opens the menu for altering individual 
 border behaviours. See Border Settings below.
-\item {\bfseries Display / Write:} Selecting these options will display 
+\item {\itshape Display / Write:} Selecting these options will display 
 the simulation if desired and allow an output of the results of the 
 simulation to be saved to file as a binary 'pickle' file. Note that 
 displaying the simulation slows the process considerably, and should be 
 turned off for long simulations.
 \setcounter{numberedCntG}{\theenumi}
-\end{enumerate}
+\end{itemize}
 
 
 \subsubsection{Diffusion}
-
 The diffusion menu (shown in Figure X) has the settings that control how 
 ligands will spread through the cell's environment. The results of 
 tuning the diffusion parameters can be visualised and controlled 
@@ -228,85 +228,76 @@ interactively using a slider.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=9.08cm]{media/image2.eps}
-\caption{The program's diffusion menu, which contains 
+\caption[]{The program's diffusion menu, which contains 
 settings for controlling the how ligands diffuse through the cell's 
 environment. On the screen's right is a graph that shows how the 
 concentration gradient will change over time, where time is 
 interactively changed using the slider in the lower right. The diffusion 
-menu settings are as follows:}
-\end{figure}
-\if false
+menu settings are as follows:
 \begin{itemize}
- \item Met with Stumpf, Juliana, Andrew and agreed to do project.
- \item Set up our computers
-\end{itemize}
-\fi
+  \item {\itshape Ligand Receptors:} The number of points on the cell 
+  surface where ligand concentration is sampled. These are evenly spaced 
+  out along the cell surface.
+  \item {\itshape Initial Concentration:} This is the A coefficient in the 
+  diffusion equation. Increasing this number proportionally increases the 
+  ligand concentration. Note that this coefficient only modifies the 
+  visualisation plot and does not affect the simulation.
+  \item {\itshape Gradient Coefficient: }This is the D coefficient in the 
+  diffusion equation. It is usually called the diffusion coefficient. 
+  Decreasing this number will increase the slope of the diffusion. It is 
+  equivalent to reducing the time of diffusion. Note that this coefficient 
+  only modifies the visualisation plot and does not affect the simulation.
+  \item {\itshape Time Limit:} This is the tau coefficient within the 
+  diffusion equation. It defines the time during which sources will emit 
+  ligand. In normal diffusion, this coefficient is absent. Note that this 
+  coefficient only modifies the visualisation plot and does not affect the 
+  simulation.
+  \item {\itshape See Diffusion: }Updates the graph to the right with the 
+  parameters specified in 2-4. Note that the parameters specified above do 
+  not affect the simulation and are only used in graphing the potential.
+  \item {\itshape Type of source:} Select which type of source is 
+  required.
+  \item {\itshape Number of sources: }The total number of sources present 
+  in the simulation from the start.
+  \item {\itshape Locations and Coefficients: }Allows the user to select 
+  the locations of each possible source, and change its characteristics. 
+  For more information see below.
+  \item {\itshape Diffusion Over Time:} Allows visualisation of the 
+  diffusion over time as per the coefficients given in 2-4.
+  \end{itemize}
+}
+  \end{figure}
 
 \newcounter{numberedCntC}
-\begin{itemize}
-\item {\bfseries Ligand Receptors:} The number of points on the cell 
-surface where ligand concentration is sampled. These are evenly spaced 
-out along the cell surface.
-\item {\bfseries Initial Concentration:} This is the A coefficient in the 
-diffusion equation. Increasing this number proportionally increases the 
-ligand concentration. Note that this coefficient only modifies the 
-visualisation plot and does not affect the simulation.
-\item {\bfseries Gradient Coefficient: }This is the D coefficient in the 
-diffusion equation. It is usually called the diffusion coefficient. 
-Decreasing this number will increase the slope of the diffusion. It is 
-equivalent to reducing the time of diffusion. Note that this coefficient 
-only modifies the visualisation plot and does not affect the simulation.
-\item {\bfseries Time Limit:} This is the tau coefficient within the 
-diffusion equation. It defines the time during which sources will emit 
-ligand. In normal diffusion, this coefficient is absent. Note that this 
-coefficient only modifies the visualisation plot and does not affect the 
-simulation.
-\item {\bfseries See Diffusion: }Updates the graph to the right with the 
-parameters specified in 2-4. Note that the parameters specified above do 
-not affect the simulation and are only used in graphing the potential.
-\item {\bfseries Type of source:} Select which type of source is 
-required.
-\item {\bfseries Number of sources: }The total number of sources present 
-in the simulation from the start.
-\item {\bfseries Locations and Coefficients: }Allows the user to select 
-the locations of each possible source, and change its characteristics. 
-For more information see below.
-\item {\bfseries Diffusion Over Time:} Allows visualisation of the 
-diffusion over time as per the coefficients given in 2-4.
-\setcounter{numberedCntC}{\theenumi}
-\end{itemize}
 
 
-{\bfseries Source Location}
-
+\subsection{Source Location}
 The source menu (in Figure X) controls for where the ligand is emitted 
 from, for how long, and with what gradient.
-
-
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=5.93cm]{media/image3.eps}
+\caption{The source menu, which allows the user to specify 
+where ligand comes from, and how it is produced.}
 \end{figure}
 
 
-{\bfseries Figure X. }The source menu, which allows the user to specify 
-where ligand comes from, and how it is produced.
 
 \newcounter{numberedCntB}
-\begin{enumerate}
-\item {\bfseries Location: }the source location is specified here. In the 
+\begin{itemize}
+\item {\itshape Location: }the source location is specified here. In the 
 case of a line source, this is a single x-ordinate. In the case of a 
 point source, x- and y-ordinates would be shown..
-\item {\bfseries Parameters: }Allows each individual ligand source to be 
+\item {\itshape Parameters: }Allows each individual ligand source to be 
 customised, following the rules described above.
 \setcounter{numberedCntB}{\theenumi}
-\end{enumerate}
+\end{itemize}
 
 
 
 
-{\bfseries Cell types}
+\section{Cell types}
 
 The cell type menu controls most of the complexity of the CBMP's models 
 by allowing a wide range of parameters for up to four cell types (Figure 
@@ -318,66 +309,65 @@ X).
 \end{figure}
 
 
-{\bfseries Figure X}. The cell type window, which allows the user to 
+{\itshape Figure X}. The cell type window, which allows the user to 
 specify parameters for each cell type. The parameters are:
 
 \newcounter{numberedCntE}
-\begin{enumerate}
-\item {\bfseries Ratio: }The ratio of the total number of cells given 
+\begin{itemize}
+\item {\itshape Ratio: }The ratio of the total number of cells given 
 over to that type upon the start of the simulation. Ratios are 
 normalised and as such do not have to sum to one.
-\item {\bfseries Growth Rate: }The rate at which a cells area will 
+\item {\itshape Growth Rate: }The rate at which a cells area will 
 increase per timestep.
-\item {\bfseries Division Threshold: }The ratio of current area to 
+\item {\itshape Division Threshold: }The ratio of current area to 
 initial area at which a cell division event will occur.
-\item {\bfseries Average Speed: }The average distance a cell can travel 
+\item {\itshape Average Speed: }The average distance a cell can travel 
 in one step. Uses the same arbitrary units as other distance variables.
-\item {\bfseries Average Radius: }The average radius of cells at the 
+\item {\itshape Average Radius: }The average radius of cells at the 
 start of a simulation. This is also used in calculating cell division.
-\item {\bfseries Ligand Response: }This specifies a value which 
+\item {\itshape Ligand Response: }This specifies a value which 
 multiplies a cells proposed move direction in response to its detected 
 ligand concentration. A value of 1 indicates that a cell will travel 
 towards a source, whilst -1 will repel the cell. Note that specified 
 randomness will dilute this effect.
-\item {\bfseries Stem Threshold: }The ligand concentration boundary that 
+\item {\itshape Stem Threshold: }The ligand concentration boundary that 
 defines what is considered stem cell niche, and what is not.
-\item {\bfseries Death Rate: }The chance that at any time step, the cell 
+\item {\itshape Death Rate: }The chance that at any time step, the cell 
 in question will die.
-\item {\bfseries Persistence: }The percentage of a cells move that is 
+\item {\itshape Persistence: }The percentage of a cells move that is 
 derived from its last move.
-\item {\bfseries Randomness: }The percentage of a cells move that will be 
+\item {\itshape Randomness: }The percentage of a cells move that will be 
 random.
-\item {\bfseries Inertia Threshold: }The speed at which a cells momentum 
+\item {\itshape Inertia Threshold: }The speed at which a cells momentum 
 will overcome other cells inertia, causing bouncing.
-\item {\bfseries Signal Noise Ratio: }The ratio of maximum ligand 
+\item {\itshape Signal Noise Ratio: }The ratio of maximum ligand 
 concentration to mean ligand concentration detected by individual cells 
 receptors (default: 8). If the ratio is below this value, the signal is 
 deemed to be lost to noise, and the cell will disregard the inputs and 
 move in a persistent random manner.
-\item {\bfseries Colour:} Used to distinguish cell types in simulation 
+\item {\itshape Colour:} Used to distinguish cell types in simulation 
 display. Possible cell type colours are: Red, Blue, Magenta, Green and 
 Yellow.
-\item {\bfseries Special Options: }These represent specific special 
+\item {\itshape Special Options: }These represent specific special 
 functions cell types can have.
-\begin{enumerate}
-\item {\bfseries Left Placed: }Selecting this option will initialise all 
+\begin{itemize}
+\item {\itshape Left Placed: }Selecting this option will initialise all 
 cells of the particular time close to the left wall of the environment.
-\item {\bfseries Stem Cell: }Selecting this option will allow this type 
+\item {\itshape Stem Cell: }Selecting this option will allow this type 
 of cell to have stem cell behaviour. A stem cell will change the type of 
 its progeny depending upon its local ligand concentration and the stem 
 threshold specified in the main menu. Progeny will be either of the same 
 type (stem cell replication), or the type below (1 -$>$ 2 -$>$ 3 -$>$ 
 4). Note that type 4 cells cannot be stem cells. Deselecting this option 
 means that all types will only produce the same type.
-\item {\bfseries Stick to Source: }If the detected mean ligand 
+\item {\itshape Stick to Source: }If the detected mean ligand 
 concentration is above the stem threshold, the cells speed will be 
 divided by 10, effectively sticking it in place. 
 \setcounter{numberedCntE}{\theenumi}
-\end{enumerate}
-\end{enumerate}
+\end{itemize}
+\end{itemize}
 
-
-{\bfseries Borders}
+\subsection{Borders}
 
 The last menu is the borders menu, which allows the user to decide which 
 individual borders will respond to cells by reflecting, absorbing or 
@@ -391,8 +381,7 @@ borders can independently be set to perform reflecting or absorbing
 collisions, or to remove cells.
 \end{figure}
 
-\subsection{The Interactive Prompt 
-Interface}
+\subsection{The Interactive Prompt Interface}
 Alternatively, the CBMP can be accessed from Julia's interactive prompt. 
 The command line option is intended to be used as a way of performing 
 multiple identical simulations in order to collect data. As such the 
@@ -649,10 +638,8 @@ In general, it is more realistic to model biological signals as
 occurring over a finite time, rather than instantaneously - a Dirac 
 pulse cannot occur in nature. Thus the CBMP allows a more complex model 
 with constant output of ligand from a source. This model has one 
-parameter, a duration over which the ligand is secreted, {\itshape tau
-$_{0}$}.
-
-
+parameter, a duration over which the ligand is secreted, \(\tau
+_0\).
 
 We have used the following equation to model the concentration: 
 
@@ -661,34 +648,23 @@ We have used the following equation to model the concentration:
 %\includegraphics[width=11.14cm,height=1.86cm]{media/image11.eps}
 \end{figure}
 
-
-
-
-In this model, {\itshape tau$_{0}$} is the duration over which the 
+In this model, \(\tau_0\) is the duration over which the 
 source emits ligands. Contrary to the previous model where the input is 
 only a Dirac pulse, the number of ligands in this model is increasing 
-during the interval $[$1,{\itshape tau$_{0}$}$]$. Figure 3 
+during the interval \(1,\tau_0\). Figure 3 
 highlights the differences of the two models.
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=14.92cm,height=7.80cm]{media/image12.eps}
-\end{figure}
-
-
-{\bfseries {\itshape Figure 3:}}{\itshape  On the left, a plot of the 
+\caption{On the left, a plot of the 
 concentration of ligands over time at a distance 1 from the source with 
 the normal model. On the right, the same plot with the integrative 
 model. The parameter equals 100 steps on the left. }
-
-
+\end{figure}
 
 If the user wants to have a faster display, it is faster to use the 
 normal model as it doesn't use any integration. 
-
-
-
-
 
 \begin{figure}[H]
 \centering
@@ -852,88 +828,70 @@ collisions}
 To understand how cell-cell collisions are identified, we can consider 
 the most challenging case, where two cells lie on the path of a moving 
 cell to its destination. As shown in Figure X, the moving cell, 
-illustrated in black, is denoted m. Its initial position is m$_{0}$ 
-and its proposed position is m$_{1}$. The two cells that lie in its 
-path are denoted k$_{1}$ and k$_{2}$.
-
-
+illustrated in black, is denoted m. Its initial position is \(m_0\) 
+and its proposed position is \(m_1\). The two cells that lie in its 
+path are denoted \(k_1\) and \(k_2\).
 
 Let the cells be denoted as per Figure X.
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=15.98cm,height=6.22cm]{media/image16.eps}
+\caption{Cell \(m\) would intersect with two other 
+  cells - \(k_1\) and \(k_2\) - on the way to its destination. 
+  \(m_0\) is its initial position, \(m_1\) is the proposed position and 
+\(m_0'\) is its final position.}
 \end{figure}
 
-
-{\bfseries Figure. X }{\itshape Cell m would intersect with two other 
-cells - k$_{1}$ and k$_{2}$ - on the way to its destination. m$_{
-0 }$is its initial position, m$_{1}$ is the proposed position and m
-$_{0'}$ is its final position.}
-
-
-
-The task of finding where cell {\itshape m} will first touch another 
+The task of finding where cell \(m\) will first touch another 
 cell is divided into four questions:
 
-\newcounter{numberedCntA}
 \begin{enumerate}
 \item Which cells lie near enough to the line (of infinite length) that 
-passes through m$_{0}$ and m$_{1}$?
-\item Which cells overlap the finite region that {\itshape m }moves 
+passes through \(m_0\) and \(m_1\)
+\item Which cells overlap the finite region that \(m\) moves 
 through?
-\item Where might {\itshape m} touch those cells?
-\item Of those positions, which is the nearest to {\itshape m}'s 
+\item Where might \(m\) touch those cells?
+\item Of those positions, which is the nearest to \(m\)'s 
 starting location?
-\setcounter{numberedCntA}{\theenumi}
 \end{enumerate}
 
-
 The first question is answered by computing the orthogonal projection of 
-each stationary cell {\itshape k} onto m$_{0}$m$_{1}$, denoted 
-h. If the distance kh is less than the sum of the radii of both cells 
+each stationary cell \(k\) onto \(m_0,m_1\), denoted 
+\(h\). If the distance \(hk\) is less than the sum of the radii of both cells 
 
 \newpage
 
-
-
-
-(h$_{1}$k$_{1}$ $<$ r$_{m}$ + r$_{k}$\ \ \ \ ), then the 
+(\(h_1)k_1 < r_m + r_k\)), then the 
 stationary cell lies sufficiently close to the path of cell m to collide 
-with it. The length of h$_{1}$k$_{1}$ is given by:
+with it. The length of \(h_1k_1\) is given by:
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=5.93cm,height=1.43cm]{media/image17.eps}
 \end{figure}
 
-
-where {\itshape y = mx + p }is the equation of the line linking m$_{0
-}$ to m$_{1}$, with coefficients:
+where \(y = mx + p\) is the equation of the line linking \(m_0
+ to m_1\), with coefficients:
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=6.90cm,height=1.03cm]{media/image17.eps}
 \end{figure}
 
-
-
-
-The second question is answered by ascertaining that the angles ?m$_{0
-}$m$_{1}$k and ?m$_{1}$m$_{0}$k are both acute, or that 
-cell {\itshape k} is overlapping with m$_{1}$. Both of these angles 
-must be acute if cos(?m$_{0}$m$_{1}$k) and cos(?m$_{1}$m$_{
-0}$k) are both positive, and these cosines can be easily computed 
+The second question is answered by ascertaining that the angles \(\angle m_0
+)m_1k\) and \(\angle m_1m_0k\) are both acute, or that 
+cell \(k\) is overlapping with \(m\). Both of these angles 
+must be acute if \(cos\measuredangle m_0m_1k\) and \(cos(\measuredangle m_1m_0k\) are 
+both positive, and these cosines can be easily computed 
 using the cosine rule.
 
-
-
 So far, cells that meet these criteria lie on the the path of cell 
-{\itshape m}. However, one needs to decide which cell, of all those 
-that remain, will be hit by cell {\itshape m} first. This is done by 
+\(m\). However, one needs to decide which cell, of all those 
+that remain, will be hit by cell \(m\) first. This is done by 
 calculating where each of these cells would intersect with the moving 
-circumference of cell m, and selecting the collision that is closest to 
-{\itshape m}'s starting point. These possible positions m$_{0'}$, 
+circumference of cell \(m\), and selecting the collision that is closest to 
+\(m\)'s starting point. These possible positions \(m_0'\), 
 are computed by solving the system:
 
 \begin{figure}[H]
@@ -941,43 +899,32 @@ are computed by solving the system:
 %\includegraphics[width=8.08cm,height=2.00cm]{media/image17.eps}
 \end{figure}
 
-
-Of these solutions for m$_{0}$, the one that minimizes mm$_{0'}$ 
-is the true location at which {\itshape m} must collide with another 
+Of these solutions for \(m_0\), the one that minimizes \(m_0m_0'\) 
+is the true location at which \(m\) must collide with another 
 cell. 
 
-
-
-As noted previously, once the moving cell is moved to m$_{0'}$, if 
+As noted previously, once the moving cell is moved to \(m_0'\), if 
 cells m and k have sufficient speed, they will both continue to move. It 
 is assumed that when a cell bounces, 0.9 percent of its momentum is 
 conserved, and the other 0.1 contributes to energy loss of the 
 collision. 
 
-
-
 The motion of cells after a collision is modelled like the collision of 
-pool balls. Cell {\itshape k}, which was previously stationary, will 
-set out in a direction parallel to m$_{0}$k with a movement vector v
-$_{k}$. Cell {\itshape m} will have a new movement vector v$_{1}$ 
-that is perpendicular to v$_{k}$, and whose scalar product with v
-$_{0}$ is positive.
-
-
+pool balls. Cell \(k\), which was previously stationary, will 
+set out in a direction parallel to \(m_0k\) with a movement vector \(\mathbf{v
+_k}\). Cell \(m\) will have a new movement vector \(v_1\) 
+that is perpendicular to \(\mathbf{v_k}\), and whose scalar product with \(\mathbf{v_0}\) 
+is positive.
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=12.25cm,height=7.94cm]{media/image18.eps}
+\caption{Illustration of the choice of angles when 
+cell m bounces with cell k}
 \end{figure}
 
-
-{\bfseries Figure X. }{\itshape Illustration of the choice of angles when 
-cell m bounces with cell k}
-
-
-
-These movements do not add to v$_{0}$ and instead the momentum of 
-each cell is scaled down by a factor of g = 0.9 so that the following 
+These movements do not add to \(v_0\) and instead the momentum of 
+each cell is scaled down by a factor of \(g = 0.9\) so that the following 
 equality holds:
 
 \begin{figure}[H]
@@ -985,64 +932,51 @@ equality holds:
 %\includegraphics[width=6.89cm,height=1.57cm]{media/image19.eps}
 \end{figure}
 
-
 The weight of each cell assumed to be proportional to its squared radius 
 as the simulation takes place in a two-dimensional environment, although 
 this code can easily be changed if it is desirable to make the mass 
 proportional to the cubed radius instead.
 
-
-
 \subsubsection{Cell-border collisions}
 The other important kind of collision is between a cell and the border 
 of the environment. To put the cell at a border, one needs to know which 
 border the cell will touch first. To do this, the first step is to 
-calculate the coefficients of the line D: y=mx + p that passes through 
+calculate the coefficients of the line \(D: y=mx + p\) that passes through 
 the cell's starting location and its proposed location. It is not 
-sufficient to simply extrapolate D to the nearest wall (Figure X). 
-Instead, one must equate the line D to the lines x = x$_{E}$ - r$_{
-m}$, x = x$_{W}$ + r$_{m}$, y = y$_{N}$ - r$_{m}$, y = y
-$_{S}$ + r$_{m}$, where x$_{W}$, x$_{E}$, y$_{N}$ and y
-$_{S}$ are the respective x and y ordinates of each of the four 
-borders.
-
-
+sufficient to simply extrapolate \(D\) to the nearest wall (Figure X). 
+Instead, one must equate the line D to the lines 
+\(x = x_E) - r_m\), \(x = x_W + r_m\), \(y = y_N - r_m\), \(y = y_S + r_m\), 
+where \(x_W\), \(x_E)i\), \(y_N\) and \(y_S\) are the respective \(x\) 
+and \(y\) ordinates of each of the four borders.
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=15.98cm,height=4.60cm]{media/image20.eps}
-\end{figure}
-
-
-{\bfseries Figure X. }{\itshape The challenge of deciding which border m 
-strikes. m$_{0}$ is the initial position, m$_{1 }$is the final 
-position and m$_{2 }$is the proposed position. Note that m strikes 
-the South wall although the line D that it is travelling on strikes the 
+\caption{The challenge of deciding which border m 
+  strikes. \(m_0\) is the initial position, \(m_1\)is the final 
+  position and \(m_2\)is the proposed position. Note that \(m\) strikes 
+  the South wall although the line \(D\) that it is travelling on strikes the 
 West wall.}
-
-
+\end{figure}
 
 This gives the four places where the cell would intersect with the 
 extension of each border. To know which border the cell is going to hit 
 first, you only look at the two borders that the cell is moving towards, 
 and disregard those that are behind. The border that the cell strikes 
-first is the one that minimizes the distance m$_{1}$m$_{0}$, as 
+first is the one that minimizes the distance \(m_1m_0\), as 
 shown in Figure X. 
-
-
 
 The cell can respond to the border in three different ways: 
 
-\begin{itemize}
-\item If the border is reflecting, then the cell reflects as in optics, 
+\begin{enumerate}
+  \item If the border is {\itshape reflecting}, then the cell reflects as in optics, 
 with a new movement vector that has an outgoing angle the same as the 
-incoming angle. The new movement vector has length equal to 0.95 * m$_{
-1}$m$_{2}$, to account for inelasticity.
-\item If the border is absorbing, then the cell stays at the location m
-$_{1}$, and its speed reduces to zero.
-\item If the border is removing, then the cell disappears.
-\end{itemize}
-
+incoming angle. The new movement vector has length equal to 0.95 * \(m_1m_2\), 
+to account for inelasticity.
+\item If the border is {\itshape absorbing}, then the cell stays at the location \(m_1\), 
+  and its speed reduces to zero.
+\item If the border is {\itshape removing}, then the cell disappears.
+\end{enumerate}
 
 \section{Examples}
 The platform has been designed model diverse biological scenarios with 
@@ -1051,8 +985,6 @@ behaviour. The commonality between these models is that a
 chemoattractant is hypothesised that biases cells' behaviour according 
 to the concentration gradient established by a ligand source.
 
-
-
 Three examples that demonstrate some of the features of the model are:
 
 \begin{itemize}
@@ -1060,7 +992,6 @@ Three examples that demonstrate some of the features of the model are:
 \item The behaviour of cells around a stem cell niche
 \item Cell culture
 \end{itemize}
-
 
 These examples are far from exhaustive. For one more example, similar 
 applications could arise in modelling the mesenchymal cells present in 
@@ -1080,8 +1011,6 @@ when they get near to it. In the third case, the cells are biased
 towards but their movement towards the wound is stochastic, and they 
 again have no particular inclination to slow down when they get there.
 
-
-
 In all three simulations, the laceration is modelled as a straight-line 
 at the location x=15 and secretes ligands (cytokines) at a constant rate 
 for finite duration. The immune cells start in randomly assigned 
@@ -1091,8 +1020,6 @@ rest of parameters are available as the preset "\,migrate\_random" and
 "\,migrate\_non\_random" models. For each model, ten simulations were 
 performed, and their results were analysed as a batch.
 
-
-
 In the first model, in which the the cells to be attracted to the wound 
 deterministically, they moved to the wound quickly (in 300 timesteps) 
 and stayed there for the duration of the simulation. On gross visual 
@@ -1100,34 +1027,25 @@ inspection of this cell motion (Figure X) and the boxplot that describes
 their distance (Figure X), the cells move to the laceration more surely 
 than would be seen in nature.
 
-
-
 \begin{figure}[H]
 \centering
 %\includegraphics[width=15.87cm,height=10.58cm]{media/image21.eps}
-\end{figure}
-
-
-{\bfseries {\itshape Figure X.}}{\itshape  Timelapse of deterministic 
+\caption{Timelapse of deterministic 
 migration to a laceration at X = 15. Timesteps are every 500, starting 
-at T = 1 (Top left). Cells quickly migrate towards the laceration and 
+at \(T = 1\) (Top left). Cells quickly migrate towards the laceration and 
 form a line over the source. T = 3000 has been left off as there was no 
-difference from T = 2500}
-
-
+difference from \(T = 2500\)}
+\end{figure}
 
 \begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=12.38cm]{media/image22.eps}
-\end{figure}
-
-
-{\bfseries Figure X.} The horizontal location of cells over time when 
+\caption{The horizontal location of cells over time when 
 they migrate deterministically to the wound. Cells move to x=15, the 
 location of the wound, rapidly and remain there for the duration of the 
 simulation.
-
-
+}
+\end{figure}
 
 In the second model, the macrophages were initialised with high 
 randomness and no bias, but a tendency to slow down when they neared the 
@@ -1141,7 +1059,6 @@ at the beginning of the simulation.\begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=12.38cm]{media/image23.eps}
 \end{figure}
-
 
 The third simulation provided the only realistic results (Figure X). 
 Initialising cells to have a movement pattern made up of equal parts 
@@ -1157,7 +1074,6 @@ experiments.
 \centering
 %\includegraphics[width=16.51cm,height=12.38cm]{media/image24.eps}
 \end{figure}
-
 
 \subsubsection{Stem Cell Replication}
 It is of interest to assess how effectively the CBMP can model the 
@@ -1177,15 +1093,13 @@ results in a zone around any designated sources where stem cells grow in
 number. Once outside of this area, any new daughter cells are more 
 likely be progenitors. 
 
-
-
 To simulate the stem cell niche, we designated stem cells as type 1, 
 with a low growth rate of 0.1, a randomness of 0.7 with a persistence of 
 0.2 and a concentration response of 1, initialised to the left edge of 
 the field. Type 2 cells were designated the progenitors, with a high 
 growth rate of 0.2, and randomness of 1.0 but no attraction to the stem 
 cell niche. The remainder of parameters can be seen in the {\itshape 
-niche\_sim} preset in run\_sim.jl. A constant ligand source can be 
+niche\_sim} preset in {\itshape run\_sim.jl}. A constant ligand source can be 
 placed as a line or multiple points along the line X = 0 to generate the 
 niche; in our simulation, the five units of space on the left hand side 
 as the niche, and the rest was designated as non-niche. The borders were 
@@ -1208,47 +1122,20 @@ niche boundary.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=16.51cm,height=12.45cm]{media/image25.eps}
-\end{figure}
-
-{\bfseries {\itshape Figure X.}}{\itshape  Stem Cell Niche Simulation. 
+\caption{Stem Cell Niche Simulation. 
 Parameters used: Stem Cells(Blue): Growth Rate: 0.1, Threshold: 
 0.000793, Persistence: 0.2, Randomness 0.7. Progenitor Cells (Green) 
 Growth Rate: 0.25, Threshold 0.000793, Persistence: 0.2, Randomness: 
 1.0. The stem cell population reaches equilibrium around 2000 timesteps 
 and the progenitor cell population does not yet reach stable equilibrium 
 within 5000 timesteps.}
+\end{figure}
 
-{\begin{figure}[H]
-\centering
-%\includegraphics[width=7.50cm,height=5.68cm]{media/image26.eps}
-\end{figure}
-\begin{figure}[H]
-\centering
-%\includegraphics[width=7.94cm,height=5.98cm]{media/image27.eps}
-\end{figure}
-}
-
-{\begin{figure}[H]
-\centering
-%\includegraphics[width=7.42cm,height=5.61cm]{media/image28.eps}
-\end{figure}
-\begin{figure}[H]
-\centering
-%\includegraphics[width=7.82cm,height=5.91cm]{media/image29.eps}
-\end{figure}
-}
-
-{\begin{figure}[H]
-\centering
-%\includegraphics[width=7.56cm,height=5.71cm]{media/image30.eps}
-\end{figure}
 \begin{figure}[H]
 \centering
 %\includegraphics[width=7.60cm,height=5.74cm]{media/image31.eps}
-\end{figure}
-}
 
-{\bfseries {\itshape Figure X. }}{\itshape Frequency of cells by distance 
+\caption{Frequency of cells by distance 
 to X = 0. The simulation was performed five times, of which all cell 
 counts are a total of these runs. The region 0 $<$= x $<$= 5 is 
 designated the stem cell niche. The border between the niche and 
@@ -1257,8 +1144,9 @@ which are initialised to the leftmost wall, predominate within the stem
 cell niche for the duration of the simulation. The progenitor cells 
 predominate in the non-niche area, and their proliferation slows, but 
 does not completely stabilise in the second half of the simulation.}
+\end{figure}
 
-\subsubsection{Cell culture }
+\subsubsection{Cell Culture}
 Initialising with a cell speed of 0 allows for the simulation of a cell 
 culture with immobile cells, such as the simulation of tumour growth or 
 bacteria culturing. Whilst additions would need to be made to the 
@@ -1269,11 +1157,7 @@ against each other - with the only difference being death rate - it
 shows how many of one population have to die before the other is 
 dominant enough to outcompete them for space within the model.
 
-
-
-
-
-Performance
+\section{Performance}
 
 One significant factor that will determine the usefulness of the CBMP, 
 especially for the purpose of parameter inference, is its performance. 
@@ -1283,8 +1167,7 @@ secretion for twenty cells with eight receptors. This is highly
 dependent on which model is used for diffusion, and how many receptors 
 each cell has.
 
-\section{Further Development of the 
-Platform}
+\section{Further Development of the Platform}
 For a researcher who can program in Julia, modifications can open up the 
 possibility of more diverse models. Alteration to the program's source 
 code have been made possible by placing the software on Github, where 
@@ -1297,11 +1180,9 @@ Cell type in cell\_type.jl, and so on. The table below can be used to
 ascertain which file or files are needed for any desired alterations 
 (Table 1).
 
-
-
 \begin{table}[H]
 \centering
-\begin{tabular}{|l|l|}
+\begin{tabular}{ll}
 \hline
 {\bfseries Function} & {\bfseries File(s)} \\
 \hline
@@ -1321,10 +1202,6 @@ Process Flow & entry.jl, simulator.jl \\
 \end{table}
 {\itshape Table 1. Platform files and their relevant real world 
 functions.}
-
-
-
-
 
 In "\,move.jl", the function "\,tentative\_move" would plausibly be 
 useful to edit, and is an instructive example. Its role is to suggest a 
@@ -1441,7 +1318,7 @@ secreted by moving cells. This has immediate biological relevance in the
 case of the haematopoietic stem cell niche, where experimental evidence 
 suggests that osteoblastic cells are involved with secreting Notch 
 ligand jagged 1, which is involved with maintaining the stem cell niche.
-$^{5}$
+\cite{}
 
 If user-developers are able to contribute to these facets of the program 
 or any others that are useful for their own applications, then they are 
@@ -1484,7 +1361,6 @@ think revisiting this problem in 6 months to a year will hopefully allow
 the Julia developers to fully implement parallelisation functionality in 
 their language, therefore reducing the time it takes for these 
 simulations to run.
-
 
 \newpage
 
