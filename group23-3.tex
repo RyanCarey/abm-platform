@@ -9,26 +9,35 @@
 \usepackage{amssymb}
 \usepackage{caption}
 \usepackage{enumitem}
+\usepackage[left=2.90cm, right=2.90cm, top=3.00cm, bottom=4.50cm]{geometry}
+\usepackage{parskip}
+
+\setlength{\parskip}{11pt plus4mm minus3mm}
+
+
 
 \DeclareCaptionFont{smaller}{\fontsize{9pt}{9pt}}
 \captionsetup{singlelinecheck=off, font=footnotesize}
+\setlength{\footskip}{37pt}
 
 
-\title{Group Report for Computing Assignment: An Agent-based Modelling Platform}
+\title{Group Report for Computing Assignment: The Cell Behaviour Modelling Platform}
 \author{Ryan Carey, Lewis Kindeleit, Antoine Messager}
 
 \begin{document}
 
 \maketitle
-\section*{M Sc Bioinformatics and Theoretical Systems Biology}
-\section*{Supervisor: M.P.H Stumpf} 
-\section{Word Count: X}
+{\centering
+\subsubsection*{M Sc Bioinformatics and Theoretical Systems Biology}
+\subsubsection*{Supervisor: MPH Stumpf} 
+\subsubsection*{Word Count: X}
+}
 
 \newpage
 \tableofcontents
 \newpage
-\section{Introduction}
-Agent based models (ABM) are suited to simulating cellular dynamics because the behaviour of cells can 
+\section{Introduction --- written by LK and RC} 
+The Agent based modelling (ABM) approach is suited to simulating cellular dynamics because the behaviour of cells can 
 depend on complex interactions.\cite{kaul15} By implementing the rules 
 that dictate the behaviour of the smallest components of a system it is possible to analyse the emergent 
 system to see if the researcher’s understanding is correct. This approach has gained popularity in recent 
@@ -80,7 +89,7 @@ This comparison can be used to check whether the mechanics underlying
 the simulation are approximately correct or to discover previously 
 unknown characteristics about the system undergoing investigation.
 
-\section{Installation}
+\section{Installation --- written by RC and LK}
 The CBMP has been developed in Julia 0.4. in RedHat Enterprise Linux 
 Workstation release 6.2, and has also been tested on Ubuntu 14.04 in 
 Julia 0.3. The platform should run on any operating system 
@@ -88,7 +97,7 @@ that has Julia installed, however there may be slight differences
 between them.
 
 To run the CBMP, first Julia must be installed. If this has already been 
-done, please skip to the Required Dependencies section.
+done, please skip to the Dependencies section.
 
 \subsection{Detailed Instructions}
 To install Julia, follow the instructions on the website, 
@@ -170,12 +179,12 @@ collect data.
 The overall structure of the graphical user interface is that of a main 
 menu that controls the most important parameters, and three submenus 
 that are used to control the details pertaining to diffusion, cell types 
-and borders. In all menus, help buttons are available to provide 
+and borders. Help buttons are available in all menus to provide 
 detailed instruction on the function of each parameter.
 
 \subsubsection{Main Menu}
 The main menu allows the user to alter environment-wide parameters such 
-as starting number of cells and the size of the environment (Figure X). 
+as starting number of cells and the size of the environment (Figure 1). 
 
 \begin{figure}[H]
 \centering
@@ -212,22 +221,26 @@ turned off for long simulations.
 \end{figure}
 
 \subsubsection{Diffusion Menu}
-The diffusion menu (shown in Figure X) has the settings that control how 
-ligands will spread through the cell's environment. The results of 
+The diffusion menu (shown in Figure 2) contains the settings that control how 
+ligand will spread through the environment. The results of 
 tuning the diffusion parameters can be visualised and controlled 
 interactively using a slider.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=13.51cm]{media/diffusion_screen_annotated.png}
-\caption[]{The program's diffusion menu, which contains 
-settings for controlling the how ligands diffuse through the cell's 
-environment. On the screen's right is a graph that shows how the 
+\caption[]{The diffusion menu, which contains 
+settings for controlling the how ligand diffuses through the cells'
+environment. On the right is a graph that shows how the 
 concentration gradient will change over time, where time is 
 interactively changed using the slider in the lower right. The diffusion 
 menu settings are as follows:
+}
+\end{figure}
+{\fontsize{9pt}{9pt}
 \begin{enumerate}[topsep=2pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
-  \item {\itshape Ligand Receptors:} The number of points on the cell 
+  \item {\itshape Ligand Receptors:} 
+      The number of points on the cell 
   surface where ligand concentration is sampled. These are evenly spaced 
   out along the cell surface.
   \item {\itshape Initial Concentration:} This is the A coefficient in the 
@@ -258,30 +271,30 @@ menu settings are as follows:
   diffusion over time as per the coefficients given in 2-4.
 \end{enumerate}
 }
-\end{figure}
 
 \subsubsection{Source Location Menu}
-The source menu (in Figure X) controls for where the ligand is emitted 
+The source menu (in Figure 3) controls where the ligand is emitted 
 from, for how long, and with what gradient.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=13.51cm]{media/source_loc_screen_annotated.png}
 \caption[]{The source menu, which allows the user to specify 
-where ligand comes from, and how it is produced.}
+where ligand comes from, and how it is produced.
 \begin{itemize}
-\item {\itshape Location: }the source location is specified here. In the 
+\item {\itshape Location:} the source location is specified here. In the 
 case of a line source, this is a single x-ordinate. In the case of a 
 point source, x- and y-ordinates would be shown..
-\item {\itshape Parameters: }Allows each individual ligand source to be 
-customised, following the rules described above.
+\item {\itshape Parameters:} Allows each individual ligand source to be 
+customised, following the rules described under Diffusion Menu.
 \end{itemize}
+}
 \end{figure}
 
 \subsubsection{Cell Type Menu}
 The cell type menu controls most of the complexity of the CBMP's models 
 by allowing a wide range of parameters for up to four cell types (Figure 
-X). 
+4). 
 
 \begin{figure}[H]
 \centering
@@ -324,16 +337,15 @@ concentration. Progeny are either of the same type (stem cell replication), or t
 (\(1 \rightarrow 2 \rightarrow 3 \rightarrow 4\)). Note that type 4 cells cannot be stem cells. If not checked,
 cells divide to produce only cells of their own type.
 \item {\itshape Stick to Source:} Causes cells of this type to slow down by 90\% when they can detect
-  ligand in their environment, sticking them in place.
+  a large amount of ligand in their environment, effectively sticking them in place.
 \end{enumerate}
 }
 \end{figure}
 
 \subsubsection{Border Menu}
-
 The last menu is the borders menu, which allows the user to decide which 
 individual borders will respond to cells by reflecting, absorbing or 
-removing them.
+removing them. Its controls are detailed in Figure 5.
 
 \begin{figure}[H]
 \centering
@@ -367,7 +379,7 @@ unfeasible to include all parameters as function arguments. Any
 parameter that can be changed within the GUI is available for alteration 
 within the command line version. If the user desires to replicate the 
 simulations we discuss later, the command line version can be run with 
-an additional function argument. These are ``stem'', ``migrate\_random'' 
+an additional function argument. These are ``niche\_sim'', ``migrate\_random'' 
 and ``migrate\_non\_random''. These presets already have the parameters 
 that our simulations ran saved within them. The user can copy this code 
 and substitute parameters to store their own simulations.
@@ -375,12 +387,12 @@ and substitute parameters to store their own simulations.
 Comments are provided in {\itshape run\_sum.jl} so that users can see 
 what different parameters do. These parameters are laid out similarly to 
 the graphical menus (For instance, the cell type characteristics are 
-shown in run\_sim.jl), and are written as Julia variables.
+shown in run\_sim.jl), and are written as Julia variables (Figure 6).
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{media/runsim.png}
-\caption[]{Figure X: run.jl: choosing cell type parameters}
+\caption[]{Source code for run.jl: choosing cell type parameters}
 \end{figure}
 
 \subsection{Accessing Binary Outputs}
@@ -403,16 +415,15 @@ in an array. ``stack'' can be further used to combine the simulations
 together into one time series. All of these are provided for 
 conveniently analysing the output from the CBMP.
 
-\section{The Model}
-The framework of the model can be seen briefly outlined in Figure X. To 
+\section{The Model --- written by AM and RC, software developed by AM with contributions from RC and LK}
+The framework of the model can be seen briefly outlined in Figure 7. To 
 begin with, cells are allocated to non-overlapping locations using 
 sequential random placement. If not all cells can be placed in the size 
 of environment specified, the model will stop trying to place cells and 
 report this. However, the simulation will then begin with the amount of 
 cells that had already been placed. Once completed, the simulation will 
-then iterate over five steps for the amount of user specified time 
-steps, shown in Figure X. These events take place in two-dimensional 
-continuous space. 
+then iterate over five steps for the amount of user-specified time. 
+These events take place in two-dimensional continuous space. 
 
 \begin{figure}[H]
 \centering
@@ -431,7 +442,7 @@ haematopoietic stem cells in a niche model), or across the whole field,
 depending upon their specified type location. If a proposed location 
 overlaps with another cell, then a new location is randomly generated 
 and proposed (random sequential placement). If many attempts are made to 
-fit a cell in the given field, but the cells are simply too numerous and 
+fit a cell in the given field but the cells are simply too numerous or
 too large, then the simulation stops placing new cells and carries out 
 the simulation with the amount of cells it had so far placed correctly.
 
@@ -451,7 +462,7 @@ implemented to be changed or removed, or new behaviours added.
 
 \subsubsection{Cell Death}
 Cell death is modelled as random, and uniform for a given type of cell. 
-This assumes that cell death is independent of the cell's environment, 
+This assumes that cell death is independent of the cells' environment, 
 and in particular, independent of prior deaths that have occurred in 
 that cell's vicinity. In reality, apoptosis is mediated by environmental 
 factors, and this could be included with the development of a more 
@@ -470,7 +481,7 @@ The magnitude of the initial movement vector is drawn from a Chi-squared
 distribution with two degrees of freedom. 
 
 A cell's movement is determined by three aspects: the ligand, the 
-randomness and the persistence. These are explained in turn.
+randomness and the persistence. These are each explained in turn.
 
 In order to decide where to move, cells detect the amount of ligand at 
 receptor locations on their cell membrane. In the model, the number of 
@@ -479,16 +490,16 @@ equally around the circumference of the cell.
 
 The cell is then most likely to go in the direction that - according to 
 its receptors - has maximal concentration. Since it would not be 
-biologically realistic for a cell to reliably detect infinitesimal 
-differences in concentration around its surface, the user is allowed to 
+biologically realistic for a cell to reliably filter infinitesimal 
+differences in concentration from noise, the user is allowed to 
 decide the minimum ratio (and also a minimum absolute amount) of ligand 
 that cells are able to detect. In the case of a stem cell, this 
 threshold is also used to indicate whether the stem cell is in the 
-niche, and this will determines its mitotic behaviour.
+niche, and this determines its mitotic behaviour.
 
-If the cell cannot detect the surrounding ligand, it's motion is 
+If the cell cannot detect the surrounding ligand, its motion is 
 determined by a combination of its last movement vector and random 
-chance. this combination is weighted by user-specified persistence and 
+chance. This combination is weighted by user-specified persistence and 
 randomness parameters.
 
 When a movement is proposed for a cell, there are two ways that its 
@@ -506,8 +517,8 @@ Cells grow according to a user specified growth rate that depends on the
 cell's area. Because only one cell grows per timestep, the growth rate 
 is adjusted to account for the number of cells in the simulation. 
 Whether a cell divides depends on two factors: i) the ratio of its size 
-to the size at which that type of cell is initialised. If this ratio 
-exceeds the specified threshold, then the cell will divide. ii) the 
+to the size at which that type of cell is initialised (if this ratio 
+exceeds the specified threshold then the cell will divide) and ii) the 
 adjacent space available. If there is insufficient space to place two 
 daughter cells, then the cell will refrain from dividing. When cells 
 divide, each of the daughter cells have half of the area of the parent 
@@ -523,14 +534,14 @@ daughter cells becoming progenitor cells instead.
 The CBMP allows generation of ligand as an instantaneous pulse, or 
 continuously over finite time. There can be multiple sources, so long as 
 they are all of the same variety. Modelling how cells are affected by 
-these ligands depends on modelling its diffusion. These environmental 
+ligand depends on modelling its diffusion. These environmental 
 models are best understood by beginning with the instantaneous case.
 
 \subsubsection{Diffusion}
 {\bfseries Instantaneous Pulse of Ligand} \\
 The equations governing the diffusion of ligand from an instantaneous 
 source can be derived from the example of a single particle \(P\) that can 
-move along an axis, as in Figure X.
+move along an axis, as in Figure 8.
 
 \begin{figure}[H]
 \centering
@@ -539,7 +550,7 @@ move along an axis, as in Figure X.
 one-dimensional space}
 \end{figure}
 
-Consider a particle \(P\) that, as in Figure X, has an equal probability of 
+The particle \(P\) is taken to have an equal probability of 
 moving left or right. Let the length of each jump be \(a\), and 
 the time elapsed during each jump be \(\tau\), and assume that 
 the particle takes another step immediately as soon as each previous 
@@ -606,10 +617,14 @@ The concentration is then modelled as follows:
 \end{equation}
 
 In this model, \(\tau_0\) is the duration over which the 
-source emits ligands. Contrary to the previous model where the input is 
+source emits ligand. Contrary to the previous model where the input is 
 only a Dirac pulse, the number of ligands in this model is increasing 
-during the interval \(1,\tau_0\). Figure 3 
-highlights the differences of the two models.
+during the interval \(1,\tau_0\). Figure 9 
+highlights the differences of the two models over time. The differences
+between the two models can also be compared in their spatial properties. As
+shown in Figure 10, they both decrease monotonically with distance and have
+a grossly similar curve that decreases rapidly close to the source then
+becomes more flat at a greater distance.
 
 \begin{figure}[H]
 \centering
@@ -681,9 +696,9 @@ have finished moving, their locations are given to the overlap-checking routine
 (red) to confirm their locations and declare the movement stage complete.}
 \end{figure}
 
-The algorithm for detecting collisions begins by storing all of the 
+The algorithm for detecting collisions, detailed in Figure 11, begins by storing all of the 
 cells' initial location, in case the simulation needs to be restored to 
-that original state. as shown in figure X, the next step is to check 
+that original state. The next step is to check 
 whether the cell is going to touch any other cells, or to touch the 
 border. If the cell has more than one collision in its path, then the 
 cell is made to collide with whichever object it would hit first, and 
@@ -708,15 +723,13 @@ It is instructive to describe in some more detail how it is detected
 that a cell is colliding with another cell, or that it is colliding with 
 the wall.
 
-\subsubsection{Cell-cell Collisions}
+\subsubsection{Cell-Cell Collisions}
 To understand how cell-cell collisions are identified, we can consider 
 the most challenging case, where two cells lie on the path of a moving 
-cell to its destination. As shown in Figure X, the moving cell, 
+cell to its destination. As shown in Figure 12, the moving cell, 
 illustrated in black, is denoted m. Its initial position is \(m_0\) 
 and its proposed position is \(m_1\). The two cells that lie in its 
 path are denoted \(k_1\) and \(k_2\).
-
-Let the cells be denoted as per Figure X.
 
 \begin{figure}[H]
 \centering
@@ -766,8 +779,8 @@ both positive, and these cosines can be easily computed
 using the cosine rule.
 
 So far, cells that meet these criteria lie on the the path of cell 
-\(m\). However, one needs to decide which cell, of all those 
-that remain, will be hit by cell \(m\) first. This is done by 
+\(m\). However, one needs to decide which of the remaining cells
+will be hit by cell \(m\) first. This is done by 
 calculating where each of these cells would intersect with the moving 
 circumference of cell \(m\), and selecting the collision that is closest to 
 \(m\)'s starting point. These possible positions \(m_{0'}\), 
@@ -804,7 +817,7 @@ Moreover, the momentum of the system is split between cells \(m\) and \(k\) as a
 pool-ball collision, as shown in Figure X. This is a coarse approximation of biological 
 reality but is better than the alternative of neglecting to model collisions at all. 
 
-In this model, cell \(k\), which was previously stationary, will 
+Cell \(k\), which was previously stationary, will 
 set out with a movement vector \(\mathbf{v_k}\) in a direction parallel to \(\overrightarrow{m_{0'}k}\).
 Cell \(m\) will have a new movement vector \(\mathbf{v_m}\) 
 that is perpendicular to \(\mathbf{v_k}\), and whose scalar product with \(\mathbf{v_0}\) 
@@ -816,7 +829,7 @@ is positive.
 \caption{Illustration how an angle is selected when cell \(m\) bounces with cell \(k\)}
 \end{figure}
 
-The weight of each cell assumed to be proportional to its squared radius 
+The weight of each cell is assumed to be proportional to its squared radius 
 as the simulation takes place in a two-dimensional environment, although 
 this code can easily be changed if it is desirable to make the mass 
 proportional to the cubed radius instead.
@@ -843,8 +856,8 @@ and \(y\) ordinates of each of the four borders.
 West wall.}
 \end{figure}
 
-This gives the four places where the cell would intersect with the 
-extension of each border. To know which border the cell is going to hit 
+This gives a location where the cell-edge would intersect each of the
+four borders. To know which border the cell is going to hit 
 first, you only look at the two borders that the cell is moving towards, 
 and disregard those that are behind. The border that the cell strikes 
 first is the one that minimizes the distance \(m_1m_0\), as 
@@ -862,8 +875,8 @@ to account for inelasticity.
 \item If the border is {\itshape removing}, then the cell disappears.
 \end{enumerate}
 
-\section{Example Applications}
-The platform has been designed model diverse biological scenarios with 
+\section{Example Applications --- written by LK and RC, data analysis by RC, images by LK}
+The platform has been designed to model diverse biological scenarios with 
 slight changes in parameters resulting in large changes in emergent 
 behaviour. The commonality between these models is that a 
 chemoattractant is hypothesised that biases cells' behaviour according 
@@ -878,14 +891,15 @@ Two examples that demonstrate some of the features of the model are:
 
 These examples are far from exhaustive. For one more example, similar 
 applications could arise in modelling the mesenchymal cells present in 
-embryogenesis,\cite{caplan91} where it has been shown that cells are highly influenced 
+embryogenesis,\cite{caplan91}\cite{merks05} where it has been shown that cells are highly influenced 
 by attractive and repulsive chemokines in their local environment.
 
 \subsubsection{Macrophage Migration}
 The first model was designed to investigate how macrophages migrate to a 
 laceration. This model was designed to copy an experimental setup in 
 which lacerations are performed on a fruit fly, and the migration of 
-macrophages is microscopically examined on the resultant wound. To 
+macrophages is microscopically examined on the resultant wound. 
+To 
 demonstrate how the CBMP could be useful for modelling these data, three 
 competing hypotheses were tested. In the first hypothesis, the cell 
 migrate towards the wound deterministically. In the second hypothesis, 
@@ -896,7 +910,7 @@ again have no particular inclination to slow down when they get there.
 
 In all three simulations, the laceration is modelled as a straight-line 
 at the location x=15 and secretes ligands (cytokines) at a constant rate 
-for finite duration. The immune cells start in randomly assigned 
+for finite duration. The immune cells are initialised to randomly assigned 
 locations. The growth rate and death rate are set to zero, and the cells 
 are 0.5 units in size. The borders were set to remove stray cells. The 
 rest of parameters are available as the preset ``migrate\_random'' and 
@@ -912,37 +926,43 @@ than would be seen in nature.
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=14.41cm]{media/}
+\includegraphics[width=14.41cm]{media/Collated_determinstic.png}
 \caption{Shapshots of deterministic 
 migration to a laceration at X = 15. Images are shown every 500 timesteps, 
 starting at \(t = 1\) (Top left). Cells quickly migrate towards the laceration and 
-form a line over the source. T = 3000 has been left off as there was no 
+form a line over the source. T = 3000 is not displayed as there was no 
 difference from \(T = 2500\)}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h]
 \centering
 \includegraphics[width=11.51cm]{media/DetMigrationtoWound.png}
-\caption{The horizontal location of cells over time when 
-they migrate deterministically to the wound. Cells move to x=15, the 
-location of the wound, rapidly and remain there for the duration of the 
+\caption{Deterministic migration to the wound, located at \(x=15\). The horizontal location
+  of cells over time is shown. Cells rapidly converted to \(x=15\), the 
+location of the wound and remain there for the duration of the 
 simulation.}
 \end{figure}
 
 In the second model, the macrophages were initialised with high 
-randomness and no bias, but a tendency to slow down when they neared the 
+randomness and no bias, with a tendency to slow down when they neared the 
 wound. This simulation provided some evidence macrophages do not arrive 
 at wounds solely by being slowed by cytokines or exposed collagen at 
 those wounds, as they did not differentially associate at the wound as 
 would be expected {\itshape in vivo} (Figure X). After 3000 timesteps, 
 the distribution of cells within the simulation was almost identical, 
 with the average position not noticeably closer to the laceration than 
-at the beginning of the simulation.\begin{figure}[H]
+at the beginning of the simulation.
+\begin{figure}[H]
 \centering
 \includegraphics[width=11.51cm]{media/RandomMigrationtoWound.png}
+\caption{Random migration with a wound located at \(x=15\). In this simulation, 
+  cells are not biased
+  to move in one direction more than any other but when they arrive at the wound,
+  their motion is slowed. This model did not cause cells to migrate to x=15.
+}
 \end{figure}
 
-The third simulation provided the only realistic results (Figure X). 
+The third simulation provided by far the most realistic results (Figure X). 
 Initialising cells to have a movement pattern made up of equal parts 
 persistence, randomness and bias resulted in a slow attraction of cells 
 towards the laceration. This is much more representative of the gross 
@@ -954,20 +974,21 @@ experiments.
 
 To repeat these simulations, run the platform in GUI mode, and use default
 parameters for all values except for the following:
-Main menu: 
+
+{\itshape Main menu:}
 \begin{itemize}
   \item 50 cells
   \item 3000 timesteps
   \item Type of source: Sustained
 \end{itemize}
-Diffusion menu and ligand menu:
+{\itshape Diffusion menu and ligand menu:}
 \begin{itemize}
 \item Type of source: Line
-\item Location: X=15
+\item Location: x=15
 \item Initial concentration: 100
 \item Upper time: 3000
 \end{itemize}
-Cell type
+{\itshape Cell type:}
 \begin{itemize}
   \item For deterministic movement:
     \begin{itemize}
@@ -987,6 +1008,10 @@ Cell type
 \begin{figure}[H]
 \centering
 \includegraphics[width=11.51cm]{media/StochMigrationtoWound.png}
+\caption{Stochastic migration to the wound, located at \(x=15\). The horizontal location
+  of cells over time is shown. Cells rapidly moved to \(x=15\) but some continued to reside
+  at a larger distance from the wound source, mostly within five units of the wound.
+}
 \end{figure}
 
 \subsubsection{Stem Cell Replication}
@@ -999,10 +1024,9 @@ collaboration for the authors is the case of haematopoeitic stem cells in
 mouse models. Experimental evidence suggests that the Notch1 ligand is 
 involved in the expansion of stem cells in a region that is referred to 
 as the stem cell niche.\cite{calvi03} In the CBMP model, we defined the stem cell 
-niche as the region where stem cells are differentially likely to remain 
-as stem cells when they replicate. The stem cell niche is defined in the 
-simulation as any area in the environment where the local ligand 
-concentration exceeds the concentration threshold. In practice, this 
+niche as the region where the ligand concentration is detected by stem-cells,
+so that when they replicate, they are differentially likely to remain as
+stem cells. In practice, this 
 results in a zone around any designated sources where stem cells grow in 
 number. Once outside of this area, any new daughter cells are more 
 likely be progenitors. 
@@ -1014,7 +1038,7 @@ the field. Type 2 cells were designated the progenitors, with a high
 growth rate of 0.2, and randomness of 1.0 but no attraction to the stem 
 cell niche. The remainder of parameters can be seen in the {\itshape 
 niche\_sim} preset in {\itshape run\_sim.jl}. A constant ligand source can be 
-placed as a line or multiple points along the line X = 0 to generate the 
+placed as a line or as multiple points along the line \(x=0\) to generate the 
 niche; in our simulation, the five units of space on the left hand side 
 as the niche, and the rest was designated as non-niche. The borders were 
 initialised as the left hand border being absorbing and the other 3 as 
@@ -1025,6 +1049,15 @@ new progenitor cells at the stem cell niche border. After about 2500
 iterations the rate of growth of progenitor cells in the field of the 
 simulation decreased, and would eventually approach equilibrium (Figure 
 X).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=13.51cm]{media/pops.png}
+\caption{Stem Cell Niche Simulation. Parameters used: Stem Cells(Blue): Growth Rate: 0.1, Threshold: 0.000793, 
+  Persistence: 0.2, Randomness 0.7. Progenitor Cells (Green) Growth Rate: 0.25, Threshold 0.000793, Persistence: 
+  0.2, Randomness: 1.0. The stem cell population reaches equilibrium around 2000 timesteps and the progenitor 
+cell population does not yet reach stable equilibrium within 5000 timesteps.}
+\end{figure}
 
 A sense of how this growth happens across space is given in Figure X. 
 Initially, the stem cells begin at the leftmost wall of the simulation, 
@@ -1038,33 +1071,22 @@ To repeat this simulation, run the platform in interactive prompt mode
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=14.51cm]{media/6sim.png}
-\caption{Stem Cell Niche Simulation. 
+\includegraphics[width=13.51cm]{media/6sim.png}
+\caption{Frequency of cells by distance to \(x=0\) in the Stem Cell Niche
+  Simulation. The simulation was performed five times, of which all cell 
+counts are a total of these runs. The region \(0 \leq x \leq 5\) is 
+designated the stem cell niche. The border between the niche and 
+non-niche area is indicated by the black vertical line. 
+The stem cell population reaches equilibrium around 2000 timesteps 
+and the progenitor cell population does not yet reach stable equilibrium 
+within 5000 timesteps.
 Parameters used: Stem Cells(Blue): Growth Rate: 0.1, Threshold: 25, 
 Persistence: 0.2, Randomness 0.7. Progenitor Cells (Green) 
 Growth Rate: 0.25, Persistence: 0.2, Randomness: 1.0. 
-The stem cell population reaches equilibrium around 2000 timesteps 
-and the progenitor cell population does not yet reach stable equilibrium 
-within 5000 timesteps.}
+}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{media/Collated_determinstic.png}
-
-\caption{Frequency of cells by distance 
-to X = 0. The simulation was performed five times, of which all cell 
-counts are a total of these runs. The region \(0 \leq x \leq 5\) is 
-designated the stem cell niche. The border between the niche and 
-non-niche area is indicated by the black vertical line. The stem cells, 
-which are initialised to the leftmost wall, predominate within the stem 
-cell niche for the duration of the simulation. The progenitor cells 
-predominate in the non-niche area, and their proliferation slows, but 
-does not completely stabilise in the second half of the simulation.}
-\end{figure}
-
-\section{Performance}
-
+\section{Performance --- written by RC}
 One significant factor that will determine the usefulness of the CBMP, 
 especially for the purpose of parameter inference, is its performance. 
 On an AMD 1.9GHz single processor desktop computer, the CBMP is able to 
@@ -1073,7 +1095,7 @@ secretion for twenty cells with eight receptors. This is highly
 dependent on which model is used for diffusion, and how many receptors 
 each cell has.
 
-\section{Further Development of the Platform}
+\section{Further Development of the Platform -- written by LK and RC}
 For a researcher who can program in Julia, modifications can open up the 
 possibility of more diverse models. Alteration to the program's source 
 code have been made possible by placing the software on Github, where 
@@ -1133,8 +1155,8 @@ feasible.
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=13.23cm]{media/image32.eps}
-\caption{Figure X: The tentative\_move function}
+\includegraphics[width=11.23cm]{media/tentativemove.png}
+\caption{The tentative\_move function}
 \end{figure}
 
 While it has been attempted to make the platform as comprehensive as 
@@ -1155,7 +1177,7 @@ are crucial to the migrational pattern of embryonic cells.\cite{raz09} Implement
 a distinction between epithelial and mesenchymal cells would work well 
 with the aforementioned development, and could all be involved in 
 modelling tumour growth and the role of angiogenesis and epithelial to 
-mesenchymal transition (EMT) in the progression of the disease state.
+mesenchymal transition in the progression of the disease state.
 
 Second, a logical extension of the platform would be to enable it to 
 distinguish and keep track of different ligand types throughout the 
@@ -1163,9 +1185,9 @@ environment. This would provide a chance for competing signals to
 influence cellular decisions, which could then be more exquisitely 
 responsive to their environment. Another interesting feature would be to 
 model how cells respond to secretion of ligand that starts at different 
-times. For example, it would be interesting to see how reaction of cells 
-that have been migrating towards a laceration that then encounter a 
-sharp, strong pulse of attractive chemokine from elsewhere. Given that 
+times. For example, it would be interesting to see how cells react
+if they are migrating towards a laceration and then encounter a 
+sharp, strong pulse of attractive chemokine. Given that 
 the simulation already allows users to specify when each source should 
 cease to produce ligand, it would be a small extension to make the 
 diffusion start at a time that is also specified by the user, rather 
@@ -1223,7 +1245,7 @@ email, at ryan.carey14@imperial.ac.uk,
 lewis.kindeleit14@imperial.ac.uk, 
 antoine.messager14@imperial.ac.uk.
 
-\section{Conclusion}
+\section{Conclusion --- written by LK}
 The CBMP is an adaptable, extensible platform for modelling diverse cellular behaviours in a user-specified 
 environment. It uses an ABM to model cell-behaviour and partial differential equations to model the environment. 
 An agent-based approach is ideal for modelling the cells as they are heterogeneous entities with complex 
@@ -1244,10 +1266,14 @@ helpful for exploring and analysing cellular simulations and will only improve a
 \begin{thebibliography}{99}
 \bibitem{kaul15}
   Kaul, Himanshu, and Yiannis Ventikos. ``Investigating biocomplexity through the agent-based paradigm.'' {\itshape Briefings in bioinformatics} 16.1 (2015): 137-152. http://bib.oxfordjournals.org/content/16/1/137.full\#ref-2
+\bibitem{grimm06} Grimm, Volker, et al. "A standard protocol for describing individual-based and agent-based models." {\itshape Ecological modelling} 198.1 (2006): 115-126.
+\bibitem{drasdo07} Drasdo, Dirk, Stefan Hoehme, and Michael Block. "On the role of physics in the growth and pattern formation of multi-cellular systems: What can we learn from individual-cell based models?." {\itshape Journal of Statistical Physics} 128.1-2 (2007): 287-345.]
 \bibitem{codling08}
   Codling, Edward A., Michael J. Plank, and Simon Benhamou. ``Random walk models in biology.'' {\itshape Journal of the Royal Society Interface} 5.25 (2008): 813-834.
 \bibitem{caplan91}
   Caplan, Arnold I. ``Mesenchymal stem cells.'' {\itshape Journal of orthopaedic research} (1991): 641-650.
+\bibitem{merks05}
+  Merks, Roeland MH, and James A. Glazier. ``A cell-centered approach to developmental biology.'' {\itshape Physica A: Statistical Mechanics and its Applications} 352.1 (2005): 113-130.
 \bibitem{linheng05}
   Li, Linheng, and Ting Xie. ``Stem cell niche: structure and function.'' {\itshape Annu. Rev. Cell Dev. Biol.} 21 (2005): 605-631.
 \bibitem{calvi03}
@@ -1256,10 +1282,10 @@ helpful for exploring and analysing cellular simulations and will only improve a
   Raz, Erez, and Harsha Mahabaleshwar. ``Chemokine signaling in embryonic cell migration: a fisheye view.'' {\itshape Development} 136.8 (2009): 1223-1229.
 \bibitem{roeder06}
   Roeder, Ingo, et al. ``Dynamic modeling of imatinib-treated chronic myeloid leukemia: functional insights and clinical implications.'' {\itshape Nature medicine} 12.10 (2006): 1181-1184.
-\bibitem{grimm06} Grimm, Volker, et al. "A standard protocol for describing individual-based and agent-based models." {\itshape Ecological modelling} 198.1 (2006): 115-126.
-\bibitem{drasdo07} Drasdo, Dirk, Stefan Hoehme, and Michael Block. "On the role of physics in the growth and pattern formation of multi-cellular systems: What can we learn from individual-cell based models?." {\itshape Journal of Statistical Physics} 128.1-2 (2007): 287-345.]
 \end{thebibliography}
 
+%\bibitem{vincente05}
+%  Vicente-Manzanares, Miguel, Donna J. Webb, and A. Rick Horwitz. ``Cell migration at a glance.'' {\itshape Journal of Cell Science} 118.21 (2005): 4917-4919.
 %\newpage
 %\begin{appendices}
 %\end{appendices}
