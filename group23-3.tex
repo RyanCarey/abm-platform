@@ -20,44 +20,55 @@
 \begin{document}
 
 \maketitle
+\section*{M Sc Bioinformatics and Theoretical Systems Biology}
+\section*{Supervisor: M.P.H Stumpf} 
+\section{Word Count: X}
 
 \newpage
 \tableofcontents
 \newpage
-\section{Word Count: X}
-\newpage
 \section{Introduction}
-The Cell Behaviour Modeling Platform (CBMP) is a simulation environment 
-for agent-based models of cells. It is a research tool that can simulate 
-a variety of systems in which cells move through continuous space in 
-response to diffusing environmental stimuli and each other. It can be 
-used to create kinds of cells and environmental stimuli, where the cells 
-behave according to user specified parameters.
+Agent based models (ABM) are suited to simulating cellular dynamics because the behaviour of cells can 
+depend on complex interactions.\cite{kaul15} By implementing the rules 
+that dictate the behaviour of the smallest components of a system it is possible to analyse the emergent 
+system to see if the researcher’s understanding is correct. This approach has gained popularity in recent 
+years as increases in computing power have allowed for more sophisticated behaviour to be simulated. 
+This in turn has increased the relevance of output data, improving the scope for using them to inform 
+future experimental direction. \cite{grimm06} \cite{drasdo07}
 
-It has been developed in Julia, a relatively new language that is highly 
-optimized for performance but nonetheless offers readable syntax and 
-short development time. This has resulted in a platform that can 
-simulate many individual cells within a continuous space environment at 
-good speed, whilst still being very accessible and easily modified to 
-suit new users needs.
+To this end, ABMs have been created to analyse a myriad of biological problems such as cell migration 
+and tumour formation with varying degrees of success. However, the technical expertise required to 
+create such a model limits the amount of biologists who utilise these useful tools. An adaptable and 
+easy-to-use platform could potentially assist many experimental biologists to test formal models for 
+how observed cells behave. The long-range goal to decrease the barriers to  ABM creation for researchers 
+was the basis for our platform, the Cell Behaviour Modelling Platform (CBMP).
 
-The CBMP can run as a command line interface or as a graphical user 
-interface. The command line interface is designed for fast expert use, 
-whereas the GUI has been developed to be easier to use, and to display 
-the simulation in real-time. Either interface can output the results of 
-simulations as a binary file to allow quantitative analysis in Julia or 
-Python. The CBMP has been developed with a publicly available codebase 
-in Julia, which can readily undergo modification by end-users.
+The CBMP is a research tool that can simulate a variety of systems in which cells move through continuous 
+space in response to diffusing environmental stimuli and each other. It can be used to create kinds of 
+cells and environmental stimuli, where the cells behave according to user specified parameters. In the absence 
+of environmental stimuli, the cells walk according to a combination of persistence and 
+randomness, according to walk models that have a long history of use in biology.\cite{codling08} 
+When environmental stimuli are present, cells decide where to move based on several factors: 
+the evaluation of chemical stimuli, the cells current direction of motion and a random component. The 
+growth of cells depends on whether they have sufficient space around them. The model implements simple 
+rules describing how cells interact with each other and their environment, which gives the opportunity 
+to observe emergent behaviour and to compare this to real world experimental data. This comparison can 
+be used to check whether the mechanics underlying the simulation are approximately correct or to discover 
+previously unknown characteristics about the system undergoing investigation.
 
-The CBMP uses an agent-based model to model cell-behaviour, and partial 
-differential equations to model their environment. An agent-based 
-approach is ideal for modelling the cells as they are heterogeneous 
-entities with complex interactions. For the cytokines, a continuum 
-approach is essential because they are heterogenous and are too numerous 
-to be modelled individually.\cite{kaul15}
+The platform has been developed in Julia, a relatively new language that is highly optimized for performance 
+but nonetheless offers readable syntax and short development time. This has resulted in a platform that 
+can simulate many individual cells within a continuous space environment at good speed, whilst still 
+being very accessible and easily modified to suit new users’ needs. This means the platform is an easily 
+accessible tool that has a large amount of room to be tailored to an individual's preferences. The platform 
+is intended to gain functionality via new users implementing code that suits their specific needs. Extending 
+the platform in this manner is substantially less difficult and time-consuming than designing an ABM 
+from scratch. The CBMP allows substantially varied models. Moreover the codebase is designed to tolerate 
+significant customisation and is made publicly available online. The intent is for the CBMP to facilitate 
+inferences about many of the diverse cellular systems being investigated today.
 
 In the absence of an environmental stimulus, the cells carry out a walk 
-that includes elements of persistence and randomness.\cite{codling08} When environmental 
+that includes elements of persistence and randomness. When environmental 
 stimuli are present, cells decide where to move based on several 
 factors: the evaluation of chemical stimuli, the cell's current 
 direction of motion and a random component. The growth of cells depends 
@@ -72,11 +83,7 @@ unknown characteristics about the system undergoing investigation.
 \section{Installation}
 The CBMP has been developed in Julia 0.4. in RedHat Enterprise Linux 
 Workstation release 6.2, and has also been tested on Ubuntu 14.04 in 
-Julia 0.3. As the Julia language is updated on a nightly basis, some of 
-the syntax used within the platform can become deprecated in as little 
-as 24 hours. Whilst this has yet to pose a significant problem, we 
-anticipate that the next large Julia upgrade (0.5) may require the 
-platform to be updated. The platform should run on any operating system 
+Julia 0.3. The platform should run on any operating system 
 that has Julia installed, however there may be slight differences 
 between them.
 
@@ -200,8 +207,8 @@ the simulation if desired and allow an output of the results of the
 simulation to be saved to file as a binary 'pickle' file. Note that 
 displaying the simulation slows the process considerably, and should be 
 turned off for long simulations.
-\end{enumerate}}
-
+\end{enumerate}
+}
 \end{figure}
 
 \subsubsection{Diffusion Menu}
@@ -279,7 +286,8 @@ X).
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{media/cell_type_screen_annotated.png}
-\caption[]{The controls for the four types of cells:
+\caption[]{The cell type window, which allows the user to 
+specify parameters for each of the four cell types. The parameters are:
 \begin{enumerate}[topsep=2pt,itemsep=-1ex,partopsep=1ex,parsep=1ex]
 \item {\itshape Ratio:} The relative amount of this type of cell.
 Ratios are normalised and as such do not have to sum to one.
@@ -321,9 +329,6 @@ cells divide to produce only cells of their own type.
 }
 \end{figure}
 
-{\itshape Figure X}. The cell type window, which allows the user to 
-specify parameters for each cell type. The parameters are:
-
 \subsubsection{Border Menu}
 
 The last menu is the borders menu, which allows the user to decide which 
@@ -332,7 +337,7 @@ removing them.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=6.63cm]{media/border_screen.png}
+\includegraphics[width=6.13cm]{media/border_screen.png}
 \caption[]{The border menu Each of the four 
 borders can independently be set to perform reflecting or absorbing 
 collisions, or to remove cells.}
@@ -411,9 +416,10 @@ continuous space.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=6.71cm]{media/algorithmoverview.png}
-\caption[]{Global overview of the model. The five main stages 
-of the simulation are cell death, environment dynamic, movement, cell 
+\includegraphics[width=5.81cm]{media/algorithmoverview.png}
+\caption[]{Global overview of the model. The three stages of the program
+  are initialisation (green), iteration (blue) and termination (red). 
+  Interation has five parts: cell death, environment dynamic, movement, cell 
 growth and mitosis.}
 \end{figure}
 
@@ -665,7 +671,14 @@ other cells, and resolves these collisions recursively.
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{media/algorithm.png}
-\caption{The algorithm for moving cells}
+\caption{The algorithm for moving cells. To begin with, a move is proposed
+for cell m. This move is evaluated by the ballistics functions (in yellow),
+which identify whether the cell will collide with another cell, with 
+the border, or neither. If there are collisions, then a new move (green) is 
+proposed again for any colliding cells and managed recursively. If there
+are no collisions, then the cell's move is finished (blue). Once all cells
+have finished moving, their locations are given to the overlap-checking routine 
+(red) to confirm their locations and declare the movement stage complete.}
 \end{figure}
 
 The algorithm for detecting collisions begins by storing all of the 
@@ -799,7 +812,7 @@ is positive.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{media/cellcollide.png}
+\includegraphics[width=13cm]{media/cellcollide.png}
 \caption{Illustration how an angle is selected when cell \(m\) bounces with cell \(k\)}
 \end{figure}
 
@@ -822,7 +835,7 @@ and \(y\) ordinates of each of the four borders.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=14.98cm]{media/wall.png}
+\includegraphics[width=12.98cm]{media/wall.png}
 \caption{The challenge of deciding which border m 
   strikes. \(m_0\) is the initial position, \(m_1\)is the final 
   position and \(m_2\)is the proposed position. Note that \(m\) strikes 
@@ -849,19 +862,18 @@ to account for inelasticity.
 \item If the border is {\itshape removing}, then the cell disappears.
 \end{enumerate}
 
-\section{Examples}
+\section{Example Applications}
 The platform has been designed model diverse biological scenarios with 
 slight changes in parameters resulting in large changes in emergent 
 behaviour. The commonality between these models is that a 
 chemoattractant is hypothesised that biases cells' behaviour according 
 to the concentration gradient established by a ligand source.
 
-Three examples that demonstrate some of the features of the model are:
+Two examples that demonstrate some of the features of the model are:
 
 \begin{itemize}
 \item The migration of macrophages to a wound.
 \item The behaviour of cells around a stem cell niche
-\item Cell culture
 \end{itemize}
 
 These examples are far from exhaustive. For one more example, similar 
@@ -901,16 +913,16 @@ than would be seen in nature.
 \begin{figure}[H]
 \centering
 %\includegraphics[width=14.41cm]{media/}
-\caption{Timelapse of deterministic 
-migration to a laceration at X = 15. Timesteps are every 500, starting 
-at \(t = 1\) (Top left). Cells quickly migrate towards the laceration and 
+\caption{Shapshots of deterministic 
+migration to a laceration at X = 15. Images are shown every 500 timesteps, 
+starting at \(t = 1\) (Top left). Cells quickly migrate towards the laceration and 
 form a line over the source. T = 3000 has been left off as there was no 
 difference from \(T = 2500\)}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=14.51cm]{media/DetMigrationtoWound.png}
+\includegraphics[width=11.51cm]{media/DetMigrationtoWound.png}
 \caption{The horizontal location of cells over time when 
 they migrate deterministically to the wound. Cells move to x=15, the 
 location of the wound, rapidly and remain there for the duration of the 
@@ -927,7 +939,7 @@ the distribution of cells within the simulation was almost identical,
 with the average position not noticeably closer to the laceration than 
 at the beginning of the simulation.\begin{figure}[H]
 \centering
-\includegraphics[width=14.51cm]{media/RandomMigrationtoWound.png}
+\includegraphics[width=11.51cm]{media/RandomMigrationtoWound.png}
 \end{figure}
 
 The third simulation provided the only realistic results (Figure X). 
@@ -940,9 +952,41 @@ lifelike dynamics. There may be more insights from comparing more subtly
 different models to the data from automatic microscopy of these 
 experiments.
 
+To repeat these simulations, run the platform in GUI mode, and use default
+parameters for all values except for the following:
+Main menu: 
+\begin{itemize}
+  \item 50 cells
+  \item 3000 timesteps
+  \item Type of source: Sustained
+\end{itemize}
+Diffusion menu and ligand menu:
+\begin{itemize}
+\item Type of source: Line
+\item Location: X=15
+\item Initial concentration: 100
+\item Upper time: 3000
+\end{itemize}
+Cell type
+\begin{itemize}
+  \item For deterministic movement:
+    \begin{itemize}
+      \item Randomness 0.0
+    \end{itemize}
+  \item For random movement:
+    \begin{itemize}
+      \item Randomness 1.0
+    \end{itemize}
+  \item For stochastic movement:
+    \begin{itemize}
+      \item Persistence 0.8
+      \item Randomness 0.8
+    \end{itemize}
+\end{itemize}
+
 \begin{figure}[H]
 \centering
-\includegraphics[width=14.51cm]{media/StochMigrationtoWound.png}
+\includegraphics[width=11.51cm]{media/StochMigrationtoWound.png}
 \end{figure}
 
 \subsubsection{Stem Cell Replication}
@@ -989,21 +1033,24 @@ cells far outnumber stem cells in the non-niche region, although each
 type of cell spills over to a small degree to the other side of the 
 niche boundary.
 
+To repeat this simulation, run the platform in interactive prompt mode 
+(run\_sim.jl), using the niche\_sim settings.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=14.51cm]{media/6sim.png}
 \caption{Stem Cell Niche Simulation. 
-Parameters used: Stem Cells(Blue): Growth Rate: 0.1, Threshold: 
-0.000793, Persistence: 0.2, Randomness 0.7. Progenitor Cells (Green) 
-Growth Rate: 0.25, Threshold 0.000793, Persistence: 0.2, Randomness: 
-1.0. The stem cell population reaches equilibrium around 2000 timesteps 
+Parameters used: Stem Cells(Blue): Growth Rate: 0.1, Threshold: 25, 
+Persistence: 0.2, Randomness 0.7. Progenitor Cells (Green) 
+Growth Rate: 0.25, Persistence: 0.2, Randomness: 1.0. 
+The stem cell population reaches equilibrium around 2000 timesteps 
 and the progenitor cell population does not yet reach stable equilibrium 
 within 5000 timesteps.}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-%\includegraphics[width=7.60cm]{media/image31.eps}
+\includegraphics[width=\linewidth]{media/Collated_determinstic.png}
 
 \caption{Frequency of cells by distance 
 to X = 0. The simulation was performed five times, of which all cell 
@@ -1015,17 +1062,6 @@ cell niche for the duration of the simulation. The progenitor cells
 predominate in the non-niche area, and their proliferation slows, but 
 does not completely stabilise in the second half of the simulation.}
 \end{figure}
-
-\subsubsection{Cell Culture}
-Initialising with a cell speed of 0 allows for the simulation of a cell 
-culture with immobile cells, such as the simulation of tumour growth or 
-bacteria culturing. Whilst additions would need to be made to the 
-platform to create simulations that could have scientific implications, 
-simple simulations can be performed that can reveal some interesting 
-dynamics. In a simulation of two identical types of cells competing 
-against each other - with the only difference being death rate - it 
-shows how many of one population have to die before the other is 
-dominant enough to outcompete them for space within the model.
 
 \section{Performance}
 
@@ -1187,38 +1223,25 @@ email, at ryan.carey14@imperial.ac.uk,
 lewis.kindeleit14@imperial.ac.uk, 
 antoine.messager14@imperial.ac.uk.
 
-\section{An Alternative Agent-based Model}
-We also attempted to implement a semi-spatial model based on the model 
-described by Roeder to simulate the development of leukaemia and the 
-effect of the tyrosine kinase inhibitor imatinib on normal and disease 
-state cells. The concepts behind this model broadly match our own, with 
-cells moving between compartments stochastically and transitioning from 
-stem cells to progenitors depending upon their most recent surroundings. 
-This results in slow expansion until the first progenitors appeared 
-within the system (after roughly 24 hours). After this, the speed of the 
-expansion increased exponentially. After 500 iterations (1 hour time 
-steps), the speed of the simulation had slowed dramatically due to size.
+\section{Conclusion}
+The CBMP is an adaptable, extensible platform for modelling diverse cellular behaviours in a user-specified 
+environment. It uses an ABM to model cell-behaviour and partial differential equations to model the environment. 
+An agent-based approach is ideal for modelling the cells as they are heterogeneous entities with complex 
+interactions. For the cytokines, a continuum approach is essential because they are heterogeneous and 
+are too numerous to be modelled individually. It can run as a command line interface or as a graphical 
+user interface. The command line interface is designed for fast expert use, whereas the GUI has been 
+developed to be easier to use, and to display the simulation in real-time. Either interface can output 
+the results of simulations as a binary file to allow quantitative analysis in Julia or Python. The platform 
+has been developed with a publicly available code-base in Julia, which can readily undergo modification 
+by end-users.
 
-However, despite the lack of results from this alternative model, it 
-revealed a few properties that could be adapted and incorporated into 
-our model. Amongst these, an attempt at modelling the cell cycle in a 
-more accurate manner, with proliferating and nonproliferating same type 
-cells (currently not possible in our platform), represents an exciting 
-prospect.
-
-With one of the intended benefits of the Julia programming language 
-supposedly being the ease with which parallelisation can be applied to 
-programs encouraged us to attempt to adapt the model for comparison to 
-our own. However, with Julia being in its embryonic state, its 
-parallelisation ability is not quite what we'd hoped, and as such we 
-think revisiting this problem in 6 months to a year will hopefully allow 
-the Julia developers to fully implement parallelisation functionality in 
-their language, therefore reducing the time it takes for these 
-simulations to run.
+There is scope for improving the platform by incorporating new functionality into it. For expert users 
+the codebase can be further complicated to carry out a vast array of simulations. The CBMP is already 
+helpful for exploring and analysing cellular simulations and will only improve as new additions are made. 
 
 \newpage
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{99}
 \bibitem{kaul15}
   Kaul, Himanshu, and Yiannis Ventikos. ``Investigating biocomplexity through the agent-based paradigm.'' {\itshape Briefings in bioinformatics} 16.1 (2015): 137-152. http://bib.oxfordjournals.org/content/16/1/137.full\#ref-2
 \bibitem{codling08}
@@ -1233,6 +1256,8 @@ simulations to run.
   Raz, Erez, and Harsha Mahabaleshwar. ``Chemokine signaling in embryonic cell migration: a fisheye view.'' {\itshape Development} 136.8 (2009): 1223-1229.
 \bibitem{roeder06}
   Roeder, Ingo, et al. ``Dynamic modeling of imatinib-treated chronic myeloid leukemia: functional insights and clinical implications.'' {\itshape Nature medicine} 12.10 (2006): 1181-1184.
+\bibitem{grimm06} Grimm, Volker, et al. "A standard protocol for describing individual-based and agent-based models." {\itshape Ecological modelling} 198.1 (2006): 115-126.
+\bibitem{drasdo07} Drasdo, Dirk, Stefan Hoehme, and Michael Block. "On the role of physics in the growth and pattern formation of multi-cellular systems: What can we learn from individual-cell based models?." {\itshape Journal of Statistical Physics} 128.1-2 (2007): 287-345.]
 \end{thebibliography}
 
 %\newpage
