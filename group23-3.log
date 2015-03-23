@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.1415926-2.5-0.9999.3 (TeX Live 2013/Debian) (format=xelatex 2015.3.11)  23 MAR 2015 02:18
+This is XeTeX, Version 3.1415926-2.5-0.9999.3 (TeX Live 2013/Debian) (format=xelatex 2015.3.23)  23 MAR 2015 02:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -54,7 +54,7 @@ File: xetex.def 2013/04/29 v0.96 LaTeX color/graphics driver for XeTeX (RRM/JK)
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
 )
-(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+(/home/ryan/texmf/tex/latex/local/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count91
 \float@exts=\toks15
@@ -69,7 +69,7 @@ Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
 LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
 ))
-(/usr/share/texlive/texmf-dist/tex/generic/ulem/ulem.sty
+(/home/ryan/texmf/tex/latex/ulem.sty
 \UL@box=\box28
 \UL@hyphenbox=\box29
 \UL@skip=\skip43
@@ -149,10 +149,10 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+(/home/ryan/texmf/tex/latex/caption/caption/tex/latex/caption/caption.sty
 Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+(/home/ryan/texmf/tex/latex/caption/caption/tex/latex/caption/caption3.sty
 Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 57.
 \captionmargin=\dimen117
@@ -166,7 +166,7 @@ Package caption3 Info: TeX engine: e-TeX on input line 57.
 \c@ContinuedFloat=\count105
 Package caption Info: float package is loaded.
 )
-(/home/ryan/texmf/tex/latex/local/enumitem.sty
+(/home/ryan/texmf/tex/latex/enumitem.sty
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \labelindent=\skip47
 \enit@outerparindent=\dimen124
@@ -397,8 +397,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 1223--1224
 
 [39] (./group23-3.aux) ) 
 Here is how much of TeX's memory you used:
- 3365 strings out of 495658
- 47334 string characters out of 6187951
+ 3364 strings out of 495658
+ 47255 string characters out of 6187951
  101567 words of memory out of 5000000
  6505 multiletter control sequences out of 15000+600000
  23496 words of font info for 68 fonts, out of 8000000 for 9000
