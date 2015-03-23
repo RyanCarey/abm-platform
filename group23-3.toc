@@ -1,29 +1,30 @@
-\contentsline {section}{\numberline {1}Introduction}{3}
-\contentsline {section}{\numberline {2}Installation}{4}
-\contentsline {subsection}{\numberline {2.1}Detailed Instructions}{4}
-\contentsline {subsection}{\numberline {2.2}Dependencies}{5}
-\contentsline {subsection}{\numberline {2.3}The Graphical User Interface}{6}
-\contentsline {subsubsection}{\numberline {2.3.1}Main Menu}{6}
-\contentsline {subsubsection}{\numberline {2.3.2}Diffusion Menu}{8}
-\contentsline {subsubsection}{\numberline {2.3.3}Source Location Menu}{10}
-\contentsline {subsubsection}{\numberline {2.3.4}Cell Type Menu}{10}
-\contentsline {subsubsection}{\numberline {2.3.5}Border Menu}{12}
-\contentsline {subsection}{\numberline {2.4}The Interactive Prompt Interface}{12}
-\contentsline {subsection}{\numberline {2.5}Accessing Binary Outputs}{13}
-\contentsline {section}{\numberline {3}The Model}{13}
-\contentsline {subsection}{\numberline {3.1}Initialisation}{14}
-\contentsline {subsection}{\numberline {3.2}Iteration}{14}
-\contentsline {subsubsection}{\numberline {3.2.1}Cell Death}{14}
-\contentsline {subsubsection}{\numberline {3.2.2}Movement}{15}
-\contentsline {subsubsection}{\numberline {3.2.3}Growth and Division}{16}
-\contentsline {subsubsection}{\numberline {3.2.4}Diffusion}{16}
-\contentsline {subsection}{\numberline {3.3}Collisions}{19}
-\contentsline {subsubsection}{\numberline {3.3.1}Cell-cell Collisions}{20}
-\contentsline {subsubsection}{\numberline {3.3.2}Cell-border Collisions}{22}
-\contentsline {section}{\numberline {4}Examples}{23}
-\contentsline {subsubsection}{\numberline {4.0.3}Macrophage Migration}{24}
-\contentsline {subsubsection}{\numberline {4.0.4}Stem Cell Replication}{25}
-\contentsline {subsubsection}{\numberline {4.0.5}Cell Culture}{27}
-\contentsline {section}{\numberline {5}Performance}{27}
-\contentsline {section}{\numberline {6}Further Development of the Platform}{28}
-\contentsline {section}{\numberline {7}An Alternative Agent-based Model}{32}
+\contentsline {section}{\numberline {1}Word Count: X}{3}
+\contentsline {section}{\numberline {2}Introduction}{4}
+\contentsline {section}{\numberline {3}Installation}{5}
+\contentsline {subsection}{\numberline {3.1}Detailed Instructions}{5}
+\contentsline {subsection}{\numberline {3.2}Dependencies}{6}
+\contentsline {subsection}{\numberline {3.3}The Graphical User Interface}{7}
+\contentsline {subsubsection}{\numberline {3.3.1}Main Menu}{7}
+\contentsline {subsubsection}{\numberline {3.3.2}Diffusion Menu}{9}
+\contentsline {subsubsection}{\numberline {3.3.3}Source Location Menu}{11}
+\contentsline {subsubsection}{\numberline {3.3.4}Cell Type Menu}{11}
+\contentsline {subsubsection}{\numberline {3.3.5}Border Menu}{13}
+\contentsline {subsection}{\numberline {3.4}The Interactive Prompt Interface}{13}
+\contentsline {subsection}{\numberline {3.5}Accessing Binary Outputs}{14}
+\contentsline {section}{\numberline {4}The Model}{15}
+\contentsline {subsection}{\numberline {4.1}Initialisation}{16}
+\contentsline {subsection}{\numberline {4.2}Iteration}{16}
+\contentsline {subsubsection}{\numberline {4.2.1}Cell Death}{16}
+\contentsline {subsubsection}{\numberline {4.2.2}Movement}{16}
+\contentsline {subsubsection}{\numberline {4.2.3}Growth and Division}{17}
+\contentsline {subsubsection}{\numberline {4.2.4}Diffusion}{18}
+\contentsline {subsection}{\numberline {4.3}Collisions}{22}
+\contentsline {subsubsection}{\numberline {4.3.1}Cell-cell Collisions}{23}
+\contentsline {subsubsection}{\numberline {4.3.2}Cell-border Collisions}{26}
+\contentsline {section}{\numberline {5}Examples}{27}
+\contentsline {subsubsection}{\numberline {5.0.3}Macrophage Migration}{28}
+\contentsline {subsubsection}{\numberline {5.0.4}Stem Cell Replication}{31}
+\contentsline {subsubsection}{\numberline {5.0.5}Cell Culture}{34}
+\contentsline {section}{\numberline {6}Performance}{34}
+\contentsline {section}{\numberline {7}Further Development of the Platform}{34}
+\contentsline {section}{\numberline {8}An Alternative Agent-based Model}{37}
