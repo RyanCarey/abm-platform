@@ -1,61 +1,79 @@
-# abm-platform
-[In development] A platform for agent-based modelling, written in Julia, for a Bioinformatics MSc group project.
+## Purpose
+This is a platform for agent-based modelling developed in Julia for a ten-week bioinformatics project
+by Ryan Carey, Lewis Kindeleit and Antoine Messager.
 
-Open the program by running "entry.jl"
+## Installation
+The CBMP has been developed in Julia 0.4. in RedHat Enterprise Linux 
+Workstation release 6.2, and has also been tested on Ubuntu 14.04 in 
+Julia 0.3. The platform should run on any operating system 
+that has Julia installed, however there may be slight differences 
+between them.
 
-This project allows the user to simulate a specified quantity of cells within a square environment. At each timestep, a cell is chosen at random to be the subject of several functions:
-* Cell Movement
-* Cell Growth
-* Cell Divison (if applicable)
-* Cell Death
+To run the CBMP, first Julia must be installed. If this has already been 
+done, please skip to the Dependencies section.
 
-The parameters for these functions are specifiable by the user and are explained below.
+### Detailed Instruction
+To install Julia, follow the instructions on the website, 
+http://julialang.org/downloads/. Similarly,
+install Python at www.python.org/downloads if you do not have it already. 
+The Julia packages Winston, Tk and PyCall are most easily installed 
+using the interactive Julia prompt. The Julia prompt is opened by entering
+into the command line: 
 
-## Main Screen
-### Initialisation Options
-It is possible to specify the starting conditions for the model in the main screen.
-![Main Screen](main_screen.png)
+> julia} 
 
-* Number of cells: The total number of cells at the start of the simulation.
-* Number of timesteps: The total number of iterations made by the simulation.
-* Height/Width of Environment: This denotes the size of the simulation environment in some arbitrary units.
-* Stem Threshold: This specifies the concentration of ligand at which a reproducing stem cell will switch between self-replication and progenitor production
-* Probability of cell death: At every timestep, the cell under scrutiny will have this chance to die and be removed from the simulation.
-* Type of diffusion: Choose between two ways for calculating ligand's concentration
-* Display Simulation: Selecting this option will produce an image of the simulation to the right hand side.
-* Write to text: Selecting this option will save an output of the simulation to file.
+To install the required packages, enter the following into Julia's interactive prompt: 
 
-## Diffusion Settings
-These settings allow the user to alter the behaviour of ligand sources and their placement within the environment.
-![Diffusion Screen](diffusion_screen.png)
-* Probability of Persistance: The chance that a cell will disregard the information about future moves from it surroundings and continue its movement.
-* Numbers of direction: The amount of directions a cell can calculate possible moves in. They are spaced out evenly along the cell surface.
-* Initial Concentration: Linearly linked to the concentration
-* Gradient Coefficient: Decrease this parameter to increase the slope of the concentration
-* Tau (Integrative diffusion only): Maximum upper time limit of the integration
-* Type of source: Select which type of source is required.
-* Number of sources: The total number of sources present in the simulation from the start.
-* Source Locations: Allows the user to select the locations of each possible source.
-* Diffusion Over Time: This slider can be used to display the concentration of ligand from one source with the above coefficients over time. Move the slider to change time. 
+> Pkg.add("\,Winston") 
 
-## Cell Settings
-The simulation allows for 4 different cell types, but can run with only one.
-![Cell Type Screen](cell_type_screen.png)
-* Ratio: The ratio of the total number of cells given over to that type upon the start of the simulation. Ratios are normalised and as such do not have to sum to one.
-* Growth Rate: The rate at which a cells area will increase per timestep.
-* Division Threshold: The ratio of current area to initial area at which a cell division event will occur.
-* Average Speed: The average distance a cell can travel in one step. Uses the same arbitrary units as other distance variables.
-* Average Radius: The average radius of cells at the start of a simulation. This is also used in calculating cell division.
-* Conc. Response: This specifies a value which multiplies a cells proposed move direction in response to its detected ligand concentration. A value of 1 indicates that a cell will travel towards a source, whilst -1 will repel the cell. Note that specified randomness will dilute this effect.
-* Randomness: The percentage of a cells move that will be random.
-* Colour: Possible cell type colours are: Red('ro'), Blue('bo'), Purple('mo'), Green('go') and Yellow('yo').
-* Left Placed: Selecting this option will initialise all cells of the particular time close to the left wall of the environment.
-* Stem Cell: Selecting this option will allow this type of cell to have stem cell behaviour. A stem cell will change the type of its progeny depending upon its local ligand concentration and the stem threshold specified in the main menu. Progeny will be either of the same type (stem cell replication), or the type below (1 -> 2 -> 3 -> 4). Note that type 4 cells cannot be stem cells. Unselecting this option means that all types will only produce the same type.
+> Pkg.add("\,Tk") 
 
-## Border Settings
-This window allows the specification of each border within the environment.
-![Border Screen](border_screen.png)
-* Reflecting: Cells will bounce off these walls.
-* Absorbing: Upon contact, these cells will stick to these walls.
-* Killing: Upon contact, these cells will die and be removed from the simulation.
+> Pkg.add("\,PyCall")}  
 
+To return to the command line, enter: 
+
+> exit()} 
+
+You can install the python package {\itshape Pickle} by typing into the command line: 
+
+> pip install pickle} 
+
+If all of the dependencies are already installed, then all you need to 
+do is download the repository and run CBMP.jl.
+
+## Dependencies
+
+The installation depends on:
+
+* Julia 0.3 -- 0.4 with:
+  * begin{itemize}
+  * Winston
+  * Tk
+  * PyCall
+* Python (tested on 2.8 and 3.4 but it should work for other versions) with:
+  * Pickle
+
+Once you have installed the dependencies, all you need to do is download 
+the repository and run CBMP.jl. If you have git installed, you do this 
+by entering into your command line: 
+
+> git clone https://github.com/RyanCarey/abm-platform.git 
+
+> julia CBMP.jl
+
+The software comes with 2 different methods of inputting parameters and 
+starting simulations: an easy to use GUI and a command line version. The 
+GUI has been created with experiment design in mind; it gives the user 
+fine-grained control of all parameters that describe the behaviour of 
+cells and the way in which environmental stimuli diffuse through the 
+environment, whilst providing immediate feedback.
+
+The command line version, whilst being more complicated to operate, is 
+much faster at performing simulations due to the lack of simulation 
+display and increased parameter input speed. Parameters are input 
+directly into the code and as such requires slightly more expertise to 
+use. This option is intended to be used when experimental setup is 
+already decided and multiple simulations are required to be run to 
+collect data.
+
+For explanation of how to use these versions, refer to the manual (manual.pdf)
