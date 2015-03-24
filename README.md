@@ -1,7 +1,9 @@
 ## Purpose
 This is a platform for agent-based modelling developed in Julia for a ten-week bioinformatics project
 by Ryan Carey, Lewis Kindeleit and Antoine Messager. Here are the installation instructions. For
-usage instructions and more information, refer to the manual (manual.pdf)
+usage instructions and more information, refer to the manual (manual.pdf) Using a graphical user
+interface or REPL, it allows simulations to be performed, which can be viewed graphically or outputted
+to pickle for analysis in Python or Julia.
 
 ## Installation
 The CBMP has been developed in Julia 0.4. in RedHat Enterprise Linux 
