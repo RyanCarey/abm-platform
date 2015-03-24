@@ -21,7 +21,7 @@ The Julia packages Winston, Tk and PyCall are most easily installed
 using the interactive Julia prompt. The Julia prompt is opened by entering
 into the command line: 
 
-   > julia} 
+    > julia
 
 To install the required packages, enter the following into Julia's interactive prompt: 
 
@@ -29,15 +29,15 @@ To install the required packages, enter the following into Julia's interactive p
 
     > Pkg.add("\,Tk") 
 
-    > Pkg.add("\,PyCall")}  
+    > Pkg.add("\,PyCall")
 
 To return to the command line, enter: 
 
-    > exit()} 
+    > exit()
 
-You can install the python package {\itshape Pickle} by typing into the command line: 
+You can install the python package Pickle by typing into the command line: 
 
-    > pip install pickle} 
+    > pip install pickle
 
 If all of the dependencies are already installed, then all you need to 
 do is download the repository and run CBMP.jl.
@@ -47,7 +47,6 @@ do is download the repository and run CBMP.jl.
 The installation depends on:
 
 * Julia 0.3 -- 0.4 with:
-  * begin{itemize}
   * Winston
   * Tk
   * PyCall
