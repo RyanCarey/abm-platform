@@ -25,11 +25,11 @@ into the command line:
 
 To install the required packages, enter the following into Julia's interactive prompt: 
 
-    > Pkg.add("\,Winston") 
+    > Pkg.add("Winston") 
 
-    > Pkg.add("\,Tk") 
+    > Pkg.add("Tk") 
 
-    > Pkg.add("\,PyCall")
+    > Pkg.add("PyCall")
 
 To return to the command line, enter: 
 
@@ -46,7 +46,7 @@ do is download the repository and run CBMP.jl.
 
 The installation depends on:
 
-* Julia 0.3 -- 0.4 with:
+* Julia 0.3 - 0.4 with:
   * Winston
   * Tk
   * PyCall
