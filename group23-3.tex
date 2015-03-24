@@ -868,8 +868,9 @@ The cell can respond to the border in three different ways:
 \begin{enumerate}
   \item If the border is {\itshape reflecting}, then the cell reflects as in optics, 
 with a new movement vector that has an outgoing angle the same as the 
-incoming angle. The new speed is equal to \((g+1)/2\) multiplied by the original speed
-to account for inelasticity.
+incoming angle. The new speed is equal to the original speed minus the distance done
+multiplied by g to account for inelasticity. Indeed, as we work with a unitarian time step, 
+there are no difference between distance and speed. 
 \item If the border is {\itshape absorbing}, then the cell stays at the location \(m_1\), 
   and its speed reduces to zero.
 \item If the border is {\itshape removing}, then the cell disappears.
