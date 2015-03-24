@@ -1,6 +1,7 @@
 ## Purpose
 This is a platform for agent-based modelling developed in Julia for a ten-week bioinformatics project
-by Ryan Carey, Lewis Kindeleit and Antoine Messager.
+by Ryan Carey, Lewis Kindeleit and Antoine Messager. Here are the installation instructions. For
+usage instructions and more information, refer to the manual (manual.pdf)
 
 ## Installation
 The CBMP has been developed in Julia 0.4. in RedHat Enterprise Linux 
@@ -20,23 +21,23 @@ The Julia packages Winston, Tk and PyCall are most easily installed
 using the interactive Julia prompt. The Julia prompt is opened by entering
 into the command line: 
 
-> julia} 
+   > julia} 
 
 To install the required packages, enter the following into Julia's interactive prompt: 
 
-> Pkg.add("\,Winston") 
+    > Pkg.add("\,Winston") 
 
-> Pkg.add("\,Tk") 
+    > Pkg.add("\,Tk") 
 
-> Pkg.add("\,PyCall")}  
+    > Pkg.add("\,PyCall")}  
 
 To return to the command line, enter: 
 
-> exit()} 
+    > exit()} 
 
 You can install the python package {\itshape Pickle} by typing into the command line: 
 
-> pip install pickle} 
+    > pip install pickle} 
 
 If all of the dependencies are already installed, then all you need to 
 do is download the repository and run CBMP.jl.
@@ -57,9 +58,9 @@ Once you have installed the dependencies, all you need to do is download
 the repository and run CBMP.jl. If you have git installed, you do this 
 by entering into your command line: 
 
-> git clone https://github.com/RyanCarey/abm-platform.git 
+    > git clone https://github.com/RyanCarey/abm-platform.git 
 
-> julia CBMP.jl
+    > julia CBMP.jl
 
 The software comes with 2 different methods of inputting parameters and 
 starting simulations: an easy to use GUI and a command line version. The 
