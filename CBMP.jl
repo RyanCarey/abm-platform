@@ -34,7 +34,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   global type_source=rb_value[1]
   global type_diffusion=diff_type
 
-  if(type_source=="Point")	
+  if(type_source=="Triangle")	
     for i in 1:nb_source
       source_x_ord[i]=v3p[2*i-1]
       source_y_ord[i]=v3p[2*i]
@@ -131,7 +131,7 @@ function init_window()
   grid_rowconfigure(frame, 1, weight=1)
 
    #set defaults    
-  v = Float64[1, 100, 30, 30,0.9]
+  v = Float64[10, 100, 30, 30,0.9]
   v2=Float64[8, 8, 1, 10, 1,8,1]
   global rb_value=["Point"]
   global v3p=Array(Float64,2*int(v2[5]))
@@ -142,9 +142,9 @@ function init_window()
     v3p[2*i-1]=0
     v3p[2*i]=0
     v3l[i]=0
-    v4[3*i-2]=100
-    v4[3*i-1]=1
-    v4[3*i]=300
+    v4[3*i-2]=100    # coef
+    v4[3*i-1]=1      # A (initial)
+    v4[3*i]=5000      # tau
     v5[2*i-1]=100
     v5[2*i]=1
   end
@@ -163,13 +163,16 @@ function init_window()
   # 11: Speed threshold that the cell needs to exceed to push another cell
   # 12: Minimum ratio between max and mean concentration that a cell can detect (for deciding its movement)
   #             1       2     3     4     5     6     7      8      9    10   11    12
-  v8 = Float64[1.0    0.00   2.0   1.0  0.5    1.0   00    .0000   .0    .2  .1   1.00;
-               0.0    0.05   2.0   1.0  1.0   -1.0   1.5   .0001   .5    .5  .1   1.00;
-               0.0    0.05   2.0   1.0  1.0    1.0   1.5   .0001   .5    .5  .1   1.00;
-               0.0    0.05   2.0   1.0  1.0    1.0   1.5   .0001   .5    .5  .1   1.00]
+      v8 = Float64[1.0   0.10   2.0   1.0   1.0   1.0   25.0  .0001   .2   1.   .1   1.00;
+                   0.0   0.20   2.0   2.0   1.0  -1.0   0.0   .0001   .5   1.0   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00;
+                   0.0   0.05   2.0   1.0   1.0   1.0   0.0   .0001   .5   .5   .1   1.00]
+      v9 = ["ro"    true    true    false;
+            "bo"    false    false    false;
+            "mo"    false    false    false;
+            "go"    false    false    false]
 
-  v9 = ["ro" false true false;"bo" false false false;"mo" false false false;"go" false false false]
-  v10 = String["Reflecting","Reflecting","Reflecting","Reflecting"]
+  v10 = String["Absorbing", "Removing", "Removing", "Removing"]
 
   # make and activate controls
   prompts = String["Number of cells", "Number of timesteps ", "Width of environment",
@@ -204,11 +207,8 @@ function init_window()
     grid(entries[i],i,2,sticky="ew")
   end
 
-  
-
   lvoid1=Label(frame,"")
   grid(lvoid1,6,1:3)
-
 
   rb2 = Radio(frame, ["Sustained", "Instantaneous"])
   grid(rb2,7,2,sticky="ew")
