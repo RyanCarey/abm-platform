@@ -34,7 +34,7 @@ function ok_press(window::Tk.Tk_Toplevel, canvas::Tk.Canvas, frame::Tk.Tk_Frame,
   global type_source=rb_value[1]
   global type_diffusion=diff_type
 
-  if(type_source=="Triangle")	
+  if(type_source=="Point")	
     for i in 1:nb_source
       source_x_ord[i]=v3p[2*i-1]
       source_y_ord[i]=v3p[2*i]
@@ -144,7 +144,7 @@ function init_window()
     v3l[i]=0
     v4[3*i-2]=100    # coef
     v4[3*i-1]=1      # A (initial)
-    v4[3*i]=5000      # tau
+    v4[3*i]=300     # tau
     v5[2*i-1]=100
     v5[2*i]=1
   end
